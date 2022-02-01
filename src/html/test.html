@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+		</style>
+	</head>
+	<body>
+		<script src="../js/three.js"></script>
+		<script src="../js/three.min.js"></script>
+		<script src="../js/GLTFLoader.js" type="module"></script>
+		<script src="../js/gameObject.js" type="module"></script>
+		<script src="../js/gameObjectManager.js" type="module"></script>
+
+		<script src="../js/components/component.js" type="module"></script>
+		<script src="../js/components/playerInput.js" type="module"></script>
+		<script src="../js/components/playerMouvement.js" type="module"></script>
+		<script src="../js/components/mesh.js" type="module"></script>
+		<script src="../js/components/thirdPersonCamera.js" type="module"></script>
+
+		<script src="../js/main.js" type="module"></script>
+
+		<style>
+			#blocker {
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0,0,0,0.5);
+			}
+
+			#instructions {
+				width: 100%;
+				height: 100%;
+
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+
+				text-align: center;
+				font-size: 14px;
+				cursor: pointer;
+			}
+		</style>
+
+
+	</body>
+</html>
