@@ -9,6 +9,7 @@ class GameObject extends THREE.Object3D{
         this.handlers = {};
         this.parent = null;
         this.params = params;
+        //test
     }
 
     SetParent(p) {
