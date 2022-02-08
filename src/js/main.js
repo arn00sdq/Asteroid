@@ -1,15 +1,8 @@
-import CharacterMouvement  from './components/playerMouvement.js'
-import GameObject from "./GameObject.js";
-import CharacterControllerInput from './components/playerInput.js';
-import GameObjectManager from './gameObjectManager.js'
-import ShipMesh from './components/mesh.js'
-import ThirdPersonCamera from './components/thirdPersonCamera.js';
-import PlayerShootProjectiles from './components/PlayerShootProjectiles.js';
-
-
-import { PointerLockControls } from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/controls/PointerLockControls.js';
-import { Vector3 } from './three.module.js';
-
+import Player from "./components/Player.js";
+import BasicBullet from "./components/BasicBullet.js";
+import GameObjectManager from "./gameObjectManager.js";
+import BasicAsteroid from "./components/AsteroidMesh.js";
+import { Euler, Vector3 } from './three.module.js';
 
 
 class Asteroid {
@@ -17,24 +10,30 @@ class Asteroid {
         
         this.Initialize();
         this.LoadPlayer();
+        
     }
 
     Initialize(){
 
         this.camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.001, 10000 );
-        this.camera.position.set(0,0.3,0);
         this.scene = new THREE.Scene();
+        this.camera.position.set(0,0.3,0);
         this.camera.lookAt( this.scene.position );
 
         var gridHelper = new THREE.GridHelper( 40, 40 );
         this.scene.add( gridHelper );
     
         this.scene.add( new THREE.AxesHelper() );
-        let light = new THREE.AmbientLight(0xFFFFFF, 1.0);
+        let light = new THREE.DirectionalLight( 0xffffff, 1 );
+        light.position.set( 50, 50, 50 );
         this.scene.add(light);
-        this.GameObjectManager = new GameObjectManager()
         
-
+        this.renderer = new THREE.WebGLRenderer({ antialias: false });
+        this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.renderer.autoClear = false
+        document.body.appendChild( this.renderer.domElement );
+        
+       
         window.addEventListener('resize', () => {
             this.OnWindowResize();
           }, false);
@@ -47,35 +46,28 @@ class Asteroid {
         this.follow = new THREE.Object3D;
         this.follow.position.z = - 0.3;
         this.goal.add(this.camera)
-        
-        const params = {
+        const basicBullet = new BasicBullet();
+        this.GameObjectManager = new GameObjectManager(this.scene);
+        this.params = {
             goal: this.goal,
             camera:this.camera,
             follow: this.follow,
             scene: this.scene,
-        }
-        this.meshProjectileCylinder = new GameObject("BasicBullet", params);
-
-        const weaponParams = {
-            basicBullet :  this.meshProjectileCylinder, // new GameObject("basicBullet")
+            gameObj : this.GameObjectManager,
+            weapon : basicBullet
         }
 
-        this.player = new GameObject("Player", params);
-        this.player.AddComponent(new ShipMesh.ShipMesh('../medias/models/Soldier.glb',params));
-        this.player.AddComponent(new CharacterControllerInput.CharacterControllerInput(params));
-        this.player.AddComponent(new CharacterMouvement.CharacterMouvement(params));
-        this.player.AddComponent(new ThirdPersonCamera.ThirdPersonCamera(params));
-        this.player.AddComponent(new PlayerShootProjectiles.PlayerShootProjectiles(weaponParams, params));
-        this.scene.add(this.player)
-
-        this.GameObjectManager.Add(this.player,'player');
-        
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
-        this.renderer.setSize( window.innerWidth, window.innerHeight );
-        document.body.appendChild( this.renderer.domElement );
-          this.previousRAF = null;
-          this.RAF();
-
+       let player = new Player(this.params);
+       player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.scene);
+       
+        for (let index = 0; index < 1; index++) {
+            let rVectorPos = new THREE.Vector3(Math.floor(-1), 0 ,Math.floor(Math.random() * 10))
+            let rEuleurRot = new THREE.Euler(0,0,0)
+            let asteroidProps = new BasicAsteroid(this.scene,0,new THREE.Vector3(1.0,1.0,1.0));
+            asteroidProps.Instantiate(asteroidProps, rVectorPos, rEuleurRot, this.scene)
+        }
+        this.previousRAF = null;
+        this.RAF();
     }
 
     RAF() {
@@ -84,25 +76,22 @@ class Asteroid {
                 this.previousRAF = t;
             }
             this.RAF();
-            this.Step(t - this.previousRAF) /1000;
-            this.previousRAF = t;
             this.renderer.render(this.scene, this.camera);
-   
+            this.Step(t - this.previousRAF);
+            this.previousRAF = t;
          });    
       }
     
-    Step(timeElapsed) {
-        
-        const timeElapsedS = Math.min(1.0 / 30.0, timeElapsed * 0.001);    
-        this.GameObjectManager.Update(timeElapsedS);
-        
-      }
+    Step(timeElapsed) {  
+        const timeElapsedS = Math.min(1.0 / 30.0, timeElapsed * 0.001);
+        this.params.gameObj.Update(timeElapsedS)
+    }
 
-      OnWindowResize() {
+    OnWindowResize() {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-      }
+    }
       
 
 }

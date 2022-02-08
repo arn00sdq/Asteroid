@@ -1,8 +1,7 @@
 import Component  from "./component.js";
 
-    class CharacterControllerInput extends Component {
+    class CharacterControllerInput{
         constructor(params) {
-          super();
           this._params = params;
           this._Init();
         }
@@ -75,7 +74,9 @@ import Component  from "./component.js";
             }
           }
 
+          Update() {}
+
     }
 
-export default {CharacterControllerInput, Component}
+export default CharacterControllerInput
 

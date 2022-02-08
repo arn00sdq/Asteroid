@@ -1,10 +1,9 @@
 
 import { Euler, Quaternion, Vector3, MathUtils } from '../three.module.js';
-import Component from './component.js';
 
-class ThirdPersonCamera extends Component{
+class ThirdPersonCamera{
     constructor(params) {
-        super();
+        this.parent = params
         this.camera = params.camera;
         this.goal = params.goal;
         this.follow = params.follow;
@@ -17,25 +16,25 @@ class ThirdPersonCamera extends Component{
     }
 
     Update(timeElapsed) {
-        
-        const target = this.GetComponent('ShipMesh');
-        this.speed = 0.0;
+        if( this.parent.mesh !== null){
+            this.speed = 0.0;
             
-        this.a.lerp(target.soldier.position, 1);
-        this.b.copy(this.goal.position);
+        this.a.lerp( this.parent.position, 1);
+        
+        this.b.copy(this.parent.params.goal.position);
 
         this.dir.copy( this.a ).sub( this.b );
         const dis = this.a.distanceTo( this.b ) - this.offset;
-        this.goal.position.addScaledVector( this.dir, dis );
+        this.parent.params.goal.position.addScaledVector( this.dir, dis );
         //this.goal.position.lerp(new Vector3(this.temp.x,this.temp.y,this.temp.z), 0.02);
-        this.temp.copy(this.goal.position)
-        this.temp.setFromMatrixPosition(this.follow.matrixWorld);
+        this.temp.copy(this.parent.params.goal.position)
+        this.temp.setFromMatrixPosition(this.parent.params.follow.matrixWorld);
         
-        this.camera.lookAt(this.parent.position );
+        this.parent.params.camera.lookAt(this.parent.position );
       //  target.mixer.update( timeElapsed )
-
+        }
         
     }
 }
 
-export default {ThirdPersonCamera, Component}
+export default ThirdPersonCamera

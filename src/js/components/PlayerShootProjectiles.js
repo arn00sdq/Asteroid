@@ -1,25 +1,37 @@
+import { Vector3 } from "../three.module.js";
+import AsteroidMesh from "./AsteroidMesh.js";
 import Component from "./component.js";
 
-class PlayerShootProjectiles extends Component{
-    constructor(weaponParams){
-        super();
-        this.weaponParams = weaponParams;
-        this.bulletTab = [];
-        this.cloneSps = null;
-        this.speed = 0.4;
+class PlayerShootProjectiles{
+    constructor(params,weapon){
+      this.parent = params;
+      this.weaponParams = weapon;
+
+      this.spawnDistance = -0.3;
+
+      this.spawnPos = new THREE.Vector3
+      this.spawnRot = new THREE.Euler
+      this.playerDirection = new THREE.Vector3
     }
 
     Update(timeElapsed){
-        const input = this.GetComponent('CharacterControllerInput');
-        const SpaceShip = this.GetComponent('ShipMesh');   
-          if ( input.keys.shoot ){ // plusieurs if donc chagez le param weaponParams
+        const input = this.parent.GetComponent('CharacterControllerInput');
+          if ( input.keys.shoot ){ 
             input.keys.shoot = false;
-            this.parent.Instantiate(this.weaponParams.basicBullet, SpaceShip.soldier.position, SpaceShip.soldier.rotation); 
+            this.Shoot()   
           }
-          this.bulletTab.forEach(b => {
-            b.translateZ(this.speed)
-        });
+    }
+
+    Shoot(){
+      let t = this.weaponParams.clone();
+      t.InitMesh();
+
+      this.spawnPos.set(this.parent.position.x,this.parent.position.y + this.spawnDistance,this.parent.position.z);
+      this.playerDirection = this.parent.getWorldPosition(new THREE.Vector3());
+      this.spawnRot =  this.parent.rotation;
+      
+      t.Instantiate(t,this.spawnPos, this.spawnRot,this.parent.params.scene)
     }
 }
 
-export default {PlayerShootProjectiles}
+export default PlayerShootProjectiles
