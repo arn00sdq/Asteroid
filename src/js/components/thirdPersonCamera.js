@@ -1,5 +1,4 @@
-
-import { Euler, Quaternion, Vector3, MathUtils } from '../three.module.js';
+import { Euler, Quaternion, Vector3, MathUtils } from '../three/three.module.js'
 
 class ThirdPersonCamera{
     constructor(params) {
@@ -16,7 +15,7 @@ class ThirdPersonCamera{
     }
 
     Update(timeElapsed) {
-        if( this.parent.mesh !== null){
+        if( this.parent.children[0] !== null){
             this.speed = 0.0;
             
         this.a.lerp( this.parent.position, 1);

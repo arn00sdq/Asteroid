@@ -1,53 +1,58 @@
-import { Vector3 } from "../three.module.js";
 import AsteroidMovement from "./AsteroidMouvement.js";
+import {OBJLoader} from "../Loader/OBJLoader.js"
 
 class BasicAsteroid extends THREE.Group{
-    constructor(scene,nbBreak,scale){
+    constructor(scene,nbBreak){
         super();
         this.components = {};
-        this.mesh = null;
+        this.name = "Asteroid"
         this.nbBreak = nbBreak;
         this.scene = scene;
-        this.InitMesh(scale)
+        this.InitComponent()
     }
     
     InitComponent(){
         this.AddComponent(new AsteroidMovement(this))
     }
 
-    InitMesh(scale){
-        const geometry = new THREE.CylinderGeometry(0.2,0.2,0.2 );
-        const material = new THREE.MeshNormalMaterial( );
-        this.mesh = new THREE.Mesh( geometry, material );
-        this.mesh.scale.copy(scale);
+    InitMesh(model,scale){
+        this.add(model);
 
-        this.mesh.geometry.computeBoundingBox();
-        this.mesh.geometry.computeBoundingSphere();
-
-        this.mesh.BB = new THREE.Box3().copy( this.mesh.geometry.boundingBox );
-        this.mesh.BS = new THREE.Sphere().copy( this.mesh.geometry.boundingSphere );
-
-        this.add(this.mesh);
-
+        this.children[0].scale.copy(scale)
+        this.SetRigidBoby(this.children[0])
+        
     }  
 
-    Update(timeElapsed) {
-        if(this.mesh !== null){
-            this.rotation.x = (this.rotation.x + (Math.PI / 180) * timeElapsed * 10 );
-            this.rotation.y = (this.rotation.y + (Math.PI / 180) * timeElapsed * 10 );
-            this.rotation.z = (this.rotation.z + (Math.PI / 180) * timeElapsed * 10);
-        }
+    SetRigidBoby(object){
+        object.geometry.computeBoundingBox();
+        object.geometry.computeBoundingSphere();
+        object.BB = new THREE.Box3().copy( object.geometry.boundingBox );
+        object.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
+    }
+
+    SetInvulnerability(seconds){
+        this.BB = null;
+        this.BS = null;
+       if(this.children[0]){
+            setTimeout(() => {
+                this.BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
+                this.BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
+            }, seconds);
+       } 
     }
 
     Instantiate(o,p,r,s){
         
         o.position.copy(p);
         o.rotation.copy(r);
-
+        this.SetInvulnerability(500);
+        console.log(o)
         s.add(o);
+        
     }
 
     Destroy(object){
+       
         this.scene.remove(object);
         object.mesh = null;
     }
@@ -58,6 +63,14 @@ class BasicAsteroid extends THREE.Group{
 
     AddComponent(c) {
         this.components[c.constructor.name] = c;      
+    }
+
+    Update(timeElapsed) {
+        if(this.children[0] !== null){   
+            for (let k in this.components) {
+                this.components[k].Update(timeElapsed);
+            }
+        }
     }
 }
 

@@ -1,7 +1,3 @@
-import { Vector3 } from "../three.module.js";
-import AsteroidMesh from "./AsteroidMesh.js";
-import Component from "./component.js";
-
 class PlayerShootProjectiles{
     constructor(params,weapon){
       this.parent = params;

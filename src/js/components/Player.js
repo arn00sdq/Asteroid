@@ -1,21 +1,17 @@
-import BulletMesh from './BulletMesh.js'
-import AsteroidMesh from './AsteroidMesh.js';
-import {GLTFLoader} from "../GLTFLoader.js";
+import {GLTFLoader} from "../Loader/GLTFLoader.js";
 import ThirdPersonCamera from './thirdPersonCamera.js';
 import PlayerShootProjectiles from './PlayerShootProjectiles.js';
 import CharacterControllerInput from './playerInput.js';
-import CharacterMouvement  from './playerMouvement.js'
-import * as THREE from '../three.module.js'
+import CharacterMouvement  from './playerMouvement.js';
+import * as THREE from '../three/three.module.js'
 
 class Player extends THREE.Group{ 
     constructor(params) {
         super();
         this.components = {};
-        this.name = "GameObject";
-        this.mesh = null;
+        this.name = "Player";
         this.params = params;
         this.InitComponent();
-        this.InitMesh();
     }
 
     InitComponent(){
@@ -26,23 +22,18 @@ class Player extends THREE.Group{
        
     }
 
-    InitMesh(){
-        let me = this;
-        const loader = new GLTFLoader();
-        loader.load('../medias/models/SpaceShip.gltf',  function(gltf) {
-            me.mesh = gltf.scene.children[0];
-            me.mesh.geometry.computeBoundingBox();
-            me.mesh.geometry.computeBoundingSphere();
-            
-            me.mesh.BB = new THREE.Box3().copy( me.mesh.geometry.boundingBox );
-            me.mesh.BS = new THREE.Sphere().copy( me.mesh.geometry.boundingSphere );
+    InitMesh(model,scale){
+        this.add(model)
+        
+        this.children[0].scale.copy(scale)
+        this.SetRigidBoby(this.children[0])
+    }
 
-            me.mesh.scale.set(0.05,0.05,0.05)
-
-            me.add(me.mesh);
-            //me.rotation.x = Math.PI / 180 * 90;
-            //me.rotation.y = (Math.PI / 180) * 180;
-        }); 
+    SetRigidBoby(object){
+        object.geometry.computeBoundingBox();
+        object.geometry.computeBoundingSphere();
+        object.BB = new THREE.Box3().copy( object.geometry.boundingBox );
+        object.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
     }
 
     Instantiate(o,p,r,s){
@@ -68,7 +59,7 @@ class Player extends THREE.Group{
     }
 
     Update(timeElapsed){
-        if(this.mesh !== null){
+        if(this.children[0] !== null){
             for (let k in this.components) {
                 this.components[k].Update(timeElapsed);
             }

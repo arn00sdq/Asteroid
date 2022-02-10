@@ -1,4 +1,4 @@
-import * as THREE from '../three.module.js'
+import * as THREE from '../three/three.module.js'
 
 class BasicBullet extends THREE.Group{ 
     constructor(parent) {
@@ -20,8 +20,8 @@ class BasicBullet extends THREE.Group{
         this.mesh.geometry.computeBoundingBox();
         this.mesh.geometry.computeBoundingSphere();
 
-        this.mesh.BB = new THREE.Box3().copy( this.mesh.geometry.boundingBox );
-        this.mesh.BS = new THREE.Sphere().copy( this.mesh.geometry.boundingSphere );
+        this.BB = new THREE.Box3().copy( this.mesh.geometry.boundingBox );
+        this.BS = new THREE.Sphere().copy( this.mesh.geometry.boundingSphere );
 
         this.add(this.mesh);
         
@@ -33,13 +33,9 @@ class BasicBullet extends THREE.Group{
         this.rotation.copy(r);
 
         s.add(o)
-
-        
-
     }
 
     Destroy(object){
-        console.log("Destroy")
         this.parent.remove(object.mesh);
         this.parent.remove(object);
         object.mesh = null;
@@ -61,8 +57,6 @@ class BasicBullet extends THREE.Group{
                 this.components[k].Update(timeElapsed);
             }
             this.translateZ(this.speed);
-            //this.mesh.position.copy(this.position);
-            //this.mesh.rotation.copy(this.rotation);
         }
         
     }

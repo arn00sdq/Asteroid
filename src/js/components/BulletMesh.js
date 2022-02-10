@@ -1,5 +1,5 @@
 import Component from './component.js';
-import {GLTFLoader} from "../GLTFLoader.js";
+import {GLTFLoader} from "../Loader/GLTFLoader.js";
 
 class BulletMesh extends Component{
     constructor(){
