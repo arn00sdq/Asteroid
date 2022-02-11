@@ -36,10 +36,23 @@ class Player extends THREE.Group{
         object.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
     }
 
+    SetInvulnerability(seconds){
+        this.BB = null;
+        this.BS = null;
+       if(this.children[0]){
+            setTimeout(() => {
+                this.BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
+                this.BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
+            }, seconds);
+       } 
+    }
+
     Instantiate(o,p,r,s){
 
         this.position.copy(p);
         this.rotation.copy(r);
+
+        this.SetInvulnerability(500);
 
         s.add(o)
         

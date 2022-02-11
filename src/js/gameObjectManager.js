@@ -26,11 +26,10 @@ class GameObjectManager{
     }
 
     collision_handler(e,e2){
+      console.log(e,e2)
       switch(e.constructor.name){
         case "BasicAsteroid":
-          
           this.Asteroid_Subdivision(e);
-          console.log(this.scene)
           e.Destroy(e);
           break;
         case "Player":
@@ -60,12 +59,12 @@ class GameObjectManager{
         for (let index = 1; index <= 2; index++) {
           let rVectorPos = new THREE.Vector3(e.position.x + Math.random() *  0.2, 0 ,
                                              e.position.z + Math.random() *  0.5);
-          let rEuleurRot = new Euler(0, Math.random() *  ((Math.PI / 180) * 180) ,0);
+          let rEuleurRot = new Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
           let scale = new Vector3(0.5,0.5,0.5);
 
           let asteroidProps = e.clone();
           this.SetCloneValue(asteroidProps,e);
-          asteroidProps.Instantiate(asteroidProps, rVectorPos, rEuleurRot, this.scene);
+          asteroidProps.Instantiate(asteroidProps, rVectorPos, rEuleurRot);
         }
       }
     }

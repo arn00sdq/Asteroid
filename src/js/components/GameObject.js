@@ -41,13 +41,13 @@ class BasicAsteroid extends THREE.Group{
        } 
     }
 
-    Instantiate(o,p,r){
+    Instantiate(o,p,r,s){
         
         o.position.copy(p);
         o.rotation.copy(r);
-
         this.SetInvulnerability(500);
-        this.scene.add(o);
+        console.log(o)
+        s.add(o);
         
     }
 

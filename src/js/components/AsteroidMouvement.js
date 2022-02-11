@@ -10,13 +10,12 @@ class AsteroidMovement {
     InitComponent() {}
 
     Update(timeElapsed) {
-      /*if(this.parent.mesh !== null){
-        this.parent.rotation.x = (this.parent.rotation.x + (Math.PI / 180) * timeElapsed * 10 );
-        this.parent.rotation.y = (this.parent.rotation.y + (Math.PI / 180) * timeElapsed * 10 );
-        this.parent.rotation.z = (this.parent.rotation.z + (Math.PI / 180) * timeElapsed * 10);
-      }*/
-
-      this.parent.translateZ(0.01 * this.parent.nbBreak);
+      if(this.parent.children[0] !== null){
+        this.parent.children[0].rotation.x = (this.parent.children[0].rotation.x + (Math.PI / 180) * timeElapsed * 10 );
+        this.parent.children[0].rotation.y = (this.parent.children[0].rotation.y + (Math.PI / 180) * timeElapsed * 10 );
+        this.parent.children[0].rotation.z = (this.parent.children[0].rotation.z + (Math.PI / 180) * timeElapsed * 10);
+      }
+      this.parent.translateZ(0.01 * ((this.parent.nbBreak*2) + 1));
 
     }
   };

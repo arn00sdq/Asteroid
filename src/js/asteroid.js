@@ -31,7 +31,13 @@ class Asteroid {
         this.camera.position.set(0,0.3,0); //0.3 troisieme personne, 2/3 vu en follow, 
         this.camera.lookAt( this.scene.position );
 
-        this.gm= new GameManager(this.scene);
+        this.goal = new THREE.Object3D;
+        this.follow = new THREE.Object3D;
+        this.follow.position.z = - 0.3;
+        this.goal.add(this.camera);
+
+        this.gm = new GameManager(this.scene);
+        
         window.addEventListener('resize', () => {
             this.OnWindowResize();
           }, false);
@@ -43,18 +49,21 @@ class Asteroid {
         const loaderAsteroid = new OBJLoader(this.loadingManager);
         const loaderShip = new GLTFLoader(this.loadingManager);
         loaderAsteroid.load('../medias/models/rock.obj',  ( object ) => {
-            this.modelManager.push(object.children[0]);
+            object.name="SpaceRock";
+            this.modelManager.push(object);
            
         }); 
         
         let me = this;
         loaderShip.load('../medias/models/SpaceShip.gltf',  function(gltf) {
-            me.modelManager.push(gltf.scene.children[0]);
+            gltf.scene.name="SpaceShip"
+            me.modelManager.push(gltf.scene);
         }); 
         
     }
 
     LoadScene(){
+        console.log(this.modelManager)
         var gridHelper = new THREE.GridHelper( 40, 40 );
         this.scene.add( gridHelper );
         
@@ -71,10 +80,7 @@ class Asteroid {
 
     LoadProps() {
 
-        this.goal = new THREE.Object3D;
-        this.follow = new THREE.Object3D;
-        this.follow.position.z = - 0.3;
-        this.goal.add(this.camera);
+        
         const basicBullet = new BasicBullet();
         this.GameObjectManager = new GameObjectManager(this.scene, this.modelManager);
         this.params = {
@@ -84,22 +90,34 @@ class Asteroid {
             scene: this.scene,
             gameObj : this.GameObjectManager,
             weapon : basicBullet,
-            loader : this.loadingManager,
         }
-        
+
+        let playerModel; let rockModel;
+        this.modelManager.forEach((e) => {
+            if(e.name == "SpaceShip") 
+                playerModel = e;
+            if(e.name == "SpaceRock")
+                rockModel = e;
+        })
+
         let player = new Player(this.params);
-        player.InitMesh(this.modelManager[1],new THREE.Vector3(0.05,0.05,0.05));
+        player.InitMesh(playerModel.children[0],new THREE.Vector3(0.05,0.05,0.05));
         player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.scene);
         
-        for (let index = 0; index < 1; index++) {
+        console.log(player)
+        let asteroidProps = new BasicAsteroid(this.scene,0);
+        asteroidProps.InitComponent();
+        asteroidProps.InitMesh(rockModel.children[0],new THREE.Vector3(0.003,0.003,0.003));
+        
+        for (let index = 0; index < 2; index++) {
             let rVectorPos = new THREE.Vector3(Math.floor(-1), 0 ,Math.floor(Math.random() * 10))
             let rEuleurRot = new THREE.Euler(0,0,0)
-            let asteroidProps = new BasicAsteroid(this.scene,0);
-            asteroidProps.InitComponent();
-            asteroidProps.InitMesh(this.modelManager[0],new THREE.Vector3(0.003,0.003,0.003));
-            
-            asteroidProps.Instantiate(asteroidProps, rVectorPos, rEuleurRot, this.scene)
+            let asteClone = asteroidProps.clone();
+            asteClone.scene = this.scene;
+            asteClone.nbBreak = asteroidProps.nbBreak;
+            asteClone.Instantiate(asteClone, rVectorPos, rEuleurRot)
         }
+
         this.previousRAF = null;
         console.log(this.scene)
         this.RAF();
