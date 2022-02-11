@@ -28,7 +28,7 @@ class Asteroid {
             }, false );
         });
 
-        this.camera.position.set(0,0.3,0); //0.3 troisieme personne, 2/3 vu en follow, 
+        this.camera.position.set(0,2,0); //0.3 troisieme personne, 2/3 vu en follow, 
         this.camera.lookAt( this.scene.position );
 
         this.goal = new THREE.Object3D;

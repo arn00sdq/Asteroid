@@ -65,10 +65,20 @@ import Component from './component.js';
           sideways.multiplyScalar(velocity.x * timeInSeconds);
           forward.multiplyScalar(velocity.z * timeInSeconds);
       
-          const pos = controlObject.position.clone();
+          const pos = controlObject.position;
+
+          if(pos.distanceTo(new THREE.Vector3(0,0,0) ) > 5){
+            pos.x = -pos.x
+            pos.y = pos.y
+            pos.z = -pos.z
+          }
+
+         
           pos.add(forward);
           pos.add(sideways);
-          controlObject.position.copy(pos)
+
+          console.log(pos)
+         // controlObject.position.copy(pos)
 
         }
       };

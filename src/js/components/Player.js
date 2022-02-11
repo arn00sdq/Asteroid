@@ -77,6 +77,7 @@ class Player extends THREE.Group{
                 this.components[k].Update(timeElapsed);
             }
         }
+        //console.log(this.position.distanceTo(new THREE.Vector3(0,0,0) ), this.position)
     }
 
 }
