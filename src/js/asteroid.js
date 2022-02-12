@@ -1,7 +1,7 @@
-import Player from "./components/Player.js";
-import BasicBullet from "./components/BasicBullet.js";
+import Player from "./components/Player/Player.js";
+import BasicBullet from "./components/Bullet/BasicBullet.js";
 import GameObjectManager from "./gameObjectManager.js";
-import BasicAsteroid from "./components/AsteroidMesh.js";
+import BasicAsteroid from "./components/Asteroid/AsteroidMesh.js";
 import GameManager from "./GameManager.js";
 
 import {OBJLoader} from "./Loader/OBJLoader.js"

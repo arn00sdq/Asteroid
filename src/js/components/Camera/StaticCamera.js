@@ -1,5 +1,3 @@
-import { Euler, Quaternion, Vector3, MathUtils } from '../three/three.module.js'
-
 class StaticCamera{
 
     constructor(parent) {

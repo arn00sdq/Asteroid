@@ -1,18 +1,20 @@
-import {GLTFLoader} from "../Loader/GLTFLoader.js";
-import ThirdPersonCamera from './thirdPersonCamera.js';
 import PlayerShootProjectiles from './PlayerShootProjectiles.js';
 import CharacterControllerInput from './playerInput.js';
 import CharacterMouvement  from './playerMouvement.js';
-import StaticCamera from "./StaticCamera.js";
 import PlayerHealthSystem from "./PlayerHealthSystem.js";
-import CameraTracking from "./CameraTracking.js";
-import * as THREE from '../three/three.module.js'
+
+import ThirdPersonCamera from '../Camera/thirdPersonCamera.js';
+import StaticCamera from "../Camera/StaticCamera.js";
+import CameraTracking from "../Camera/CameraTracking.js";
+
+import * as THREE from '../../three/three.module.js'
 
 class Player extends THREE.Group{ 
 
     constructor(params) {
 
         super();
+        
         this.components = {};
         this.name = "Player";
         this.params = params;
@@ -62,6 +64,7 @@ class Player extends THREE.Group{
 
                 this.BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
                 this.BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
+
             }, seconds);
 
        } 

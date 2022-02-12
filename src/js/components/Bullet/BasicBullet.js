@@ -1,8 +1,8 @@
-import * as THREE from '../three/three.module.js'
-
 class BasicBullet extends THREE.Group{ 
     constructor(parent) {
+
         super();
+
         this.components = {};
         this.name = "GameObject";
         this.mesh = null;
@@ -13,6 +13,7 @@ class BasicBullet extends THREE.Group{
     InitComponent() {}
 
     InitMesh(){
+
         const geometry = new THREE.CylinderGeometry(0.2,0.2,0.2 );
         const material = new THREE.MeshNormalMaterial( );
         this.mesh = new THREE.Mesh( geometry, material );
@@ -36,17 +37,24 @@ class BasicBullet extends THREE.Group{
     }
 
     Destroy(object){
+
         this.parent.remove(object.mesh);
         this.parent.remove(object);
+
         object.mesh = null;
+
     }
     
     GetComponent(n) {
+        
         return this.components[n];
+
     }
 
     AddComponent(c) {
+
         this.components[c.constructor.name] = c;      
+
     }
 
     Update(timeElapsed){
@@ -54,8 +62,11 @@ class BasicBullet extends THREE.Group{
         if(this.mesh !== null){
             
             for (let k in this.components) {
+
                 this.components[k].Update(timeElapsed);
+
             }
+            
             this.translateZ(this.speed);
         }
         

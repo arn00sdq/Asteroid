@@ -1,6 +1,3 @@
-import BasicAsteroid from "./components/AsteroidMesh.js";
-import { Euler, Vector3 } from '../js/three/three.module.js';
-
 class GameObjectManager{
 
     constructor(scene, model) {
@@ -105,8 +102,8 @@ class GameObjectManager{
 
           let rVectorPos = new THREE.Vector3(e.position.x + Math.random() *  0.2, 0 ,
                                              e.position.z + Math.random() *  0.5);
-          let rEuleurRot = new Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
-          let scale = new Vector3(0.5,0.5,0.5);
+          let rEuleurRot = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
+          let scale = new THREE.Vector3(0.5,0.5,0.5);
 
           let asteroidProps = e.clone();
           this.SetCloneValue(asteroidProps,e);
