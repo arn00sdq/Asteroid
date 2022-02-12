@@ -34,13 +34,14 @@ class ThirdPersonCamera{
             }else{
 
                 this.dir.copy( this.a ).sub( this.b );// Calcul de la pos de la cam
-                  
                 let dis = this.a.distanceTo( this.b ) - this.offset;  // pos vaisseau - pos cam
 
                 if( dis > 1) {
+
                     dis = 0.1
                 }
                 if( dis < -1) {
+
                     dis = - 0.1
                 }
 

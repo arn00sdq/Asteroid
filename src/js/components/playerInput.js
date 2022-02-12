@@ -49,7 +49,7 @@ import Component  from "./component.js";
                 this.keys.shoot = false;
                 break;
 
-              case 49: // 1
+              case 49: // 1 -- fixe
                 this.keys.cam1 = true; 
                 this.keys.cam2 = false; 
                 this.keys.cam3 = false; 
@@ -65,10 +65,11 @@ import Component  from "./component.js";
                 }
                 break;
 
-              case 51: // 3
+              case 51: // 3 mode poursuite
                 this.keys.cam3 = true;
                 this.keys.cam2 = false; 
                 this.keys.cam1 = false;
+                this.CameraTrackingInit();
                 break;
                 
               case 16: // SHIFT
@@ -109,13 +110,8 @@ import Component  from "./component.js";
             let goal_setting = this.parent.params.goal;
             let camera_setting = this.parent.params.camera;
 
-            goal_setting.position.x = 0
-            goal_setting.position.y = 5
-            goal_setting.position.z = 0
-
-            camera_setting.position.x = 0
-            camera_setting.position.y = 5
-            camera_setting.position.z = 0
+            goal_setting.position.set(0,5,0);
+            camera_setting.position.set(0,5,0);
 
             camera_setting.lookAt(0,0,0)
 
@@ -126,13 +122,16 @@ import Component  from "./component.js";
             let goal_setting = this.parent.params.goal;
             let camera_setting = this.parent.params.camera;
 
-            goal_setting.position.x = 0
-            goal_setting.position.y = 0
-            goal_setting.position.z = 0
+            goal_setting.position.set(0,0,0);
+            camera_setting.position.set(0,0.3,0);
 
-            camera_setting.position.x = 0
-            camera_setting.position.y = 0.3
-            camera_setting.position.z = 0
+          }
+
+          CameraTrackingInit(){
+
+            let camera_setting = this.parent.params.camera;
+
+            camera_setting.position.set(0,5,0);
 
           }
 

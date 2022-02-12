@@ -4,6 +4,7 @@ import PlayerShootProjectiles from './PlayerShootProjectiles.js';
 import CharacterControllerInput from './playerInput.js';
 import CharacterMouvement  from './playerMouvement.js';
 import StaticCamera from "./StaticCamera.js";
+import CameraTracking from "./CameraTracking.js";
 import * as THREE from '../three/three.module.js'
 
 class Player extends THREE.Group{ 
@@ -21,8 +22,10 @@ class Player extends THREE.Group{
 
     InitComponent(){
 
+        this.AddComponent(new CameraTracking(this));
         this.AddComponent(new StaticCamera(this));
         this.AddComponent(new ThirdPersonCamera(this));
+        
         this.AddComponent(new CharacterControllerInput(this));
         this.AddComponent(new CharacterMouvement(this));
         this.AddComponent(new PlayerShootProjectiles(this,this.params.weapon));
