@@ -102,9 +102,11 @@ class Asteroid {
             goal: this.goal,
             camera:this.camera,
             follow: this.follow,
+
             scene: this.scene,
             gameObj : this.GameObjectManager,
             weapon : basicBullet,
+            
         }
 
         let playerModel; let rockModel;
@@ -182,7 +184,7 @@ class Asteroid {
 
         event.target.remove();
         this.LoadProps();
-        
+
     }
 }
 

@@ -11,6 +11,23 @@ class GameObjectManager{
 
     }
 
+    Update(timeElapsed) {
+
+      this.scene.children.forEach(e => {
+
+        if(e.type == "Group"){
+
+          this.Detect_collision()
+          this.DetectEdge(e);
+
+          e.Update(timeElapsed)
+
+        }
+
+      }); 
+
+    }
+
     Detect_collision() {
 
       this.scene.children.forEach( e => { 
@@ -52,7 +69,7 @@ class GameObjectManager{
           break;
           
         case "Player":
-          e.Destroy(e);
+          this.CollisionPlayerHandler(e, e2);
           break;
 
         case "BasicBullet":
@@ -69,7 +86,7 @@ class GameObjectManager{
           break;
 
         case "Player":
-          e2.Destroy(e2);
+          this.CollisionPlayerHandler(e2, e);
           break;
 
         case "BasicBullet":
@@ -120,20 +137,20 @@ class GameObjectManager{
 
     }
 
-    Update(timeElapsed) {
+    CollisionPlayerHandler(player, object){
+      let playerHealth = player.GetComponent("PlayerHealthSystem");
+      if (object.name == "Asteroid"){
 
-      this.scene.children.forEach(e => {
+        playerHealth.Damage(1);
+        player.Destroy(player);
 
-        if(e.type == "Group"){
+        if(playerHealth.life > 0){
 
-          this.Detect_collision()
-          this.DetectEdge(e);
-
-          e.Update(timeElapsed)
+          player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.scene);
 
         }
 
-      }); 
+      }
 
     }
 
