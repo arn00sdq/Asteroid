@@ -67,6 +67,9 @@ import Component from './component.js';
       
           const pos = controlObject.position;
 
+          pos.add(forward);
+          pos.add(sideways);
+
           if(pos.distanceTo(new THREE.Vector3(0,0,0) ) > 5){
             pos.x = -pos.x
             pos.y = pos.y
@@ -74,10 +77,9 @@ import Component from './component.js';
           }
 
          
-          pos.add(forward);
-          pos.add(sideways);
 
-          console.log(pos)
+
+
          // controlObject.position.copy(pos)
 
         }

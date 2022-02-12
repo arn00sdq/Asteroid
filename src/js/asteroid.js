@@ -28,7 +28,7 @@ class Asteroid {
             }, false );
         });
 
-        this.camera.position.set(0,2,0); //0.3 troisieme personne, 2/3 vu en follow, 
+        this.camera.position.set(0,0.3,0); //0.3 troisieme personne, 2/3 vu en follow, 
         this.camera.lookAt( this.scene.position );
 
         this.goal = new THREE.Object3D;
@@ -104,7 +104,6 @@ class Asteroid {
         player.InitMesh(playerModel.children[0],new THREE.Vector3(0.05,0.05,0.05));
         player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.scene);
         
-        console.log(player)
         let asteroidProps = new BasicAsteroid(this.scene,0);
         asteroidProps.InitComponent();
         asteroidProps.InitMesh(rockModel.children[0],new THREE.Vector3(0.003,0.003,0.003));
@@ -129,6 +128,7 @@ class Asteroid {
                 this.previousRAF = t;
             }
             this.RAF();
+           // console.log(this.goal,this.camera)
             this.renderer.render(this.scene, this.camera);
             this.Step(t - this.previousRAF);
             this.previousRAF = t;
