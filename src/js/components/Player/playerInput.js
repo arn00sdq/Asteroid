@@ -46,7 +46,7 @@ class CharacterControllerInput {
         break;
 
       case 32: // space
-        this.keys.shoot = false;
+        this.keys.shoot = true;
         break;
 
       case 49: // 1 -- fixe
@@ -92,10 +92,6 @@ class CharacterControllerInput {
         break;
       case 68: // d
         this.keys.right = false;
-        break;
-
-      case 32: // space
-        this.keys.shoot = true;
         break;
 
       case 16: // SHIFT
