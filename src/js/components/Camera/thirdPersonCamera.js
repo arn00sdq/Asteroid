@@ -26,7 +26,7 @@ class ThirdPersonCamera{
             
             let limitA = this.a.distanceTo(new THREE.Vector3(0,0,0) )
             
-            if((limitA) > 6 )  {
+            if((limitA) > 15 )  {
 
                 this.goal.position.x =  this.a.x
                 this.goal.position.z =  this.a.z -0.3

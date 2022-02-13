@@ -4,7 +4,7 @@ class GameObjectManager{
 
       this.scene = scene;
       this.modelManager = model;
-      this.edge_limit = 6;
+      this.edge_limit = 15;
 
     }
 
@@ -56,44 +56,6 @@ class GameObjectManager{
 
     }
 
-    collision_handler(e,e2){
-
-      switch(e.constructor.name){
-
-        case "BasicAsteroid":
-          this.Asteroid_Subdivision(e);
-          e.Destroy(e);
-          break;
-          
-        case "Player":
-          this.CollisionPlayerHandler(e, e2);
-          break;
-
-        case "BasicBullet":
-          e.Destroy(e);
-          break;
-
-      }
-
-      switch(e2.constructor.name){
-
-        case "BasicAsteroid":
-          this.Asteroid_Subdivision(e2);
-          e2.Destroy(e2);
-          break;
-
-        case "Player":
-          this.CollisionPlayerHandler(e2, e);
-          break;
-
-        case "BasicBullet":
-          e2.Destroy(e2);
-          break;
-
-      }
-
-    }
-
     Asteroid_Subdivision(e){
 
       if(e.nbBreak < 2){
@@ -106,6 +68,7 @@ class GameObjectManager{
           let scale = new THREE.Vector3(0.5,0.5,0.5);
 
           let asteroidProps = e.clone();
+          asteroidProps.children[0].material = e.children[0].material.clone();
           this.SetCloneValue(asteroidProps,e);
           asteroidProps.Instantiate(asteroidProps, rVectorPos, rEuleurRot);
 
@@ -122,6 +85,43 @@ class GameObjectManager{
 
     }
 
+    collision_handler(e,e2){
+
+      switch(e.constructor.name){
+
+        case "BasicAsteroid":
+          this.CollisionAsteroidHandler(e, e2);
+          break;
+          
+        case "Player":
+          this.CollisionPlayerHandler(e, e2);
+          break;
+
+        case "BasicBullet":
+          e.Destroy(e);
+          break;
+
+      }
+
+      switch(e2.constructor.name){
+
+        case "BasicAsteroid":
+          this.CollisionAsteroidHandler(e2, e);
+          
+          break;
+
+        case "Player":
+          this.CollisionPlayerHandler(e2, e);
+          break;
+
+        case "BasicBullet":
+          e2.Destroy(e2);
+          break;
+
+      }
+
+    }
+
     DetectEdge(object){  
       
       if(object.position.distanceTo(new THREE.Vector3(0,0,0) ) > this.edge_limit){
@@ -135,7 +135,9 @@ class GameObjectManager{
     }
 
     CollisionPlayerHandler(player, object){
+      
       let playerHealth = player.GetComponent("PlayerHealthSystem");
+
       if (object.name == "Asteroid"){
 
         playerHealth.Damage(1);
@@ -144,8 +146,37 @@ class GameObjectManager{
         if(playerHealth.life > 0){
 
           player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.scene);
-
+  
         }
+
+      }
+
+    }
+
+    CollisionAsteroidHandler(asteroid, object){
+
+      let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
+
+      if (object.name == "Player"){
+          asteroidHealth.Damage("max")
+
+      }
+
+      if(object.name == "BasicBullet"){
+
+        let bullet = object.GetComponent("BulletDamageSystem");
+        asteroidHealth.Damage(bullet.damageAmount);
+
+      }
+
+      if(asteroidHealth.life == 0) {
+
+        setTimeout(() => {
+
+          this.Asteroid_Subdivision(asteroid);
+          asteroid.Destroy(asteroid);
+
+        }, 110);
 
       }
 

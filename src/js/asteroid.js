@@ -1,7 +1,7 @@
 import Player from "./components/Player/Player.js";
 import BasicBullet from "./components/Bullet/BasicBullet.js";
 import GameObjectManager from "./gameObjectManager.js";
-import BasicAsteroid from "./components/Asteroid/AsteroidMesh.js";
+import BasicAsteroid from "./components/Asteroid/BasicAsteroid.js";
 import GameManager from "./GameManager.js";
 
 import {OBJLoader} from "./Loader/OBJLoader.js"
@@ -133,6 +133,7 @@ class Asteroid {
             let rEuleurRot = new THREE.Euler(0,0,0)
 
             let asteClone = asteroidProps.clone();
+            asteClone.children[0].material = asteroidProps.children[0].material.clone();
             asteClone.scene = this.scene;
             asteClone.nbBreak = asteroidProps.nbBreak;
 
@@ -156,7 +157,7 @@ class Asteroid {
             }
             this.RAF();
             this.renderer.render(this.scene, this.camera);
-            this.Step(t - this.previousRAF);
+            this.Step(t);
             this.previousRAF = t;
 
          });    
@@ -166,8 +167,7 @@ class Asteroid {
     Step(timeElapsed) {  
 
         const timeElapsedS = Math.min(1.0 / 30.0, timeElapsed * 0.001);
-
-        this.params.gameObj.Update(timeElapsedS);
+        this.params.gameObj.Update(timeElapsed * 0.001);
         this.gm.Update();
 
     }

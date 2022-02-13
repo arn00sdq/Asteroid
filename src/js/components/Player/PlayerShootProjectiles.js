@@ -19,7 +19,10 @@ class PlayerShootProjectiles{
     }
 
     Shoot(){
+      
       let t = this.weaponParams.clone();
+      t.spaceShip = this.parent;
+
       t.InitMesh();
 
       this.spawnPos.set(this.parent.position.x,this.parent.position.y + this.spawnDistance,this.parent.position.z);
@@ -27,6 +30,7 @@ class PlayerShootProjectiles{
       this.spawnRot =  this.parent.rotation;
       
       t.Instantiate(t,this.spawnPos, this.spawnRot,this.parent.params.scene)
+      
     }
 }
 

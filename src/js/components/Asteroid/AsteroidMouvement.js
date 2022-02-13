@@ -14,16 +14,16 @@ class AsteroidMovement {
 
       if(this.parent.children[0] !== null){
 
-        this.parent.children[0].rotation.x = (this.parent.children[0].rotation.x + (Math.PI / 180) * timeElapsed * 10 );
-        this.parent.children[0].rotation.y = (this.parent.children[0].rotation.y + (Math.PI / 180) * timeElapsed * 10 );
-        this.parent.children[0].rotation.z = (this.parent.children[0].rotation.z + (Math.PI / 180) * timeElapsed * 10);
+        this.parent.children[0].rotation.x = (this.parent.children[0].rotation.x + (Math.PI / 180) * 0.016 * 10 );
+        this.parent.children[0].rotation.y = (this.parent.children[0].rotation.y + (Math.PI / 180) * 0.016 * 10 );
+        this.parent.children[0].rotation.z = (this.parent.children[0].rotation.z + (Math.PI / 180) * 0.016 * 10);
 
       }
 
       this.parent.translateZ(0.01 * ((this.parent.nbBreak*2) + 1));
 
     }
-    
+
   };
 
 export default AsteroidMovement

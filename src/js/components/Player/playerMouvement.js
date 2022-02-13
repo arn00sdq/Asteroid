@@ -14,6 +14,8 @@ class CharacterMouvement { // composant script
 
   Update(timeInSeconds) {
 
+    const TiS = 0.016
+
     const input = this.parent.GetComponent('CharacterControllerInput');
 
     const velocity = this.velocity;
@@ -24,7 +26,7 @@ class CharacterMouvement { // composant script
       velocity.z * this.decceleration.z
     )
 
-    frameDecceleration.multiplyScalar(timeInSeconds);
+    frameDecceleration.multiplyScalar(0.016);
     frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
       Math.abs(frameDecceleration.z), Math.abs(velocity.z));
     velocity.add(frameDecceleration);
@@ -37,13 +39,13 @@ class CharacterMouvement { // composant script
 
     if (input.keys.forward) {
 
-      velocity.z += acc.z * timeInSeconds;
+      velocity.z += acc.z * TiS;
 
     }
 
     if (input.keys.backward) {
 
-      velocity.z -= acc.z * timeInSeconds;
+      velocity.z -= acc.z * TiS;
 
     }
 
@@ -52,14 +54,14 @@ class CharacterMouvement { // composant script
     if (input.keys.left) {
 
       _Y.set(0, 1, 0); // axe Y
-      _Q.setFromAxisAngle(_Y, 4.0 * Math.PI * timeInSeconds * this.acceleration.y);
+      _Q.setFromAxisAngle(_Y, 4.0 * Math.PI * TiS * this.acceleration.y);
       _R.multiply(_Q);
 
     }
     if (input.keys.right) {
 
       _Y.set(0, 1, 0); // axe Y
-      _Q.setFromAxisAngle(_Y, 4.0 * - Math.PI * timeInSeconds * this.acceleration.y);
+      _Q.setFromAxisAngle(_Y, 4.0 * - Math.PI * TiS * this.acceleration.y);
       _R.multiply(_Q);
 
     }
@@ -74,14 +76,14 @@ class CharacterMouvement { // composant script
     sideways.applyQuaternion(controlObject.quaternion);
     sideways.normalize();
 
-    sideways.multiplyScalar(velocity.x * timeInSeconds);
-    forward.multiplyScalar(velocity.z * timeInSeconds);
+    sideways.multiplyScalar(velocity.x * TiS);
+    forward.multiplyScalar(velocity.z * TiS);
 
     const pos = controlObject.position;
 
     pos.add(forward);
     pos.add(sideways);
-
+    
   }
 
 };

@@ -1,4 +1,5 @@
 import AsteroidMovement from "./AsteroidMouvement.js";
+import AsteroidHealthSystem from "./AsteroidHealthSystem.js";
 
 class BasicAsteroid extends THREE.Group{
 
@@ -9,13 +10,14 @@ class BasicAsteroid extends THREE.Group{
         this.name = "Asteroid"
         this.nbBreak = nbBreak;
         this.scene = scene;
-        this.InitComponent()
+        this.InitComponent();
 
     }
     
     InitComponent(){
 
         this.AddComponent(new AsteroidMovement(this))
+        this.AddComponent(new AsteroidHealthSystem(this))
 
     }
 

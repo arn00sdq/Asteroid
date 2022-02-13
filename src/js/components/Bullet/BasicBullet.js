@@ -1,16 +1,25 @@
+import BulletMouvement from "./BulletMouvement.js";
+import BulletDamageSystem from "./BulletDamageSystem.js";
+
 class BasicBullet extends THREE.Group{ 
-    constructor(parent) {
+    constructor() {
 
         super();
 
         this.components = {};
-        this.name = "GameObject";
+        this.name = "BasicBullet";
         this.mesh = null;
-        this.speed = 0.1;
+        this.spaceShip = null;
+        this.InitComponent();
         
     }
 
-    InitComponent() {}
+    InitComponent() {
+
+        this.AddComponent(new BulletMouvement(this))
+        this.AddComponent(new BulletDamageSystem(this))
+
+    }
 
     InitMesh(){
 
@@ -67,7 +76,6 @@ class BasicBullet extends THREE.Group{
 
             }
             
-            this.translateZ(this.speed);
         }
         
     }
