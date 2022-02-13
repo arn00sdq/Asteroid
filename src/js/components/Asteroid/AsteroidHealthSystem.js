@@ -13,7 +13,6 @@ class AsteroidHealthSystem{
 
         this.DamageMarker();
 
-        console.log(lifeAmount)
         if(lifeAmount == "max"){
 
             this.life = 0;
