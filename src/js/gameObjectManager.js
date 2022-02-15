@@ -1,28 +1,14 @@
-class GameObjectManager{
+import GameManager from "./GameManager.js";
 
-    constructor(scene, model) {
+class GameObjectManager extends GameManager{
 
-      this.scene = scene;
+    constructor(scene,model) {
+
+      super(scene);
+      
       this.modelManager = model;
       this.edge_limit = 15;
-
-    }
-
-    Update(timeElapsed) {
-
-      this.scene.children.forEach(e => {
-
-        if(e.type == "Group"){
-
-          this.Detect_collision()
-          this.DetectEdge(e);
-
-          e.Update(timeElapsed)
-
-        }
-
-      }); 
-
+      
     }
 
     Detect_collision() {
@@ -147,6 +133,10 @@ class GameObjectManager{
 
           player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.scene);
   
+        }else{
+
+          this.OnPlayerEnd();
+
         }
 
       }
@@ -171,14 +161,38 @@ class GameObjectManager{
 
       if(asteroidHealth.life == 0) {
 
-        setTimeout(() => {
 
           this.Asteroid_Subdivision(asteroid);
           asteroid.Destroy(asteroid);
 
-        }, 110);
-
       }
+
+    }
+
+    Update(timeElapsed) {
+
+      let nbEnnemyFrame = 0;
+
+      this.scene.children.forEach(e => {
+
+        if(e.type == "Group"){
+
+          if(e.name == "Asteroid"){
+
+            nbEnnemyFrame++ ;
+
+          } 
+      
+          this.Detect_collision()
+          this.DetectEdge(e);
+
+          e.Update(timeElapsed)
+
+        }
+
+      }); 
+
+      this.CountEnnemy(nbEnnemyFrame);
 
     }
 

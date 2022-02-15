@@ -12,9 +12,9 @@ class PlayerHealthSystem{
     Damage(lifeAmount){
 
         this.life -= lifeAmount
+        
         if (this.life < 0) this.life = 0
 
-        console.log(this.life)
     }
 
     Heal(healAmount){

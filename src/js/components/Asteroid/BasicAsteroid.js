@@ -22,7 +22,7 @@ class BasicAsteroid extends THREE.Group{
     }
 
     InitMesh(model,scale){
-
+        
         this.add(model);
 
         this.children[0].scale.copy(scale)

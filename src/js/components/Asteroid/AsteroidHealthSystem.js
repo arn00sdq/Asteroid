@@ -11,7 +11,7 @@ class AsteroidHealthSystem{
 
     Damage(lifeAmount){
 
-        this.DamageMarker();
+        
 
         if(lifeAmount == "max"){
 
@@ -24,6 +24,8 @@ class AsteroidHealthSystem{
         
         if (this.life < 0) this.life = 0;
 
+        if (this.life > 0) this.DamageMarker();
+        ; 
     }
 
     Heal(healAmount){

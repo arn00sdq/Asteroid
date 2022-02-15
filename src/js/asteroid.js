@@ -40,8 +40,6 @@ class Asteroid {
         this.follow = new THREE.Object3D;
         this.follow.position.z = - 0.3;
         this.goal.add(this.camera);
-
-        this.gm = new GameManager(this.scene);
         
         window.addEventListener('resize', () => {
 
@@ -55,9 +53,17 @@ class Asteroid {
 
         this.modelManager = [];
         const loaderAsteroid = new OBJLoader(this.loadingManager);
+        const loaderExplosion = new OBJLoader(this.loadingManager);
         const loaderShip = new GLTFLoader(this.loadingManager);
 
         loaderAsteroid.load('../medias/models/rock.obj',  ( object ) => {
+
+            object.name="SpaceRock";
+            this.modelManager.push(object);
+           
+        }); 
+
+        loaderExplosion.load('../medias/models/explosion.obj',  ( object ) => {
 
             object.name="SpaceRock";
             this.modelManager.push(object);
@@ -75,8 +81,6 @@ class Asteroid {
     }
 
     LoadScene(){
-
-        console.log(this.modelManager)
 
         var gridHelper = new THREE.GridHelper( 40, 40 );
         this.scene.add( gridHelper );
@@ -96,7 +100,8 @@ class Asteroid {
     LoadProps() {
 
         const basicBullet = new BasicBullet();
-        this.GameObjectManager = new GameObjectManager(this.scene, this.modelManager);
+        this.gm = new GameManager(this.scene);
+        this.GameObjectManager = new GameObjectManager(this.scene,this.modelManager);
 
         this.params = {
             goal: this.goal,
@@ -104,7 +109,6 @@ class Asteroid {
             follow: this.follow,
 
             scene: this.scene,
-            gameObj : this.GameObjectManager,
             weapon : basicBullet,
             
         }
@@ -141,9 +145,23 @@ class Asteroid {
 
         }
 
-        this.previousRAF = null;
-        console.log(this.scene)
-        this.RAF();
+        this.remove = null ;
+        document.addEventListener('keydown',  this.remove =  this.OnPlayerBegin.bind(this))
+
+    }
+
+    OnPlayerBegin( event ) {
+
+        if (event.code == 'Space') {
+
+            document.getElementById("start_game").style.display = "none";
+            document.removeEventListener('keydown',  this.remove);
+
+            this.previousRAF = null;
+
+            this.RAF();
+        }
+
     }
 
     RAF() {
@@ -155,6 +173,7 @@ class Asteroid {
                 this.previousRAF = t;
 
             }
+
             this.RAF();
             this.renderer.render(this.scene, this.camera);
             this.Step(t);
@@ -167,8 +186,7 @@ class Asteroid {
     Step(timeElapsed) {  
 
         const timeElapsedS = Math.min(1.0 / 30.0, timeElapsed * 0.001);
-        this.params.gameObj.Update(timeElapsed * 0.001);
-        this.gm.Update();
+        this.GameObjectManager.Update(timeElapsed * 0.001);
 
     }
 
@@ -186,6 +204,8 @@ class Asteroid {
         this.LoadProps();
 
     }
+
+    
 }
 
 let _App = new Asteroid();
