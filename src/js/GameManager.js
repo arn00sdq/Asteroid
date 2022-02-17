@@ -5,12 +5,13 @@ class GameManager {
         this.scene = scene;
         this.score = 0;
         this.ennemy = 0;
+        this.level = "1"
 
     }
 
     OnPlayerEnd() {
 
-        console.log("playerDead")
+        document.getElementById("end_game").style.display = "";
 
     }
 

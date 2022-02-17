@@ -22,7 +22,7 @@ class AsteroidMovement {
 
       let palier = Math.floor(timeElapsed / 4);
       this.parent.translateZ(0.01 * (this.parent.nbBreak*2) * ( (palier + 1) * 0.1 ) + 0.01 );
-      //console.log( 0.01 * (this.parent.nbBreak*2) * ( (palier + 1) * 0.1 ) + 0.01  )
+     // console.log( 0.01 * (this.parent.nbBreak*2) * ( (palier + 1) * 0.1 ) + 0.01  )
 
     }
 

@@ -1,3 +1,4 @@
+
 class PlayerShootProjectiles{
     constructor(params,weapon){
 
@@ -10,6 +11,8 @@ class PlayerShootProjectiles{
       this.spawnPos = new THREE.Vector3;
       this.spawnRot = new THREE.Euler;
       this.playerDirection = new THREE.Vector3;
+
+      this.temp = new THREE.Vector3;
 
     }
 
@@ -40,12 +43,14 @@ class PlayerShootProjectiles{
 
       t.InitMesh();
 
-      this.spawnPos.set(this.parent.position.x,this.parent.position.y + this.spawnDistance,this.parent.position.z);
+      this.temp.setFromMatrixPosition(this.parent.follow.matrixWorld);
+      this.spawnPos.set(this.temp);
+
       this.playerDirection = this.parent.getWorldPosition(new THREE.Vector3());
       this.spawnRot =  this.parent.rotation;
       
-      t.GetComponent("BulletDamageSystem").Start(this.spawnPos)
-      t.Instantiate(t,this.spawnPos, this.spawnRot,this.parent.params.scene);
+      t.GetComponent("BulletDamageSystem").Start(this.temp)
+      t.Instantiate(t,this.temp, this.spawnRot,this.parent.params.scene);
       
     }
 }

@@ -14,7 +14,7 @@ class Player extends THREE.Group{
     constructor(params) {
 
         super();
-        
+
         this.components = {};
         this.name = "Player";
         this.params = params;
@@ -40,6 +40,10 @@ class Player extends THREE.Group{
 
         this.add(model)
         
+        this.follow = new THREE.Object3D;
+        this.follow.position.z = 0.3;
+        this.add(this.follow);
+
         this.children[0].scale.copy(scale)
         this.SetRigidBoby(this.children[0])
 

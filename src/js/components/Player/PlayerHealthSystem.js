@@ -3,7 +3,7 @@ class PlayerHealthSystem{
     constructor(parent) {
 
         this.parent = parent;
-        this.life = 3;
+        this.life = 1;
 
     }
 

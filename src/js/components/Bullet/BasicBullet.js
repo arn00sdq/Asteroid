@@ -23,9 +23,15 @@ class BasicBullet extends THREE.Group{
 
     InitMesh(){
 
-        const geometry = new THREE.CylinderGeometry(0.2,0.2,0.2 );
-        const material = new THREE.MeshNormalMaterial( );
+        const geometry = new THREE.CylinderGeometry(0.01,0.01,0.1,12,2,false);
+        const material = new THREE.MeshLambertMaterial( );
+        
+        material.color.set(0xff0000)
+        material.emissive.set(0xff000d)
+
         this.mesh = new THREE.Mesh( geometry, material );
+
+        this.mesh.rotateX( (Math.PI / 180) *90 );
 
         this.mesh.geometry.computeBoundingBox();
         this.mesh.geometry.computeBoundingSphere();
