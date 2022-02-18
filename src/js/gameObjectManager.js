@@ -134,7 +134,7 @@ class GameObjectManager extends GameManager{
         playerHealth.Damage(1);
         player.Destroy(player);
 
-        if(playerHealth.life > 0){
+        if(player.life > 0){
 
           player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.scene);
   
@@ -195,16 +195,15 @@ class GameObjectManager extends GameManager{
     Update(timeElapsed) {
 
       let nbEnnemyFrame = 0;
+      let playerLife;
 
       this.scene.children.forEach(e => {
 
         if(e.type == "Group"){
 
-          if(e.name == "Asteroid"){
+          if(e.name == "Asteroid") nbEnnemyFrame++ ;
 
-            nbEnnemyFrame++ ;
-
-          } 
+          if(e.name == "Player") playerLife = e.life ;
       
           this.Detect_collision()
           this.DetectEdge(e);
@@ -216,6 +215,7 @@ class GameObjectManager extends GameManager{
       }); 
 
       this.CountEnnemy(nbEnnemyFrame);
+      this.PrintLife(playerLife);
 
     }
 

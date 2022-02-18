@@ -39,13 +39,11 @@ class GameManager {
             let rEuleurRot = new THREE.Euler(0,0,0)
             let asteClone = this.asteroid.clone();
             
-
             asteClone.children[0].material = this.asteroid.children[0].material.clone();
             asteClone.scene = this.scene;
             asteClone.nbBreak = this.asteroid.nbBreak;
 
             asteClone.Instantiate(asteClone, rVectorPos, rEuleurRot)
-
 
         }
 
@@ -54,6 +52,12 @@ class GameManager {
     printScore(){
         
         document.getElementById("score").appendChild = this.score;
+
+    }
+
+    PrintLife(life) {
+
+        if(life !== undefined) document.getElementById("life").innerHTML = life;
 
     }
 
