@@ -8,11 +8,9 @@ class BulletMouvement{
     }
 
     Update(timeElapsed){
-
         
-        let palier = Math.floor(timeElapsed / 4);
-        this.parent.translateZ(  0.01 * (palier + 1 )); 
-
+        let palier = Math.floor(timeElapsed / 7);
+        this.parent.translateZ(  0.01 * Math.log(palier) + 0.06); 
 
     }
 

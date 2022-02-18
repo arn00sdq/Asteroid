@@ -38,19 +38,29 @@ class PlayerShootProjectiles{
 
     Shoot(){
       
-      let t = this.weaponParams.clone();
-      t.spaceShip = this.parent;
+      this.weaponParams.InitMesh();
 
-      t.InitMesh();
 
-      this.temp.setFromMatrixPosition(this.parent.follow.matrixWorld);
-      this.spawnPos.set(this.temp);
+      for (let i = 0; i < this.parent.cannon.length; i++) {
 
-      this.playerDirection = this.parent.getWorldPosition(new THREE.Vector3());
-      this.spawnRot =  this.parent.rotation;
-      
-      t.GetComponent("BulletDamageSystem").Start(this.temp)
-      t.Instantiate(t,this.temp, this.spawnRot,this.parent.params.scene);
+        let bulletClone = this.weaponParams.clone();
+
+        bulletClone.spaceShip = this.parent;
+        bulletClone.scene = this.weaponParams.scene;
+        
+        this.temp.setFromMatrixPosition(this.parent.cannon[i].matrixWorld);
+        this.spawnPos.copy(this.parent.cannon[i].position);
+
+        this.playerDirection = this.parent.getWorldPosition(new THREE.Vector3());
+        this.spawnRot =  this.parent.rotation;
+        
+        bulletClone.GetComponent("BulletDamageSystem").Start(this.temp);
+       
+        bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot);
+
+        this.parent.params.scene.add(new THREE.Object3D)
+
+      }
       
     }
 }

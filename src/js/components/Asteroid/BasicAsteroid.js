@@ -3,13 +3,18 @@ import AsteroidHealthSystem from "./AsteroidHealthSystem.js";
 
 class BasicAsteroid extends THREE.Group{
 
-    constructor(scene,nbBreak){
+    constructor(scene,model,nbBreak){
 
         super();
+
         this.components = {};
+        this.model = model
+        this.scene = scene;
+
         this.name = "Asteroid"
         this.nbBreak = nbBreak;
-        this.scene = scene;
+        this.life = 35;
+        
         this.InitComponent();
 
     }
@@ -21,13 +26,13 @@ class BasicAsteroid extends THREE.Group{
 
     }
 
-    InitMesh(model,scale){
+    InitMesh(scale){
         
-        console.log(model)
-        this.add(model);
+        this.add(this.model);
 
         this.children[0].scale.copy(scale)
-        this.SetRigidBoby(this.children[0])
+        this.SetRigidBoby(this.children[0]);
+
         
     }  
 
@@ -45,7 +50,6 @@ class BasicAsteroid extends THREE.Group{
 
         this.BB = null;
         this.BS = null;
-        
        if(this.children[0]){
            
             setTimeout(() => {
@@ -63,7 +67,10 @@ class BasicAsteroid extends THREE.Group{
         o.position.copy(p);
         o.rotation.copy(r);
 
+        if (o.children[0].material.color.getHexString() !== 'ffffff')  o.children[0].material.color.set(0xffffff);
+
         this.SetInvulnerability(500);
+
         this.scene.add(o);
         
     }

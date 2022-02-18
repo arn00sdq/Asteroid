@@ -1,43 +1,47 @@
 class AsteroidHealthSystem{
 
-    constructor(parent) {
+    constructor(parent,originalColor) {
 
         this.parent = parent;
-        this.life = 15;
+        this.color = originalColor;
 
     }
 
-    Update() {}
+    Update(  ) {}
 
     Damage(lifeAmount){
 
-        
-
         if(lifeAmount == "max"){
 
-            this.life = 0;
+            this.parent.life = 0;
 
         }else{
 
-            this.life -= lifeAmount
+            this.parent.life -= lifeAmount
         }
         
-        if (this.life < 0) this.life = 0;
+        if (this.parent.life < 0) this.parent.life = 0;
 
-        if (this.life > 0) this.DamageMarker();
-        ; 
+        if (this.parent.life > 0) this.DamageMarker();
+
     }
 
     Heal(healAmount){
 
-        this.life += healAmount;
-        if (this.life > 0) this.life = this.life
+        this.parent.life += healAmount;
+        if (this.life > 0) this.parent.life = this.parent.life
 
     }
 
     DamageMarker(){
 
         let asteroidColor = this.parent.children[0].material.color;
+        
+        if(asteroidColor.getHexString() !== 'ffffff'){
+
+            asteroidColor.set(0xffffff);
+
+        }
         let asteroidHex = asteroidColor.getHex();
         asteroidColor.set('red');
 

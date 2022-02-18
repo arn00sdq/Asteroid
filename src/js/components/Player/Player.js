@@ -11,13 +11,16 @@ import * as THREE from '../../three/three.module.js'
 
 class Player extends THREE.Group{ 
 
-    constructor(params) {
+    constructor(params, model) {
 
         super();
 
-        this.components = {};
         this.name = "Player";
+        this.components = {};
         this.params = params;
+        this.model = model;
+
+        this.cannon = [];
         
         this.InitComponent();
 
@@ -36,13 +39,18 @@ class Player extends THREE.Group{
        
     }
 
-    InitMesh(model,scale){
+    InitMesh(scale){
 
-        this.add(model)
+        this.add(this.model)
         
-        this.follow = new THREE.Object3D;
-        this.follow.position.z = 0.3;
-        this.add(this.follow);
+        this.cannon.push(new THREE.Object3D);
+        this.cannon.push(new THREE.Object3D);
+
+        this.cannon[0].position.copy( new THREE.Vector3(-0.1,0,0.1) );
+        this.cannon[1].position.copy( new THREE.Vector3(0.1,0,0.1) );
+
+        this.add(this.cannon[0]);
+        this.add(this.cannon[1]);
 
         this.children[0].scale.copy(scale)
         this.SetRigidBoby(this.children[0])

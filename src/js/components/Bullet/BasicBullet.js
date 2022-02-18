@@ -2,14 +2,16 @@ import BulletMouvement from "./BulletMouvement.js";
 import BulletDamageSystem from "./BulletDamageSystem.js";
 
 class BasicBullet extends THREE.Group{ 
-    constructor() {
+    constructor(model, scene) {
 
         super();
 
         this.components = {};
         this.name = "BasicBullet";
-        this.mesh = null;
         this.spaceShip = null;
+        this.model = model;
+        this.scene = scene;
+
         this.InitComponent();
         
     }
@@ -23,32 +25,58 @@ class BasicBullet extends THREE.Group{
 
     InitMesh(){
 
-        const geometry = new THREE.CylinderGeometry(0.01,0.01,0.1,12,2,false);
-        const material = new THREE.MeshLambertMaterial( );
+        this.add(this.model);
+
+        this.children[0].geometry.computeBoundingBox();
+        this.children[0].geometry.computeBoundingSphere();
+
+        this.children[0].BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
+        this.children[0].BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
+
         
-        material.color.set(0xff0000)
-        material.emissive.set(0xff000d)
 
-        this.mesh = new THREE.Mesh( geometry, material );
+        //this.SetRigidBoby(this.children[0])
+        
+    }
+    
+    SetRigidBoby(object){
 
-        this.mesh.rotateX( (Math.PI / 180) *90 );
+        object.geometry.computeBoundingBox();
+        object.geometry.computeBoundingSphere();
 
-        this.mesh.geometry.computeBoundingBox();
-        this.mesh.geometry.computeBoundingSphere();
+        object.BB = new THREE.Box3().copy( object.geometry.boundingBox );
+        object.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
 
-        this.BB = new THREE.Box3().copy( this.mesh.geometry.boundingBox );
-        this.BS = new THREE.Sphere().copy( this.mesh.geometry.boundingSphere );
+    }
 
-        this.add(this.mesh);
+    Instantiate(o,p,r){
+        
+       /* const matrix = new THREE.Matrix4();
+        matrix.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+        o.children[0].setMatrixAt(0,matrix)
+        o.mesh.setMatrixAt(0,matrix)*/
+
+        o.position.copy(p);
+        o.rotation.copy(r);
+
+        this.SetInvulnerability(100);
+
+        this.scene.add(o);
         
     }
 
-    Instantiate(o,p,r,s){
-        
-        this.position.copy(p);
-        this.rotation.copy(r);
+    SetInvulnerability(seconds){
 
-        s.add(o)
+        this.BB = null;
+        this.BS = null;
+           
+        setTimeout(() => {
+
+            this.BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
+            this.BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
+
+        }, seconds);
+
     }
 
     Destroy(object){
@@ -74,7 +102,7 @@ class BasicBullet extends THREE.Group{
 
     Update(timeElapsed){
         
-        if(this.mesh !== null){
+        if(this.children[0] !== null){
             
             for (let k in this.components) {
 

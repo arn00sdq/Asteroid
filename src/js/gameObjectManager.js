@@ -51,11 +51,13 @@ class GameObjectManager extends GameManager{
           let rVectorPos = new THREE.Vector3(e.position.x + Math.random() *  0.2, 0 ,
                                              e.position.z + Math.random() *  0.5);
           let rEuleurRot = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
-          let scale = new THREE.Vector3(0.5,0.5,0.5);
 
           let asteroidProps = e.clone();
           asteroidProps.children[0].material = e.children[0].material.clone();
+
           this.SetCloneValue(asteroidProps,e);
+
+          asteroidProps.scale.copy(new THREE.Vector3( Math.pow(0.75 , asteroidProps.nbBreak), Math.pow(0.75 , asteroidProps.nbBreak), Math.pow(0.75 , asteroidProps.nbBreak)));
           asteroidProps.Instantiate(asteroidProps, rVectorPos, rEuleurRot);
 
         }
@@ -68,11 +70,14 @@ class GameObjectManager extends GameManager{
 
       clone.scene = this.scene;
       clone.nbBreak = original.nbBreak + 1;
+      //console.log(clone.life , (original.nbBreak + 1))
+      clone.life = clone.life / (clone.nbBreak + 1)
 
     }
 
     collision_handler(e,e2){
 
+      
       switch(e.constructor.name){
 
         case "BasicAsteroid":
@@ -84,7 +89,7 @@ class GameObjectManager extends GameManager{
           break;
 
         case "BasicBullet":
-          e.Destroy(e);
+          this.CollisionBulletHandler(e, e2);
           break;
 
       }
@@ -101,7 +106,7 @@ class GameObjectManager extends GameManager{
           break;
 
         case "BasicBullet":
-          e2.Destroy(e2);
+          this.CollisionBulletHandler(e2, e);
           break;
 
       }
@@ -148,6 +153,7 @@ class GameObjectManager extends GameManager{
       let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
 
       if (object.name == "Player"){
+
           asteroidHealth.Damage("max")
 
       }
@@ -159,13 +165,30 @@ class GameObjectManager extends GameManager{
 
       }
 
-      if(asteroidHealth.life == 0) {
-
+      if(asteroid.life == 0) {
 
           this.Asteroid_Subdivision(asteroid);
           asteroid.Destroy(asteroid);
 
       }
+
+    }
+
+    CollisionBulletHandler(bullet, object){
+
+      if(bullet.name == object.name) return;
+
+      if(object.name == "Player"){
+
+        bullet.Destroy(bullet)
+
+      };
+
+      if(object.name == "Asteroid"){
+
+        bullet.Destroy(bullet)
+
+      };
 
     }
 

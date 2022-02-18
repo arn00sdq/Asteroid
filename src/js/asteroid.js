@@ -71,6 +71,18 @@ class Asteroid {
         var map = textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg');
         var material = new THREE.MeshPhongMaterial({map:map})
 
+        const geometryAsteroid = new THREE.CylinderGeometry(0.01,0.01,0.1,12,2,false); 
+        const materialAsteroid = new THREE.MeshLambertMaterial( );
+        
+        materialAsteroid.color.set(0xff0000)
+        materialAsteroid.emissive.set(0xff000d)
+
+        const cylinderMesh = new THREE.Mesh( geometryAsteroid, materialAsteroid);
+        cylinderMesh.name="Bullet";
+        cylinderMesh.rotateX( (Math.PI / 180) *90 );
+
+        this.modelManager.push(cylinderMesh);
+
         loaderAsteroid.load('../medias/models/low_poly.obj',  ( object ) => {
 
             object.traverse( function ( child ) {
@@ -80,7 +92,6 @@ class Asteroid {
             } );
 
             object.name="SpaceRock";
-            console.log(object)
             this.modelManager.push(object);
            
         }); 
@@ -121,7 +132,19 @@ class Asteroid {
 
     LoadProps() {
 
-        const basicBullet = new BasicBullet();
+        let playerModel; let rockModel; let bulletModel
+        this.modelManager.forEach((e) => {
+
+            if(e.name == "SpaceShip")  playerModel = e;
+
+            if(e.name == "SpaceRock")  rockModel = e;
+
+            if(e.name == "Bullet")  bulletModel = e;
+
+        })
+
+        this.basicBullet = new BasicBullet(bulletModel, this.scene);
+
         this.gm = new GameManager(this.scene);
         this.GameObjectManager = new GameObjectManager(this.scene,this.modelManager);
 
@@ -131,45 +154,17 @@ class Asteroid {
             follow: this.follow,
 
             scene: this.scene,
-            weapon : basicBullet,
+            weapon : this.basicBullet,
             
         }
 
-        let playerModel; let rockModel;
-        this.modelManager.forEach((e) => {
+        this.gm.player = new Player(this.params, playerModel.children[0]);
+        this.gm.asteroid = new BasicAsteroid(this.scene,rockModel.children[0],0);
 
-            if(e.name == "SpaceShip") 
-                playerModel = e;
-            if(e.name == "SpaceRock")
-                rockModel = e;
-
-        })
-
-        let player = new Player(this.params);
-        player.InitMesh(playerModel.children[0],new THREE.Vector3(0.05,0.05,0.05));
-        player.Instantiate(player,new THREE.Vector3(0,0,0), new THREE.Euler(0,0,0),this.scene);
-        
-        let asteroidProps = new BasicAsteroid(this.scene,0);
-        asteroidProps.InitComponent();
-        console.log(rockModel)
-        asteroidProps.InitMesh(rockModel.children[0],new THREE.Vector3(0.0003,0.0003,0.0003));
-        
-        for (let index = 0; index < 10; index++) {
-
-            let rVectorPos = new THREE.Vector3(Math.floor(-1), 0 ,Math.floor(Math.random() * 10))
-            let rEuleurRot = new THREE.Euler(0,0,0)
-
-            let asteClone = asteroidProps.clone();
-            asteClone.children[0].material = asteroidProps.children[0].material.clone();
-            asteClone.scene = this.scene;
-            asteClone.nbBreak = asteroidProps.nbBreak;
-
-            asteClone.Instantiate(asteClone, rVectorPos, rEuleurRot)
-
-        }
+        this.gm.InstantiatePlayer();
+        this.gm.InstantiateWave();
 
         this.remove = null ;
-    
 
         this.renderer.render(this.scene, this.camera);
 
@@ -186,7 +181,6 @@ class Asteroid {
             document.removeEventListener('keydown',  this.remove);
 
             this.previousRAF = null;
-            console.log(this.scene)
             this.RAF();
         }
 
