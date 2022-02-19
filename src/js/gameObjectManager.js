@@ -48,30 +48,16 @@ class GameObjectManager extends GameManager{
 
         for (let index = 1; index <= 2; index++) {
 
-          let rVectorPos = new THREE.Vector3(e.position.x + Math.random() *  0.2, 0 ,
+          let position = new THREE.Vector3(e.position.x + Math.random() *  0.2, 0 ,
                                              e.position.z + Math.random() *  0.5);
-          let rEuleurRot = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
+          let rotation = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
+          let scale = Math.pow(0.75 , e.nbBreak);
 
-          let asteroidProps = e.clone();
-          asteroidProps.children[0].material = e.children[0].material.clone();
-
-          this.SetCloneValue(asteroidProps,e);
-
-          asteroidProps.scale.copy(new THREE.Vector3( Math.pow(0.75 , asteroidProps.nbBreak), Math.pow(0.75 , asteroidProps.nbBreak), Math.pow(0.75 , asteroidProps.nbBreak)));
-          asteroidProps.Instantiate(asteroidProps, rVectorPos, rEuleurRot);
+          this.SpawnAsteroid(e , position,rotation, scale)
 
         }
 
       }
-
-    }
-
-    SetCloneValue(clone, original){
-
-      clone.scene = this.scene;
-      clone.nbBreak = original.nbBreak + 1;
-      //console.log(clone.life , (original.nbBreak + 1))
-      clone.life = clone.life / (clone.nbBreak + 1)
 
     }
 
@@ -196,6 +182,7 @@ class GameObjectManager extends GameManager{
 
       let nbEnnemyFrame = 0;
       let playerLife;
+      let countBullet = 0;
 
       this.scene.children.forEach(e => {
 
@@ -204,6 +191,8 @@ class GameObjectManager extends GameManager{
           if(e.name == "Asteroid") nbEnnemyFrame++ ;
 
           if(e.name == "Player") playerLife = e.life ;
+
+          if(e.name == "BasicBullet") countBullet++;
       
           this.Detect_collision()
           this.DetectEdge(e);
@@ -216,6 +205,7 @@ class GameObjectManager extends GameManager{
 
       this.CountEnnemy(nbEnnemyFrame);
       this.PrintLife(playerLife);
+      this.CheckBullet(countBullet)
 
     }
 

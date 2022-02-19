@@ -11,6 +11,7 @@ class BasicBullet extends THREE.Group{
         this.spaceShip = null;
         this.model = model;
         this.scene = scene;
+        this.index = 0;
 
         this.InitComponent();
         
@@ -51,10 +52,12 @@ class BasicBullet extends THREE.Group{
 
     Instantiate(o,p,r){
         
-       /* const matrix = new THREE.Matrix4();
-        matrix.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-        o.children[0].setMatrixAt(0,matrix)
-        o.mesh.setMatrixAt(0,matrix)*/
+        const dummy = new THREE.Object3D
+        dummy.position.copy(p);
+        dummy.rotation.copy(r);
+       // dummy.updateMatrix();
+
+        o.children[0].setMatrixAt(this.index,dummy.matrix)
 
         o.position.copy(p);
         o.rotation.copy(r);

@@ -62,10 +62,11 @@ class BasicAsteroid extends THREE.Group{
 
     }
 
-    Instantiate(o,p,r){
+    Instantiate(o,p,r,s){
         
         o.position.copy(p);
         o.rotation.copy(r);
+        o.scale.copy(new THREE.Vector3(s,s,s))
 
         if (o.children[0].material.color.getHexString() !== 'ffffff')  o.children[0].material.color.set(0xffffff);
 

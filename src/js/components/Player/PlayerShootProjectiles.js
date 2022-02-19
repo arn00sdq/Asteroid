@@ -14,6 +14,8 @@ class PlayerShootProjectiles{
 
       this.temp = new THREE.Vector3;
 
+      this.indexMissile = 1
+
     }
 
     Update(timeElapsed){
@@ -47,6 +49,7 @@ class PlayerShootProjectiles{
 
         bulletClone.spaceShip = this.parent;
         bulletClone.scene = this.weaponParams.scene;
+        bulletClone.index = this.indexMissile;
         
         this.temp.setFromMatrixPosition(this.parent.cannon[i].matrixWorld);
         this.spawnPos.copy(this.parent.cannon[i].position);
@@ -58,7 +61,7 @@ class PlayerShootProjectiles{
        
         bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot);
 
-        this.parent.params.scene.add(new THREE.Object3D)
+        this.indexMissile ++;
 
       }
       

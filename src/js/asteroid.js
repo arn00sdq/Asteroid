@@ -71,13 +71,13 @@ class Asteroid {
         var map = textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg');
         var material = new THREE.MeshPhongMaterial({map:map})
 
-        const geometryAsteroid = new THREE.CylinderGeometry(0.01,0.01,0.1,12,2,false); 
+        const geometryAsteroid = new THREE.CylinderBufferGeometry(0.01,0.01,0.1,5,1,false); 
         const materialAsteroid = new THREE.MeshLambertMaterial( );
         
-        materialAsteroid.color.set(0xff0000)
-        materialAsteroid.emissive.set(0xff000d)
+        /*materialAsteroid.color.set(0xff0000)
+        materialAsteroid.emissive.set(0xff000d)*/
 
-        const cylinderMesh = new THREE.Mesh( geometryAsteroid, materialAsteroid);
+        const cylinderMesh = new THREE.InstancedMesh( geometryAsteroid, materialAsteroid, 100);
         cylinderMesh.name="Bullet";
         cylinderMesh.rotateX( (Math.PI / 180) *90 );
 
@@ -159,7 +159,7 @@ class Asteroid {
         }
 
         this.gm.player = new Player(this.params, playerModel.children[0]);
-        this.gm.asteroid = new BasicAsteroid(this.scene,rockModel.children[0],0);
+        this.gm.asteroid = new BasicAsteroid(this.scene,rockModel.children[0],-1);
 
         this.gm.InstantiatePlayer();
         this.gm.InstantiateWave();
@@ -199,6 +199,7 @@ class Asteroid {
             this.RAF();
             this.renderer.render(this.scene, this.camera);
             this.Step(t);
+           // console.log(this.scene)
             this.previousRAF = t;
 
          });    

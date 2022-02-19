@@ -9,7 +9,7 @@ class GameManager {
         this.scene = scene;
         this.score = 0;
         this.ennemy = 0;
-        this.level = "1"
+        this.level = 2
 
     }
 
@@ -25,27 +25,59 @@ class GameManager {
     }
 
     InstantiateWave(){
+
         this.asteroid.InitComponent();
         this.asteroid.InitMesh(new THREE.Vector3(0.0003,0.0003,0.0003));
         
-        
-        for (let index = 0; index < 2; index++) {
+        switch (this.level){
 
-            let rVectorPos = new THREE.Vector3( ( ( Math.random() *  ( 10.5 - 8.5 )) + 8.5 ) * (Math.round(Math.random()) ? 1 : -1) , 
+            case 1:
+                this.AsteroidWave(this.asteroid, 5);
+                break;
+            case 2:
+                this.BossWave(this.asteroid);
+                break;
+            case 3:
+                break;
+        }
+
+    }
+
+    AsteroidWave(asteroid, nbAsteroid){
+
+        for (let index = 0; index < nbAsteroid; index++) {
+
+            let position = new THREE.Vector3( ( ( Math.random() *  ( 10.5 - 8.5 ) ) + 8.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
-                                                ( (Math.random() *  ( 10.5 - 2 ) )+ 2  ) * (Math.round(Math.random()) ? 1 : -1)
-                                              )
+                                              ( ( Math.random() *  ( 10.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                            )
 
-            let rEuleurRot = new THREE.Euler(0,0,0)
-            let asteClone = this.asteroid.clone();
-            
-            asteClone.children[0].material = this.asteroid.children[0].material.clone();
-            asteClone.scene = this.scene;
-            asteClone.nbBreak = this.asteroid.nbBreak;
+            let rotation = new THREE.Euler(0,0,0);
+            let scale = 1;
 
-            asteClone.Instantiate(asteClone, rVectorPos, rEuleurRot)
+            this.SpawnAsteroid(asteroid, position, rotation, scale)
 
         }
+
+    }
+
+    BossWave(asteroid){
+
+        let scale = 2;
+        this.SpawnAsteroid(asteroid, position, rotation, scale )
+
+    }
+
+    SpawnAsteroid(asteroid,position, rotation, scale){
+
+        let asteClone = asteroid.clone();
+
+        asteClone.children[0].material = asteroid.children[0].material.clone();
+        asteClone.scene = this.scene;
+        asteClone.nbBreak = asteroid.nbBreak + 1;
+        asteClone.life = asteClone.life / (asteClone.nbBreak + 1)
+
+        asteClone.Instantiate(asteClone, position, rotation, scale)
 
     }
 
@@ -66,6 +98,33 @@ class GameManager {
         this.ennemy = nbEnnemyFrame;
 
         document.getElementById("remaining_asteroid").innerHTML = this.ennemy;
+
+    }
+
+    CheckBullet(nbBullet){
+
+        let objectsToRemove = [];
+        let bulletToRemove = 2;
+
+        if (nbBullet >15){
+
+            this.scene.traverse( function(child ) {
+                
+                if(child.name == "BasicBullet" && bulletToRemove > 0){
+                    
+                    objectsToRemove.push(child)
+                    bulletToRemove--;
+
+                }
+
+            })
+
+        }
+
+        objectsToRemove.forEach(node => {
+			this.scene.remove( node );
+		});
+
 
     }
 
