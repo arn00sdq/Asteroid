@@ -1,15 +1,17 @@
 class GameManager {
 
-    constructor(scene){
+    constructor(scene, player, asteroid, joker){
 
-        this.player = null;
-        this.asteroid = null; 
+        this.player = player;
+        this.asteroid = asteroid; 
+        this.joker = joker;
+
         this.limite = 15;
 
         this.scene = scene;
         this.score = 0;
         this.ennemy = 0;
-        this.level = 2
+        this.level = 1;
 
     }
 
@@ -20,8 +22,18 @@ class GameManager {
     }
 
     InstantiatePlayer(){
+        
         this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
         this.player.Instantiate(this.player,new THREE.Vector3(0,0,0), new THREE.Euler(0,0,0),this.scene);
+
+    }
+
+    InstantiateJoker(){
+
+        console.log(this.joker)
+        this.joker.InitMesh(0,new THREE.Vector3(0.03,0.03,0.03));
+        this.joker.Instantiate(this.joker,new THREE.Vector3(0,0,0), new THREE.Euler(0,0,0));
+
     }
 
     InstantiateWave(){
@@ -32,7 +44,7 @@ class GameManager {
         switch (this.level){
 
             case 1:
-                this.AsteroidWave(this.asteroid, 5);
+                this.AsteroidWave(this.asteroid, 2);
                 break;
             case 2:
                 this.BossWave(this.asteroid);
@@ -64,7 +76,7 @@ class GameManager {
     BossWave(asteroid){
 
         let scale = 2;
-        this.SpawnAsteroid(asteroid, position, rotation, scale )
+        //this.SpawnAsteroid(asteroid, position, rotation, scale )
 
     }
 
@@ -105,7 +117,7 @@ class GameManager {
 
         let objectsToRemove = [];
         let bulletToRemove = 2;
-
+        
         if (nbBullet >15){
 
             this.scene.traverse( function(child ) {

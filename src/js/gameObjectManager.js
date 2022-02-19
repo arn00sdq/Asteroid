@@ -2,12 +2,14 @@ import GameManager from "./GameManager.js";
 
 class GameObjectManager extends GameManager{
 
-    constructor(scene,model) {
+    constructor(scene,player,asteroid,joker) {
 
-      super(scene);
+      super(scene,player,asteroid,joker);
       
-      this.modelManager = model;
+     // this.modelManager = model;
       this.edge_limit = 15;
+
+      this.nextSecond = null;
       
     }
 
@@ -205,7 +207,17 @@ class GameObjectManager extends GameManager{
 
       this.CountEnnemy(nbEnnemyFrame);
       this.PrintLife(playerLife);
-      this.CheckBullet(countBullet)
+      this.CheckBullet(countBullet);
+
+      if(this.nextSecond !== Math.round(timeElapsed)){
+
+        // futur random
+        this.nextSecond =  Math.round(timeElapsed);
+       // if(this.nextSecond % 5 == 0) this.InstantiateJoker();
+      
+      }
+
+      if(this.nextSecond < Math.round(timeElapsed))  this.nextSecond = null 
 
     }
 

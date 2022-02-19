@@ -6,7 +6,9 @@ import GameManager from "./GameManager.js";
 
 import {OBJLoader} from "./Loader/OBJLoader.js"
 import {GLTFLoader} from "./Loader/GLTFLoader.js";
+import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js";
 import { TextureLoader } from "./three/three.module.js";
+import Joker from "./components/Joker/Joker.js";
 
 class Asteroid {
     constructor() {
@@ -18,9 +20,6 @@ class Asteroid {
     }
 
     Initialize(){
-
-
-        
 
         this.camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.001, 10000 );
         this.scene = new THREE.Scene();
@@ -65,6 +64,7 @@ class Asteroid {
 
         const loaderAsteroid = new OBJLoader(this.loadingManager);
         const loaderExplosion = new OBJLoader(this.loadingManager);
+        const loaderShield = new OBJLoader(this.loadingManager);
         const loaderShip = new GLTFLoader(this.loadingManager);
 
         const textureLoader = new TextureLoader();
@@ -102,6 +102,12 @@ class Asteroid {
             this.modelManager.push(object);
            
         }); 
+
+        loaderShield.load("../medias/models/collectable/Love.obj", (object) => {
+
+            object.name="ShieldItem";
+            this.modelManager.push(object)
+        },)
         
         let me = this;
         loaderShip.load('../medias/models/SpaceShip.gltf',  function(gltf) {
@@ -132,7 +138,7 @@ class Asteroid {
 
     LoadProps() {
 
-        let playerModel; let rockModel; let bulletModel
+        let playerModel; let rockModel; let bulletModel; let shieldModel;
         this.modelManager.forEach((e) => {
 
             if(e.name == "SpaceShip")  playerModel = e;
@@ -141,12 +147,11 @@ class Asteroid {
 
             if(e.name == "Bullet")  bulletModel = e;
 
+            if(e.name == "ShieldItem")  shieldModel = e;
+
         })
 
         this.basicBullet = new BasicBullet(bulletModel, this.scene);
-
-        this.gm = new GameManager(this.scene);
-        this.GameObjectManager = new GameObjectManager(this.scene,this.modelManager);
 
         this.params = {
             goal: this.goal,
@@ -158,11 +163,22 @@ class Asteroid {
             
         }
 
-        this.gm.player = new Player(this.params, playerModel.children[0]);
-        this.gm.asteroid = new BasicAsteroid(this.scene,rockModel.children[0],-1);
+        
 
-        this.gm.InstantiatePlayer();
-        this.gm.InstantiateWave();
+        let player = new Player(this.params, playerModel.children[0]);
+        let asteroid = new BasicAsteroid(this.scene,rockModel.children[0],-1);
+        
+        console.log(shieldModel,rockModel)
+
+        let joker =  new Joker(this.scene, shieldModel.children[0]);
+
+        this.GameObjectManager = new GameObjectManager(this.scene,player,asteroid,joker);
+
+        this.GameObjectManager.InstantiatePlayer();
+        this.GameObjectManager.InstantiateJoker();
+        this.GameObjectManager.InstantiateWave();
+
+        console.log(this.scene)
 
         this.remove = null ;
 
@@ -195,7 +211,7 @@ class Asteroid {
                 this.previousRAF = t;
 
             }
-
+            
             this.RAF();
             this.renderer.render(this.scene, this.camera);
             this.Step(t);
