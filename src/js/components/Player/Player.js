@@ -23,7 +23,7 @@ class Player extends THREE.Group{
 
         this.cannon = [];
         
-        this.InitComponent();
+       // this.InitComponent();
 
     }
 

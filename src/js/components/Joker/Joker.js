@@ -5,15 +5,17 @@ class Joker extends THREE.Group{
         super();
 
         this.jokerItems = jokerItems;
+        this.name = "Joker"
         
         
         this.scene = scene;
+        this.InitComponent();
 
     }
 
     InitComponent() {}
 
-    InitMesh(number,scale){
+    InitMesh(scale){
         
         this.add(this.jokerItems);
 
@@ -32,13 +34,12 @@ class Joker extends THREE.Group{
 
     }
 
-    Instantiate(o,p,r){
+    Instantiate(o,p,r,s){
         
         o.position.copy(p);
         o.rotation.copy(r);
+        o.scale.copy(new THREE.Vector3(s,s,s))
 
-     //   o.scale.copy(new THREE.Vector3(s,s,s))
-        
         this.scene.add(o);
         
     }
@@ -48,7 +49,7 @@ class Joker extends THREE.Group{
         this.scene.remove(object);
         object.mesh = null;
     }
-    Update(timeElapsed){}
+    Update(){}
 
 }
 

@@ -1,12 +1,10 @@
 import Player from "./components/Player/Player.js";
 import BasicBullet from "./components/Bullet/BasicBullet.js";
-import GameObjectManager from "./gameObjectManager.js";
 import BasicAsteroid from "./components/Asteroid/BasicAsteroid.js";
 import GameManager from "./GameManager.js";
 
 import {OBJLoader} from "./Loader/OBJLoader.js"
 import {GLTFLoader} from "./Loader/GLTFLoader.js";
-import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.117.1/examples/jsm/loaders/FBXLoader.js";
 import { TextureLoader } from "./three/three.module.js";
 import Joker from "./components/Joker/Joker.js";
 
@@ -163,22 +161,23 @@ class Asteroid {
             
         }
 
-        
+        const models = {
 
-        let player = new Player(this.params, playerModel.children[0]);
-        let asteroid = new BasicAsteroid(this.scene,rockModel.children[0],-1);
-        
-        console.log(shieldModel,rockModel)
+            player : new Player(this.params, playerModel.children[0]),
+            asteroid : new BasicAsteroid(this.scene,rockModel.children[0],-1),
+            joker :  new Joker(this.scene, shieldModel.children[0]),
 
-        let joker =  new Joker(this.scene, shieldModel.children[0]);
+        }
 
-        this.GameObjectManager = new GameObjectManager(this.scene,player,asteroid,joker);
+        const utils = {
 
-        this.GameObjectManager.InstantiatePlayer();
-        this.GameObjectManager.InstantiateJoker();
-        this.GameObjectManager.InstantiateWave();
+            renderer : this.renderer,
+            scene : this.scene,
+            camera : this.camera,
 
-        console.log(this.scene)
+        }
+
+        this.gm = new GameManager(models, utils)
 
         this.remove = null ;
 
@@ -197,35 +196,8 @@ class Asteroid {
             document.removeEventListener('keydown',  this.remove);
 
             this.previousRAF = null;
-            this.RAF();
+            this.gm.StartLevel();
         }
-
-    }
-
-    RAF() {
-
-        requestAnimationFrame((t) => {
-
-            if (this.previousRAF === null) {
-
-                this.previousRAF = t;
-
-            }
-            
-            this.RAF();
-            this.renderer.render(this.scene, this.camera);
-            this.Step(t);
-           // console.log(this.scene)
-            this.previousRAF = t;
-
-         });    
-
-      }
-    
-    Step(timeElapsed) {  
-
-        const timeElapsedS = Math.min(1.0 / 30.0, timeElapsed * 0.001);
-        this.GameObjectManager.Update(timeElapsed * 0.001);
 
     }
 

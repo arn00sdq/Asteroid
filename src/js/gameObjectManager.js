@@ -1,25 +1,19 @@
-import GameManager from "./GameManager.js";
+class GameObjectManager{
 
-class GameObjectManager extends GameManager{
-
-    constructor(scene,player,asteroid,joker) {
-
-      super(scene,player,asteroid,joker);
+    constructor(parent) {
       
-     // this.modelManager = model;
+      this.parent = parent;
       this.edge_limit = 15;
-
-      this.nextSecond = null;
       
     }
 
     Detect_collision() {
 
-      this.scene.children.forEach( e => { 
+      this.parent.scene.children.forEach( e => { 
 
         if( e.BB && e.children[0]){
 
-          this.scene.children.forEach(e2 => {
+          this.parent.scene.children.forEach(e2 => {
 
             if((e !== e2) &&  (e2.BB && e.BB) && e2.children[0] && e.children[0]){
 
@@ -55,7 +49,7 @@ class GameObjectManager extends GameManager{
           let rotation = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
           let scale = Math.pow(0.75 , e.nbBreak);
 
-          this.SpawnAsteroid(e , position,rotation, scale)
+          this.parent.InstantiateAsteroid(e , position,rotation, scale)
 
         }
 
@@ -65,7 +59,6 @@ class GameObjectManager extends GameManager{
 
     collision_handler(e,e2){
 
-      
       switch(e.constructor.name){
 
         case "BasicAsteroid":
@@ -124,11 +117,11 @@ class GameObjectManager extends GameManager{
 
         if(player.life > 0){
 
-          player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.scene);
+          player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.parent.scene);
   
         }else{
 
-          this.OnPlayerEnd();
+          this.parent.OnPlayerEnd();
 
         }
 
@@ -182,11 +175,9 @@ class GameObjectManager extends GameManager{
 
     Update(timeElapsed) {
 
-      let nbEnnemyFrame = 0;
-      let playerLife;
-      let countBullet = 0;
+      let nbEnnemyFrame = 0; let playerLife; let countBullet = 0;
 
-      this.scene.children.forEach(e => {
+      this.parent.scene.children.forEach(e => {
 
         if(e.type == "Group"){
 
@@ -205,19 +196,11 @@ class GameObjectManager extends GameManager{
 
       }); 
 
-      this.CountEnnemy(nbEnnemyFrame);
-      this.PrintLife(playerLife);
-      this.CheckBullet(countBullet);
-
-      if(this.nextSecond !== Math.round(timeElapsed)){
-
-        // futur random
-        this.nextSecond =  Math.round(timeElapsed);
-       // if(this.nextSecond % 5 == 0) this.InstantiateJoker();
+      this.parent.CountEnnemy(nbEnnemyFrame);
+      this.parent.PrintLife(playerLife);
+      this.parent.CheckBullet(countBullet);
+      this.parent.JokerSystem(timeElapsed);
       
-      }
-
-      if(this.nextSecond < Math.round(timeElapsed))  this.nextSecond = null 
 
     }
 

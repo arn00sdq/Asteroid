@@ -1,18 +1,41 @@
+import GameObjectManager from "./gameObjectManager.js";
+
 class GameManager {
 
-    constructor(scene, player, asteroid, joker){
+    constructor(models, utils){
 
-        this.player = player;
-        this.asteroid = asteroid; 
-        this.joker = joker;
+        this.components = {}
+
+        this.renderer = utils.renderer
+        this.scene = utils.scene;
+        this.camera = utils.camera;
+
+        this.player = models.player;
+        this.asteroid = models.asteroid; 
+        this.joker = models.joker;
 
         this.limite = 15;
+        
+        this.nextSecond = null;
 
-        this.scene = scene;
         this.score = 0;
         this.ennemy = 0;
         this.level = 1;
 
+        this.InitComponent();
+
+    }
+
+    AddComponent(c) {
+
+        this.components[c.constructor.name] = c;   
+
+    }
+
+    InitComponent(){
+
+        this.AddComponent(new GameObjectManager(this));
+       
     }
 
     OnPlayerEnd() {
@@ -21,30 +44,28 @@ class GameManager {
 
     }
 
-    InstantiatePlayer(){
-        
-        this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
-        this.player.Instantiate(this.player,new THREE.Vector3(0,0,0), new THREE.Euler(0,0,0),this.scene);
-
-    }
-
-    InstantiateJoker(){
-
-        console.log(this.joker)
-        this.joker.InitMesh(0,new THREE.Vector3(0.03,0.03,0.03));
-        this.joker.Instantiate(this.joker,new THREE.Vector3(0,0,0), new THREE.Euler(0,0,0));
-
-    }
-
-    InstantiateWave(){
+    
+    ModelInitialisation(){
 
         this.asteroid.InitComponent();
         this.asteroid.InitMesh(new THREE.Vector3(0.0003,0.0003,0.0003));
+
+        this.player.InitComponent();
+        this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
+
+        this.joker.InitComponent();
+        this.joker.InitMesh(new THREE.Vector3(0.03,0.03,0.03));
+        
+    }
+
+    StartLevel(){
+
+        this.ModelInitialisation(); // futur mdel remve scene donc on garde
         
         switch (this.level){
 
             case 1:
-                this.AsteroidWave(this.asteroid, 2);
+                this.AsteroidWave(this.asteroid, 1);
                 break;
             case 2:
                 this.BossWave(this.asteroid);
@@ -52,6 +73,10 @@ class GameManager {
             case 3:
                 break;
         }
+
+        this.InstantiatePlayer(this.player, new THREE.Vector3(0,0,0), new THREE.Euler(0,0,0),this.scene )
+
+        this.RAF();
 
     }
 
@@ -67,7 +92,7 @@ class GameManager {
             let rotation = new THREE.Euler(0,0,0);
             let scale = 1;
 
-            this.SpawnAsteroid(asteroid, position, rotation, scale)
+            this.InstantiateAsteroid(asteroid, position, rotation, scale)
 
         }
 
@@ -76,11 +101,35 @@ class GameManager {
     BossWave(asteroid){
 
         let scale = 2;
-        //this.SpawnAsteroid(asteroid, position, rotation, scale )
+        //this.InstantiateAsteroid(asteroid, position, rotation, scale )
 
     }
 
-    SpawnAsteroid(asteroid,position, rotation, scale){
+
+    InstantiatePlayer(player,position, rotation, scene){
+        
+        let playerClone = player.clone();
+
+        playerClone.scene = this.scene;
+        playerClone.params = player.params;
+        playerClone.life = player.life;
+        playerClone.cannon = player.cannon;
+
+        playerClone.Instantiate(this.player,position, rotation, scene);
+
+    }
+
+    InstantiateJoker(joker,position, rotation, scale){
+
+
+        let jokerClone = joker.clone();
+        jokerClone.scene = this.scene;
+
+        jokerClone.Instantiate(jokerClone,position, rotation, scale);
+
+    }
+
+    InstantiateAsteroid(asteroid,position, rotation, scale){
 
         let asteClone = asteroid.clone();
 
@@ -137,6 +186,61 @@ class GameManager {
 			this.scene.remove( node );
 		});
 
+
+    }
+
+    JokerSystem(timeElapsed){
+        if(this.nextSecond !== Math.round(timeElapsed)){
+
+            // futur random
+            this.nextSecond =  Math.round(timeElapsed);
+            if(this.nextSecond % 5 == 0){
+
+                let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+                0 ,
+                                                    ( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                                )
+
+                let rotation = new THREE.Euler(0,0,0);
+                let scale = 0.3;
+
+                this.InstantiateJoker(this.joker,position,rotation,scale);
+
+            } 
+          
+          }
+    
+          if(this.nextSecond < Math.round(timeElapsed))  this.nextSecond = null 
+    }
+
+    RAF() {
+
+        requestAnimationFrame((t) => {
+
+            if (this.previousRAF === null) {
+
+                this.previousRAF = t;
+
+            }
+            
+            this.RAF();
+            this.renderer.render(this.scene, this.camera);
+            this.Step(t);
+            this.previousRAF = t;
+
+         });    
+
+      }
+    
+    Step(timeElapsed) {  
+
+        const timeElapsedS = Math.min(1.0 / 30.0, timeElapsed * 0.001);
+
+        for (let k in this.components) {
+
+            this.components[k].Update(timeElapsed * 0.001);
+
+        }
 
     }
 
