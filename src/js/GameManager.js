@@ -18,7 +18,8 @@ class GameManager {
 
         this.limite = 15;
         
-        this.nextSecond = null;
+        this.nextCoin = null;
+        this.nextHeart = null;
 
         this.score = 0;
         this.ennemy = 0;
@@ -191,50 +192,54 @@ class GameManager {
 
     JokerSystem(timeElapsed){
 
-        if(this.nextSecond !== Math.round(timeElapsed)){
+        if(this.nextCoin !== Math.round(timeElapsed)){
 
-            // futur random
-            this.nextSecond =  Math.round(timeElapsed);
+            this.nextCoin =  Math.round(timeElapsed);
 
-            if(this.nextSecond % 3 == 0){
+            if(this.nextCoin % 5 == 0){
 
-                let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
-                0 ,
-                                                    ( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 )
-                                                )
-
+                let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) ,  0 ,( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 ))
                 let rotation = new THREE.Euler(0,0,0);
                 
+                let scale = 0.1;
+                this.InstantiateJoker(this.coin,position,rotation,scale);
 
-                let randomJoker = Math.round(( Math.random() *  ( 1 - 0) ) + 0)
-                let scale;
-
-                switch (randomJoker) {
-
-                    case 0 :
-                        scale = 0.03;
-                        this.InstantiateJoker(this.heart,position,rotation,scale);
-                        break
-
-                    case 1 :
-                        scale = 0.1;
-                        this.InstantiateJoker(this.coin,position,rotation,scale);
-                        break
-
-                }
          
             } 
           
-          }
-    
-          if(this.nextSecond < Math.round(timeElapsed))  this.nextSecond = null 
+        }
+
+        if(this.nextHeart !== Math.round(timeElapsed)){
+
+            this.nextHeart =  Math.round(timeElapsed);
+
+            if(this.nextHeart % 6 == 0){
+
+                let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) ,  0 , ( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 ))
+                let rotation = new THREE.Euler(0,0,0);      
+
+                let random = Math.round(( Math.random() *  ( 2 - 0) ) + 0)
+                let scale;
+
+                if(random == 1){
+
+                    scale = 0.03;
+                    console.log(random)
+                    this.InstantiateJoker(this.heart,position,rotation,scale);
+
+                }
+                
+            } 
+        }
+        
+        if(this.nextCoin < Math.round(timeElapsed))  this.nextCoin = null 
+        if(this.nextHeart < Math.round(timeElapsed))  this.nextHeart = null 
 
     }
 
     PlayerAddLife(number){
 
         this.player.GetComponent("PlayerHealthSystem").Heal(number);
-        console.log(this.player.life)
 
     }
 
