@@ -13,6 +13,8 @@ class CharacterControllerInput {
       right: false,
       space: false,
 
+      kta: false,
+
       shift: false,
 
       shoot: false,
@@ -47,6 +49,10 @@ class CharacterControllerInput {
 
       case 32: // space
         this.keys.shoot = true;
+        break;
+
+      case 75: // k
+        this.keys.kta = true;
         break;
 
       case 49: // 1 -- fixe

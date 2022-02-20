@@ -4,6 +4,10 @@ class GameObjectManager{
       
       this.parent = parent;
       this.edge_limit = 15;
+
+      this.level_sys_comp = this.parent.GetComponent("LevelSystem");
+
+      console.log(this.parent.GetComponent("LevelSystem"))
       
     }
 
@@ -40,6 +44,8 @@ class GameObjectManager{
 
     Asteroid_Subdivision(e){
 
+      
+
       if(e.nbBreak < 2){
 
         for (let index = 1; index <= 2; index++) {
@@ -49,7 +55,7 @@ class GameObjectManager{
           let rotation = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
           let scale = Math.pow(0.75 , e.nbBreak);
 
-          this.parent.InstantiateAsteroid(e , position,rotation, scale)
+          this.level_sys_comp.InstantiateAsteroid(e , position,rotation, scale)
 
         }
 
@@ -58,6 +64,7 @@ class GameObjectManager{
     }
 
     collision_handler(e,e2){
+
       switch(e.constructor.name){
 
         case "BasicAsteroid":
@@ -215,6 +222,8 @@ class GameObjectManager{
 
       let nbEnnemyFrame = 0; let playerLife; let countBullet = 0;
 
+      let displayComponent = this.parent.GetComponent("DisplaySystem")
+
       this.parent.scene.children.forEach(e => {
 
         if(e.type == "Group"){
@@ -234,11 +243,11 @@ class GameObjectManager{
 
       }); 
 
-      this.parent.CountEnnemy(nbEnnemyFrame);
-      this.parent.PrintLife(playerLife);
+      displayComponent.PrintEnnemy(nbEnnemyFrame);
+      displayComponent.PrintLife(playerLife);
+
       this.parent.CheckBullet(countBullet);
-      this.parent.JokerSystem(timeElapsed);
-      
+     // this.parent.JokerSystem(timeElapsed);
 
     }
 

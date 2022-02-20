@@ -1,7 +1,7 @@
 import Player from "./components/Player/Player.js";
 import BasicBullet from "./components/Bullet/BasicBullet.js";
 import BasicAsteroid from "./components/Asteroid/BasicAsteroid.js";
-import GameManager from "./GameManager.js";
+import GameManager from "./components/GameSystem/GameManager.js";
 
 import {OBJLoader} from "./Loader/OBJLoader.js"
 import {GLTFLoader} from "./Loader/GLTFLoader.js";
@@ -211,7 +211,7 @@ class Asteroid {
             document.removeEventListener('keydown',  this.remove);
 
             this.previousRAF = null;
-            this.gm.StartLevel();
+            this.gm.GetComponent("LevelSystem").StartLevel();
         }
 
     }
