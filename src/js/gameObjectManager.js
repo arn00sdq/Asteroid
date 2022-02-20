@@ -58,7 +58,6 @@ class GameObjectManager{
     }
 
     collision_handler(e,e2){
-
       switch(e.constructor.name){
 
         case "BasicAsteroid":
@@ -71,6 +70,14 @@ class GameObjectManager{
 
         case "BasicBullet":
           this.CollisionBulletHandler(e, e2);
+          break;
+
+        case "Heart":
+          this.CollisionHeartHandler(e, e2);
+          break;
+
+        case "Coin":
+          this.CollisionCoinHandler(e, e2);
           break;
 
       }
@@ -89,6 +96,14 @@ class GameObjectManager{
         case "BasicBullet":
           this.CollisionBulletHandler(e2, e);
           break;
+
+        case "Heart":
+            this.CollisionHeartHandler(e2, e);
+            break;
+
+        case "Coin":
+            this.CollisionCoinHandler(e, e2);
+            break;
 
       }
 
@@ -172,6 +187,27 @@ class GameObjectManager{
       };
 
     }
+
+    CollisionCoinHandler(coin, object){
+
+      if(coin.name == "Coin" && coin.mesh !== null){
+
+        coin.Destroy(coin);
+
+      }
+
+    }
+
+    CollisionHeartHandler(heart, object){
+      
+      if(heart.name == "Heart" && heart.mesh !== null){
+
+        heart.Destroy(heart);
+
+      }
+
+    }
+
 
     Update(timeElapsed) {
 

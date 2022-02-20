@@ -12,7 +12,9 @@ class GameManager {
 
         this.player = models.player;
         this.asteroid = models.asteroid; 
-        this.joker = models.joker;
+
+        this.heart = models.heart;
+        this.coin = models.coin;
 
         this.limite = 15;
         
@@ -25,6 +27,8 @@ class GameManager {
         this.InitComponent();
 
     }
+
+    // Composants gameManager a voir a la fin print ect 
 
     AddComponent(c) {
 
@@ -53,8 +57,11 @@ class GameManager {
         this.player.InitComponent();
         this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
 
-        this.joker.InitComponent();
-        this.joker.InitMesh(new THREE.Vector3(0.03,0.03,0.03));
+        this.heart.InitComponent();
+        this.heart.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
+
+        this.coin.InitComponent();
+        this.coin.InitMesh(new THREE.Vector3(1,1,1));
         
     }
 
@@ -108,21 +115,14 @@ class GameManager {
 
     InstantiatePlayer(player,position, rotation, scene){
         
-        let playerClone = player.clone();
-
-        playerClone.scene = this.scene;
-        playerClone.params = player.params;
-        playerClone.life = player.life;
-        playerClone.cannon = player.cannon;
-
-        playerClone.Instantiate(this.player,position, rotation, scene);
+        player.Instantiate(player,position, rotation, scene);
 
     }
 
     InstantiateJoker(joker,position, rotation, scale){
 
-
         let jokerClone = joker.clone();
+
         jokerClone.scene = this.scene;
 
         jokerClone.Instantiate(jokerClone,position, rotation, scale);
@@ -190,11 +190,13 @@ class GameManager {
     }
 
     JokerSystem(timeElapsed){
+
         if(this.nextSecond !== Math.round(timeElapsed)){
 
             // futur random
             this.nextSecond =  Math.round(timeElapsed);
-            if(this.nextSecond % 5 == 0){
+
+            if(this.nextSecond % 3 == 0){
 
                 let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                 0 ,
@@ -202,15 +204,31 @@ class GameManager {
                                                 )
 
                 let rotation = new THREE.Euler(0,0,0);
-                let scale = 0.3;
+                
 
-                this.InstantiateJoker(this.joker,position,rotation,scale);
+                let randomJoker = Math.round(( Math.random() *  ( 1 - 0) ) + 0)
+                let scale;
 
+                switch (randomJoker) {
+
+                    case 0 :
+                        scale = 0.03;
+                        this.InstantiateJoker(this.heart,position,rotation,scale);
+                        break
+
+                    case 1 :
+                        scale = 0.1;
+                        this.InstantiateJoker(this.coin,position,rotation,scale);
+                        break
+
+                }
+         
             } 
           
           }
     
           if(this.nextSecond < Math.round(timeElapsed))  this.nextSecond = null 
+
     }
 
     RAF() {

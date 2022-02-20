@@ -6,7 +6,8 @@ import GameManager from "./GameManager.js";
 import {OBJLoader} from "./Loader/OBJLoader.js"
 import {GLTFLoader} from "./Loader/GLTFLoader.js";
 import { TextureLoader } from "./three/three.module.js";
-import Joker from "./components/Joker/Joker.js";
+import Heart from "./components/Joker/Heart.js";
+import Coin from "./components/Joker/Coin.js";
 
 class Asteroid {
     constructor() {
@@ -60,9 +61,7 @@ class Asteroid {
 
         this.modelManager = [];
 
-        const loaderAsteroid = new OBJLoader(this.loadingManager);
-        const loaderExplosion = new OBJLoader(this.loadingManager);
-        const loaderShield = new OBJLoader(this.loadingManager);
+        const loaderObj = new OBJLoader(this.loadingManager);
         const loaderShip = new GLTFLoader(this.loadingManager);
 
         const textureLoader = new TextureLoader();
@@ -81,7 +80,7 @@ class Asteroid {
 
         this.modelManager.push(cylinderMesh);
 
-        loaderAsteroid.load('../medias/models/low_poly.obj',  ( object ) => {
+        loaderObj.load('../medias/models/low_poly.obj',  ( object ) => {
 
             object.traverse( function ( child ) {
 
@@ -94,19 +93,26 @@ class Asteroid {
            
         }); 
 
-        loaderExplosion.load('../medias/models/explosion.obj',  ( object ) => {
+        loaderObj.load('../medias/models/explosion.obj',  ( object ) => {
 
             object.name="SpaceRock";
             this.modelManager.push(object);
            
         }); 
 
-        loaderShield.load("../medias/models/collectable/Love.obj", (object) => {
+        loaderObj.load("../medias/models/collectable/Love.obj", (object) => {
 
-            object.name="ShieldItem";
+            object.name="HeartItem";
             this.modelManager.push(object)
-        },)
+        });
         
+        loaderObj.load("../medias/models/collectable/coin/Coin.obj", (object) => {
+
+            object.name="CoinItem";
+            this.modelManager.push(object)
+        });
+        
+
         let me = this;
         loaderShip.load('../medias/models/SpaceShip.gltf',  function(gltf) {
 
@@ -136,7 +142,8 @@ class Asteroid {
 
     LoadProps() {
 
-        let playerModel; let rockModel; let bulletModel; let shieldModel;
+        let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel
+        console.log(this.modelManager)
         this.modelManager.forEach((e) => {
 
             if(e.name == "SpaceShip")  playerModel = e;
@@ -145,7 +152,14 @@ class Asteroid {
 
             if(e.name == "Bullet")  bulletModel = e;
 
-            if(e.name == "ShieldItem")  shieldModel = e;
+            if(e.name == "HeartItem"){
+
+                e.children[0].name = "Heart"
+                heartModel = e
+
+            }  
+
+            if(e.name == "CoinItem")  coinModel = e
 
         })
 
@@ -165,7 +179,8 @@ class Asteroid {
 
             player : new Player(this.params, playerModel.children[0]),
             asteroid : new BasicAsteroid(this.scene,rockModel.children[0],-1),
-            joker :  new Joker(this.scene, shieldModel.children[0]),
+            heart :  new Heart(this.scene, heartModel.children[0]),
+            coin : new Coin(this.scene, coinModel.children[0]),
 
         }
 
