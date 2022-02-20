@@ -19,7 +19,7 @@ class Player extends THREE.Group{
         this.components = {};
         this.params = params;
         this.model = model;
-        this.life = 3;
+        this.life = 1;
 
         this.cannon = [];
         

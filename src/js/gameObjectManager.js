@@ -193,6 +193,7 @@ class GameObjectManager{
       if(coin.name == "Coin" && coin.mesh !== null){
 
         coin.Destroy(coin);
+        this.parent.PlayerAddCoin(1);
 
       }
 
@@ -203,6 +204,7 @@ class GameObjectManager{
       if(heart.name == "Heart" && heart.mesh !== null){
 
         heart.Destroy(heart);
+        this.parent.PlayerAddLife(1);
 
       }
 

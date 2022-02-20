@@ -144,7 +144,7 @@ class GameManager {
 
     printScore(){
         
-        document.getElementById("score").appendChild = this.score;
+        document.getElementById("score").innerHTML = this.score;
 
     }
 
@@ -228,6 +228,21 @@ class GameManager {
           }
     
           if(this.nextSecond < Math.round(timeElapsed))  this.nextSecond = null 
+
+    }
+
+    PlayerAddLife(number){
+
+        this.player.GetComponent("PlayerHealthSystem").Heal(number);
+        console.log(this.player.life)
+
+    }
+
+    PlayerAddCoin(number){
+
+        this.score += number;
+        console.log(this.score)
+        this.printScore();
 
     }
 

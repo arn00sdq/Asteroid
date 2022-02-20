@@ -3,6 +3,7 @@ class PlayerHealthSystem{
     constructor(parent) {
 
         this.parent = parent;
+        this.healthLimit = 3
 
     }
 
@@ -17,8 +18,9 @@ class PlayerHealthSystem{
     }
 
     Heal(healAmount){
-
-        this.parent.life += healAmount;
+        
+        if(this.parent.life < this.healthLimit) this.parent.life += healAmount;
+        
         if (this.parent.life > 0) this.parent.life = this.parent.life
 
     }
