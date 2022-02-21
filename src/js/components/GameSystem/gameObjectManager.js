@@ -235,11 +235,13 @@ class GameObjectManager{
           this.Detect_collision()
           this.DetectEdge(e);
 
-          e.Update(timeElapsed)
+          e.Update(timeElapsed);
 
         }
 
       }); 
+
+      this.parent.ennemy = nbEnnemyFrame;
 
       displayComponent.PrintEnnemy(nbEnnemyFrame);
 

@@ -22,8 +22,7 @@ class GameManager {
         this.limite = 15;
 
         this.score = 0;
-        this.ennemy = 0;
-        this.level = 1;
+        this.ennemy = null;
 
         this.InitComponent();
 
@@ -51,6 +50,22 @@ class GameManager {
 
         return this.components[n];
 
+    }
+
+    ModelInitialisation(){
+
+        this.asteroid.InitComponent();
+        this.asteroid.InitMesh(new THREE.Vector3(0.0003,0.0003,0.0003));
+
+        this.player.InitComponent();
+        this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
+
+        this.heart.InitComponent();
+        this.heart.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
+
+        this.coin.InitComponent();
+        this.coin.InitMesh(new THREE.Vector3(1,1,1));
+        
     }
 
     OnPlayerEnd() {
@@ -107,7 +122,7 @@ class GameManager {
             if (this.previousRAF === null) {
 
                 this.previousRAF = t;
-
+ 
             }
             
             this.RAF();

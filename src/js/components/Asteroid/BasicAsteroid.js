@@ -71,7 +71,6 @@ class BasicAsteroid extends THREE.Group{
         if (o.children[0].material.color.getHexString() !== 'ffffff')  o.children[0].material.color.set(0xffffff);
 
         this.SetInvulnerability(500);
-        console.log(o)
 
         this.scene.add(o);
         

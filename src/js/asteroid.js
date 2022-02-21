@@ -143,7 +143,7 @@ class Asteroid {
     LoadProps() {
 
         let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel
-        
+
         this.modelManager.forEach((e) => {
 
             if(e.name == "SpaceShip")  playerModel = e;
@@ -193,6 +193,7 @@ class Asteroid {
         }
 
         this.gm = new GameManager(models, utils)
+        this.gm.ModelInitialisation(); 
 
         this.remove = null ;
 
@@ -209,8 +210,7 @@ class Asteroid {
 
             document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown',  this.remove);
-
-            this.previousRAF = null;
+           
             this.gm.GetComponent("LevelSystem").StartLevel();
         }
 
