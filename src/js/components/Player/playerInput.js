@@ -14,6 +14,7 @@ class CharacterControllerInput {
       space: false,
 
       kta: false,
+      nj: false,
 
       shift: false,
 
@@ -49,6 +50,14 @@ class CharacterControllerInput {
 
       case 32: // space
         this.keys.shoot = true;
+        break;
+
+      case 73: // i
+        this.keys.invincible = true;
+        break;
+
+      case 74: // j
+        this.keys.nj = true;
         break;
 
       case 75: // k

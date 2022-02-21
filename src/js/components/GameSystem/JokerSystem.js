@@ -7,6 +7,8 @@ class JokerSystem{
         this.nextCoin = null;
         this.nextHeart = null;
 
+        this.joker = [this.parent.heart, this.parent.coin]
+
         this.level_sys_comp = this.parent.GetComponent("LevelSystem");
 
     }

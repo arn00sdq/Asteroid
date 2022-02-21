@@ -6,8 +6,6 @@ class GameObjectManager{
       this.edge_limit = 15;
 
       this.level_sys_comp = this.parent.GetComponent("LevelSystem");
-
-      console.log(this.parent.GetComponent("LevelSystem"))
       
     }
 
@@ -244,7 +242,6 @@ class GameObjectManager{
       }); 
 
       displayComponent.PrintEnnemy(nbEnnemyFrame);
-      displayComponent.PrintLife(playerLife);
 
       this.parent.CheckBullet(countBullet);
      // this.parent.JokerSystem(timeElapsed);

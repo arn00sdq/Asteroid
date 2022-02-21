@@ -33,10 +33,11 @@ class GameManager {
 
         
         this.AddComponent(new LevelSystem(this));
+        this.AddComponent(new GameObjectManager(this));
         this.AddComponent(new JokerSystem(this));
         this.AddComponent(new DisplaySystem(this));
         this.AddComponent(new HackSystem(this));
-        this.AddComponent(new GameObjectManager(this));
+        
        
     }
 
@@ -88,13 +89,14 @@ class GameManager {
     PlayerAddLife(number){
 
         this.player.GetComponent("PlayerHealthSystem").Heal(number);
+        this.GetComponent("DisplaySystem").PrintLife(this.player.life);
 
     }
 
     PlayerAddCoin(number){
 
         this.score += number;
-        this.GetComponent("DisplaySystem").printScore();
+        this.GetComponent("DisplaySystem").printScore(this.score);
 
     }
 

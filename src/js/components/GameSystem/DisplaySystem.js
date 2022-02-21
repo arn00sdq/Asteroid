@@ -6,9 +6,9 @@ class DisplaySystem{
 
     }
     
-    printScore(){
+    printScore(score){
         
-        document.getElementById("score").innerHTML = this.score;
+        document.getElementById("score").innerHTML = score;
 
     }
 

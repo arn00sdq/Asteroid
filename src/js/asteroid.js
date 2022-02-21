@@ -143,7 +143,7 @@ class Asteroid {
     LoadProps() {
 
         let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel
-        console.log(this.modelManager)
+        
         this.modelManager.forEach((e) => {
 
             if(e.name == "SpaceShip")  playerModel = e;

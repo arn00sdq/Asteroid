@@ -24,6 +24,8 @@ class AsteroidHealthSystem{
 
         if (this.parent.life > 0) this.DamageMarker();
 
+        if(this.parent.life == 0) {}
+
     }
 
     Heal(healAmount){
