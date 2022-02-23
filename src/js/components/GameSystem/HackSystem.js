@@ -39,6 +39,7 @@ class HackSystem{
     NextJoker() {
 
         this.playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
+        let playerJoker = this.parent.player;
 
         if (this.playerInput.nj){
 
@@ -54,6 +55,10 @@ class HackSystem{
                 case 1:
                     this.parent.PlayerAddCoin(1);
                     console.log("Piece en +");
+                    break;
+                case 2:
+                    playerJoker.GetComponent("PlayerShootProjectiles").AddProjectile(1);
+                    console.log("Cannon en plus");
                     break;
 
             }

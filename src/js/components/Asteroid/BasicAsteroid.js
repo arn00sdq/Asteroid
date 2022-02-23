@@ -31,8 +31,6 @@ class BasicAsteroid extends THREE.Group{
         this.add(this.model);
 
         this.children[0].scale.copy(scale)
-        this.SetRigidBoby(this.children[0]);
-
         
     }  
 
@@ -41,21 +39,18 @@ class BasicAsteroid extends THREE.Group{
         object.geometry.computeBoundingBox();
         object.geometry.computeBoundingSphere();
 
-        object.BB = new THREE.Box3().copy( object.geometry.boundingBox );
-        object.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
+        this.BB = new THREE.Box3().copy( object.geometry.boundingBox );
+        this.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
 
     }
 
     SetInvulnerability(seconds){
 
-        this.BB = null;
-        this.BS = null;
        if(this.children[0]){
            
             setTimeout(() => {
 
-                this.BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
-                this.BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
+                this.SetRigidBoby(this.children[0]);
 
             }, seconds);
        } 

@@ -24,6 +24,8 @@ class CharacterControllerInput {
       cam2: true,
       cam3: false,
 
+      screenshot : false,
+
     };
 
     document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
@@ -89,6 +91,10 @@ class CharacterControllerInput {
 
       case 16: // SHIFT
         this.keys.shift = true;
+        break;
+
+      case 80: // SHIFT
+        this.keys.screenshot = true;
         break;
     }
   }

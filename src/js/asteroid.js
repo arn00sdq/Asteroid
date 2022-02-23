@@ -8,6 +8,7 @@ import {GLTFLoader} from "./Loader/GLTFLoader.js";
 import { TextureLoader } from "./three/three.module.js";
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
+import Arrow from "./components/Joker/Arrow.js";
 
 class Asteroid {
     constructor() {
@@ -60,19 +61,25 @@ class Asteroid {
     LoadModel(){
 
         this.modelManager = [];
+        this.animationsManager = [];
+        this.idleAction = null;
 
         const loaderObj = new OBJLoader(this.loadingManager);
         const loaderShip = new GLTFLoader(this.loadingManager);
-
+        
         const textureLoader = new TextureLoader();
         var map = textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg');
         var material = new THREE.MeshPhongMaterial({map:map})
 
+        var mapCoin = textureLoader.load('../medias/models/collectable/coin/textures/Coin_Gold_albedo.png');
+        var materialCoin = new THREE.MeshPhongMaterial({map:mapCoin});
+
         const geometryAsteroid = new THREE.CylinderBufferGeometry(0.01,0.01,0.1,5,1,false); 
         const materialAsteroid = new THREE.MeshLambertMaterial( );
         
-        /*materialAsteroid.color.set(0xff0000)
-        materialAsteroid.emissive.set(0xff000d)*/
+        materialAsteroid.color.set(0xff0000)
+        materialAsteroid.emissive.set(0xff000d)
+
 
         const cylinderMesh = new THREE.InstancedMesh( geometryAsteroid, materialAsteroid, 100);
         cylinderMesh.name="Bullet";
@@ -89,6 +96,7 @@ class Asteroid {
             } );
 
             object.name="SpaceRock";
+            console.log(object)
             this.modelManager.push(object);
            
         }); 
@@ -104,20 +112,37 @@ class Asteroid {
 
             object.name="HeartItem";
             this.modelManager.push(object)
+
         });
         
         loaderObj.load("../medias/models/collectable/coin/Coin.obj", (object) => {
 
+            object.traverse( function ( child ) {
+                if ( child.isMesh ) child.material = materialCoin;
+            
+            });
+
             object.name="CoinItem";
             this.modelManager.push(object)
+
+        });
+
+        loaderObj.load("../medias/models/collectable/addBeam/arrow.obj", (object) => {
+
+            object.name="ArrowItem";
+            this.modelManager.push(object)
+            
         });
         
 
         let me = this;
+        
         loaderShip.load('../medias/models/SpaceShip.gltf',  function(gltf) {
-
+            me.animationsManager.push(new THREE.AnimationMixer( gltf.scene ));
+            me.idleAction = me.animationsManager[0].clipAction( gltf.animations[0] )
             gltf.scene.name="SpaceShip";
             me.modelManager.push(gltf.scene);
+            me.idleAction.play()
 
         }); 
         
@@ -142,7 +167,8 @@ class Asteroid {
 
     LoadProps() {
 
-        let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel
+        let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel;
+        let arrowModel;
 
         this.modelManager.forEach((e) => {
 
@@ -155,13 +181,16 @@ class Asteroid {
             if(e.name == "HeartItem"){
 
                 e.children[0].name = "Heart"
-                heartModel = e
+                heartModel = e;
 
             }  
 
             if(e.name == "CoinItem")  coinModel = e
 
+            if(e.name == "ArrowItem") arrowModel = e
+
         })
+
 
         this.basicBullet = new BasicBullet(bulletModel, this.scene);
 
@@ -181,6 +210,7 @@ class Asteroid {
             asteroid : new BasicAsteroid(this.scene,rockModel.children[0],-1),
             heart :  new Heart(this.scene, heartModel.children[0]),
             coin : new Coin(this.scene, coinModel.children[0]),
+            arrow : new Arrow(this.scene, arrowModel.children[0]),
 
         }
 
@@ -192,7 +222,12 @@ class Asteroid {
 
         }
 
-        this.gm = new GameManager(models, utils)
+        const animations = {
+            mixer : null/*this.animationsManager[0]*/,
+            idleAction : null/* this.idleAction*/,
+        }
+
+        this.gm = new GameManager(models, utils, animations)
         this.gm.ModelInitialisation(); 
 
         this.remove = null ;

@@ -29,7 +29,7 @@ class ThirdPersonCamera{
             if((limitA) > 15 )  {
 
                 this.goal.position.x =  this.a.x
-                this.goal.position.z =  this.a.z -0.3
+                this.goal.position.z =  this.a.z - 0.3
 
             }else{
 

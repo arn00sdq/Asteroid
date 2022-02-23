@@ -1,10 +1,15 @@
 
 class PlayerShootProjectiles{
+
     constructor(params,weapon){
 
       this.parent = params;
+
       this.weaponParams = weapon;
       this.canShoot = true;
+
+      this.nbCannon = 0;
+      this.cannon = [];
 
       this.spawnDistance = -0.3;
 
@@ -18,32 +23,12 @@ class PlayerShootProjectiles{
 
     }
 
-    Update(timeElapsed){
-      
-        const input = this.parent.GetComponent('CharacterControllerInput');
-
-          if ( input.keys.shoot && this.canShoot ){ 
-          
-            this.Shoot()
-            this.canShoot = false
-
-            setTimeout(() => {
-
-              this.canShoot = true;
-    
-            }, 500);   
-            
-          }
-
-          input.keys.shoot = false;
-    }
-
     Shoot(){
       
       this.weaponParams.InitMesh();
 
 
-      for (let i = 0; i < this.parent.cannon.length; i++) {
+      for (let i = 0; i < this.cannon.length; i++) {
 
         let bulletClone = this.weaponParams.clone();
 
@@ -51,8 +36,8 @@ class PlayerShootProjectiles{
         bulletClone.scene = this.weaponParams.scene;
         bulletClone.index = this.indexMissile;
         
-        this.temp.setFromMatrixPosition(this.parent.cannon[i].matrixWorld);
-        this.spawnPos.copy(this.parent.cannon[i].position);
+        this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
+        this.spawnPos.copy(this.cannon[i].position);
 
         this.playerDirection = this.parent.getWorldPosition(new THREE.Vector3());
         this.spawnRot =  this.parent.rotation;
@@ -66,6 +51,52 @@ class PlayerShootProjectiles{
       }
       
     }
+
+    AddProjectile(nbCannon){
+
+      this.nbCannon += nbCannon;
+      this.cannon = [];
+
+      let zPos = new THREE.Vector3(0,0,0.1); // changez z ou x pour futur
+      let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
+      
+      for(let i = 0; i < this.nbCannon ; i++){
+
+          this.cannon.push(new THREE.Object3D);
+
+          let x = r * Math.cos( 360 / ( i + 2 ) );
+          let z = r * Math.sin( 360 / ( i + 2 ) );
+
+          /* console.log("xPos : ", x)
+             console.log("zPos : ", z) */
+
+          let posCannon = new THREE.Vector3( x, 0, z )
+          this.cannon[i].position.copy( posCannon );
+          this.parent.add(this.cannon[i]);
+
+      }
+
+    }
+
+    Update(timeElapsed){
+      
+      const input = this.parent.GetComponent('CharacterControllerInput');
+
+        if ( input.keys.shoot && this.canShoot ){ 
+        
+          this.Shoot()
+          this.canShoot = false
+
+          setTimeout(() => {
+
+            this.canShoot = true;
+  
+          }, 500);   
+          
+        }
+
+        input.keys.shoot = false;
+  }
 }
 
 export default PlayerShootProjectiles

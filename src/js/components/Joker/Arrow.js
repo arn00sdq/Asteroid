@@ -1,6 +1,6 @@
 import JokerMovement from "./JokerMovement.js";
 
-class Coin extends THREE.Group{
+class Arrow extends THREE.Group{
 
     constructor(scene, model){
 
@@ -9,7 +9,7 @@ class Coin extends THREE.Group{
         this.components = {}
 
         this.model = model;
-        this.name = "Coin"
+        this.name = "Arrow"
         
         this.scene = scene;
         this.InitComponent();
@@ -18,7 +18,7 @@ class Coin extends THREE.Group{
 
     InitComponent() {
 
-        this.AddComponent(new JokerMovement(this))
+      /*  this.AddComponent(new JokerMovement(this))*/
 
     }
 
@@ -86,4 +86,4 @@ class Coin extends THREE.Group{
 
 }
 
-export default Coin
+export default Arrow

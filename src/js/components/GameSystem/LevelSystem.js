@@ -18,6 +18,7 @@ class LevelSystem{
 
         let jokerClone = joker.clone();
 
+        jokerClone.children[0].material = joker.children[0].material.clone();
         jokerClone.scene = this.parent.scene;
 
         jokerClone.Instantiate(jokerClone,position, rotation, scale);
@@ -91,7 +92,7 @@ class LevelSystem{
     }
 
     Update(timeElapsed){
-        console.log(this.parent.scene)
+
         if(this.parent.ennemy == 0){
 
             this.level++;

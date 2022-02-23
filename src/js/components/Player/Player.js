@@ -20,8 +20,6 @@ class Player extends THREE.Group{
         this.params = params;
         this.model = model;
         this.life = 1;
-
-        this.cannon = [];
         
        // this.InitComponent();
 
@@ -44,14 +42,7 @@ class Player extends THREE.Group{
 
         this.add(this.model)
         
-        this.cannon.push(new THREE.Object3D);
-        this.cannon.push(new THREE.Object3D);
-
-        this.cannon[0].position.copy( new THREE.Vector3(-0.1,0,0.1) );
-        this.cannon[1].position.copy( new THREE.Vector3(0.1,0,0.1) );
-
-        this.add(this.cannon[0]);
-        this.add(this.cannon[1]);
+        this.GetComponent("PlayerShootProjectiles").AddProjectile(2)
 
         this.children[0].scale.copy(scale)
         this.SetRigidBoby(this.children[0])
@@ -63,11 +54,8 @@ class Player extends THREE.Group{
         object.geometry.computeBoundingBox();
         object.geometry.computeBoundingSphere();
 
-        object.BB = new THREE.Box3().copy( object.geometry.boundingBox );
-        object.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
-
-        this.BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
-        this.BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
+        this.BB = new THREE.Box3().copy( object.geometry.boundingBox );
+        this.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
 
     }
 

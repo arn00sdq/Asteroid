@@ -85,6 +85,10 @@ class GameObjectManager{
           this.CollisionCoinHandler(e, e2);
           break;
 
+        case "Arrow":
+          this.CollisionArrowHandler(e, e2);
+          break;
+
       }
 
       switch(e2.constructor.name){
@@ -108,6 +112,10 @@ class GameObjectManager{
 
         case "Coin":
             this.CollisionCoinHandler(e, e2);
+            break;
+
+        case "Arrow":
+            this.CollisionArrowHandler(e, e2);
             break;
 
       }
@@ -177,13 +185,7 @@ class GameObjectManager{
 
     CollisionBulletHandler(bullet, object){
 
-      if(bullet.name == object.name) return;
-
-      if(object.name == "Player"){
-
-        bullet.Destroy(bullet)
-
-      };
+     // if(bullet.name == object.name) return;
 
       if(object.name == "Asteroid"){
 
@@ -210,6 +212,17 @@ class GameObjectManager{
 
         heart.Destroy(heart);
         this.parent.PlayerAddLife(1);
+
+      }
+
+    }
+
+    CollisionArrowHandler(arrow, object){
+      
+      if(arrow.name == "Arrow" && arrow.mesh !== null){
+
+        arrow.Destroy(arrow);
+        this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1)
 
       }
 

@@ -6,7 +6,7 @@ import HackSystem from "./HackSystem.js";
 
 class GameManager {
 
-    constructor(models, utils){
+    constructor(models, utils, animation){
 
         this.components = {}// a voir section print, triche, joker , niveau
 
@@ -16,8 +16,13 @@ class GameManager {
 
         this.player = models.player;
         this.asteroid = models.asteroid; 
+
         this.heart = models.heart;
         this.coin = models.coin;
+        this.arrow = models.arrow;
+
+        this.mixer = animation.mixer;
+        this.idle = animation.idleAction;
 
         this.limite = 15;
 
@@ -65,6 +70,9 @@ class GameManager {
 
         this.coin.InitComponent();
         this.coin.InitMesh(new THREE.Vector3(1,1,1));
+
+        this.arrow.InitComponent();
+        this.arrow.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
         
     }
 
@@ -137,12 +145,20 @@ class GameManager {
     Step(timeElapsed) {  
 
        // const timeElapsedS = Math.min(1.0 / 30.0, timeElapsed * 0.001);
-
+        /*this.mixer.update(timeElapsed * 0.000001)    */
         for (let k in this.components) {
 
             this.components[k].Update(timeElapsed * 0.001);
 
         }
+
+        if (this.player.GetComponent("CharacterControllerInput").keys.screenshot) {
+            this.player.GetComponent("CharacterControllerInput").keys.screenshot = false;
+
+            let screenshot = this.renderer.domElement.toDataURL();
+            console.log("ScreenShot effectué", screenshot)
+
+          }
 
     }
 
