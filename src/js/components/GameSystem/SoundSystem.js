@@ -45,6 +45,31 @@ class SoundSystem{
 
     }
 
+    PlayHitBullet(audio, delay,volume){
+
+        const bulletBuffer =  this.audioManager.find(e => e.name == "BulletHit");
+
+        audio.setBuffer( bulletBuffer );
+        audio.setLoop( false );
+        audio.setVolume( volume );
+
+        console.log("a fond")
+
+        audio.play(delay);
+
+    }
+
+    PlayShipDamageTaken(audio, delay,volume){
+
+        const bulletBuffer =  this.audioManager.find(e => e.name == "ShipDamageTaken");
+
+        audio.setBuffer( bulletBuffer );
+        audio.setLoop( false );
+        audio.setVolume( volume );
+        audio.play(delay);
+
+    }
+
     Update(timeElapsed){}
 
 }

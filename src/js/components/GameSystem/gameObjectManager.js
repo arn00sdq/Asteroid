@@ -7,8 +7,6 @@ class GameObjectManager{
 
       this.level_sys_comp = this.parent.GetComponent("LevelSystem");
       this.sound_sys = this.parent.GetComponent("SoundSystem");
-
-      console.log(this.sound_sys)
       
     }
 
@@ -144,6 +142,10 @@ class GameObjectManager{
       if (object.name == "Asteroid"){
 
         playerHealth.Damage(1);
+
+        let playerHitSound = new THREE.Audio( this.parent.audio.listener );
+        this.sound_sys.PlayShipDamageTaken(playerHitSound, 0,0.2);
+
         player.Destroy(player);
 
         if(player.life > 0){
@@ -163,6 +165,9 @@ class GameObjectManager{
     CollisionAsteroidHandler(asteroid, object){
 
       let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
+
+      let playerHitSound = new THREE.Audio( this.parent.audio.listener );
+      this.sound_sys.PlayHitBullet(playerHitSound, Math.random() * 0.1,0.2);
 
       if (object.name == "Player"){
 

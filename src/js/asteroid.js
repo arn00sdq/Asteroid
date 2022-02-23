@@ -100,7 +100,6 @@ class Asteroid {
             } );
 
             object.name="SpaceRock";
-            console.log(object)
             this.modelManager.push(object);
            
         }); 
@@ -172,6 +171,16 @@ class Asteroid {
 
         audioLoader.load( '../medias/sounds/bullet/bullet.mp3', function( buffer ) {
             buffer.name = "Bullet";
+            me.audioManager.push(buffer);
+        });
+
+        audioLoader.load( '../medias/sounds/hit/hit.mp3', function( buffer ) {
+            buffer.name = "BulletHit";
+            me.audioManager.push(buffer);
+        });
+
+        audioLoader.load( '../medias/sounds/ship/ship.mp3', function( buffer ) {
+            buffer.name = "ShipDamageTaken";
             me.audioManager.push(buffer);
         });
 
@@ -263,8 +272,6 @@ class Asteroid {
             arrow : new Arrow(this.scene, arrowModel.children[0]),
 
         }
-
-        console.log(this.audioManager)
 
         this.gm = new GameManager(models, utils, animations, audio)
         this.gm.ModelInitialisation(); 
