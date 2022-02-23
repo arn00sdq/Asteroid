@@ -15,6 +15,7 @@ class Asteroid {
 
         this.Initialize();
         this.LoadModel();
+        this.LoadAudio();
         this.LoadScene();
 
     }
@@ -44,6 +45,9 @@ class Asteroid {
 
         this.camera.position.set(0,0.3,0); //0.3 troisieme personne, 2/3 vu en follow, 
         this.camera.lookAt( this.scene.position );
+
+        this.listener = new THREE.AudioListener();
+        this.camera.add( this.listener );
 
         this.goal = new THREE.Object3D;
         this.follow = new THREE.Object3D;
@@ -148,6 +152,27 @@ class Asteroid {
         
     }
 
+    LoadAudio(){
+
+        this.audioManager = [];
+
+        this.sound = new THREE.Audio( this.listener );
+
+        const audioLoader = new THREE.AudioLoader();
+        let me = this;
+        audioLoader.load( '../medias/sounds/coin/coin.mp3', function( buffer ) {
+            buffer.name = "Coin";
+            me.audioManager.push(buffer);
+        });
+
+        audioLoader.load( '../medias/sounds/heart/heart.mp3', function( buffer ) {
+            buffer.name = "Heart";
+            me.audioManager.push(buffer);
+        });
+
+
+    }
+
     LoadScene(){
 
         var gridHelper = new THREE.GridHelper( 40, 40 );
@@ -227,7 +252,16 @@ class Asteroid {
             idleAction : null/* this.idleAction*/,
         }
 
-        this.gm = new GameManager(models, utils, animations)
+        const audio = {
+
+            audioManager : this.audioManager,
+            sound :  this.sound,
+
+        }
+
+        console.log(this.audioManager)
+
+        this.gm = new GameManager(models, utils, animations, audio)
         this.gm.ModelInitialisation(); 
 
         this.remove = null ;

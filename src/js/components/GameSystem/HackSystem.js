@@ -5,8 +5,10 @@ class HackSystem{
         this.parent = parent;
         
         this.objectManager = this.parent.GetComponent("GameObjectManager");
-
         this.jokerSytem = this.parent.GetComponent("JokerSystem");
+        this.sound_sys = this.parent.GetComponent("SoundSystem");
+
+
         this.indexJoker = 0;
 
     }
@@ -49,11 +51,13 @@ class HackSystem{
 
                 case 0:
                     this.parent.PlayerAddLife(1);
+                    this.sound_sys.PlayHeartPickUp();
                     console.log("vie supplémentaire");
                     break;
 
                 case 1:
                     this.parent.PlayerAddCoin(1);
+                    this.sound_sys.PlayCoinPickUp();
                     console.log("Piece en +");
                     break;
                 case 2:

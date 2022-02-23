@@ -6,6 +6,9 @@ class GameObjectManager{
       this.edge_limit = 15;
 
       this.level_sys_comp = this.parent.GetComponent("LevelSystem");
+      this.sound_sys = this.parent.GetComponent("SoundSystem");
+
+      console.log(this.sound_sys)
       
     }
 
@@ -201,6 +204,8 @@ class GameObjectManager{
 
         coin.Destroy(coin);
         this.parent.PlayerAddCoin(1);
+        this.sound_sys.PlayCoinPickUp();
+
 
       }
 
@@ -212,6 +217,7 @@ class GameObjectManager{
 
         heart.Destroy(heart);
         this.parent.PlayerAddLife(1);
+        this.sound_sys.PlayHeartPickUp();
 
       }
 

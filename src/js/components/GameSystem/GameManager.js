@@ -3,10 +3,11 @@ import JokerSystem from "./JokerSystem.js";
 import LevelSystem from "./LevelSystem.js";
 import GameObjectManager from "./gameObjectManager.js";
 import HackSystem from "./HackSystem.js";
+import SoundSystem from "./SoundSystem.js";
 
 class GameManager {
 
-    constructor(models, utils, animation){
+    constructor(models, utils, animation,audio){
 
         this.components = {}// a voir section print, triche, joker , niveau
 
@@ -20,6 +21,8 @@ class GameManager {
         this.heart = models.heart;
         this.coin = models.coin;
         this.arrow = models.arrow;
+
+        this.audio = audio
 
         this.mixer = animation.mixer;
         this.idle = animation.idleAction;
@@ -37,10 +40,12 @@ class GameManager {
 
         
         this.AddComponent(new LevelSystem(this));
+        this.AddComponent(new SoundSystem(this,this.audio));
         this.AddComponent(new GameObjectManager(this));
         this.AddComponent(new JokerSystem(this));
         this.AddComponent(new DisplaySystem(this));
         this.AddComponent(new HackSystem(this));
+        
         
        
     }
