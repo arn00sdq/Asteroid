@@ -11,17 +11,20 @@ import * as THREE from '../../three/three.module.js'
 
 class Player extends THREE.Group{ 
 
-    constructor(params, model) {
+    constructor(params, model, audio) {
 
         super();
 
         this.name = "Player";
         this.components = {};
+
         this.params = params;
         this.model = model;
+        this.audio = audio;
+
+        this.audio_syst = null;
+
         this.life = 1;
-        
-       // this.InitComponent();
 
     }
 
@@ -34,7 +37,7 @@ class Player extends THREE.Group{
         this.AddComponent(new CharacterControllerInput(this));
         this.AddComponent(new CharacterMouvement(this));
         this.AddComponent(new PlayerHealthSystem(this));
-        this.AddComponent(new PlayerShootProjectiles(this,this.params.weapon));
+        this.AddComponent(new PlayerShootProjectiles(this,this.params.weapon,this.audio));
        
     }
 

@@ -2,7 +2,7 @@ import BulletMouvement from "./BulletMouvement.js";
 import BulletDamageSystem from "./BulletDamageSystem.js";
 
 class BasicBullet extends THREE.Group{ 
-    constructor(model, scene) {
+    constructor(model, scene, audio) {
 
         super();
 
@@ -12,7 +12,7 @@ class BasicBullet extends THREE.Group{
         this.model = model;
         this.scene = scene;
         this.index = 0;
-
+        this.audio = audio;
         this.InitComponent();
         
     }
@@ -34,7 +34,6 @@ class BasicBullet extends THREE.Group{
         this.children[0].BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
         this.children[0].BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
 
-        
 
         //this.SetRigidBoby(this.children[0])
         
@@ -55,7 +54,6 @@ class BasicBullet extends THREE.Group{
         const dummy = new THREE.Object3D
         dummy.position.copy(p);
         dummy.rotation.copy(r);
-       // dummy.updateMatrix();
 
         o.children[0].setMatrixAt(this.index,dummy.matrix)
 
@@ -63,6 +61,8 @@ class BasicBullet extends THREE.Group{
         o.rotation.copy(r);
 
         this.SetInvulnerability(100);
+
+        console.log(o)
 
         this.scene.add(o);
         

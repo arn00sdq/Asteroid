@@ -170,6 +170,11 @@ class Asteroid {
             me.audioManager.push(buffer);
         });
 
+        audioLoader.load( '../medias/sounds/bullet/bullet.mp3', function( buffer ) {
+            buffer.name = "Bullet";
+            me.audioManager.push(buffer);
+        });
+
 
     }
 
@@ -216,8 +221,15 @@ class Asteroid {
 
         })
 
+        const audio = {
 
-        this.basicBullet = new BasicBullet(bulletModel, this.scene);
+            audioManager : this.audioManager,
+            sound :  this.sound,
+            listener: this.listener
+
+        }
+
+        this.basicBullet = new BasicBullet(bulletModel, this.scene,audio);
 
         this.params = {
             goal: this.goal,
@@ -227,16 +239,6 @@ class Asteroid {
             scene: this.scene,
             weapon : this.basicBullet,
             
-        }
-
-        const models = {
-
-            player : new Player(this.params, playerModel.children[0]),
-            asteroid : new BasicAsteroid(this.scene,rockModel.children[0],-1),
-            heart :  new Heart(this.scene, heartModel.children[0]),
-            coin : new Coin(this.scene, coinModel.children[0]),
-            arrow : new Arrow(this.scene, arrowModel.children[0]),
-
         }
 
         const utils = {
@@ -252,10 +254,13 @@ class Asteroid {
             idleAction : null/* this.idleAction*/,
         }
 
-        const audio = {
+        const models = {
 
-            audioManager : this.audioManager,
-            sound :  this.sound,
+            player : new Player(this.params, playerModel.children[0],audio),
+            asteroid : new BasicAsteroid(this.scene,rockModel.children[0],-1),
+            heart :  new Heart(this.scene, heartModel.children[0]),
+            coin : new Coin(this.scene, coinModel.children[0]),
+            arrow : new Arrow(this.scene, arrowModel.children[0]),
 
         }
 

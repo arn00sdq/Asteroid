@@ -34,6 +34,8 @@ class GameManager {
 
         this.InitComponent();
 
+        this.player.audio_syst = this.GetComponent("SoundSystem");
+
     }
 
     InitComponent(){
@@ -45,8 +47,6 @@ class GameManager {
         this.AddComponent(new JokerSystem(this));
         this.AddComponent(new DisplaySystem(this));
         this.AddComponent(new HackSystem(this));
-        
-        
        
     }
 
