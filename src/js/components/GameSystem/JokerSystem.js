@@ -25,8 +25,8 @@ class JokerSystem{
 
     PlayerAddCoin(score, number){
 
-        score += number;
-        this.parent.GetComponent("DisplaySystem").printScore(score);
+        this.parent.score += number;
+        this.parent.GetComponent("DisplaySystem").printScore(this.parent.score);
 
     }
 

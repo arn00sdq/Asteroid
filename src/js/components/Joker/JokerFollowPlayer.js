@@ -23,9 +23,11 @@ class JokerFollowPlayer {
         this.b.copy(this.target.position);
 
         if (this.a > this.b){
+
             this.dir.copy( this.a ).sub( this.b );// Calcul de la pos du bouclier
 
         }else{
+            
             this.dir.copy( this.b ).sub( this.a );// Calcul de la pos du bouclier
         }
         

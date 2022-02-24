@@ -8,7 +8,8 @@ class DisplaySystem{
     
     printScore(score){
         
-        document.getElementById("score").innerHTML = score;
+        console.log(score)
+        if(score !== undefined) document.getElementById("score").innerHTML = score;
 
     }
 
