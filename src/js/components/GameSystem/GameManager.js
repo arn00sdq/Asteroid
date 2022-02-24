@@ -73,16 +73,12 @@ class GameManager {
         this.player.InitComponent();
         this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
 
-        this.heart.InitComponent();
         this.heart.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
 
-        this.coin.InitComponent();
         this.coin.InitMesh(new THREE.Vector3(1,1,1));
 
-        this.arrow.InitComponent();
         this.arrow.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
-
-        this.shield.InitComponent();
+        
         this.shield.InitMesh(new THREE.Vector3(0.1,0.1,0.1));
         
     }

@@ -61,7 +61,7 @@ class BasicBullet extends THREE.Object3D{
         o.rotation.copy(r);
 
         this.SetInvulnerability(100);
-
+        
         this.scene.add(o);
         
     }

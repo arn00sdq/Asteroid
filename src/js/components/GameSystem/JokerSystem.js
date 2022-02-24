@@ -97,7 +97,7 @@ class JokerSystem{
 
                 let currentJoker = this.jokerAv[random];
 
-                this.level_sys_comp.InstantiateJoker(currentJoker,position,rotation,currentJoker.vscale);
+                this.level_sys_comp.InstantiateJoker(currentJoker,position,rotation,1);
                 
             } 
         }
