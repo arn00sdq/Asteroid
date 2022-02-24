@@ -14,7 +14,7 @@ class JokerSystem{
         this.nbArrow = 0;
         this.nbShield= 0;
 
-        this.joker = [this.parent.heart, this.parent.coin, this.parent.arrow]
+        this.joker = [this.parent.heart, this.parent.coin, this.parent.arrow, this.parent.shield]
 
         this.level_sys_comp = this.parent.GetComponent("LevelSystem");
 
@@ -142,7 +142,7 @@ class JokerSystem{
 
             this.nextShield =  Math.round(timeElapsed);
 
-            if(this.nextShield % 1 == 0 && this.nbShield == 0){
+            if(this.nextShield % 6 == 0 && this.nbShield == 0){
 
                 let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) ,  0  , ( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 ))
                 let rotation = new THREE.Euler(0,0,0);      

@@ -228,7 +228,6 @@ class Asteroid {
         let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel;
         let arrowModel; let shieldModel;
 
-        console.log(this.modelManager)
         this.modelManager.forEach((e) => {
 
             if(e.name == "SpaceShip")  playerModel = e;

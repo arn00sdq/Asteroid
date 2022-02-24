@@ -62,8 +62,6 @@ class BasicBullet extends THREE.Object3D{
 
         this.SetInvulnerability(100);
 
-        console.log(o)
-
         this.scene.add(o);
         
     }

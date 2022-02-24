@@ -64,6 +64,8 @@ class GameObjectManager{
 
     collision_handler(e,e2){
 
+      console.log(e,e2)
+
       switch(e.constructor.name){
 
         case "BasicAsteroid":
@@ -217,10 +219,13 @@ class GameObjectManager{
 
     CollisionShieldHandler(shield, object){
 
+      if(coin.name == "Shield" && coin.mesh !== null){
 
-      shield.Destroy(shield);
-      this.sound_sys.PlayCoinPickUp();
-      this.joker_sys.PlayerProtection(object,3000);
+        shield.Destroy(shield);
+        this.sound_sys.PlayCoinPickUp();
+        this.joker_sys.PlayerProtection(object,3000);
+     
+      }
 
     }
 
@@ -229,7 +234,7 @@ class GameObjectManager{
       if(heart.name == "Heart" && heart.mesh !== null){
 
         heart.Destroy(heart);
-        this.joker_sys.PlayerAddCoin(object, 1);
+        this.joker_sys.PlayerAddLife(object, 1);
         this.sound_sys.PlayHeartPickUp();
 
       }
