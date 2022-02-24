@@ -48,6 +48,14 @@ class Shield extends THREE.Object3D{
 
     }
 
+    RemoveRigidBody(object) {
+
+        object.BB = null;
+        object.BS = null;
+
+    }
+
+
 
     Instantiate(o,p,r,s){
         
@@ -56,18 +64,16 @@ class Shield extends THREE.Object3D{
         o.scale.copy(new THREE.Vector3(s,s,s))
 
         this.SetRigidBoby(this.children[0]);
-        
+
         this.scene.add(o);
         
     }
 
     InstantiateAndDestroy(o,p,r,s,t){
-
+        
         o.position.copy(p);
         o.rotation.copy(r);
         o.scale.copy(new THREE.Vector3(s,s,s))
-
-        this.SetRigidBoby(this.children[0]);
         
         this.scene.add(o);
 

@@ -64,9 +64,6 @@ class GameObjectManager{
 
     collision_handler(e,e2){
 
-     /* console.log("Collision : ",e.name,e2.name)
-      console.log("Position : ",e,e2)*/
-
       switch(e.constructor.name){
 
         case "BasicAsteroid":
@@ -173,7 +170,7 @@ class GameObjectManager{
 
     CollisionAsteroidHandler(asteroid, object){
 
-      if(object.name == "Heart" || object.name == "Shield"|| object.name ==  "Coin"|| object.name == "Arrow") return;
+      if(object.name == "Heart" || object.name == "Shield"|| object.name ==  "Coin"|| object.name == "Arrow" ||  object.name ==  "Asteroid" ) return;
 
       let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
 

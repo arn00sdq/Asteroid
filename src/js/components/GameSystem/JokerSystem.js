@@ -1,31 +1,16 @@
+import JokerFollowPlayer from "../Joker/JokerFollowPlayer.js";
+
 class JokerSystem{
 
     constructor(parent,models){
 
         this.parent = parent;
-
+        
         this.nextJoker = null;
-
-        this.nbHeart = 0;
-        this.heartAvailable = true;
-        this.limitHeart = 1;
-
-        this.nbCoin = 0;
-        this.coinAvailable = true;
-        this.limitCoin = 5;
-
-        this.nbArrow = 0;
-        this.arrowAvailable = true;
-        this.limitArrow = 1;
-
-        this.nbShield= 0;
-        this.shieldAvailable = true;
-        this.limitShield = 1;
 
         this.joker = [models.heart, models.arrow, models.coin,models.shield];
         this.jokerAv = []
         this.jokerUnv = []
-
 
         this.level_sys_comp = this.parent.GetComponent("LevelSystem");
 
@@ -33,7 +18,6 @@ class JokerSystem{
 
     PlayerAddLife(player,number){
 
-        console.log(player)
         player.GetComponent("PlayerHealthSystem").Heal(number);
         this.parent.GetComponent("DisplaySystem").PrintLife(player.life);
 
@@ -46,35 +30,43 @@ class JokerSystem{
 
     }
 
-    /*PlayerProtection(player,shield, seconds){
-
+    PlayerProtection(player,shield, seconds){
+        
         player.immune = true;
-
+        
         this.nbShield  = 4;
 
-        let zPos = new THREE.Vector3(0,0,0.1);
-        let r = zPos.distanceTo(new THREE.Vector3(0,0,-0.5));
+        let parentVector  = new THREE.Vector3;
+        parentVector.setFromMatrixPosition(player.matrixWorld)
 
-        let shieldClone = shield;
+        let zPos = new THREE.Vector3(0,0,0.1).add(parentVector);
+        let r = zPos.distanceTo(new THREE.Vector3(0,0,-0.5).add(parentVector));
         
-        for(let i = 0; i < this.nbShield ; i++){
+        for(let i = 0; i <2 ; i++){
 
-            let x = r * Math.cos( 360 / ( i + 2 ) );
-            let z = r * Math.sin( 360 / ( i + 2 ) );
+            let shieldClone = shield.clone();
+            shieldClone.scene = shield.scene;
 
-            let posShield = new THREE.Vector3( x, 0, z )
-            shieldClone.position.copy( posShield );
-            shieldClone.Instantiate(shieldClone,posShield, new THREE.Euler(0,0,0),1)
+            let x = new THREE.Vector3( r * Math.cos(THREE.MathUtils.degToRad(360.0) / ( i +1  ) ),0,0);
+            let z =  new THREE.Vector3(0,0, r * Math.sin( THREE.MathUtils.degToRad(360.0) / ( i + 1  ) ));
+            let posShield = x.add(z).add(zPos)
+
+ 
+            shieldClone.AddComponent(new JokerFollowPlayer(shieldClone,player,x,z));
+            shieldClone.RemoveRigidBody(shieldClone);
+            shieldClone.InstantiateAndDestroy(shieldClone,posShield, new THREE.Euler(0,0,0),1,3000)
+
 
         }
 
+       
         setTimeout(() => {
 
             player.immune = false;
 
         }, seconds);
 
-    }*/
+    }
 
     JokerSpawnSystem(timeElapsed){
 
@@ -118,6 +110,7 @@ class JokerSystem{
     Update(timeElapsed){
 
         this.JokerSpawnSystem(timeElapsed);
+        
 
     }
 
