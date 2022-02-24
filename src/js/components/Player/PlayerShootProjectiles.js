@@ -1,13 +1,13 @@
 class PlayerShootProjectiles{
 
-    constructor(parent,weapon,audio){
+    constructor(parent,audio){
 
       this.parent = parent;
-
-      this.weaponParams = weapon;
-      this.canShoot = true;
       this.audio = audio;
 
+      this.weaponParams = null;
+
+      this.canShoot = true;
       this.nbCannon = 0;
       this.cannon = [];
 
@@ -16,19 +16,15 @@ class PlayerShootProjectiles{
       this.spawnPos = new THREE.Vector3;
       this.spawnRot = new THREE.Euler;
       this.playerDirection = new THREE.Vector3;
-
       this.temp = new THREE.Vector3;
 
-      this.indexMissile = 1
+      this.indexMissile = 1;
 
     }
 
     Shoot(){
       
-      this.weaponParams.InitMesh();
-
       for (let i = 0; i < this.cannon.length; i++) {
-
 
         let bulletClone = this.weaponParams.clone();
 
@@ -47,7 +43,8 @@ class PlayerShootProjectiles{
         let bulletSound = new THREE.Audio( this.audio.listener );
         this.parent.audio_syst.PlayBulletShoot(bulletSound, Math.random() * 0.2, 0.2);
 
-        bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot);
+        bulletClone.SetRigidBody(bulletClone.children[0]);
+        bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 1);
 
         this.indexMissile ++;
 

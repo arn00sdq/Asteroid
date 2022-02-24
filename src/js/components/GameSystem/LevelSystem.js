@@ -22,7 +22,7 @@ class LevelSystem{
         jokerClone.children[0].material = joker.children[0].material.clone();
         jokerClone.scene = this.parent.scene;
         
-        jokerClone.SetRigidBoby(jokerClone.children[0]);
+        jokerClone.SetRigidBody(jokerClone.children[0]);
         jokerClone.Instantiate(jokerClone,position, rotation, scale);
 
     }

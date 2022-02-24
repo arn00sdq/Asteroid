@@ -259,15 +259,13 @@ class Asteroid {
 
         }
 
-        this.basicBullet = new BasicBullet(bulletModel, this.scene,audio);
-
         this.params = {
+
             goal: this.goal,
             camera:this.camera,
             follow: this.follow,
 
             scene: this.scene,
-            weapon : this.basicBullet,
             
         }
 
@@ -292,6 +290,7 @@ class Asteroid {
             coin : new Coin(this.scene, coinModel.children[0]),
             arrow : new Arrow(this.scene, arrowModel.children[0]),
             shield: new Shield(this.scene, shieldModel.children[0]),
+            basicBullet : new BasicBullet(this.scene, bulletModel, audio),
 
         }
 

@@ -1,14 +1,16 @@
 class GameObject extends THREE.Object3D{
 
-    constructor(scene, model){
-
+    constructor(scene, model, audio){
+        
         super();
+
+        if (!audio) audio = null;
 
         this.components = {};
         this.model = model;
         this.scene = scene;
         this.name = null;
-
+        this.audio = audio;
         this.nb = 0;
         this.limit = 0;
 
@@ -28,7 +30,7 @@ class GameObject extends THREE.Object3D{
     /**
     * @param {THREE.Object3D}  object Object3D du modèle
     */
-    SetRigidBoby(object){
+    SetRigidBody(object){
 
         object.geometry.computeBoundingBox();
         object.geometry.computeBoundingSphere();
@@ -45,6 +47,26 @@ class GameObject extends THREE.Object3D{
 
         object.BB = null;
         object.BS = null;
+
+    }
+    
+    /** 
+    * @param {Number}  seconds temps en seconde
+    **/
+    SetInvulnerability(seconds){
+
+        this.BB = null;
+        this.BS = null;
+       if(this.children[0]){
+
+            setTimeout(() => {
+
+                this.BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
+                this.BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
+
+            }, seconds);
+
+       } 
 
     }
 
@@ -104,6 +126,15 @@ class GameObject extends THREE.Object3D{
     }
 
     /**
+    * @param {THREE.Object3D}  c Composant du modele
+    */
+    GetComponent(n) {
+
+        return this.components[n];
+
+    }
+
+    /**
     * @param {Number}  timeElapsed temps en seconde
     */
     Update(timeElapsed){
@@ -111,7 +142,7 @@ class GameObject extends THREE.Object3D{
         if(this.children[0] !== null){   
 
             for (let k in this.components) {
-
+                
                 this.components[k].Update(timeElapsed);
             }
         }

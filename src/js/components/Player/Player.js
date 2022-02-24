@@ -39,7 +39,7 @@ class Player extends THREE.Object3D{
         this.AddComponent(new CharacterControllerInput(this));
         this.AddComponent(new CharacterMouvement(this));
         this.AddComponent(new PlayerHealthSystem(this));
-        this.AddComponent(new PlayerShootProjectiles(this,this.params.weapon,this.audio));
+        this.AddComponent(new PlayerShootProjectiles(this,this.audio));
        
     }
 

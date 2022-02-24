@@ -236,7 +236,6 @@ class GameObjectManager{
 
         heart.Destroy(heart);
         this.parent.heart.nb -= 1
-        console.log(this.parent.arrow.nb)
         this.joker_sys.PlayerAddLife(object, 1);
         this.sound_sys.PlayHeartPickUp();
 

@@ -22,6 +22,8 @@ class GameManager {
         this.coin = models.coin;
         this.arrow = models.arrow;
         this.shield = models.shield;
+        this.basicBullet = models.basicBullet;
+
 
         this.audio = audio
 
@@ -35,8 +37,6 @@ class GameManager {
 
         this.InitComponent(models,audio);
 
-        this.player.audio_syst = this.GetComponent("SoundSystem");
-
     }
 
     InitComponent(models,audio){
@@ -49,6 +49,7 @@ class GameManager {
         this.AddComponent(new HackSystem(this));
         this.AddComponent(new GameObjectManager(this));
         
+        this.player.audio_syst = this.GetComponent("SoundSystem");
         
        
     }
@@ -74,12 +75,14 @@ class GameManager {
         this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
 
         this.heart.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
-
         this.coin.InitMesh(new THREE.Vector3(1,1,1));
-
         this.arrow.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
-        
         this.shield.InitMesh(new THREE.Vector3(0.1,0.1,0.1));
+
+        this.basicBullet.InitMesh(new THREE.Vector3(1,1,1));
+
+        this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
+        
         
     }
 
