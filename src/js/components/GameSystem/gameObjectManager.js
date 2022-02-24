@@ -64,7 +64,7 @@ class GameObjectManager{
 
     collision_handler(e,e2){
 
-      console.log(e,e2)
+      //console.log(e,e2)
 
       switch(e.constructor.name){
 
@@ -207,6 +207,8 @@ class GameObjectManager{
 
     CollisionCoinHandler(coin, object){
 
+      if(object.name == "BasicBullet") return;
+
       if(coin.name == "Coin" && coin.mesh !== null){
 
         coin.Destroy(coin);
@@ -219,7 +221,9 @@ class GameObjectManager{
 
     CollisionShieldHandler(shield, object){
 
-      if(coin.name == "Shield" && coin.mesh !== null){
+      if(object.name == "BasicBullet") return;
+
+      if(shield.name == "Shield" && shield.mesh !== null){
 
         shield.Destroy(shield);
         this.sound_sys.PlayCoinPickUp();
@@ -230,6 +234,8 @@ class GameObjectManager{
     }
 
     CollisionHeartHandler(heart, object){
+
+      if(object.name == "BasicBullet") return;
       
       if(heart.name == "Heart" && heart.mesh !== null){
 
@@ -242,6 +248,8 @@ class GameObjectManager{
     }
 
     CollisionArrowHandler(arrow, object){
+
+      if(object.name == "BasicBullet") return
       
       if(arrow.name == "Arrow" && arrow.mesh !== null){
 
