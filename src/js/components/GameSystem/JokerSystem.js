@@ -1,20 +1,31 @@
 class JokerSystem{
 
-    constructor(parent){
+    constructor(parent,models){
 
         this.parent = parent;
 
-        this.nextCoin = null;
-        this.nextHeart = null;
-        this.nextArrow = null;
-        this.nextShield = null;
+        this.nextJoker = null;
 
         this.nbHeart = 0;
-        this.nbCoin = 0;
-        this.nbArrow = 0;
-        this.nbShield= 0;
+        this.heartAvailable = true;
+        this.limitHeart = 1;
 
-        this.joker = [this.parent.heart, this.parent.coin, this.parent.arrow, this.parent.shield]
+        this.nbCoin = 0;
+        this.coinAvailable = true;
+        this.limitCoin = 5;
+
+        this.nbArrow = 0;
+        this.arrowAvailable = true;
+        this.limitArrow = 1;
+
+        this.nbShield= 0;
+        this.shieldAvailable = true;
+        this.limitShield = 1;
+
+        this.joker = [models.heart, models.arrow, models.coin,models.shield];
+        this.jokerAv = []
+        this.jokerUnv = []
+
 
         this.level_sys_comp = this.parent.GetComponent("LevelSystem");
 
@@ -22,152 +33,85 @@ class JokerSystem{
 
     PlayerAddLife(player,number){
 
+        console.log(player)
         player.GetComponent("PlayerHealthSystem").Heal(number);
-        console.log("life")
         this.parent.GetComponent("DisplaySystem").PrintLife(player.life);
 
     }
 
     PlayerAddCoin(score, number){
 
-        this.parent.score += number;
-        this.parent.GetComponent("DisplaySystem").printScore(this.parent.score);
+        score += number;
+        this.parent.GetComponent("DisplaySystem").printScore(score);
 
     }
 
-    PlayerProtection(player, seconds){
+    /*PlayerProtection(player,shield, seconds){
 
         player.immune = true;
+
+        this.nbShield  = 4;
+
+        let zPos = new THREE.Vector3(0,0,0.1);
+        let r = zPos.distanceTo(new THREE.Vector3(0,0,-0.5));
+
+        let shieldClone = shield;
+        
+        for(let i = 0; i < this.nbShield ; i++){
+
+            let x = r * Math.cos( 360 / ( i + 2 ) );
+            let z = r * Math.sin( 360 / ( i + 2 ) );
+
+            let posShield = new THREE.Vector3( x, 0, z )
+            shieldClone.position.copy( posShield );
+            shieldClone.Instantiate(shieldClone,posShield, new THREE.Euler(0,0,0),1)
+
+        }
 
         setTimeout(() => {
 
             player.immune = false;
 
-        }, 3000);
+        }, seconds);
 
-    }
+    }*/
 
     JokerSpawnSystem(timeElapsed){
 
-        this.parent.scene.children.forEach((e) => {
+        if(this.nextJoker !== Math.round(timeElapsed)){
+    
+            this.joker.forEach( (e,index) => {        
 
-            if(e.name == "Heart") this.nbHeart++;
-
-            if(e.name == "Coin") this.nbCoin++;
-
-            if(e.name == "Arrow") this.nbArrow++;
-
-            if(e.name == "Shield") this.nbShield++;
-
-        });
-
-        /*
-        * Coin
-        */
-
-        if(this.nextCoin !== Math.round(timeElapsed)){
-
-            this.nextCoin =  Math.round(timeElapsed);
-
-            if(this.nextCoin % 5 == 0 && this.nbCoin <= 5){
-
-                let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) ,  0 ,( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 ))
-                let rotation = new THREE.Euler(0,0,0);
-                
-                let scale = 0.1;
-                this.level_sys_comp.InstantiateJoker(this.parent.coin,position,rotation,scale);
-
-         
-            } 
-          
-        }
-
-        /*
-        * Heart
-        */
-
-        if(this.nextHeart !== Math.round(timeElapsed)){
-
-            this.nextHeart =  Math.round(timeElapsed);
-
-            if(this.nextHeart % 6 == 0 && this.nbHeart == 0){
-
-                let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) ,  0 , ( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 ))
-                let rotation = new THREE.Euler(0,0,0);      
-
-                let random = Math.round(( Math.random() *  ( 2 - 0) ) + 0)
-                let scale;
-
-                if(random == 1){
-
-                    scale = 0.03;
-                    this.level_sys_comp.InstantiateJoker(this.parent.heart,position,rotation,scale);
+                if (e.nb >= e.limit) {
+                    if (this.jokerAv.includes(e) == true) this.jokerAv.splice(this.jokerAv.indexOf(e),1)
+                    if (this.jokerUnv.includes(e) == false) this.jokerUnv.push(e)
+            
+                }else if(e.nb < e.limit) {
+                    if (this.jokerUnv.includes(e,index) == true) this.jokerUnv.splice(this.jokerUnv.indexOf(e),1)
+                    if (this.jokerAv.includes(e) == false) this.jokerAv.push(e);
 
                 }
-                
-            } 
-        }
 
-        /*
-        * AddMissile
-        */
+            });
 
-        if(this.nextArrow !== Math.round(timeElapsed)){
+            this.nextJoker =  Math.round(timeElapsed);
 
-            this.nextArrow =  Math.round(timeElapsed);
-
-            if(this.nextArrow % 6 == 0 && this.nbArrow == 0){
-
-                let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) ,  -1  , ( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 ))
-                let rotation = new THREE.Euler(0,0,0);      
-
-                let random = Math.round(( Math.random() *  ( 2 - 0) ) + 0)
-                let scale;
-
-                if(random == 1){
-
-                    scale = 1;
-                    this.level_sys_comp.InstantiateJoker(this.parent.arrow,position,rotation,scale);
-
-                }
-                
-            } 
-        }
-
-        /*
-        * Shield
-        */
-
-        if(this.nextShield !== Math.round(timeElapsed)){
-
-            this.nextShield =  Math.round(timeElapsed);
-
-            if(this.nextShield % 6 == 0 && this.nbShield == 0){
+            if(this.nextJoker % 1 == 0 && this.jokerAv.length > 0){
 
                 let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) ,  0  , ( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 ))
                 let rotation = new THREE.Euler(0,0,0);      
 
-                let random = Math.round(( Math.random() *  ( 2 - 0) ) + 0)
-                let scale;
+                let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
 
-                if(random == 1){
+                let currentJoker = this.jokerAv[random];
 
-                    scale = 1;
-                    this.level_sys_comp.InstantiateJoker(this.parent.shield,position,rotation,scale);
-
-                }
+                this.level_sys_comp.InstantiateJoker(currentJoker,position,rotation,currentJoker.vscale);
                 
             } 
         }
-        
-        if(this.nextCoin < Math.round(timeElapsed))  this.nextCoin = null 
-        if(this.nextHeart < Math.round(timeElapsed))  this.nextHeart = null 
-        if(this.nextShield < Math.round(timeElapsed))  this.nextShield = null
 
-        this.nbCoin = 0;
-        this.nbHeart = 0;
-        this.nbArrow = 0;
-        this.nbShield = 0;
+        if(this.nextJoker < Math.round(timeElapsed))  this.nextJoker = null
+
 
     }
 

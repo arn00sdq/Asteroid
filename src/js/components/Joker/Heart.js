@@ -1,16 +1,21 @@
 import JokerMovement from "./JokerMovement.js";
 
-class Heart extends THREE.Group{
+class Heart extends THREE.Object3D{
 
     constructor(scene, model){
 
         super();
 
         this.components = {};
-
         this.model = model;
-        this.name = "Heart";
+        this.vscale = 0.05;
         
+        this.name = "Heart";
+        this.type == "Joker"
+
+        this.nb = 0;
+        this.limit = 1;
+      
         this.scene = scene;
         this.InitComponent();
 
@@ -58,12 +63,10 @@ class Heart extends THREE.Group{
 
         object.mesh = null;
        
-        setTimeout(() => {
 
-            this.scene.remove(object);
+        this.scene.remove(object);
             
 
-        }, 150);
  
     }
 

@@ -33,18 +33,18 @@ class GameManager {
         this.score = 0;
         this.ennemy = null;
 
-        this.InitComponent();
+        this.InitComponent(models,audio);
 
         this.player.audio_syst = this.GetComponent("SoundSystem");
 
     }
 
-    InitComponent(){
+    InitComponent(models,audio){
 
         
         this.AddComponent(new LevelSystem(this));
         this.AddComponent(new SoundSystem(this,this.audio));
-        this.AddComponent(new JokerSystem(this));
+        this.AddComponent(new JokerSystem(this,models));
         this.AddComponent(new DisplaySystem(this));
         this.AddComponent(new HackSystem(this));
         this.AddComponent(new GameObjectManager(this));

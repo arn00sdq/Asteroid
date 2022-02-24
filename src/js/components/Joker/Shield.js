@@ -1,16 +1,22 @@
 import JokerMovement from "./JokerMovement.js";
 
-class Shield extends THREE.Group{
+class Shield extends THREE.Object3D{
 
     constructor(scene, model){
 
         super();
 
         this.components = {};
+        this.vscale = 1;
 
         this.model = model;
+
         this.name = "Shield";
-        
+        this.type == "Joker"
+
+        this.nb = 0;
+        this.limit = 1;
+
         this.scene = scene;
         this.InitComponent();
 
@@ -39,6 +45,7 @@ class Shield extends THREE.Group{
         this.BB = new THREE.Box3().copy( object.geometry.boundingBox );
         this.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
 
+
     }
 
 
@@ -52,6 +59,25 @@ class Shield extends THREE.Group{
         
         this.scene.add(o);
         
+    }
+
+    InstantiateAndDestroy(o,p,r,s,t){
+
+        o.position.copy(p);
+        o.rotation.copy(r);
+        o.scale.copy(new THREE.Vector3(s,s,s))
+
+        this.SetRigidBoby(this.children[0]);
+        
+        this.scene.add(o);
+
+        setTimeout(() => {
+
+            this.Destroy(o)
+
+        }, t);
+
+
     }
 
     Destroy(object){

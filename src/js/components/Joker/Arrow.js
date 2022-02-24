@@ -7,9 +7,14 @@ class Arrow extends THREE.Group{
         super();
 
         this.components = {}
-
         this.model = model;
-        this.name = "Arrow"
+        this.vscale = 0.5;
+
+        this.name = "Arrow";
+        this.type = "Joker";
+
+        this.nb = 0;
+        this.limit = 1;    
         
         this.scene = scene;
         this.InitComponent();

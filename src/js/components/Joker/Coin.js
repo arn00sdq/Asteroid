@@ -1,16 +1,22 @@
 import JokerMovement from "./JokerMovement.js";
 
-class Coin extends THREE.Group{
+class Coin extends THREE.Object3D{
 
     constructor(scene, model){
 
         super();
 
         this.components = {}
+        this.vscale = 0.1;
 
         this.model = model;
-        this.name = "Coin"
         
+        this.name = "Coin";
+        this.type == "Joker"
+
+        this.nb = 0;
+        this.limit = 5;
+
         this.scene = scene;
         this.InitComponent();
 
@@ -26,8 +32,9 @@ class Coin extends THREE.Group{
 
         this.add(this.model);
         
-        this.children[0].scale.copy(scale)
-        
+        this.children[0].scale.copy(scale);
+        this.SetRigidBoby(this.children[0]);
+
     }  
 
     SetRigidBoby(object){
@@ -37,6 +44,7 @@ class Coin extends THREE.Group{
 
         this.BB = new THREE.Box3().copy( object.geometry.boundingBox );
         this.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
+        
 
     }
   
@@ -57,12 +65,10 @@ class Coin extends THREE.Group{
 
         object.mesh = null;
        
-        setTimeout(() => {
-
-            this.scene.remove(object);
+        this.scene.remove(object);
             
 
-        }, 150);
+
  
     }
 

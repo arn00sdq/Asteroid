@@ -64,6 +64,10 @@ class HackSystem{
                     player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
                     console.log("Cannon en plus");
                     break;
+                case 3:
+                    joker_sys.PlayerProtection(this.parent.player, this.parent.shield,3000);
+                    console.log("Protection");
+                    break;
 
             }
 

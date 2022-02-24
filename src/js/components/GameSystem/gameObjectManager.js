@@ -64,7 +64,8 @@ class GameObjectManager{
 
     collision_handler(e,e2){
 
-      //console.log(e,e2)
+     /* console.log("Collision : ",e.name,e2.name)
+      console.log("Position : ",e,e2)*/
 
       switch(e.constructor.name){
 
@@ -172,16 +173,14 @@ class GameObjectManager{
 
     CollisionAsteroidHandler(asteroid, object){
 
+      if(object.name == "Heart" || object.name == "Shield"|| object.name ==  "Coin"|| object.name == "Arrow") return;
+
       let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
 
       let playerHitSound = new THREE.Audio( this.parent.audio.listener );
       this.sound_sys.PlayHitBullet(playerHitSound, Math.random() * 0.1,0.2);
 
-      if (object.name == "Player" && object.immune == false){
-
-          asteroidHealth.Damage("max")
-
-      }
+      if (object.name == "Player" && object.immune == false) asteroidHealth.Damage("max")
 
       if(object.name == "BasicBullet"){
 
@@ -207,11 +206,11 @@ class GameObjectManager{
 
     CollisionCoinHandler(coin, object){
 
-      if(object.name == "BasicBullet") return;
 
-      if(coin.name == "Coin" && coin.mesh !== null){
+      if(object.name == "Player" && coin.mesh !== null){
 
         coin.Destroy(coin);
+        this.parent.coin.nb -= 1
         this.joker_sys.PlayerAddCoin(this.parent.score, 1);
         this.sound_sys.PlayCoinPickUp();
 
@@ -221,13 +220,13 @@ class GameObjectManager{
 
     CollisionShieldHandler(shield, object){
 
-      if(object.name == "BasicBullet") return;
 
-      if(shield.name == "Shield" && shield.mesh !== null){
+      if(object.name == "Player" && shield.mesh !== null){
 
         shield.Destroy(shield);
+        this.parent.shield.nb -= 1
         this.sound_sys.PlayCoinPickUp();
-        this.joker_sys.PlayerProtection(object,3000);
+        this.joker_sys.PlayerProtection(object,shield, 3000);
      
       }
 
@@ -235,11 +234,12 @@ class GameObjectManager{
 
     CollisionHeartHandler(heart, object){
 
-      if(object.name == "BasicBullet") return;
       
-      if(heart.name == "Heart" && heart.mesh !== null){
+      if(object.name == "Player" && heart.mesh !== null){
 
         heart.Destroy(heart);
+        this.parent.heart.nb -= 1
+        console.log(this.parent.arrow.nb)
         this.joker_sys.PlayerAddLife(object, 1);
         this.sound_sys.PlayHeartPickUp();
 
@@ -249,11 +249,11 @@ class GameObjectManager{
 
     CollisionArrowHandler(arrow, object){
 
-      if(object.name == "BasicBullet") return
       
-      if(arrow.name == "Arrow" && arrow.mesh !== null){
+      if(object.name == "Player" && arrow.mesh !== null){
 
         arrow.Destroy(arrow);
+        this.parent.arrow.nb -= 1
         this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
 
       }

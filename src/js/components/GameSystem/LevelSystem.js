@@ -16,10 +16,12 @@ class LevelSystem{
 
     InstantiateJoker(joker,position, rotation, scale){
 
+        joker.nb += 1;
         let jokerClone = joker.clone();
 
         jokerClone.children[0].material = joker.children[0].material.clone();
         jokerClone.scene = this.parent.scene;
+        
 
         jokerClone.Instantiate(jokerClone,position, rotation, scale);
 
