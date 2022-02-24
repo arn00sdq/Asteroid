@@ -1,6 +1,6 @@
 import JokerMovement from "./JokerMovement.js";
 
-class Heart extends THREE.Group{
+class Shield extends THREE.Group{
 
     constructor(scene, model){
 
@@ -9,7 +9,7 @@ class Heart extends THREE.Group{
         this.components = {};
 
         this.model = model;
-        this.name = "Heart";
+        this.name = "Shield";
         
         this.scene = scene;
         this.InitComponent();
@@ -87,4 +87,4 @@ class Heart extends THREE.Group{
 
 }
 
-export default Heart
+export default Shield

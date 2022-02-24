@@ -9,7 +9,7 @@ import CameraTracking from "../Camera/CameraTracking.js";
 
 import * as THREE from '../../three/three.module.js'
 
-class Player extends THREE.Group{ 
+class Player extends THREE.Object3D{ 
 
     constructor(params, model, audio) {
 
@@ -21,6 +21,8 @@ class Player extends THREE.Group{
         this.params = params;
         this.model = model;
         this.audio = audio;
+        
+        this.immune = false;
 
         this.audio_syst = null;
 

@@ -1,7 +1,7 @@
 import AsteroidMovement from "./AsteroidMouvement.js";
 import AsteroidHealthSystem from "./AsteroidHealthSystem.js";
 
-class BasicAsteroid extends THREE.Group{
+class BasicAsteroid extends THREE.Object3D{
 
     constructor(scene,model,nbBreak){
 

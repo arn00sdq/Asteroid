@@ -9,6 +9,7 @@ import { TextureLoader } from "./three/three.module.js";
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
 import Arrow from "./components/Joker/Arrow.js";
+import Shield from "./components/Joker/Shield.js";
 
 class Asteroid {
     constructor() {
@@ -78,6 +79,9 @@ class Asteroid {
         var mapCoin = textureLoader.load('../medias/models/collectable/coin/textures/Coin_Gold_albedo.png');
         var materialCoin = new THREE.MeshPhongMaterial({map:mapCoin});
 
+        var mapShield = textureLoader.load('../medias/models/collectable/shield/texture_shield.png');
+        var materialShield = new THREE.MeshPhongMaterial({map:mapShield});
+
         const geometryAsteroid = new THREE.CylinderBufferGeometry(0.01,0.01,0.1,5,1,false); 
         const materialAsteroid = new THREE.MeshLambertMaterial( );
         
@@ -117,10 +121,25 @@ class Asteroid {
             this.modelManager.push(object)
 
         });
+
+        loaderObj.load("../medias/models/collectable/shield/shield.obj", (object) => {
+
+            object.traverse( function ( child ) {
+
+                if ( child.isMesh ) child.material = materialShield;
+
+            });
+            
+            object.children[0].rotateX( (Math.PI / 180) *90 );
+            object.name="ShieldItem";
+            this.modelManager.push(object)
+
+        });
         
         loaderObj.load("../medias/models/collectable/coin/Coin.obj", (object) => {
 
             object.traverse( function ( child ) {
+
                 if ( child.isMesh ) child.material = materialCoin;
             
             });
@@ -207,8 +226,9 @@ class Asteroid {
     LoadProps() {
 
         let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel;
-        let arrowModel;
+        let arrowModel; let shieldModel;
 
+        console.log(this.modelManager)
         this.modelManager.forEach((e) => {
 
             if(e.name == "SpaceShip")  playerModel = e;
@@ -216,6 +236,8 @@ class Asteroid {
             if(e.name == "SpaceRock")  rockModel = e;
 
             if(e.name == "Bullet")  bulletModel = e;
+
+            if(e.name == "ShieldItem") shieldModel = e;
 
             if(e.name == "HeartItem"){
 
@@ -270,6 +292,7 @@ class Asteroid {
             heart :  new Heart(this.scene, heartModel.children[0]),
             coin : new Coin(this.scene, coinModel.children[0]),
             arrow : new Arrow(this.scene, arrowModel.children[0]),
+            shield: new Shield(this.scene, shieldModel.children[0]),
 
         }
 

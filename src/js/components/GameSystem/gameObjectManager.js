@@ -7,6 +7,7 @@ class GameObjectManager{
 
       this.level_sys_comp = this.parent.GetComponent("LevelSystem");
       this.sound_sys = this.parent.GetComponent("SoundSystem");
+      this.joker_sys = this.parent.GetComponent("JokerSystem");
       
     }
 
@@ -19,13 +20,12 @@ class GameObjectManager{
           this.parent.scene.children.forEach(e2 => {
 
             if((e !== e2) &&  (e2.BB && e.BB) && e2.children[0] && e.children[0]){
-
               let otherBB = new THREE.Box3().copy( e2.BB ).applyMatrix4( e2.children[0].matrixWorld );
               let otherBS = new THREE.Sphere().copy( e2.BS ).applyMatrix4( e2.children[0].matrixWorld );
               let collisionB = new THREE.Box3().copy( e.BB ).applyMatrix4( e.children[0].matrixWorld ).intersectsBox( otherBB );
               let collisionS = new THREE.Sphere().copy( e.BS ).applyMatrix4( e.children[0].matrixWorld ).intersectsBox( otherBS );
               
-              if (collisionB && collisionS) {
+            if (collisionB && collisionS) {
 
                 this.collision_handler(e,e2)
 
@@ -90,6 +90,10 @@ class GameObjectManager{
           this.CollisionArrowHandler(e, e2);
           break;
 
+        case "Shield":
+          this.CollisionArrowHandler(e, e2);
+            break;
+
       }
 
       switch(e2.constructor.name){
@@ -112,13 +116,15 @@ class GameObjectManager{
             break;
 
         case "Coin":
-            this.CollisionCoinHandler(e, e2);
+            this.CollisionCoinHandler(e2, e);
             break;
 
         case "Arrow":
-            this.CollisionArrowHandler(e, e2);
+            this.CollisionArrowHandler(e2, e);
             break;
-
+        case "Shield":
+          this.CollisionShieldHandler(e2, e);
+          break;
       }
 
     }
@@ -139,7 +145,7 @@ class GameObjectManager{
       
       let playerHealth = player.GetComponent("PlayerHealthSystem");
 
-      if (object.name == "Asteroid"){
+      if (object.name == "Asteroid" && player.immune == false){
 
         playerHealth.Damage(1);
 
@@ -169,7 +175,7 @@ class GameObjectManager{
       let playerHitSound = new THREE.Audio( this.parent.audio.listener );
       this.sound_sys.PlayHitBullet(playerHitSound, Math.random() * 0.1,0.2);
 
-      if (object.name == "Player"){
+      if (object.name == "Player" && object.immune == false){
 
           asteroidHealth.Damage("max")
 
@@ -193,13 +199,7 @@ class GameObjectManager{
 
     CollisionBulletHandler(bullet, object){
 
-     // if(bullet.name == object.name) return;
-
-      if(object.name == "Asteroid"){
-
-        bullet.Destroy(bullet)
-
-      };
+      if(object.name == "Asteroid") bullet.Destroy(bullet)
 
     }
 
@@ -208,11 +208,19 @@ class GameObjectManager{
       if(coin.name == "Coin" && coin.mesh !== null){
 
         coin.Destroy(coin);
-        this.parent.PlayerAddCoin(1);
+        this.joker_sys.PlayerAddCoin(this.parent.score, 1);
         this.sound_sys.PlayCoinPickUp();
 
-
       }
+
+    }
+
+    CollisionShieldHandler(shield, object){
+
+
+      shield.Destroy(shield);
+      this.sound_sys.PlayCoinPickUp();
+      this.joker_sys.PlayerProtection(object,3000);
 
     }
 
@@ -221,7 +229,7 @@ class GameObjectManager{
       if(heart.name == "Heart" && heart.mesh !== null){
 
         heart.Destroy(heart);
-        this.parent.PlayerAddLife(1);
+        this.joker_sys.PlayerAddCoin(object, 1);
         this.sound_sys.PlayHeartPickUp();
 
       }
@@ -233,7 +241,7 @@ class GameObjectManager{
       if(arrow.name == "Arrow" && arrow.mesh !== null){
 
         arrow.Destroy(arrow);
-        this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1)
+        this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
 
       }
 
@@ -248,7 +256,7 @@ class GameObjectManager{
 
       this.parent.scene.children.forEach(e => {
 
-        if(e.type == "Group"){
+        if(e.type == "Object3D"){
 
           if(e.name == "Asteroid") nbEnnemyFrame++ ;
 
@@ -270,7 +278,6 @@ class GameObjectManager{
       displayComponent.PrintEnnemy(nbEnnemyFrame);
 
       this.parent.CheckBullet(countBullet);
-     // this.parent.JokerSystem(timeElapsed);
 
     }
 

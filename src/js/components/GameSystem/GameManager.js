@@ -21,6 +21,7 @@ class GameManager {
         this.heart = models.heart;
         this.coin = models.coin;
         this.arrow = models.arrow;
+        this.shield = models.shield;
 
         this.audio = audio
 
@@ -43,10 +44,12 @@ class GameManager {
         
         this.AddComponent(new LevelSystem(this));
         this.AddComponent(new SoundSystem(this,this.audio));
-        this.AddComponent(new GameObjectManager(this));
         this.AddComponent(new JokerSystem(this));
         this.AddComponent(new DisplaySystem(this));
         this.AddComponent(new HackSystem(this));
+        this.AddComponent(new GameObjectManager(this));
+        
+        
        
     }
 
@@ -78,6 +81,9 @@ class GameManager {
 
         this.arrow.InitComponent();
         this.arrow.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
+
+        this.shield.InitComponent();
+        this.shield.InitMesh(new THREE.Vector3(0.1,0.1,0.1));
         
     }
 
@@ -114,19 +120,6 @@ class GameManager {
 
     }
 
-    PlayerAddLife(number){
-
-        this.player.GetComponent("PlayerHealthSystem").Heal(number);
-        this.GetComponent("DisplaySystem").PrintLife(this.player.life);
-
-    }
-
-    PlayerAddCoin(number){
-
-        this.score += number;
-        this.GetComponent("DisplaySystem").printScore(this.score);
-
-    }
 
     RAF() { // transformer en update ?
 

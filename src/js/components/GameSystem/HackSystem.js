@@ -4,10 +4,8 @@ class HackSystem{
 
         this.parent = parent;
         
-        this.objectManager = this.parent.GetComponent("GameObjectManager");
         this.jokerSytem = this.parent.GetComponent("JokerSystem");
         this.sound_sys = this.parent.GetComponent("SoundSystem");
-
 
         this.indexJoker = 0;
 
@@ -40,28 +38,30 @@ class HackSystem{
 
     NextJoker() {
 
-        this.playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
-        let playerJoker = this.parent.player;
+        let playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
+        let joker_sys = this.parent.GetComponent("JokerSystem");
+        
+        let player = this.parent.player;
 
-        if (this.playerInput.nj){
+        if (playerInput.nj){
 
-            this.playerInput.nj = false;
+            playerInput.nj = false;
             
             switch (this.indexJoker){
 
                 case 0:
-                    this.parent.PlayerAddLife(1);
+                    joker_sys.PlayerAddLife(player,1);
                     this.sound_sys.PlayHeartPickUp();
                     console.log("vie supplémentaire");
                     break;
 
                 case 1:
-                    this.parent.PlayerAddCoin(1);
+                    joker_sys.PlayerAddCoin(this.parent.score, 1);
                     this.sound_sys.PlayCoinPickUp();
                     console.log("Piece en +");
                     break;
                 case 2:
-                    playerJoker.GetComponent("PlayerShootProjectiles").AddProjectile(1);
+                    player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
                     console.log("Cannon en plus");
                     break;
 
@@ -75,18 +75,19 @@ class HackSystem{
 
     KillThemAll(){ 
 
-        this.playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
+        let playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
+        let objectManager = this.parent.GetComponent("GameObjectManager");
 
-        if (this.playerInput.kta){
+        if (playerInput.kta){
 
-            this.playerInput.kta = false;
+            playerInput.kta = false;
             let scene = this.parent.scene;
 
             scene.children.forEach( (e) => {
 
                 if (e.name == "Asteroid"){
 
-                    this.objectManager.Asteroid_Subdivision(e);
+                    objectManager.Asteroid_Subdivision(e);
                     e.Destroy(e);
 
                 }

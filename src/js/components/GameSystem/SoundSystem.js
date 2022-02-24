@@ -53,8 +53,6 @@ class SoundSystem{
         audio.setLoop( false );
         audio.setVolume( volume );
 
-        console.log("a fond")
-
         audio.play(delay);
 
     }

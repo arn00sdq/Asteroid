@@ -1,7 +1,7 @@
 import BulletMouvement from "./BulletMouvement.js";
 import BulletDamageSystem from "./BulletDamageSystem.js";
 
-class BasicBullet extends THREE.Group{ 
+class BasicBullet extends THREE.Object3D{ 
     constructor(model, scene, audio) {
 
         super();
