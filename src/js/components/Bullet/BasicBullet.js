@@ -27,7 +27,7 @@ class BasicBullet extends GameObject{
 
     Instantiate(o,p,r,s){
         
-        super.Instantiate(o,p,r,s); /*overwrite*/ 
+        super.Instantiate(o,p,r,s);
 
         const dummy = new THREE.Object3D
         dummy.position.copy(p);

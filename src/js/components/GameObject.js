@@ -22,7 +22,7 @@ class GameObject extends THREE.Object3D{
     InitMesh(scale){
 
         this.add(this.model);
-        
+
         this.children[0].scale.copy(scale)
         
     }  

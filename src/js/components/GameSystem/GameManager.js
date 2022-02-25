@@ -68,17 +68,13 @@ class GameManager {
 
     ModelInitialisation(){
 
-        this.asteroid.InitComponent();
+
         this.asteroid.InitMesh(new THREE.Vector3(0.0003,0.0003,0.0003));
-
-        this.player.InitComponent();
         this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
-
         this.heart.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
         this.coin.InitMesh(new THREE.Vector3(1,1,1));
         this.arrow.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
         this.shield.InitMesh(new THREE.Vector3(0.1,0.1,0.1));
-
         this.basicBullet.InitMesh(new THREE.Vector3(1,1,1));
 
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;

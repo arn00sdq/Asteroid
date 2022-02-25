@@ -10,7 +10,9 @@ class LevelSystem{
 
     InstantiatePlayer(player,position, rotation, scene){
         
-        player.Instantiate(player,position, rotation, scene);
+        let mesh = player.children.find( e => e.constructor.name == "Mesh")
+        player.SetRigidBody(mesh)
+        player.Instantiate(player,position, rotation, 0.04);
 
     }
 
@@ -36,6 +38,7 @@ class LevelSystem{
         asteClone.nbBreak = asteroid.nbBreak + 1;
         asteClone.life = asteClone.life / (asteClone.nbBreak + 1)
 
+        asteClone.SetRigidBody(asteClone.children[0]);
         asteClone.Instantiate(asteClone, position, rotation, scale)
 
     }
