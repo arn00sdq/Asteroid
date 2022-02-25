@@ -10,7 +10,6 @@ class LevelSystem{
 
     InstantiatePlayer(player,position, rotation, scene){
         
-        let mesh = player.children.find( e => e.constructor.name == "Mesh")
         player.SetRigidBody(player)
         player.Instantiate(player,position, rotation, 0.04);
 
