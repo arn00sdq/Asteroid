@@ -34,7 +34,9 @@ class SoundSystem{
 
     }
 
-    PlayBulletShoot(audio, delay,volume){
+    PlayBulletShoot(listener, delay,volume){
+
+        let audio = new THREE.Audio( listener );
 
         const bulletBuffer =  this.audioManager.find(e => e.name == "Bullet");
 

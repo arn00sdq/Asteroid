@@ -23,8 +23,6 @@ class PlayerShootProjectiles{
 
     Shoot(){
 
-      
-      
       for (let i = 0; i < this.cannon.length; i++) {
 
         let bulletClone = this.weaponParams.clone();
@@ -40,9 +38,8 @@ class PlayerShootProjectiles{
 
         bulletClone.SetRigidBody(bulletClone);
         bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 1);
-
-        let bulletSound = new THREE.Audio( this.audio.listener );
-        this.parent.audio_syst.PlayBulletShoot(bulletSound, Math.random() * 0.2, 0.2);
+        
+        this.parent.audio_syst.PlayBulletShoot(this.audio.listener, Math.random() * 0.2, 0.2);
 
         this.indexMissile ++;
 

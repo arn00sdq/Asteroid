@@ -9,7 +9,7 @@ class GameManager {
 
     constructor(models, utils, animation,audio){
 
-        this.components = {}// a voir section print, triche, joker , niveau
+        this.components = {}
 
         this.renderer = utils.renderer
         this.scene = utils.scene;
@@ -113,7 +113,6 @@ class GameManager {
         objectsToRemove.forEach(node => {
 			this.scene.remove( node );
 		});
-
 
     }
 

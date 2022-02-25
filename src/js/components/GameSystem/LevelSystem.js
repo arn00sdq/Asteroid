@@ -48,7 +48,7 @@ class LevelSystem{
         switch (this.level){
 
             case 1:
-                this.AsteroidWave(this.parent.asteroid, 1);
+                this.AsteroidWave(this.parent.asteroid, 10);
                 break;
             case 2:
                 this.BossWave(this.parent.asteroid);
@@ -66,7 +66,7 @@ class LevelSystem{
 
     AsteroidWave(asteroid, nbAsteroid){
 
-        for (let index = 0; index < 10; index++) {
+        for (let index = 0; index < nbAsteroid; index++) {
 
             let position = new THREE.Vector3( ( ( Math.random() *  ( 10.5 - 8.5 ) ) + 8.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
