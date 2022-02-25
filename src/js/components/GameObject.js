@@ -1,5 +1,11 @@
 class GameObject extends THREE.Object3D{
 
+    /**
+    *
+    * @param {THREE.Scene}  scene 
+    * @param {THREE.Mesh}  model
+    * @param {THREE.Audio} [audio] 
+    */
     constructor(scene, model, audio){
         
         super();
@@ -17,7 +23,8 @@ class GameObject extends THREE.Object3D{
     }
 
     /**
-    * @param {THREE.Vector3}  scale Scale de l'object
+    *- Ajoute la mesh et definit le scale
+    * @param {THREE.Vector3}  scale 
     */
     InitMesh(scale){
 
@@ -28,28 +35,27 @@ class GameObject extends THREE.Object3D{
     }  
 
     /**
-    * @param {THREE.Object3D}  object Object3D du modèle
+    *- Ajoute une box3 
+    * @param {THREE.Object3D}  object
     */
     SetRigidBody(object){
 
         object.userData.box3 = new THREE.Box3()
         
-     //   console.log(object.name, object.userData)
-
     }
 
     /**
-    * @param {THREE.Object3D}  object Object3D du modèle
+    * Enleve la box3 
+    * @param {}  object 
     */
-    RemoveRigidBody(object) {
+    RemoveRigidBody() {
 
-       /* object.BB = null;
-        object.BS = null;*/
+        this.userData.box3 = null;
 
     }
     
     /** 
-    * @param {Number}  seconds temps en seconde
+    * @param {Number}  seconds Temps en seconde durant la box3 est retirée
     **/
     SetInvulnerability(seconds){
 
@@ -69,6 +75,7 @@ class GameObject extends THREE.Object3D{
     }
 
     /**
+    * - Ajoute l'objet à la scène 
     * @param {THREE.Object3D}  o Object3D du modèle
     * @param {THREE.Vector3}  p position du modèle à instancier
     * @param {THREE.Euler}  r rotation du modèle à instancier
@@ -84,11 +91,11 @@ class GameObject extends THREE.Object3D{
     }
 
     /**
-    * @param {THREE.Object3D}  o Object3D du modèle
-    * @param {THREE.Vector3}  p position du modèle à instancier
-    * @param {THREE.Euler}  r rotation du modèle à instancier
-    * @param {THREE.Scene}  s scène courante
-    * @param {Number}  s temps en seconde
+    *- Ajoute l'objet à la scène et le retire au bout de x seconds 
+    * @param {THREE.Object3D}  o
+    * @param {THREE.Vector3}  p
+    * @param {THREE.Euler}  r 
+    * @param {THREE.Scene}  s 
     */
     InstantiateAndDestroy(o,p,r,s,t){
         
@@ -104,7 +111,8 @@ class GameObject extends THREE.Object3D{
     }
 
     /**
-    * @param {THREE.Object3D}  o Object3D du modèle
+    *- Enleve l'objet de la scène 
+    * @param {THREE.Object3D}  o Enleve l'objet de la scène
     */
     Destroy(object){
 
@@ -115,7 +123,8 @@ class GameObject extends THREE.Object3D{
     }
 
     /**
-    * @param {THREE.Object3D}  c Composant du modele
+    *- Ajout du composant au modele 
+    * @param {THREE.Object3D}  c 
     */
     AddComponent(c) {
 
@@ -124,7 +133,8 @@ class GameObject extends THREE.Object3D{
     }
 
     /**
-    * @param {THREE.Object3D}  c Composant du modele
+    * Retourne le composant
+    * @param {THREE.Object3D}  c 
     */
     GetComponent(n) {
 
@@ -133,7 +143,8 @@ class GameObject extends THREE.Object3D{
     }
 
     /**
-    * @param {Number}  timeElapsed temps en seconde
+    * temps en seconde
+    * @param {Number}  timeElapsed 
     */
     Update(timeElapsed){
 
