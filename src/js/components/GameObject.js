@@ -5,7 +5,7 @@ class GameObject extends THREE.Object3D{
         super();
 
         if (!audio) audio = null;
-
+        
         this.components = {};
         this.model = model;
         this.scene = scene;
@@ -32,11 +32,9 @@ class GameObject extends THREE.Object3D{
     */
     SetRigidBody(object){
 
-        object.geometry.computeBoundingBox();
-        object.geometry.computeBoundingSphere();
-
-        this.BB = new THREE.Box3().copy( object.geometry.boundingBox );
-        this.BS = new THREE.Sphere().copy( object.geometry.boundingSphere );
+        object.userData.box3 = new THREE.Box3()
+        
+     //   console.log(object.name, object.userData)
 
     }
 
@@ -45,8 +43,8 @@ class GameObject extends THREE.Object3D{
     */
     RemoveRigidBody(object) {
 
-        object.BB = null;
-        object.BS = null;
+       /* object.BB = null;
+        object.BS = null;*/
 
     }
     
@@ -55,14 +53,14 @@ class GameObject extends THREE.Object3D{
     **/
     SetInvulnerability(seconds){
 
-        this.BB = null;
-        this.BS = null;
+        this.userData.box3 = null;
+        this.userData.box3 = null;
+
        if(this.children[0]){
 
             setTimeout(() => {
 
-                this.BB = new THREE.Box3().copy( this.children[0].geometry.boundingBox );
-                this.BS = new THREE.Sphere().copy( this.children[0].geometry.boundingSphere );
+                this.userData.box3 = new THREE.Box3()
 
             }, seconds);
 
@@ -139,6 +137,8 @@ class GameObject extends THREE.Object3D{
     */
     Update(timeElapsed){
 
+        if (this.userData.box3 !==null &&  this.userData.box3) this.userData.box3.setFromObject(this)
+        
         if(this.children[0] !== null){   
 
             for (let k in this.components) {

@@ -26,7 +26,7 @@ class HackSystem{
 
             }else{
 
-                this.parent.player.SetRigidBoby(this.parent.player.children[0])
+                this.parent.player.SetRigidBoby(this.parent.player)
                 console.log(" Désactivation invincible mode")
 
             }

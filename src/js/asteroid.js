@@ -89,7 +89,7 @@ class Asteroid {
         materialAsteroid.emissive.set(0xff000d)
 
 
-        const cylinderMesh = new THREE.InstancedMesh( geometryAsteroid, materialAsteroid, 100);
+        const cylinderMesh = new THREE.Mesh( geometryAsteroid, materialAsteroid);
         cylinderMesh.name="Bullet";
         cylinderMesh.rotateX( (Math.PI / 180) *90 );
 

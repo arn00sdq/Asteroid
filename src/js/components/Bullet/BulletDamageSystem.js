@@ -21,7 +21,8 @@ class BulletDamageSystem{
     Update(timeElapsed){
 
         let DistanceTravelled = this.parent.position.distanceTo(this.lastPosition)
-        this.damageAmount = this.damage - DistanceTravelled
+        this.damageAmount = this.damage - (DistanceTravelled /2)
+        
 
         if(this.damageAmount <= 0)  this.damageAmount = 0 /*this.parent.Destroy(this.parent)*/
 

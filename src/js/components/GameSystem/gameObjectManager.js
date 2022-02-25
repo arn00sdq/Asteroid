@@ -13,23 +13,15 @@ class GameObjectManager{
 
     Detect_collision() {
 
-      this.parent.scene.children.forEach( e => { 
-
-        if( e.BB && e.children[0]){
+      this.parent.scene.children.forEach( e =>  { 
+        
+        if( (e.userData.box3 !== null) && (e.children[0])){
 
           this.parent.scene.children.forEach(e2 => {
 
-            if((e !== e2) &&  (e2.BB && e.BB) && e2.children[0] && e.children[0]){
-              let otherBB = new THREE.Box3().copy( e2.BB ).applyMatrix4( e2.children[0].matrixWorld );
-              let otherBS = new THREE.Sphere().copy( e2.BS ).applyMatrix4( e2.children[0].matrixWorld );
-              let collisionB = new THREE.Box3().copy( e.BB ).applyMatrix4( e.children[0].matrixWorld ).intersectsBox( otherBB );
-              let collisionS = new THREE.Sphere().copy( e.BS ).applyMatrix4( e.children[0].matrixWorld ).intersectsBox( otherBS );
-              
-            if (collisionB && collisionS) {
+          if((e !== e2) &&  (e2.userData.box3 && e.userData.box3) && e2.children[0] && e.children[0]){
 
-                this.collision_handler(e,e2)
-
-              }
+            if ( e.userData.box3.intersectsBox(e2.userData.box3)) this.collision_handler(e,e2);
 
             }
 
@@ -42,8 +34,6 @@ class GameObjectManager{
     }
 
     Asteroid_Subdivision(e){
-
-      
 
       if(e.nbBreak < 2){
 

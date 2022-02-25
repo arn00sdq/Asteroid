@@ -1,3 +1,5 @@
+import BasicBullet from "../Bullet/BasicBullet.js";
+
 class PlayerShootProjectiles{
 
     constructor(parent,audio){
@@ -12,10 +14,7 @@ class PlayerShootProjectiles{
       this.cannon = [];
 
       this.spawnDistance = -0.3;
-
-      this.spawnPos = new THREE.Vector3;
       this.spawnRot = new THREE.Euler;
-      this.playerDirection = new THREE.Vector3;
       this.temp = new THREE.Vector3;
 
       this.indexMissile = 1;
@@ -23,6 +22,8 @@ class PlayerShootProjectiles{
     }
 
     Shoot(){
+
+      
       
       for (let i = 0; i < this.cannon.length; i++) {
 
@@ -33,18 +34,15 @@ class PlayerShootProjectiles{
         bulletClone.index = this.indexMissile;
 
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
-        this.spawnPos.copy(this.cannon[i].position);
-
-        this.playerDirection = this.parent.getWorldPosition(new THREE.Vector3());
         this.spawnRot =  this.parent.rotation;
         
-        bulletClone.GetComponent("BulletDamageSystem").Start(this.temp);
+        this.weaponParams.GetComponent("BulletDamageSystem").Start(this.temp);
+
+        bulletClone.SetRigidBody(bulletClone);
+        bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 1);
 
         let bulletSound = new THREE.Audio( this.audio.listener );
         this.parent.audio_syst.PlayBulletShoot(bulletSound, Math.random() * 0.2, 0.2);
-
-        bulletClone.SetRigidBody(bulletClone.children[0]);
-        bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 1);
 
         this.indexMissile ++;
 
@@ -57,7 +55,7 @@ class PlayerShootProjectiles{
       this.nbCannon += nbCannon;
       this.cannon = [];
 
-      let zPos = new THREE.Vector3(0,0,0.1); // changez z ou x pour futur
+      let zPos = new THREE.Vector3(0,0,0.5); // changez z ou x pour futur
       let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
       
       for(let i = 0; i < this.nbCannon ; i++){

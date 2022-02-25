@@ -29,12 +29,6 @@ class BasicBullet extends GameObject{
         
         super.Instantiate(o,p,r,s);
 
-        const dummy = new THREE.Object3D
-        dummy.position.copy(p);
-        dummy.rotation.copy(r);
-
-        o.children[0].setMatrixAt(this.index,dummy.matrix)
-
         o.position.copy(p);
         o.rotation.copy(r);
 

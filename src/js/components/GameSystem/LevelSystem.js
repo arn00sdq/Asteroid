@@ -11,7 +11,7 @@ class LevelSystem{
     InstantiatePlayer(player,position, rotation, scene){
         
         let mesh = player.children.find( e => e.constructor.name == "Mesh")
-        player.SetRigidBody(mesh)
+        player.SetRigidBody(player)
         player.Instantiate(player,position, rotation, 0.04);
 
     }
@@ -24,7 +24,7 @@ class LevelSystem{
         jokerClone.children[0].material = joker.children[0].material.clone();
         jokerClone.scene = this.parent.scene;
         
-        jokerClone.SetRigidBody(jokerClone.children[0]);
+        jokerClone.SetRigidBody(jokerClone);
         jokerClone.Instantiate(jokerClone,position, rotation, scale);
 
     }
@@ -38,7 +38,7 @@ class LevelSystem{
         asteClone.nbBreak = asteroid.nbBreak + 1;
         asteClone.life = asteClone.life / (asteClone.nbBreak + 1)
 
-        asteClone.SetRigidBody(asteClone.children[0]);
+      //  asteClone.SetRigidBody(asteClone.children[0]);
         asteClone.Instantiate(asteClone, position, rotation, scale)
 
     }
@@ -66,7 +66,7 @@ class LevelSystem{
 
     AsteroidWave(asteroid, nbAsteroid){
 
-        for (let index = 0; index < nbAsteroid; index++) {
+        for (let index = 0; index < 10; index++) {
 
             let position = new THREE.Vector3( ( ( Math.random() *  ( 10.5 - 8.5 ) ) + 8.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
