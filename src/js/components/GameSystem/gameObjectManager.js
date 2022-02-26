@@ -255,9 +255,11 @@ class GameObjectManager{
 
       this.parent.scene.children.forEach(e => {
 
-        if(e.type == "Object3D"){
+        if(e.type == "Object3D"){ // Ajouter un tag pour nbFrame
 
           if(e.name == "Asteroid") nbEnnemyFrame++ ;
+
+          if(e.name == "EnnemySpaceship") nbEnnemyFrame++ ;
 
           if(e.name == "Player") playerLife = e.life ;
 

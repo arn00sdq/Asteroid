@@ -15,6 +15,20 @@ class LevelSystem{
 
     }
 
+    InstantiateEnnemySS(ennemy_ss,position, rotation){
+        
+        let ennemy_ss_clone = ennemy_ss.clone();
+
+        ennemy_ss_clone.children[0].material = ennemy_ss_clone.children[0].material.clone();
+        ennemy_ss_clone.scene = ennemy_ss.scene;
+
+        ennemy_ss_clone.SetRigidBody(ennemy_ss_clone)
+        ennemy_ss_clone.Instantiate(ennemy_ss_clone,position, rotation, 0.5);
+
+        console.log(this.parent.scene)
+
+    }
+
     InstantiateJoker(joker,position, rotation, scale){
 
         joker.nb += 1;
@@ -37,7 +51,7 @@ class LevelSystem{
         asteClone.nbBreak = asteroid.nbBreak + 1;
         asteClone.life = asteClone.life / (asteClone.nbBreak + 1)
 
-      //  asteClone.SetRigidBody(asteClone.children[0]);
+        asteClone.SetRigidBody(asteClone);
         asteClone.Instantiate(asteClone, position, rotation, scale)
 
     }
@@ -47,7 +61,8 @@ class LevelSystem{
         switch (this.level){
 
             case 1:
-                this.AsteroidWave(this.parent.asteroid, 10);
+                //this.AsteroidWave(this.parent.asteroid, 10);
+                this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
                 break;
             case 2:
                 this.BossWave(this.parent.asteroid);
@@ -76,6 +91,24 @@ class LevelSystem{
             let scale = 1;
 
             this.InstantiateAsteroid(asteroid, position, rotation, scale)
+
+        }
+
+    }
+
+    EnnemySpaceshipWave(ennemy_ss, nb_ennemy_ss){
+
+        for (let index = 0; index < nb_ennemy_ss; index++) {
+
+            let position = new THREE.Vector3( ( ( Math.random() *  ( 10.5 - 8.5 ) ) + 8.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+                                                  0 ,
+                                              ( ( Math.random() *  ( 10.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                            )
+
+            let rotation = new THREE.Euler(0,0,0);
+            let scale = 1;
+
+            this.InstantiateEnnemySS(ennemy_ss, position, rotation, scale)
 
         }
 

@@ -1,5 +1,3 @@
-import BasicBullet from "../Bullet/BasicBullet.js";
-
 class PlayerShootProjectiles{
 
     constructor(parent,audio){

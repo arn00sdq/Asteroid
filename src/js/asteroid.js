@@ -10,6 +10,7 @@ import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
 import Arrow from "./components/Joker/Arrow.js";
 import Shield from "./components/Joker/Shield.js";
+import EnnemySpaceship from "./components/EnnemySpaceship/EnnemySpaceship.js";
 
 class Asteroid {
     constructor() {
@@ -72,6 +73,10 @@ class Asteroid {
         const loaderObj = new OBJLoader(this.loadingManager);
         const loaderShip = new GLTFLoader(this.loadingManager);
         
+        /* 
+        * texture
+        */
+
         const textureLoader = new TextureLoader();
         var map = textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg');
         var material = new THREE.MeshPhongMaterial({map:map})
@@ -81,6 +86,9 @@ class Asteroid {
 
         var mapShield = textureLoader.load('../medias/models/collectable/shield/texture_shield.png');
         var materialShield = new THREE.MeshPhongMaterial({map:mapShield});
+
+        var mapEnnemySS = textureLoader.load('../medias/models/Ennemy/textures/E-45 _col.jpg');
+        var materialEnnemySS = new THREE.MeshPhongMaterial({map:mapEnnemySS});
 
         const geometryAsteroid = new THREE.CylinderBufferGeometry(0.01,0.01,0.1,5,1,false); 
         const materialAsteroid = new THREE.MeshLambertMaterial( );
@@ -93,6 +101,9 @@ class Asteroid {
         cylinderMesh.name="Bullet";
         cylinderMesh.rotateX( (Math.PI / 180) *90 );
 
+        /* 
+        * ModelManager
+        */
         this.modelManager.push(cylinderMesh);
 
         loaderObj.load('../medias/models/low_poly.obj',  ( object ) => {
@@ -107,6 +118,19 @@ class Asteroid {
             this.modelManager.push(object);
            
         }); 
+
+        loaderObj.load('../medias/models/Ennemy/ennemy_ss.obj',  ( object ) => {
+
+            object.traverse( function ( child ) {
+
+                if ( child.isMesh ) child.material = materialEnnemySS;
+            
+            } );
+
+            object.name="EnnemySpaceship";
+            this.modelManager.push(object);
+
+        });
 
         loaderObj.load('../medias/models/explosion.obj',  ( object ) => {
 
@@ -226,7 +250,9 @@ class Asteroid {
     LoadProps() {
 
         let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel;
-        let arrowModel; let shieldModel;
+        let arrowModel; let shieldModel;let ennemy_ssModel;
+
+        bulletModel = new THREE.Object3D()
 
         this.modelManager.forEach((e) => {
 
@@ -234,7 +260,7 @@ class Asteroid {
 
             if(e.name == "SpaceRock")  rockModel = e;
 
-            if(e.name == "Bullet")  bulletModel = e;
+            if(e.name == "Bullet")  bulletModel.add(e);
 
             if(e.name == "ShieldItem") shieldModel = e;
 
@@ -249,7 +275,11 @@ class Asteroid {
 
             if(e.name == "ArrowItem") arrowModel = e
 
+            if(e.name == "EnnemySpaceship") ennemy_ssModel = e
+
         })
+
+        console.log(this.modelManager)
 
         const audio = {
 
@@ -284,12 +314,13 @@ class Asteroid {
 
         const models = {
 
-            player : new Player(this.params, playerModel.children[0],audio),
-            asteroid : new BasicAsteroid(this.scene,rockModel.children[0],-1),
-            heart :  new Heart(this.scene, heartModel.children[0]),
-            coin : new Coin(this.scene, coinModel.children[0]),
-            arrow : new Arrow(this.scene, arrowModel.children[0]),
-            shield: new Shield(this.scene, shieldModel.children[0]),
+            player : new Player(this.params, playerModel,audio),
+            ennemy_ss : new EnnemySpaceship(this.scene, ennemy_ssModel),
+            asteroid : new BasicAsteroid(this.scene,rockModel,-1),
+            heart :  new Heart(this.scene, heartModel),
+            coin : new Coin(this.scene, coinModel),
+            arrow : new Arrow(this.scene, arrowModel),
+            shield: new Shield(this.scene, shieldModel),
             basicBullet : new BasicBullet(this.scene, bulletModel, audio),
 
         }

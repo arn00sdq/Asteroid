@@ -27,8 +27,13 @@ class GameObject extends THREE.Object3D{
     * @param {THREE.Vector3}  scale 
     */
     InitMesh(scale){
+           
+        this.model.children.forEach( (e,i) => {
+                
+            this.add(e)
 
-        this.add(this.model);
+        })
+
 
         this.children[0].scale.copy(scale)
         

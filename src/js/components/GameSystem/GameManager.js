@@ -17,12 +17,12 @@ class GameManager {
 
         this.player = models.player;
         this.asteroid = models.asteroid; 
-
         this.heart = models.heart;
         this.coin = models.coin;
         this.arrow = models.arrow;
         this.shield = models.shield;
         this.basicBullet = models.basicBullet;
+        this.ennemy_ss = models.ennemy_ss;
 
 
         this.audio = audio
@@ -68,16 +68,15 @@ class GameManager {
 
     ModelInitialisation(){
 
-
+        /* A factoriser dans une boucle */
         this.asteroid.InitMesh(new THREE.Vector3(0.0003,0.0003,0.0003));
-        this.asteroid.SetRigidBody(this.asteroid);
         this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
+        this.ennemy_ss.InitMesh(new THREE.Vector3(1,1,1));
         this.heart.InitMesh(new THREE.Vector3(0.002,0.002,0.002));
         this.coin.InitMesh(new THREE.Vector3(0.06,0.06,0.06));
         this.arrow.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
         this.shield.InitMesh(new THREE.Vector3(0.1,0.1,0.1));
         this.basicBullet.InitMesh(new THREE.Vector3(1,1,1));
-       // this.basicBullet.SetRigidBody(this.basicBullet.children[0]);
 
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
         
