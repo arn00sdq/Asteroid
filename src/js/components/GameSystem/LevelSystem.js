@@ -21,6 +21,7 @@ class LevelSystem{
 
         ennemy_ss_clone.children[0].material = ennemy_ss_clone.children[0].material.clone();
         ennemy_ss_clone.scene = ennemy_ss.scene;
+        ennemy_ss_clone.asteroid = ennemy_ss.asteroid;
 
         ennemy_ss_clone.SetRigidBody(ennemy_ss_clone)
         ennemy_ss_clone.Instantiate(ennemy_ss_clone,position, rotation, 0.5);
@@ -61,7 +62,7 @@ class LevelSystem{
         switch (this.level){
 
             case 1:
-                //this.AsteroidWave(this.parent.asteroid, 10);
+                this.AsteroidWave(this.parent.asteroid, 10);
                 this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
                 break;
             case 2:
@@ -87,7 +88,7 @@ class LevelSystem{
                                               ( ( Math.random() *  ( 10.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 )
                                             )
 
-            let rotation = new THREE.Euler(0,0,0);
+            let rotation = new THREE.Euler( 0,0,0);
             let scale = 1;
 
             this.InstantiateAsteroid(asteroid, position, rotation, scale)

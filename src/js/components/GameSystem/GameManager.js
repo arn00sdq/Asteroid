@@ -71,7 +71,7 @@ class GameManager {
         /* A factoriser dans une boucle */
         this.asteroid.InitMesh(new THREE.Vector3(0.0003,0.0003,0.0003));
         this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
-        this.ennemy_ss.InitMesh(new THREE.Vector3(1,1,1));
+        this.ennemy_ss.InitMesh(new THREE.Vector3(0.2,0.2,0.2));
         this.heart.InitMesh(new THREE.Vector3(0.002,0.002,0.002));
         this.coin.InitMesh(new THREE.Vector3(0.06,0.06,0.06));
         this.arrow.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
@@ -79,6 +79,7 @@ class GameManager {
         this.basicBullet.InitMesh(new THREE.Vector3(1,1,1));
 
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
+        this.ennemy_ss.asteroid = this.asteroid;
         
         
     }

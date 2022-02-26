@@ -1,4 +1,5 @@
 import GameObject from '../GameObject.js';
+import SpaceshipComportement from './SpaceshipComportement.js';
 
 class EnnemySpaceship extends GameObject{ 
 
@@ -8,6 +9,7 @@ class EnnemySpaceship extends GameObject{
 
         this.components = {};
         this.name = "EnnemySpaceship";
+        this.asteroid = null;
 
         this.life = 1;
 
@@ -16,6 +18,8 @@ class EnnemySpaceship extends GameObject{
     }
 
     InitComponent(){
+
+        this.AddComponent( new SpaceshipComportement(this))
 
     }
 

@@ -279,8 +279,6 @@ class Asteroid {
 
         })
 
-        console.log(this.modelManager)
-
         const audio = {
 
             audioManager : this.audioManager,
