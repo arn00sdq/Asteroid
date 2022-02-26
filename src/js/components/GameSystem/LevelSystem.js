@@ -15,18 +15,25 @@ class LevelSystem{
 
     }
 
-    InstantiateEnnemySS(ennemy_ss,position, rotation){
+    InstantiateEnnemySS(ennemy_ss,position, rotation){/* factoriser plus tard */
         
         let ennemy_ss_clone = ennemy_ss.clone();
+       /* let mesh = ennemy_ss.children.find(e => e.constructor.name == 'Mesh');
+        ennemy_ss_clone.children.forEach((e) => { 
 
-        ennemy_ss_clone.children[0].material = ennemy_ss_clone.children[0].material.clone();
+            if (e.constructor.name == 'Mesh') 
+            e.material = mesh.material.clone(); 
+            
+        });*/
+
+
         ennemy_ss_clone.scene = ennemy_ss.scene;
+        ennemy_ss_clone.target = ennemy_ss.target;
+        ennemy_ss_clone.weaponParams = ennemy_ss.weaponParams;
         ennemy_ss_clone.asteroid = ennemy_ss.asteroid;
 
         ennemy_ss_clone.SetRigidBody(ennemy_ss_clone)
         ennemy_ss_clone.Instantiate(ennemy_ss_clone,position, rotation, 0.5);
-
-        console.log(this.parent.scene)
 
     }
 

@@ -12,8 +12,39 @@ class SpaceshipComportement {
         this.q1 = new THREE.Quaternion();
         this.q2 = new THREE.Quaternion();
 
+        this.nbCannon = 0;
+
+        this.spawnDistance = -0.3;
+        this.spawnRot = new THREE.Euler;
+        this.temp = new THREE.Vector3;
+
+        this.indexMissile = 1;
+
 
     }
+
+    AddProjectile(nbCannon){ //Composant ?
+
+        this.nbCannon += nbCannon;
+        this.cannon = [];
+  
+        let zPos = new THREE.Vector3(0,0,0.5); // changez z ou x pour futur
+        let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
+        
+        for(let i = 0; i < this.nbCannon ; i++){
+
+            this.cannon.push(new THREE.Object3D);
+  
+            let x = r * Math.cos( 360 / ( i + 2 ) );
+            let z = r * Math.sin( 360 / ( i + 2 ) );
+  
+            let posCannon = new THREE.Vector3( x, 0, z )
+            this.cannon[i].position.copy( posCannon );
+            this.parent.add(this.cannon[i]);
+  
+        }
+  
+      }
 
     Update(timeElapsed) {
 
@@ -26,7 +57,7 @@ class SpaceshipComportement {
         if(!this.Dodge()){
 
             this.Explore();
-            if(this.canShoot){
+            if(this.canShoot){ // a remnonter
 
                 this.canShoot = false;
 
@@ -115,6 +146,23 @@ class SpaceshipComportement {
 
     Shoot(){
 
+        for (let i = 0; i < this.cannon.length; i++) {
+
+            let bulletClone = this.parent.weaponParams.clone(); //a check l'affectation
+
+            bulletClone.spaceShip = this.parent;
+            bulletClone.scene = this.parent.weaponParams.scene;
+            bulletClone.index = this.indexMissile;
+    
+            this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
+    
+            bulletClone.SetRigidBody(bulletClone);
+            bulletClone.Instantiate(bulletClone,this.temp, new THREE.Euler(0,0,0), 1);      
+            bulletClone.lookAt(this.parent.target.position)
+            
+            this.indexMissile ++;
+    
+          }
 
     }
     

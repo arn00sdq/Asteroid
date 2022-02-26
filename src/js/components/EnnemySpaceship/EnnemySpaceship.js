@@ -9,7 +9,10 @@ class EnnemySpaceship extends GameObject{
 
         this.components = {};
         this.name = "EnnemySpaceship";
+
         this.asteroid = null;
+        this.weaponParams = null;
+        this.target = null;
 
         this.life = 1;
 
@@ -19,7 +22,9 @@ class EnnemySpaceship extends GameObject{
 
     InitComponent(){
 
-        this.AddComponent( new SpaceshipComportement(this))
+        this.AddComponent( new SpaceshipComportement(this));
+
+        if (this.constructor.name =="EnnemySpaceship") this.GetComponent("SpaceshipComportement").AddProjectile(1);
 
     }
 

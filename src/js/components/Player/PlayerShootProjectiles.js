@@ -45,7 +45,7 @@ class PlayerShootProjectiles{
       
     }
 
-    AddProjectile(nbCannon){
+    AddProjectile(nbCannon){ //Composant ?
 
       this.nbCannon += nbCannon;
       this.cannon = [];
