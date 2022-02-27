@@ -106,7 +106,7 @@ class LevelSystem{
                                             )
 
             let rotation = new THREE.Euler(0,0,0);
-            let scale = 0.5;
+            let scale = 0.08;
 
             this.InstantiateGameObject(ennemy_ss, position, rotation, scale)
 

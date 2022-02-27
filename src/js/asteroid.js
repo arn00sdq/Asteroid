@@ -127,6 +127,7 @@ class Asteroid {
             
             } );
 
+            object.children[0].rotateY( (Math.PI / 180) *180 );
             object.name="EnnemySpaceship";
             this.modelManager.push(object);
 
@@ -325,6 +326,7 @@ class Asteroid {
 
         this.gm = new GameManager(models, utils, animations, audio)
         this.gm.ModelInitialisation(); 
+        this.gm.ValueInitialisation(); 
 
         this.remove = null ;
 

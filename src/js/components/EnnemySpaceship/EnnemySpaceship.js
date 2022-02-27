@@ -1,4 +1,5 @@
 import GameObject from '../GameObject.js';
+import EnnemySSHealthSystem from './EnnemySSHealthSystem.js';
 import SpaceshipComportement from './SpaceshipComportement.js';
 
 class EnnemySpaceship extends GameObject{ 
@@ -14,8 +15,6 @@ class EnnemySpaceship extends GameObject{
         this.weaponParams = null;
         this.target = null;
 
-        this.life = 1;
-
         this.InitComponent();
 
     }
@@ -23,6 +22,7 @@ class EnnemySpaceship extends GameObject{
     InitComponent(){
 
         this.AddComponent( new SpaceshipComportement(this));
+        this.AddComponent( new EnnemySSHealthSystem(this));
 
         if (this.constructor.name =="EnnemySpaceship") this.GetComponent("SpaceshipComportement").AddProjectile(1);
 

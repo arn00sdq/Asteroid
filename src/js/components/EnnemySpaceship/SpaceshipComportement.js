@@ -57,7 +57,7 @@ class SpaceshipComportement {
         if(!this.Dodge()){
 
             this.Explore();
-            if(this.canShoot){ // a remnonter
+            if(this.canShoot){ 
 
                 this.canShoot = false;
 
@@ -81,7 +81,10 @@ class SpaceshipComportement {
     Explore(){
 
         let condition = true;
-        if (condition) this.RandomMouvement();
+        if (condition){
+
+            
+        } this.RandomMouvement();
 
     }
 
@@ -148,7 +151,7 @@ class SpaceshipComportement {
 
         for (let i = 0; i < this.cannon.length; i++) {
 
-            let bulletClone = this.parent.weaponParams.clone(); //a check l'affectation
+            let bulletClone = this.parent.weaponParams.clone(); 
 
             bulletClone.spaceShip = this.parent;
             bulletClone.scene = this.parent.weaponParams.scene;

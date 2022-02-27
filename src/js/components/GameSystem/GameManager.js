@@ -49,9 +49,6 @@ class GameManager {
         this.AddComponent(new HackSystem(this));
         this.AddComponent(new GameObjectManager(this));
         
-        this.player.audio_syst = this.GetComponent("SoundSystem");
-        
-       
     }
 
     AddComponent(c) {
@@ -68,7 +65,6 @@ class GameManager {
 
     ModelInitialisation(){
 
-        /* A factoriser dans une boucle */
         this.asteroid.InitMesh(new THREE.Vector3(0.0003,0.0003,0.0003));
         this.player.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
         this.ennemy_ss.InitMesh(new THREE.Vector3(0.02,0.02,0.02));
@@ -78,44 +74,22 @@ class GameManager {
         this.shield.InitMesh(new THREE.Vector3(0.1,0.1,0.1));
         this.basicBullet.InitMesh(new THREE.Vector3(1,1,1));
 
+    }
+
+    ValueInitialisation(){
+
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
-        
+        this.player.audio_syst = this.GetComponent("SoundSystem");
+
         this.ennemy_ss.weaponParams = this.basicBullet;
         this.ennemy_ss.asteroid = this.asteroid;
         this.ennemy_ss.target = this.player;
-        
-        
+
     }
 
     OnPlayerEnd() {
 
         document.getElementById("end_game").style.display = "";
-
-    }
-
-    CheckBullet(nbBullet){
-
-        let objectsToRemove = [];
-        let bulletToRemove = 2;
-        
-        if (nbBullet >15){
-
-            this.scene.traverse( function(child ) {
-                
-                if(child.name == "BasicBullet" && bulletToRemove > 0){
-                    
-                    objectsToRemove.push(child)
-                    bulletToRemove--;
-
-                }
-
-            })
-
-        }
-
-        objectsToRemove.forEach(node => {
-			this.scene.remove( node );
-		});
 
     }
 
