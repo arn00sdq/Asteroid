@@ -18,20 +18,9 @@ class LevelSystem{
     InstantiateEnnemySS(ennemy_ss,position, rotation){/* factoriser plus tard */
         
         let ennemy_ss_clone = ennemy_ss.clone();
-       /* let mesh = ennemy_ss.children.find(e => e.constructor.name == 'Mesh');
-        ennemy_ss_clone.children.forEach((e) => { 
-
-            if (e.constructor.name == 'Mesh') 
-            e.material = mesh.material.clone(); 
-            
-        });*/
-
-
-        ennemy_ss_clone.scene = ennemy_ss.scene;
-        ennemy_ss_clone.target = ennemy_ss.target;
-        ennemy_ss_clone.weaponParams = ennemy_ss.weaponParams;
-        ennemy_ss_clone.asteroid = ennemy_ss.asteroid;
-
+        
+        this.SetCloneValue(ennemy_ss_clone, ennemy_ss);
+        
         ennemy_ss_clone.SetRigidBody(ennemy_ss_clone)
         ennemy_ss_clone.Instantiate(ennemy_ss_clone,position, rotation, 0.5);
 
@@ -41,12 +30,29 @@ class LevelSystem{
 
         joker.nb += 1;
         let jokerClone = joker.clone();
-
-        jokerClone.children[0].material = joker.children[0].material.clone();
-        jokerClone.scene = this.parent.scene;
+        
+        this.SetCloneValue(jokerClone, joker);
         
         jokerClone.SetRigidBody(jokerClone);
         jokerClone.Instantiate(jokerClone,position, rotation, scale);
+
+    }
+
+    SetCloneValue(destination, source){
+
+        for (const property in destination) {
+
+            if(destination[property] == null && property !== "model")  destination[property] = source[property]
+
+        }
+
+        let mesh = source.children.find(e => e.constructor.name == 'Mesh');
+        destination.children.forEach((e) => { 
+
+            if (e.constructor.name == 'Mesh') 
+            e.material = mesh.material.clone(); 
+            
+        });
 
     }
 
