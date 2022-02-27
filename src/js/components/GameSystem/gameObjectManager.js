@@ -69,19 +69,19 @@ class GameObjectManager{
           break;
 
         case "Heart":
-          this.CollisionHeartHandler(e, e2);
+          this.CollisionJokerHandler(e, e2);
           break;
 
         case "Coin":
-          this.CollisionCoinHandler(e, e2);
+          this.CollisionJokerHandler(e, e2);
           break;
 
         case "Arrow":
-          this.CollisionArrowHandler(e, e2);
+          this.CollisionJokerHandler(e, e2);
           break;
 
         case "Shield":
-          this.CollisionArrowHandler(e, e2);
+          this.CollisionJokerHandler(e, e2);
             break;
         case "EnnemySpaceship":
           this.CollisionEnnemySSHandler(e, e2);
@@ -105,19 +105,19 @@ class GameObjectManager{
           break;
 
         case "Heart":
-            this.CollisionHeartHandler(e2, e);
+            this.CollisionJokerHandler(e2, e);
             break;
 
         case "Coin":
-            this.CollisionCoinHandler(e2, e);
+            this.CollisionJokerHandler(e2, e);
             break;
 
         case "Arrow":
-            this.CollisionArrowHandler(e2, e);
+            this.CollisionJokerHandler(e2, e);
             break;
         case "Shield":
-          this.CollisionShieldHandler(e2, e);
-          break;
+            this.CollisionJokerHandler(e2, e);
+            break;
         case "EnnemySpaceship":
           this.CollisionEnnemySSHandler(e2, e);
           break;
@@ -187,7 +187,7 @@ class GameObjectManager{
       }
 
     }
-
+    
     CollisionBulletHandler(bullet, object){
 
       if(object.name == "Asteroid" || object.name == "EnnemySpaceship" ){
@@ -200,57 +200,37 @@ class GameObjectManager{
       } 
 
     }
+  /* a facto */
 
-    CollisionCoinHandler(coin, object){
+    CollisionJokerHandler(joker, object){
 
+      if(object.name == "Player" && joker.mesh !== null){
 
-      if(object.name == "Player" && coin.mesh !== null){
+        joker.Destroy(joker);
 
-        coin.Destroy(coin);
-        this.parent.coin.nb -= 1
-        this.joker_sys.PlayerAddCoin(this.parent.score, 1);
-        this.sound_sys.PlayCoinPickUp();
+        switch(joker.constructor.name){
 
-      }
+          case "Coin":
+            this.parent.coin.nb -= 1
+            this.joker_sys.PlayerAddCoin(this.parent.score, 1);
+            this.sound_sys.PlayCoinPickUp();
+            break;
+          case "Heart":
+            this.parent.heart.nb -= 1
+            this.joker_sys.PlayerAddLife(object, 1);
+            this.sound_sys.PlayHeartPickUp();
+            break;
+          case "Arrow":
+            this.parent.arrow.nb -= 1
+            this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
+            break;
+          case "Shield":
+            this.parent.shield.nb -= 1
+            this.sound_sys.PlayCoinPickUp();
+            this.joker_sys.PlayerProtection(object,joker, 3000);
+              break;
 
-    }
-
-    CollisionShieldHandler(shield, object){
-
-
-      if(object.name == "Player" && shield.mesh !== null){
-
-        shield.Destroy(shield);
-        this.parent.shield.nb -= 1
-        this.sound_sys.PlayCoinPickUp();
-        this.joker_sys.PlayerProtection(object,shield, 3000);
-     
-      }
-
-    }
-
-    CollisionHeartHandler(heart, object){
-
-      
-      if(object.name == "Player" && heart.mesh !== null){
-
-        heart.Destroy(heart);
-        this.parent.heart.nb -= 1
-        this.joker_sys.PlayerAddLife(object, 1);
-        this.sound_sys.PlayHeartPickUp();
-
-      }
-
-    }
-
-    CollisionArrowHandler(arrow, object){
-
-      
-      if(object.name == "Player" && arrow.mesh !== null){
-
-        arrow.Destroy(arrow);
-        this.parent.arrow.nb -= 1
-        this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
+        }  
 
       }
 
@@ -258,27 +238,29 @@ class GameObjectManager{
 
     CollisionEnnemySSHandler(ennemy_ss, object){
 
-      console.log("vaisseau_ss touche")
+      if (object.name == "BasicBullet" || object.name == "Asteroid"){
 
-      let ennemy_ss_health = ennemy_ss.GetComponent("EnnemySSHealthSystem");
+        console.log(ennemy_ss.name,object.name)
+        let ennemy_ss_health = ennemy_ss.GetComponent("EnnemySSHealthSystem");
 
-      if (object.name == "BasicBullet"){
+        if (object.name == "BasicBullet"){
 
-        let bullet = object.GetComponent("BulletDamageSystem");
-        ennemy_ss_health.Damage(bullet.damageAmount);
+          let bullet = object.GetComponent("BulletDamageSystem");
+          ennemy_ss_health.Damage(bullet.damageAmount);
 
-      }
+        } 
 
-      if (object.name == "Asteroid") ennemy_ss_health.Damage(2);
+        if (object.name == "Asteroid") ennemy_ss_health.Damage(2);
 
-      if(ennemy_ss_health.life == 0) {
+        if(ennemy_ss_health.life == 0) {
 
-        ennemy_ss.Destroy(ennemy_ss);
+          ennemy_ss.Destroy(ennemy_ss);
+
+        }
 
       }
 
     }
-
 
     CheckBullet(nbBullet){
 

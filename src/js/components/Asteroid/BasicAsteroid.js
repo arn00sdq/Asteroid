@@ -29,6 +29,8 @@ class BasicAsteroid extends GameObject{
         
         super.Instantiate(o,p,r,s);
 
+        this.nbBreak = this.nbBreak + 1;
+
         o.position.copy(p);
         o.rotation.copy(r);
         o.scale.copy(new THREE.Vector3(s,s,s))
@@ -44,9 +46,7 @@ class BasicAsteroid extends GameObject{
 
     Destroy(object){
 
-        super.Instantiate(object);
-
-        this.nbBreak = this.nbBreak + 1;
+        super.Destroy(object);
 
         object.mesh = null;
        
