@@ -73,7 +73,7 @@ class JokerSystem{
         if(this.nextJoker !== Math.round(timeElapsed)){
     
             this.joker.forEach( (e,index) => {        
-
+                
                 if (e.nb >= e.limit) {
                     if (this.jokerAv.includes(e) == true) this.jokerAv.splice(this.jokerAv.indexOf(e),1)
                     if (this.jokerUnv.includes(e) == false) this.jokerUnv.push(e)
@@ -97,7 +97,7 @@ class JokerSystem{
 
                 let currentJoker = this.jokerAv[random];
 
-                this.level_sys_comp.InstantiateJoker(currentJoker,position,rotation,1);
+                this.level_sys_comp.InstantiateGameObject(currentJoker,position,rotation,1);
                 
             } 
         }

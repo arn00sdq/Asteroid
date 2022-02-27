@@ -44,7 +44,7 @@ class GameObjectManager{
           let rotation = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
           let scale = Math.pow(0.75 , e.nbBreak);
 
-          this.level_sys_comp.InstantiateAsteroid(e , position,rotation, scale)
+          this.level_sys_comp.InstantiateGameObject(e , position,rotation, scale)
 
         }
 

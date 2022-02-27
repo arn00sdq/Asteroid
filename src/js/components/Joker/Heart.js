@@ -22,6 +22,22 @@ class Heart extends GameObject{
 
     }
 
+    Instantiate(o,p,r,s){
+        
+        super.Instantiate(o,p,r,s);
+
+        o.position.copy(p);
+        o.rotation.copy(r);
+        o.scale.copy(new THREE.Vector3(s,s,s))
+
+        this.SetInvulnerability(100);
+
+        this.nb += 1
+
+        this.scene.add(o);
+        
+    }
+
 }
 
 export default Heart

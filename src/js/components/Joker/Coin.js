@@ -3,7 +3,7 @@ import JokerMovement from "./JokerMovement.js";
 
 class Coin extends GameObject{
 
-    constructor(scene, model){
+    constructor(scene, model, nb){
 
         super(scene, model);
 
@@ -11,6 +11,7 @@ class Coin extends GameObject{
         this.name = "Coin";
 
         this.limit = 5;
+        this.nb = nb;
 
         this.InitComponent();
 
@@ -20,6 +21,22 @@ class Coin extends GameObject{
 
         this.AddComponent(new JokerMovement(this))
 
+    }
+
+    Instantiate(o,p,r,s){
+        
+        super.Instantiate(o,p,r,s);
+
+        o.position.copy(p);
+        o.rotation.copy(r);
+        o.scale.copy(new THREE.Vector3(s,s,s))
+
+        this.SetInvulnerability(100);
+
+        this.nb += 1;
+
+        this.scene.add(o);
+        
     }
 
 }

@@ -36,6 +36,10 @@ class BasicAsteroid extends GameObject{
         if (o.children[0].material.color.getHexString() !== 'ffffff')  o.children[0].material.color.set(0xffffff);
 
         this.SetInvulnerability(500);
+        this.life = this.life / (this.nbBreak + 1)
+        this.nbBreak = this.nbBreak + 1;
+
+        console.log(this.nbBreak)
 
         this.scene.add(o);
         

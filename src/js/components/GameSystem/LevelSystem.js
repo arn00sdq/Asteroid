@@ -8,33 +8,23 @@ class LevelSystem{
 
     }
 
-    InstantiatePlayer(player,position, rotation, scene){
+    InstantiatePlayer(player,position, rotation, scale){
         
         player.SetRigidBody(player)
-        player.Instantiate(player,position, rotation, 0.04);
+        player.Instantiate(player,position, rotation, scale);
 
     }
 
-    InstantiateEnnemySS(ennemy_ss,position, rotation){/* factoriser plus tard */
-        
-        let ennemy_ss_clone = ennemy_ss.clone();
-        
-        this.SetCloneValue(ennemy_ss_clone, ennemy_ss);
-        
-        ennemy_ss_clone.SetRigidBody(ennemy_ss_clone)
-        ennemy_ss_clone.Instantiate(ennemy_ss_clone,position, rotation, 0.5);
+    InstantiateGameObject(object,position, rotation, scale){
 
-    }
-
-    InstantiateJoker(joker,position, rotation, scale){
-
-        joker.nb += 1;
-        let jokerClone = joker.clone();
+        let object_clone = object.clone();
         
-        this.SetCloneValue(jokerClone, joker);
-        
-        jokerClone.SetRigidBody(jokerClone);
-        jokerClone.Instantiate(jokerClone,position, rotation, scale);
+        this.SetCloneValue(object_clone, object);
+
+        object_clone.SetRigidBody(object_clone)
+        object_clone.Instantiate(object_clone,position, rotation, scale);
+
+        this.UpdateValue(object_clone, object);
 
     }
 
@@ -56,17 +46,13 @@ class LevelSystem{
 
     }
 
-    InstantiateAsteroid(asteroid,position, rotation, scale){
+    UpdateValue(destination, source){
 
-        let asteClone = asteroid.clone();
+        for (const [key, value] of Object.entries(source)) {
 
-        asteClone.children[0].material = asteroid.children[0].material.clone();
-        asteClone.scene = this.parent.scene;
-        asteClone.nbBreak = asteroid.nbBreak + 1;
-        asteClone.life = asteClone.life / (asteClone.nbBreak + 1)
+            if(typeof value === 'number')source[key] = destination[key]
 
-        asteClone.SetRigidBody(asteClone);
-        asteClone.Instantiate(asteClone, position, rotation, scale)
+        }
 
     }
 
@@ -86,7 +72,7 @@ class LevelSystem{
                 break;   
         }
 
-        this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0,0), new THREE.Euler(0,0,0),this.parent.scene )
+        this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0,0), new THREE.Euler(0,0,0),0.04 )
 
         this.parent.RAF();
 
@@ -104,7 +90,7 @@ class LevelSystem{
             let rotation = new THREE.Euler( 0,0,0);
             let scale = 1;
 
-            this.InstantiateAsteroid(asteroid, position, rotation, scale)
+            this.InstantiateGameObject(asteroid, position, rotation, scale)
 
         }
 
@@ -120,9 +106,9 @@ class LevelSystem{
                                             )
 
             let rotation = new THREE.Euler(0,0,0);
-            let scale = 1;
+            let scale = 0.5;
 
-            this.InstantiateEnnemySS(ennemy_ss, position, rotation, scale)
+            this.InstantiateGameObject(ennemy_ss, position, rotation, scale)
 
         }
 
@@ -137,7 +123,7 @@ class LevelSystem{
 
         let rotation = new THREE.Euler(0,0,0);
         let scale = 10;
-        this.InstantiateAsteroid(asteroid, position, rotation, scale );
+        this.InstantiateGameObject(asteroid, position, rotation, scale );
         console.log("Vague2")
 
     }
