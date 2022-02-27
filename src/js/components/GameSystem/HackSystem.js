@@ -19,14 +19,14 @@ class HackSystem{
 
             this.playerInput.invincible = false;
 
-            if( this.parent.player.BB !== null){
+            if( this.parent.player.userData.box3  !== null){
 
                 this.parent.player.RemoveRigidBody(this.parent.player)
                 console.log(" Activation invincible mode")
 
             }else{
 
-                this.parent.player.SetRigidBoby(this.parent.player)
+                this.parent.player.SetRigidBody(this.parent.player)
                 console.log(" Désactivation invincible mode")
 
             }
