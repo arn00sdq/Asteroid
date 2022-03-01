@@ -65,7 +65,6 @@ class GameObject extends THREE.Object3D{
     SetInvulnerability(seconds){
 
         this.userData.box3 = null;
-        this.userData.box3 = null;
 
        if(this.children[0]){
 

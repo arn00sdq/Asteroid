@@ -30,13 +30,15 @@ class PlayerShootProjectiles{
         bulletClone.index = this.indexMissile;
 
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
+        this.temp.y = -0.2;
         this.spawnRot =  this.parent.rotation;
         
         this.weaponParams.GetComponent("BulletDamageSystem").Start(this.temp);
 
         bulletClone.SetRigidBody(bulletClone);
-        bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 1);
         
+        bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 0.0009);
+       
         this.parent.audio_syst.PlayBulletShoot(this.audio.listener, Math.random() * 0.2, 0.2);
 
         this.indexMissile ++;

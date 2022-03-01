@@ -88,8 +88,7 @@ class LevelSystem{
                                             )
 
             let rotation = new THREE.Euler( 0,0,0);
-            let scale = 1;
-
+            let scale = (Math.random() * (1 -0.5)) +0.5;
             this.InstantiateGameObject(asteroid, position, rotation, scale)
 
         }

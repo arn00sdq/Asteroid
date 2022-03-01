@@ -22,6 +22,7 @@ class GameManager {
         this.arrow = models.arrow;
         this.shield = models.shield;
         this.basicBullet = models.basicBullet;
+        this.ennemyBullet = models.ennemyBullet;
         this.ennemy_ss = models.ennemy_ss;
 
 
@@ -73,6 +74,7 @@ class GameManager {
         this.arrow.InitMesh(new THREE.Vector3(0.05,0.05,0.05));
         this.shield.InitMesh(new THREE.Vector3(0.1,0.1,0.1));
         this.basicBullet.InitMesh(new THREE.Vector3(1,1,1));
+        this.ennemyBullet.InitMesh(new THREE.Vector3(1,1,1));
 
     }
 
@@ -81,9 +83,11 @@ class GameManager {
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
         this.player.audio_syst = this.GetComponent("SoundSystem");
 
-        this.ennemy_ss.weaponParams = this.basicBullet;
+        this.ennemy_ss.weaponParams = this.ennemyBullet;
         this.ennemy_ss.asteroid = this.asteroid;
         this.ennemy_ss.target = this.player;
+
+        this.ennemyBullet.name = "EnnemyBullet";
 
     }
 

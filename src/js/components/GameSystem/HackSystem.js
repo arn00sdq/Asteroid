@@ -90,7 +90,8 @@ class HackSystem{
 
                 if (e.name == "Asteroid"){
 
-                    objectManager.Asteroid_Subdivision(e);
+                    e.nbBreak += 1;
+                    if (e.nbBreak < 2)  objectManager.Asteroid_Subdivision(e);
                     e.Destroy(e);
 
                 }

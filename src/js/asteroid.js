@@ -5,7 +5,7 @@ import GameManager from "./components/GameSystem/GameManager.js";
 
 import {OBJLoader} from "./Loader/OBJLoader.js"
 import {GLTFLoader} from "./Loader/GLTFLoader.js";
-import { TextureLoader } from "./three/three.module.js";
+import { Object3D, TextureLoader } from "./three/three.module.js";
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
 import Arrow from "./components/Joker/Arrow.js";
@@ -77,7 +77,11 @@ class Asteroid {
         * texture
         */
 
-        const textureLoader = new TextureLoader();
+        const textureLoader = new TextureLoader(this.loadingManager);
+
+        var mapBullet = textureLoader.load('../medias/models/bullet/obj/textures/bullet.png');
+        var materialBullet = new THREE.MeshPhongMaterial({map:mapBullet});
+
         var map = textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg');
         var material = new THREE.MeshPhongMaterial({map:map})
 
@@ -98,7 +102,7 @@ class Asteroid {
 
 
         const cylinderMesh = new THREE.Mesh( geometryAsteroid, materialAsteroid);
-        cylinderMesh.name="Bullet";
+        cylinderMesh.name="BulletEnnemy";
         cylinderMesh.rotateX( (Math.PI / 180) *90 );
 
         /* 
@@ -115,6 +119,22 @@ class Asteroid {
             } );
 
             object.name="SpaceRock";
+            this.modelManager.push(object);
+           
+        }); 
+
+        loaderObj.load('../medias/models/bullet/obj/rocket.obj',  ( object ) => {
+
+            object.traverse( function ( child ) {
+
+                if ( child.isMesh ) child.material = materialBullet;
+            
+            } );
+
+            object.name="Bullet";
+           /* object.children[0].rotateY( (Math.PI / 180) * -90 );
+            object.children[0].rotateZ( (Math.PI / 180) *-48 );*/
+            
             this.modelManager.push(object);
            
         }); 
@@ -201,7 +221,7 @@ class Asteroid {
 
         this.sound = new THREE.Audio( this.listener );
 
-        const audioLoader = new THREE.AudioLoader();
+        const audioLoader = new THREE.AudioLoader(this.loadingManager);
         let me = this;
         audioLoader.load( '../medias/sounds/coin/coin.mp3', function( buffer ) {
             buffer.name = "Coin";
@@ -251,9 +271,9 @@ class Asteroid {
     LoadProps() {
 
         let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel;
-        let arrowModel; let shieldModel;let ennemy_ssModel;
+        let arrowModel; let shieldModel;let ennemy_ssModel; 
 
-        bulletModel = new THREE.Object3D()
+        let bulletEnnemy = new Object3D();
 
         this.modelManager.forEach((e) => {
 
@@ -261,7 +281,9 @@ class Asteroid {
 
             if(e.name == "SpaceRock")  rockModel = e;
 
-            if(e.name == "Bullet")  bulletModel.add(e);
+            if(e.name == "Bullet")  bulletModel = e;
+
+            if(e.name == "BulletEnnemy")  bulletEnnemy.add(e);
 
             if(e.name == "ShieldItem") shieldModel = e;
 
@@ -321,6 +343,7 @@ class Asteroid {
             arrow : new Arrow(this.scene, arrowModel,0),
             shield: new Shield(this.scene, shieldModel,0),
             basicBullet : new BasicBullet(this.scene, bulletModel, audio),
+            ennemyBullet: new BasicBullet(this.scene, bulletEnnemy, audio),
 
         }
 
@@ -332,6 +355,7 @@ class Asteroid {
 
         this.renderer.render(this.scene, this.camera);
 
+        console.log(models.player)
         document.addEventListener('keydown',  this.remove =  this.OnPlayerBegin.bind(this))
 
     }

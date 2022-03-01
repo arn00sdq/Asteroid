@@ -33,25 +33,6 @@ class GameObjectManager{
 
     }
 
-    Asteroid_Subdivision(e){
-
-      if(e.nbBreak < 2){
-
-        for (let index = 1; index <= 2; index++) {
-
-          let position = new THREE.Vector3(e.position.x + Math.random() *  0.2, 0 ,
-                                             e.position.z + Math.random() *  0.5);
-          let rotation = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
-          let scale = Math.pow(0.75 , e.nbBreak);
-
-          this.level_sys_comp.InstantiateGameObject(e , position,rotation, scale)
-
-        }
-
-      }
-
-    }
-
     collision_handler(e,e2){
 
       switch(e.constructor.name){
@@ -66,6 +47,9 @@ class GameObjectManager{
 
         case "BasicBullet":
           this.CollisionBulletHandler(e, e2);
+          break;
+        case "EnnemyBullet":
+          this.CollisionEnnemyBulletHandler(e, e2);
           break;
 
         case "Heart":
@@ -121,6 +105,9 @@ class GameObjectManager{
         case "EnnemySpaceship":
           this.CollisionEnnemySSHandler(e2, e);
           break;
+        case "EnnemyBullet":
+          this.CollisionEnnemyBulletHandler(e2, e);
+            break;
       }
 
     }
@@ -139,25 +126,23 @@ class GameObjectManager{
 
     CollisionPlayerHandler(player, object){
       
-      let playerHealth = player.GetComponent("PlayerHealthSystem");
+      if (object.name == "Asteroid" || object.name == "EnnemyBullet"){
 
-      if (object.name == "Asteroid" || object.name == "EnnemySpaceship" && player.immune == false){
-
-        playerHealth.Damage(1);
+        let playerHealth = player.GetComponent("PlayerHealthSystem");
 
         let playerHitSound = new THREE.Audio( this.parent.audio.listener );
         this.sound_sys.PlayShipDamageTaken(playerHitSound, 0,0.2);
 
-        player.Destroy(player);
+        playerHealth.Damage(1);
+        player.SetInvulnerability(2000);
 
-        if(player.life > 0){
+        this.parent.GetComponent("DisplaySystem").PrintLife(player.life);
+        
+        if(player.life == 0){
 
-          player.Instantiate(player,new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),this.parent.scene);
-  
-        }else{
-
+          player.Destroy(player);
           this.parent.OnPlayerEnd();
-
+          
         }
 
       }
@@ -181,8 +166,24 @@ class GameObjectManager{
 
       if(asteroid.life == 0) {
 
-          this.Asteroid_Subdivision(asteroid);
+          asteroid.nbBreak += 1;
+          if (asteroid.nbBreak < 2) this.Asteroid_Subdivision(asteroid);
           asteroid.Destroy(asteroid);
+
+      }
+
+    }
+
+    Asteroid_Subdivision(e){
+
+      for (let index = 1; index <= 2; index++) {
+
+        let position = new THREE.Vector3(e.position.x + Math.random() *  0.2, 0 ,
+                                             e.position.z + Math.random() *  0.5);
+        let rotation = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
+        let scale = Math.pow(0.75 , e.nbBreak);
+
+        this.level_sys_comp.InstantiateGameObject(e , position,rotation, scale)
 
       }
 
@@ -200,7 +201,19 @@ class GameObjectManager{
       } 
 
     }
-  /* a facto */
+
+    CollisionEnnemyBulletHandler(bullet, object){
+
+      if(object.name == "Asteroid" || object.name == "Player" ){
+
+        bullet.Destroy(bullet)
+
+        let playerHitSound = new THREE.Audio( this.parent.audio.listener );
+        this.sound_sys.PlayHitBullet(playerHitSound, 0,0.2);
+
+      } 
+
+    }
 
     CollisionJokerHandler(joker, object){
 
@@ -267,7 +280,7 @@ class GameObjectManager{
       let objectsToRemove = [];
       let bulletToRemove = 2;
       
-      if (nbBullet >15){
+      if (nbBullet >40){
 
           this.parent.scene.traverse( function(child ) {
               

@@ -15,8 +15,6 @@ class PlayerHealthSystem{
         
         if (this.parent.life < 0) this.parent.life = 0
 
-        this.parent.SetInvulnerability(500);
-
     }
 
     Heal(healAmount){
