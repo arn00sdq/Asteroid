@@ -27,6 +27,7 @@ class Player extends GameObject{
         this.life = 1;
 
         this.InitComponent();
+        this.InitValue();
 
     }
 
@@ -35,13 +36,31 @@ class Player extends GameObject{
         this.AddComponent(new CameraTracking(this));
         this.AddComponent(new StaticCamera(this));
         this.AddComponent(new ThirdPersonCamera(this));
+
+        
         
         this.AddComponent(new CharacterControllerInput(this));
         this.AddComponent(new CharacterMouvement(this));
         this.AddComponent(new PlayerHealthSystem(this));
         this.AddComponent(new PlayerShootProjectiles(this,this.audio));
 
-        if (this.constructor.name =="Player") this.GetComponent("PlayerShootProjectiles").AddProjectile(2);
+        for (const property in this.children) {
+
+            console.log("ee",property)
+
+        }
+        this.children.forEach(e => { console.log("dd")})
+
+        console.log("ee", this)
+
+        
+    }
+
+    InitValue(){
+
+       if (this.constructor.name =="Player") this.GetComponent("PlayerShootProjectiles").AddProjectile(1);
+    
+
     }
 
 }

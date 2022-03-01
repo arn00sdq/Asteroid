@@ -52,21 +52,25 @@ class PlayerShootProjectiles{
       this.nbCannon += nbCannon;
       this.cannon = [];
 
-      let zPos = new THREE.Vector3(0,0,0.5); // changez z ou x pour futur
+      let zPos = new THREE.Vector3(0,0,2); // changez z ou x pour futur
       let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
+
+      console.log(r)
       
       for(let i = 0; i < this.nbCannon ; i++){
 
           this.cannon.push(new THREE.Object3D);
 
-          let x = r * Math.cos( 360 / ( i + 2 ) );
-          let z = r * Math.sin( 360 / ( i + 2 ) );
+          let x = r * Math.cos( 360 / ( i + 1 ) );
+          let z = r * Math.sin( 360 / ( i + 1 ) );
 
           let posCannon = new THREE.Vector3( x, 0, z )
           this.cannon[i].position.copy( posCannon );
           this.parent.add(this.cannon[i]);
 
       }
+
+      console.log(this.parent)
 
     }
 

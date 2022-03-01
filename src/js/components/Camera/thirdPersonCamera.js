@@ -12,16 +12,19 @@ class ThirdPersonCamera{
         this.a = new THREE.Vector3;
         this.b = new THREE.Vector3;
         this.offset = 0.3;
+        this.meshLook = null;
+        
 
     }
 
     Update(timeElapsed) {
         
         const camera_input = this.parent.GetComponent("CharacterControllerInput").keys.cam2;
-
+        
         if( this.parent.children[0] !== null && camera_input){
 
             this.a.lerp( this.parent.position, 1);
+            console.log(this.b)
             this.b.copy(this.goal.position);
             
             let limitA = this.a.distanceTo(new THREE.Vector3(0,0,0) )
@@ -50,7 +53,8 @@ class ThirdPersonCamera{
             }
             
             this.goal.position.lerp(this.temp, 0.02);
-            this.temp.setFromMatrixPosition(this.parent.children[0].matrixWorld);
+            
+            this.temp.setFromMatrixPosition(this.meshLook.matrixWorld);
             
             this.camera.lookAt(this.parent.position );
         
