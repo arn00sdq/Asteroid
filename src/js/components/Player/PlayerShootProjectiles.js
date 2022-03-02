@@ -54,8 +54,6 @@ class PlayerShootProjectiles{
 
       let zPos = new THREE.Vector3(0,0,2); // changez z ou x pour futur
       let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
-
-      console.log(r)
       
       for(let i = 0; i < this.nbCannon ; i++){
 
@@ -69,8 +67,6 @@ class PlayerShootProjectiles{
           this.parent.add(this.cannon[i]);
 
       }
-
-      console.log(this.parent)
 
     }
 

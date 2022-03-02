@@ -36,6 +36,7 @@ class GameObject extends THREE.Object3D{
 
 
         this.children[0].scale.copy(scale)
+        //console.log(this.children[0])
         
     }  
 

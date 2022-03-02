@@ -94,10 +94,15 @@ class JokerSystem{
                 let rotation = new THREE.Euler(0,0,0);      
 
                 let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
-
+                let scale = 0.05;
                 let currentJoker = this.jokerAv[random];
 
-                this.level_sys_comp.InstantiateGameObject(currentJoker,position,rotation,1);
+                if(currentJoker.name =="Arrow"){
+
+                    console.log(position,currentJoker)
+                } 
+
+                this.level_sys_comp.InstantiateGameObject(currentJoker,position,rotation,scale);
                 
             } 
         }

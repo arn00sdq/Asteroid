@@ -14,9 +14,9 @@ class JokerMovement {
 
       if(this.parent.children[0] !== null){
 
-        this.parent.children[0].rotation.y = (this.parent.children[0].rotation.y + (Math.PI / 180) * 0.008 * 10 * timeElapsed );
-
-      }
+          this.parent.children[0].rotateY((Math.PI / 180));
+        } 
+        
 
     }
 

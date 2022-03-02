@@ -4,7 +4,6 @@ import BasicAsteroid from "./components/Asteroid/BasicAsteroid.js";
 import GameManager from "./components/GameSystem/GameManager.js";
 
 import {OBJLoader} from "./Loader/OBJLoader.js"
-import {GLTFLoader} from "./Loader/GLTFLoader.js";
 import { Object3D, TextureLoader } from "./three/three.module.js";
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
@@ -71,13 +70,23 @@ class Asteroid {
         this.idleAction = null;
 
         const loaderObj = new OBJLoader(this.loadingManager);
-        const loaderShip = new GLTFLoader(this.loadingManager);
         
         /* 
         * texture
         */
 
         const textureLoader = new TextureLoader(this.loadingManager);
+
+        var mapPlayer = textureLoader.load('../medias/models/Player/textures/Andorian (4).png');
+        var normalPlayer1 = textureLoader.load('../medias/models/Player/textures/Andorian (3).png');
+        var normalPlayer2 = textureLoader.load('../medias/models/Player/textures/Husnock (3).png');
+        var envPlayer = textureLoader.load('../medias/models/Player/textures/env.png');
+        var materialPlayer = new THREE.MeshPhongMaterial({
+            map:mapPlayer, 
+            normalMap: normalPlayer1, 
+            bumpMap:normalPlayer2, 
+            emissiveMap:envPlayer,
+        });
 
         var mapBullet = textureLoader.load('../medias/models/bullet/obj/textures/bullet.png');
         var materialBullet = new THREE.MeshPhongMaterial({map:mapBullet});
@@ -100,15 +109,24 @@ class Asteroid {
         materialAsteroid.color.set(0xff0000)
         materialAsteroid.emissive.set(0xff000d)
 
+        const materialArrow = new THREE.MeshLambertMaterial( );
+        
+        materialArrow.color.set(0x0000ff)
+        materialArrow.emissive.set(0xd000ff)
+
 
         const cylinderMesh = new THREE.Mesh( geometryAsteroid, materialAsteroid);
         cylinderMesh.name="BulletEnnemy";
         cylinderMesh.rotateX( (Math.PI / 180) *90 );
 
+        const ArrowMesh = new THREE.Mesh( geometryAsteroid, materialArrow);
+        ArrowMesh.name="ArrowItem";
+        ArrowMesh.rotateZ( (Math.PI / 180) * 25);
+
         /* 
         * ModelManager
         */
-        this.modelManager.push(cylinderMesh);
+        this.modelManager.push(cylinderMesh); this.modelManager.push(ArrowMesh);
 
         loaderObj.load('../medias/models/low_poly.obj',  ( object ) => {
 
@@ -132,8 +150,6 @@ class Asteroid {
             } );
 
             object.name="Bullet";
-           /* object.children[0].rotateY( (Math.PI / 180) * -90 );
-            object.children[0].rotateZ( (Math.PI / 180) *-48 );*/
             
             this.modelManager.push(object);
            
@@ -194,22 +210,23 @@ class Asteroid {
 
         });
 
-        loaderObj.load("../medias/models/collectable/addBeam/arrow.obj", (object) => {
-
+       /* loaderObj.load("../medias/models/bullet/obj/rocket.obj", (object) => {
+/
             object.name="ArrowItem";
             this.modelManager.push(object)
             
-        });
+        });*/
         
+        loaderObj.load('../medias/models/Player/SpaceShip.obj',  (object) => {
 
-        let me = this;
-        
-        loaderShip.load('../medias/models/SpaceShip.gltf',  function(gltf) {
-            me.animationsManager.push(new THREE.AnimationMixer( gltf.scene ));
-            me.idleAction = me.animationsManager[0].clipAction( gltf.animations[0] )
-            gltf.scene.name="SpaceShip";
-            me.modelManager.push(gltf.scene);
-            me.idleAction.play()
+            object.traverse( function ( child ) {
+
+                if ( child.isMesh ) child.material = materialPlayer;
+            
+            });
+
+            object.name="SpaceShip";
+            this.modelManager.push(object);
 
         }); 
         
@@ -271,10 +288,10 @@ class Asteroid {
     LoadProps() {
 
         let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel;
-        let arrowModel; let shieldModel;let ennemy_ssModel; 
+         let shieldModel;let ennemy_ssModel; 
 
         let bulletEnnemy = new Object3D();
-
+        let arrowModel = new Object3D();
         this.modelManager.forEach((e) => {
 
             if(e.name == "SpaceShip")  playerModel = e;
@@ -296,7 +313,7 @@ class Asteroid {
 
             if(e.name == "CoinItem")  coinModel = e
 
-            if(e.name == "ArrowItem") arrowModel = e
+            if(e.name == "ArrowItem") arrowModel.add(e);
 
             if(e.name == "EnnemySpaceship") ennemy_ssModel = e
 
@@ -355,7 +372,6 @@ class Asteroid {
 
         this.renderer.render(this.scene, this.camera);
 
-        console.log(models.player)
         document.addEventListener('keydown',  this.remove =  this.OnPlayerBegin.bind(this))
 
     }

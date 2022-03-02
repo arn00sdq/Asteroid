@@ -44,21 +44,21 @@ class Player extends GameObject{
         this.AddComponent(new PlayerHealthSystem(this));
         this.AddComponent(new PlayerShootProjectiles(this,this.audio));
 
-        for (const property in this.children) {
+       /* for (const property in this.children) {
 
             console.log("ee",property)
 
         }
         this.children.forEach(e => { console.log("dd")})
 
-        console.log("ee", this)
+        console.log("ee", this)*/
 
         
     }
 
     InitValue(){
 
-       if (this.constructor.name =="Player") this.GetComponent("PlayerShootProjectiles").AddProjectile(1);
+       if (this.constructor.name =="Player") this.GetComponent("PlayerShootProjectiles").AddProjectile(1 );
     
 
     }

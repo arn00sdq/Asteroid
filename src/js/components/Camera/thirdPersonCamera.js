@@ -24,7 +24,6 @@ class ThirdPersonCamera{
         if( this.parent.children[0] !== null && camera_input){
 
             this.a.lerp( this.parent.position, 1);
-            console.log(this.b)
             this.b.copy(this.goal.position);
             
             let limitA = this.a.distanceTo(new THREE.Vector3(0,0,0) )

@@ -72,7 +72,7 @@ class LevelSystem{
                 break;   
         }
 
-        this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0,0), new THREE.Euler(0,0,0),0.04 )
+        this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.2,0), new THREE.Euler(0,0,0),0.0004 )
 
         this.parent.RAF();
 

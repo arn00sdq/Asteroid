@@ -217,7 +217,7 @@ class GameObjectManager{
 
     CollisionJokerHandler(joker, object){
 
-      if(object.name == "Player" && joker.mesh !== null){
+      if(object.name == "Player" ){
 
         joker.Destroy(joker);
 
