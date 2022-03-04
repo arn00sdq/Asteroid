@@ -92,6 +92,7 @@ class GameManager {
 
         this.ennemyBullet.name = "EnnemyBullet";
 
+
     }
 
     OnPlayerEnd() {

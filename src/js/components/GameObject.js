@@ -88,9 +88,21 @@ class GameObject extends THREE.Object3D{
     */
     Instantiate(o,p,r,s){
         
+        if(o.name == "Player") console.log(o.children)
         o.position.copy(p);
         o.rotation.copy(r);
-        o.scale.copy(new THREE.Vector3(s,s,s))
+        if(o.name == "Player"){
+            console.log(o.children)
+            o.children.forEach( e => {
+                if (e.constructor.name == "Mesh") {
+                    e.scale.copy(new THREE.Vector3(s,s,s))
+                }
+            })
+            
+        }else{
+            o.scale.copy(new THREE.Vector3(s,s,s))
+        }
+        
         this.scene.add(o);
         
     }

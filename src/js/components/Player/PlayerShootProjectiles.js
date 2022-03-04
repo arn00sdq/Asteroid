@@ -28,8 +28,9 @@ class PlayerShootProjectiles{
         bulletClone.spaceShip = this.parent;
         bulletClone.scene = this.weaponParams.scene;
         bulletClone.index = this.indexMissile;
-
+        
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
+        this.temp.add( new THREE.Vector3(this.cannon[i].position.x,0,0))
         this.temp.y = -0.2;
         this.spawnRot =  this.parent.rotation;
         
@@ -52,18 +53,22 @@ class PlayerShootProjectiles{
       this.nbCannon += nbCannon;
       this.cannon = [];
 
-      let zPos = new THREE.Vector3(0,0,2); // changez z ou x pour futur
+      let zPos = new THREE.Vector3(0,0,1); // changez z ou x pour futur
       let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
       
       for(let i = 0; i < this.nbCannon ; i++){
 
           this.cannon.push(new THREE.Object3D);
 
-          let x = r * Math.cos( 360 / ( i + 1 ) );
-          let z = r * Math.sin( 360 / ( i + 1 ) );
+          /*let x = r * Math.cos( 120 / ( i + 1 ) );
+          let z = r * Math.sin( 120 / ( i + 1 ) );*/
 
-          let posCannon = new THREE.Vector3( x, 0, z )
+          
+          let posCannon = new THREE.Vector3(  (zPos.z)/(i + 2) - (zPos.z/2) , 0, 0 )
+          console.log("Init >> ",posCannon)
           this.cannon[i].position.copy( posCannon );
+          
+
           this.parent.add(this.cannon[i]);
 
       }

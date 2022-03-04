@@ -12,6 +12,8 @@ class JokerSystem{
         this.jokerAv = []
         this.jokerUnv = []
 
+        this.hasShield = false;
+
         this.level_sys_comp = this.parent.GetComponent("LevelSystem");
 
     }
@@ -33,6 +35,7 @@ class JokerSystem{
     PlayerProtection(player,shield, seconds){
         
         player.immune = true;
+        this.hasShield = true
         
         this.nbShield  = 4;
 
@@ -63,6 +66,7 @@ class JokerSystem{
         setTimeout(() => {
 
             player.immune = false;
+            this.hasShield = false;
 
         }, seconds);
 
@@ -96,11 +100,6 @@ class JokerSystem{
                 let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
                 let scale = 0.05;
                 let currentJoker = this.jokerAv[random];
-
-                if(currentJoker.name =="Arrow"){
-
-                    console.log(position,currentJoker)
-                } 
 
                 this.level_sys_comp.InstantiateGameObject(currentJoker,position,rotation,scale);
                 

@@ -4,7 +4,7 @@ class CharacterMouvement { // composant script
 
     this.parent = parent;
     this.decceleration = new THREE.Vector3(-0.0005, -0.0001, -0.3);
-    this.acceleration = new THREE.Vector3(0.8, 0.125, 1.0);
+    this.acceleration = new THREE.Vector3(0.8, 0.2, 1.0);
     this.velocity = new THREE.Vector3(0, 0, 0);
     this.speed = 0.0
 

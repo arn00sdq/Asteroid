@@ -240,8 +240,10 @@ class GameObjectManager{
           case "Shield":
             this.parent.shield.nb -= 1
             this.sound_sys.PlayCoinPickUp();
-            this.joker_sys.PlayerProtection(object,joker, 3000);
-              break;
+            
+            if(!joker_sys.hasShield) this.joker_sys.PlayerProtection(object,joker, 3000);
+            
+            break;
 
         }  
 
@@ -253,7 +255,6 @@ class GameObjectManager{
 
       if (object.name == "BasicBullet" || object.name == "Asteroid"){
 
-        console.log(ennemy_ss.name,object.name)
         let ennemy_ss_health = ennemy_ss.GetComponent("EnnemySSHealthSystem");
 
         if (object.name == "BasicBullet"){
@@ -326,7 +327,7 @@ class GameObjectManager{
         }
 
       }); 
-
+      
       this.Detect_collision()
       this.CheckBullet(countBullet);
 

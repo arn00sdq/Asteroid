@@ -64,8 +64,14 @@ class HackSystem{
                     console.log("Cannon en plus");
                     break;
                 case 3:
-                    joker_sys.PlayerProtection(this.parent.player, this.parent.shield,3000);
-                    console.log("Protection");
+ 
+                    if(joker_sys.hasShield == false){
+
+                        joker_sys.PlayerProtection(this.parent.player, this.parent.shield,3000);
+                        console.log("Protection");
+
+                    }
+                    
                     break;
 
             }

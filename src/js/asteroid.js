@@ -24,6 +24,8 @@ class Asteroid {
     Initialize(){
 
         this.camera = new THREE.PerspectiveCamera( 90, window.innerWidth / window.innerHeight, 0.001, 10000 );
+        this.camera.fov = 112.5
+        
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color( 0x000000  );
 
@@ -52,6 +54,7 @@ class Asteroid {
 
         this.goal = new THREE.Object3D;
         this.follow = new THREE.Object3D;
+        this.follow.name = "FollowPlayer"
         this.follow.position.z = - 0.3;
         this.goal.add(this.camera);
         
@@ -171,7 +174,7 @@ class Asteroid {
 
         loaderObj.load('../medias/models/explosion.obj',  ( object ) => {
 
-            object.name="SpaceRock";
+            object.name="Explosion";
             this.modelManager.push(object);
            
         }); 
@@ -296,7 +299,11 @@ class Asteroid {
 
             if(e.name == "SpaceShip")  playerModel = e;
 
-            if(e.name == "SpaceRock")  rockModel = e;
+            if(e.name == "SpaceRock"){
+
+                
+                rockModel = e;
+            }  
 
             if(e.name == "Bullet")  bulletModel = e;
 
@@ -364,6 +371,8 @@ class Asteroid {
 
         }
 
+        models.player.add(  this.params.follow)
+
         this.gm = new GameManager(models, utils, animations, audio)
         this.gm.ModelInitialisation(); 
         this.gm.ValueInitialisation(); 
@@ -373,6 +382,7 @@ class Asteroid {
         this.renderer.render(this.scene, this.camera);
 
         document.addEventListener('keydown',  this.remove =  this.OnPlayerBegin.bind(this))
+        document.addEventListener( 'mousewheel',  this.OnMouseWheel.bind(this) ,false );
 
     }
 
@@ -387,6 +397,15 @@ class Asteroid {
             this.gm.GetComponent("LevelSystem").StartLevel();
         }
 
+    }
+
+    OnMouseWheel(event){
+
+    var fovMAX = 160;
+    var fovMIN = 1;
+    this.camera.fov -= event.wheelDeltaY * 0.05;
+    this.camera.fov = Math.max( Math.min( this.camera.fov, fovMAX ), fovMIN );
+    this.camera.updateProjectionMatrix();
     }
 
     OnWindowResize() {

@@ -143,6 +143,8 @@ class CharacterControllerInput {
 
     goal_setting.position.set(0, 0, 0);
     camera_setting.position.set(0, 0.3, 0);
+    
+    camera_setting.fov = 112.5
 
   }
 
