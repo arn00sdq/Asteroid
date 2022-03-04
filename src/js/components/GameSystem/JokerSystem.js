@@ -35,7 +35,7 @@ class JokerSystem{
     PlayerProtection(player,shield, seconds){
         
         player.immune = true;
-        this.hasShield = true
+        this.hasShield = true;
         
         this.nbShield  = 4;
 
@@ -54,15 +54,12 @@ class JokerSystem{
             let z =  new THREE.Vector3(0,0, r * Math.sin( THREE.MathUtils.degToRad(360.0) / ( i + 1  ) ));
             let posShield = x.add(z).add(zPos)
 
- 
             shieldClone.AddComponent(new JokerFollowPlayer(shieldClone,player,x,z));
             shieldClone.RemoveRigidBody(shieldClone);
-            shieldClone.InstantiateAndDestroy(shieldClone,posShield, new THREE.Euler(0,0,0),1,3000)
-
+            shieldClone.InstantiateAndDestroy(shieldClone,posShield, new THREE.Euler(0,0,0),0.1,3000)
 
         }
 
-       
         setTimeout(() => {
 
             player.immune = false;
@@ -98,9 +95,26 @@ class JokerSystem{
                 let rotation = new THREE.Euler(0,0,0);      
 
                 let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
-                let scale = 0.05;
+                let scale = 1;
                 let currentJoker = this.jokerAv[random];
 
+                switch(currentJoker.constructor.name){ //model adjustment
+
+                    case "Arrow":
+                        scale = 1;
+                        break;
+                    case "Coin":
+                        scale = 0.08;
+                        break;
+                    case "Heart":
+                        position.y = -0.05
+                        scale = 0.002;
+                        break;
+                    case "Shield":
+                        scale = 0.1;
+                        break;
+                }
+                
                 this.level_sys_comp.InstantiateGameObject(currentJoker,position,rotation,scale);
                 
             } 

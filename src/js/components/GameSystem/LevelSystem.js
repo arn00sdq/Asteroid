@@ -21,8 +21,8 @@ class LevelSystem{
         
         this.SetCloneValue(object_clone, object);
 
-        object_clone.SetRigidBody(object_clone)
         object_clone.Instantiate(object_clone,position, rotation, scale);
+        object_clone.SetRigidBody(object_clone);
 
         this.UpdateValue(object_clone, object);
 
@@ -88,7 +88,7 @@ class LevelSystem{
                                             )
 
             let rotation = new THREE.Euler( 0,0,0);
-            let scale = (Math.random() * (1 -0.5)) +0.5;
+            let scale = (Math.random() * (0.03 -0.01)) + 0.01;
             this.InstantiateGameObject(asteroid, position, rotation, scale)
 
         }

@@ -66,13 +66,13 @@ class GameManager {
 
     ModelInitialisation(){
 
-        this.asteroid.InitMesh(new THREE.Vector3(0.0003,0.0003,0.0003));
-        this.player.InitMesh(new THREE.Vector3(0.00005,0.00005,0.00005));
-        this.ennemy_ss.InitMesh(new THREE.Vector3(0.02,0.02,0.02));
-        this.heart.InitMesh(new THREE.Vector3(0.002,0.002,0.002));
+        this.asteroid.InitMesh(new THREE.Vector3(1,1,1));
+        this.player.InitMesh(new THREE.Vector3(1,1,1));
+        this.ennemy_ss.InitMesh(new THREE.Vector3(1,1,1));
+        this.heart.InitMesh(new THREE.Vector3(1,1,1));
         this.coin.InitMesh(new THREE.Vector3(1,1,1));
-        this.arrow.InitMesh(new THREE.Vector3(30,30,30));
-        this.shield.InitMesh(new THREE.Vector3(0.1,0.1,0.1));
+        this.arrow.InitMesh(new THREE.Vector3(1,1,1));
+        this.shield.InitMesh(new THREE.Vector3(1,1,1));
         this.basicBullet.InitMesh(new THREE.Vector3(1,1,1));
         this.ennemyBullet.InitMesh(new THREE.Vector3(1,1,1));
 

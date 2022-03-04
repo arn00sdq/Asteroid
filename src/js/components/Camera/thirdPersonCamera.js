@@ -60,8 +60,6 @@ class ThirdPersonCamera{
             this.temp.setFromMatrixPosition(f.matrixWorld);
             this.camera.lookAt(this.parent.position );
            
-             console.log(f.matrixWorld)
-           
         
         }
         

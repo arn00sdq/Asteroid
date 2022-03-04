@@ -10,7 +10,7 @@ class Shield extends GameObject{
         this.components = {};
         this.name = "Shield";
    
-        this.limit = nb;
+        this.limit = 1;
         this.nb = nb;
 
         this.InitComponent();
@@ -29,7 +29,11 @@ class Shield extends GameObject{
 
         o.position.copy(p);
         o.rotation.copy(r);
-        o.scale.copy(new THREE.Vector3(s,s,s))
+        o.children.forEach( e => {
+            if (e.constructor.name == "Mesh") {
+                e.scale.copy(new THREE.Vector3(s,s,s))
+            }
+        })
 
         this.SetInvulnerability(100);
 

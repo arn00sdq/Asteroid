@@ -1,16 +1,17 @@
 import GameObject from "../GameObject.js";
-
 import JokerMovement from "./JokerMovement.js";
 
 class Heart extends GameObject{
 
-    constructor(scene, model){
+    constructor(scene, model, nb){
 
         super(scene, model);
 
+        this.components = {}
         this.name = "Heart";
 
         this.limit = 1;
+        this.nb = nb;
       
         this.InitComponent();
 
@@ -28,7 +29,11 @@ class Heart extends GameObject{
 
         o.position.copy(p);
         o.rotation.copy(r);
-        o.scale.copy(new THREE.Vector3(s,s,s))
+        o.children.forEach( e => {
+            if (e.constructor.name == "Mesh") {
+                e.scale.copy(new THREE.Vector3(s,s,s))
+            }
+        })
 
         this.SetInvulnerability(100);
 

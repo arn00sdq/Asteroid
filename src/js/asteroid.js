@@ -299,11 +299,7 @@ class Asteroid {
 
             if(e.name == "SpaceShip")  playerModel = e;
 
-            if(e.name == "SpaceRock"){
-
-                
-                rockModel = e;
-            }  
+            if(e.name == "SpaceRock") rockModel = e
 
             if(e.name == "Bullet")  bulletModel = e;
 
@@ -311,14 +307,9 @@ class Asteroid {
 
             if(e.name == "ShieldItem") shieldModel = e;
 
-            if(e.name == "HeartItem"){
+            if(e.name == "HeartItem") heartModel = e;
 
-                e.children[0].name = "Heart"
-                heartModel = e;
-
-            }  
-
-            if(e.name == "CoinItem")  coinModel = e
+            if(e.name == "CoinItem")  coinModel = e;
 
             if(e.name == "ArrowItem") arrowModel.add(e);
 
@@ -362,10 +353,10 @@ class Asteroid {
             player : new Player(this.params, playerModel,audio),
             ennemy_ss : new EnnemySpaceship(this.scene, ennemy_ssModel),
             asteroid : new BasicAsteroid(this.scene,rockModel,0),
-            heart :  new Heart(this.scene, heartModel,0),
             coin : new Coin(this.scene, coinModel,0),
             arrow : new Arrow(this.scene, arrowModel,0),
             shield: new Shield(this.scene, shieldModel,0),
+            heart :  new Heart(this.scene, heartModel,0),
             basicBullet : new BasicBullet(this.scene, bulletModel, audio),
             ennemyBullet: new BasicBullet(this.scene, bulletEnnemy, audio),
 
