@@ -25,7 +25,6 @@ class GameManager {
         this.ennemyBullet = models.ennemyBullet;
         this.ennemy_ss = models.ennemy_ss;
 
-
         this.audio = audio
 
         this.mixer = animation.mixer;
@@ -84,7 +83,6 @@ class GameManager {
 
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
         this.player.audio_syst = this.GetComponent("SoundSystem");
-        this.player.GetComponent("ThirdPersonCamera").meshLook =  this.player.children.find(e => e.constructor.name == "Mesh")
 
         this.ennemy_ss.weaponParams = this.ennemyBullet;
         this.ennemy_ss.asteroid = this.asteroid;

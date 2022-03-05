@@ -18,7 +18,7 @@ class LevelSystem{
     InstantiateGameObject(object,position, rotation, scale){
 
         let object_clone = object.clone();
-        
+
         this.SetCloneValue(object_clone, object);
 
         object_clone.Instantiate(object_clone,position, rotation, scale);

@@ -3,11 +3,8 @@ import CharacterControllerInput from './playerInput.js';
 import CharacterMouvement  from './playerMouvement.js';
 import PlayerHealthSystem from "./PlayerHealthSystem.js";
 
-import ThirdPersonCamera from '../Camera/thirdPersonCamera.js';
-import StaticCamera from "../Camera/StaticCamera.js";
-import CameraTracking from "../Camera/CameraTracking.js";
-
 import GameObject from '../GameObject.js';
+import PlayerCameraSystem from './PlayerCameraSystem.js';
 
 class Player extends GameObject{ 
 
@@ -19,6 +16,8 @@ class Player extends GameObject{
         this.name = "Player";
         
         this.params = params;
+        this.camera = params.camera;
+        this.goal = params.goal;
         
         this.immune = false;
 
@@ -33,24 +32,17 @@ class Player extends GameObject{
 
     InitComponent(){
 
-        this.AddComponent(new CameraTracking(this));
-        this.AddComponent(new StaticCamera(this));
-        this.AddComponent(new ThirdPersonCamera(this));
-        
         this.AddComponent(new CharacterControllerInput(this));
         this.AddComponent(new CharacterMouvement(this));
         this.AddComponent(new PlayerHealthSystem(this));
         this.AddComponent(new PlayerShootProjectiles(this,this.audio));
-        
-      
-
+        this.AddComponent(new PlayerCameraSystem(this))
         
     }
 
     InitValue(){
 
        if (this.constructor.name =="Player") this.GetComponent("PlayerShootProjectiles").AddProjectile(1 );
-    
 
     }
 

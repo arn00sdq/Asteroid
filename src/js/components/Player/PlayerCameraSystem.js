@@ -1,0 +1,100 @@
+class PlayerCameraSystem {
+
+    constructor(parent, audio) {
+
+        this.parent = parent
+        this.camera = parent.params.camera;
+        this.goal = parent.goal;
+
+        this.temp = new THREE.Vector3;
+        this.dir = new THREE.Vector3;
+        this.a = new THREE.Vector3;
+        this.b = new THREE.Vector3;
+        this.dis = 0;
+        this.offset = 0.3;
+
+
+    }
+
+    StaticCamera() {
+
+        this.camera.lookAt(0, 0, 0);
+
+    }
+
+    CameraTracking() {
+
+        this.camera.lookAt(this.parent.position);
+        this.goal.position.copy(this.parent.position)
+
+    }
+
+    ThirdPersonCamera() {
+
+        let f = this.parent.children.find(e => e.name == "FollowPlayer");
+        let limitA = this.parent.position.distanceTo(new THREE.Vector3(0, 0, 0));
+
+        this.b.copy(this.goal.position);
+
+        if ((limitA) > 15) {
+
+            console.log("ddd")
+            this.goal.position.x = - this.parent.position.x;
+            this.goal.position.z = - this.parent.position.z;
+            this.a.copy(this.goal.position);
+
+        } else {
+            this.a.lerp(this.parent.position, 0.4);
+
+            this.dir.copy(this.a).sub(this.b).normalize();// Calcul de la pos de la cam
+            this.dis = this.a.distanceTo(this.b) - this.offset;  // pos vaisseau - pos cam
+
+            if (this.dis > 1) {
+
+                this.dis = 0.1
+            }
+            if (this.dis < -1) {
+
+                this.dis = - 0.1
+            }
+
+            this.goal.position.addScaledVector(this.dir, this.dis);
+
+        }
+
+        this.goal.position.lerp(this.temp, 0.01);
+
+        this.temp.setFromMatrixPosition(f.matrixWorld);
+        this.camera.lookAt(this.parent.position);
+
+    }
+
+    Update() {
+
+        const input = this.parent.GetComponent('CharacterControllerInput');
+
+        if (input.keys.cam1 == true) {
+
+            this.StaticCamera()
+
+        }
+
+        if (input.keys.cam2 == true) {
+
+            //camera_setting.position.set(goal_setting.position.x, 0.3, goal_setting.position.z);
+            this.ThirdPersonCamera();
+
+        }
+
+        if (input.keys.cam3 == true) {
+
+            this.CameraTracking()
+
+        }
+
+
+    }
+
+}
+
+export default PlayerCameraSystem

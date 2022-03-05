@@ -167,23 +167,35 @@ class GameObjectManager{
       if(asteroid.life == 0) {
 
           asteroid.nbBreak += 1;
-          if (asteroid.nbBreak < 2) this.Asteroid_Subdivision(asteroid);
+
+          if (asteroid.nbBreak < 2){
+
+            let dir = new THREE.Vector3();
+            dir.copy( asteroid.position ).sub( object.position ).normalize();
+            dir.y = 0;
+
+            this.Asteroid_Subdivision(asteroid,dir);
+
+          } 
+
           asteroid.Destroy(asteroid);
 
       }
 
     }
 
-    Asteroid_Subdivision(e){
+    Asteroid_Subdivision(e,dir){
 
       for (let index = 1; index <= 2; index++) {
 
         let position = new THREE.Vector3(e.position.x + Math.random() *  0.2, 0 ,
                                              e.position.z + Math.random() *  0.5);
-        let rotation = new THREE.Euler(0, Math.random() *  ( ((Math.PI / 180) * 360) - ((Math.PI / 180) * 20) + 1) + ((Math.PI / 180) * 20) ,0);
+        let rotation = new THREE.Euler(0,0 ,0);
         let scale = 0.75*e.scale.x;
 
         this.level_sys_comp.InstantiateGameObject(e , position,rotation, scale)
+
+        e.GetComponent("AsteroidMovement").direction = dir;
 
       }
 
@@ -241,7 +253,7 @@ class GameObjectManager{
             this.parent.shield.nb -= 1
             this.sound_sys.PlayCoinPickUp();
             
-            if(!joker_sys.hasShield) this.joker_sys.PlayerProtection(object,joker, 3000);
+            if(!this.joker_sys.hasShield) this.joker_sys.PlayerProtection(object,joker, 3000);
             
             break;
 
@@ -309,7 +321,7 @@ class GameObjectManager{
 
       this.parent.scene.children.forEach(e => {
 
-        if(e.type == "Object3D"){ // Ajouter un tag pour nbFrame
+        if(e.type == "Object3D"){ 
 
           if(e.name == "Asteroid") nbEnnemyFrame++ ;
 

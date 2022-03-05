@@ -138,10 +138,10 @@ class CharacterControllerInput {
 
   ThirdCameraInit() {
 
-    let goal_setting = this.parent.params.goal;
-    let camera_setting = this.parent.params.camera;
+    let goal_setting = this.parent.goal;
+    let camera_setting = this.parent.camera;
 
-    goal_setting.position.set(0, 0, 0);
+    goal_setting.position.set(this.parent.position.x, 0, this.parent.position.z -0.3);
     camera_setting.position.set(0, 0.3, 0);
     
     camera_setting.fov = 112.5
@@ -150,7 +150,7 @@ class CharacterControllerInput {
 
   CameraTrackingInit() {
 
-    let camera_setting = this.parent.params.camera;
+    let camera_setting = this.parent.camera;
 
     camera_setting.position.set(0, 5, 0);
 

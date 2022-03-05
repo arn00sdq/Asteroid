@@ -29,6 +29,8 @@ class BasicAsteroid extends GameObject{
         
         super.Instantiate(o,p,r,s);
 
+        this.GetComponent("AsteroidMovement").InitComponent();
+
         o.position.copy(p);
         o.rotation.copy(r);
         o.scale.copy(new THREE.Vector3(s,s,s))
