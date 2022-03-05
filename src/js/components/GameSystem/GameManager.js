@@ -5,6 +5,7 @@ import GameObjectManager from "./gameObjectManager.js";
 import HackSystem from "./HackSystem.js";
 import SoundSystem from "./SoundSystem.js";
 
+
 class GameManager {
 
     constructor(models, utils, animation,audio){
@@ -34,6 +35,8 @@ class GameManager {
 
         this.score = 0;
         this.ennemy = null;
+
+        this.playerInput = this.player.GetComponent("CharacterControllerInput").keys;
 
         this.InitComponent(models,audio);
 
@@ -102,20 +105,14 @@ class GameManager {
 
     RAF() { // transformer en update ?
 
-        requestAnimationFrame((t) => {
+            this.id = requestAnimationFrame((t) => {
+  
 
-            if (this.previousRAF === null) {
-
-                this.previousRAF = t;
- 
-            }
-            
-            this.RAF();
-            this.renderer.render(this.scene, this.camera);
-            this.Step(t);
-            this.previousRAF = t;
-
-         });    
+                this.RAF();
+                this.renderer.render(this.scene, this.camera);
+                this.Step(t);
+    
+             });  
 
       }
     
@@ -130,10 +127,14 @@ class GameManager {
         if (this.player.GetComponent("CharacterControllerInput").keys.screenshot) {
             this.player.GetComponent("CharacterControllerInput").keys.screenshot = false;
 
-            let screenshot = this.renderer.domElement.toDataURL();
-            console.log("ScreenShot effectué", screenshot)
+            html2canvas(document.querySelector("canvas")).then(function (canvas){
 
-          }
+                var win = window.open();
+                win.document.write('<iframe src="' + canvas.toDataURL("png")  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen> </iframe>');
+            
+            })
+              
+        }
 
     }
 

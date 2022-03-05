@@ -281,7 +281,7 @@ class Asteroid {
         light.position.set( 50, 50, 50 );
         this.scene.add(light);
         
-        this.renderer = new THREE.WebGLRenderer({ antialias: false });
+        this.renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true });
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.autoClear = false
         document.body.appendChild( this.renderer.domElement );

@@ -30,14 +30,12 @@ class PlayerShootProjectiles{
         bulletClone.index = this.indexMissile;
         
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
-        this.temp.add( new THREE.Vector3(this.cannon[i].position.x,0,0))
         this.temp.y = -0.2;
         this.spawnRot =  this.parent.rotation;
         
         this.weaponParams.GetComponent("BulletDamageSystem").Start(this.temp);
 
         bulletClone.SetRigidBody(bulletClone);
-        
         bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 0.0009);
        
         this.parent.audio_syst.PlayBulletShoot(this.audio.listener, Math.random() * 0.2, 0.2);
@@ -53,21 +51,16 @@ class PlayerShootProjectiles{
       this.nbCannon += nbCannon;
       this.cannon = [];
 
-      let zPos = new THREE.Vector3(0,0,1); // changez z ou x pour futur
+      let zPos = new THREE.Vector3(0,0,0.1); // changez z ou x pour futur
       let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
       
       for(let i = 0; i < this.nbCannon ; i++){
 
-          this.cannon.push(new THREE.Object3D);
+          this.cannon.push(new THREE.Object3D);          
+          let posCannon = new THREE.Vector3(  Math.sin( (Math.PI/180) * ( 180 / ( i + 1 )) ) * r, 0, r )
+          posCannon.add( new THREE.Vector3(- 0.05,0,0))
 
-          /*let x = r * Math.cos( 120 / ( i + 1 ) );
-          let z = r * Math.sin( 120 / ( i + 1 ) );*/
-
-          
-          let posCannon = new THREE.Vector3(  (zPos.z)/(i + 2) - (zPos.z/2) , 0, 0 )
-          console.log("Init >> ",posCannon)
           this.cannon[i].position.copy( posCannon );
-          
 
           this.parent.add(this.cannon[i]);
 

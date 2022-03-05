@@ -30,6 +30,8 @@ class CharacterControllerInput {
       cam2: true,
       cam3: false,
 
+      pause: false,
+
       screenshot : false,
 
     };
@@ -99,8 +101,22 @@ class CharacterControllerInput {
         this.keys.shift = true;
         break;
 
-      case 80: // SHIFT
+      case 80:
         this.keys.screenshot = true;
+        break;
+
+      case 27:
+
+        if(!this.keys.pause){
+
+          this.keys.pause = true;
+
+        }else{
+
+          this.keys.pause = false;
+
+        }
+        
         break;
     }
   }
