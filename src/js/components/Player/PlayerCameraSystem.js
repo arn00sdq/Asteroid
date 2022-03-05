@@ -1,10 +1,12 @@
 class PlayerCameraSystem {
 
-    constructor(parent, audio) {
+    constructor(parent, params) {
 
-        this.parent = parent
-        this.camera = parent.params.camera;
-        this.goal = parent.goal;
+        this.parent = parent;
+
+        this.follow = params.follow;
+        this.camera = params.camera;
+        this.goal = params.goal;
 
         this.temp = new THREE.Vector3;
         this.dir = new THREE.Vector3;
@@ -12,6 +14,8 @@ class PlayerCameraSystem {
         this.b = new THREE.Vector3;
         this.dis = 0;
         this.offset = 0.3;
+
+        this.parent.add(this.follow)
 
 
     }

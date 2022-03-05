@@ -121,8 +121,6 @@ class GameManager {
     
     Step(timeElapsed) {  
 
-       // const timeElapsedS = Math.min(1.0 / 30.0, timeElapsed * 0.001);
-        /*this.mixer.update(timeElapsed * 0.000001)    */
         for (let k in this.components) {
 
             this.components[k].Update(timeElapsed * 0.001);

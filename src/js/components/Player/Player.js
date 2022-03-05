@@ -16,8 +16,6 @@ class Player extends GameObject{
         this.name = "Player";
         
         this.params = params;
-        this.camera = params.camera;
-        this.goal = params.goal;
         
         this.immune = false;
 
@@ -32,17 +30,17 @@ class Player extends GameObject{
 
     InitComponent(){
 
-        this.AddComponent(new CharacterControllerInput(this));
         this.AddComponent(new CharacterMouvement(this));
         this.AddComponent(new PlayerHealthSystem(this));
         this.AddComponent(new PlayerShootProjectiles(this,this.audio));
-        this.AddComponent(new PlayerCameraSystem(this))
+        this.AddComponent(new PlayerCameraSystem(this, this.params));
+        this.AddComponent(new CharacterControllerInput(this));
         
     }
 
     InitValue(){
 
-       if (this.constructor.name =="Player") this.GetComponent("PlayerShootProjectiles").AddProjectile(1 );
+       if (this.constructor.name =="Player") this.GetComponent("PlayerShootProjectiles").AddProjectile( 1 );
 
     }
 

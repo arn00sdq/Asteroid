@@ -362,8 +362,6 @@ class Asteroid {
 
         }
 
-        models.player.add(  this.params.follow)
-
         this.gm = new GameManager(models, utils, animations, audio)
         this.gm.ModelInitialisation(); 
         this.gm.ValueInitialisation(); 

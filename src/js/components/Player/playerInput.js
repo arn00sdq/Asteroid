@@ -1,10 +1,16 @@
 class CharacterControllerInput {
   constructor(parent) {
+
     this.parent = parent;
+
+    this.cam_sys = this.parent.GetComponent("PlayerCameraSystem");
+
     this.Init();
+
   }
 
   Init() {
+
     this.keys = {
 
       forward: false,
@@ -126,8 +132,8 @@ class CharacterControllerInput {
 
   StatiCameraInit() {
 
-    let goal_setting = this.parent.params.goal;
-    let camera_setting = this.parent.params.camera;
+    let goal_setting = this.cam_sys.goal;
+    let camera_setting =  this.cam_sys.camera;
 
     goal_setting.position.set(0, 5, 0);
     camera_setting.position.set(0, 5, 0);
@@ -138,8 +144,8 @@ class CharacterControllerInput {
 
   ThirdCameraInit() {
 
-    let goal_setting = this.parent.goal;
-    let camera_setting = this.parent.camera;
+    let goal_setting =  this.cam_sys.goal;
+    let camera_setting = this.cam_sys.camera;
 
     goal_setting.position.set(this.parent.position.x, 0, this.parent.position.z -0.3);
     camera_setting.position.set(0, 0.3, 0);
@@ -150,7 +156,7 @@ class CharacterControllerInput {
 
   CameraTrackingInit() {
 
-    let camera_setting = this.parent.camera;
+    let camera_setting =  this.cam_sys.camera;
 
     camera_setting.position.set(0, 5, 0);
 
