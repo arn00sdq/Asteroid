@@ -56,13 +56,13 @@ class LevelSystem{
 
     }
 
-    StartLevel(){
+    StartLevel(restart){
         
         switch (this.level){
 
             case 1:
                 this.AsteroidWave(this.parent.asteroid, 10);
-                this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
+                //this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
                 break;
             case 2:
                 this.BossWave(this.parent.asteroid);
@@ -74,21 +74,21 @@ class LevelSystem{
 
         this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004 )
 
-        this.parent.RAF();
+        if(!restart) this.parent.RAF();
 
     }
 
     AsteroidWave(asteroid, nbAsteroid){
 
-        for (let index = 0; index < nbAsteroid; index++) {
+        for (let index = 0; index < 15; index++) {
 
-            let position = new THREE.Vector3( ( ( Math.random() *  ( 10.5 - 8.5 ) ) + 8.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+            let position = new THREE.Vector3( ( ( Math.random() *  ( 8.5 - 4.5 ) ) + 4.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
-                                              ( ( Math.random() *  ( 10.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                              ( ( Math.random() *  ( 8.5 - 1 ) ) + 1  ) * ( Math.round( Math.random() ) ? 1 : -1 )
                                             )
-
+                                            
             let rotation = new THREE.Euler( 0,0,0);
-            let scale = (Math.random() * (0.03 -0.01)) + 0.01;
+            let scale = (Math.random() * (0.03 -0.015)) + 0.015;
             this.InstantiateGameObject(asteroid, position, rotation, scale)
 
         }
@@ -99,9 +99,9 @@ class LevelSystem{
 
         for (let index = 0; index < nb_ennemy_ss; index++) {
 
-            let position = new THREE.Vector3( ( ( Math.random() *  ( 10.5 - 8.5 ) ) + 8.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+            let position = new THREE.Vector3( ( ( Math.random() *  ( 8.5 - 4.5 ) ) + 4.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
-                                              ( ( Math.random() *  ( 10.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                              ( ( Math.random() *  ( 8.5 - 1 ) ) + 1  ) * ( Math.round( Math.random() ) ? 1 : -1 )
                                             )
 
             let rotation = new THREE.Euler(0,0,0);

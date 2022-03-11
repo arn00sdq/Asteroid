@@ -46,23 +46,50 @@ class PlayerShootProjectiles{
       
     }
 
-    AddProjectile(nbCannon){ //Composant ?
+    AddProjectile(nbCannon){ 
 
       this.nbCannon += nbCannon;
       this.cannon = [];
 
-      let zPos = new THREE.Vector3(0,0,0.1); // changez z ou x pour futur
-      let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
-      
-      for(let i = 0; i < this.nbCannon ; i++){
+      switch (this.nbCannon){
+        case 1:
+          this.cannon.push(new THREE.Object3D);
+          this.cannon[0].position.copy(  new THREE.Vector3(0,0,0.2) );
+          this.parent.add(this.cannon[0]);
+          break;
+        case 2:
 
-          this.cannon.push(new THREE.Object3D);          
-          let posCannon = new THREE.Vector3(  Math.sin( (Math.PI/180) * ( 180 / ( i + 1 )) ) * r, 0, r )
-          posCannon.add( new THREE.Vector3(- 0.05,0,0))
+          for( let i = 0; i<this.nbCannon; i++) this.cannon.push(new THREE.Object3D);
 
-          this.cannon[i].position.copy( posCannon );
+          this.cannon[0].position.copy(  new THREE.Vector3(-0.1,0,0.2) );
+          this.cannon[1].position.copy(  new THREE.Vector3(0.1,0,0.2) );
 
-          this.parent.add(this.cannon[i]);
+          for( let i = 0; i<this.nbCannon; i++) this.parent.add(this.cannon[i]);
+
+          break;
+        case 3:
+
+          for( let i = 0; i<this.nbCannon; i++) this.cannon.push(new THREE.Object3D);
+
+          this.cannon[0].position.copy(  new THREE.Vector3(-0.1,0,0.2) );
+          this.cannon[1].position.copy(  new THREE.Vector3(0,0,0.2) );
+          this.cannon[2].position.copy(  new THREE.Vector3(0.1,0,0.2) );
+          
+          for( let i = 0; i<this.nbCannon; i++) this.parent.add(this.cannon[i]);
+
+          break;
+        case 4:
+
+          for( let i = 0; i<this.nbCannon; i++) this.cannon.push(new THREE.Object3D);
+
+          this.cannon[0].position.copy(  new THREE.Vector3(-0.1,0,0.2) );
+          this.cannon[1].position.copy(  new THREE.Vector3(-0.05,0,0.2) );
+          this.cannon[2].position.copy(  new THREE.Vector3(0.1,0,0.2) );
+          this.cannon[3].position.copy(  new THREE.Vector3(0.05,0,0.2) );
+          
+          for( let i = 0; i<this.nbCannon; i++) this.parent.add(this.cannon[i]);
+
+          break;
 
       }
 

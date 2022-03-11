@@ -29,6 +29,18 @@ class Asteroid {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color( 0x000000  );
 
+        this.loop = {}
+
+        const fps  = 60;
+        const slow = 1; 
+        this.loop.dt       = 0,
+        this.loop.now      = window.performance.now();
+        this.loop.last     = this.loop.now;
+        this.loop.fps      = fps;
+        this.loop.step     = 1/this.loop.fps;
+        this.loop.slow     = slow;
+        this.loop.slowStep = this.loop.slow * this.loop.step;
+
         this.loadingManager = new THREE.LoadingManager( () => {
 
             const loadingScreen = document.getElementById( 'loading-screen' );
@@ -39,12 +51,6 @@ class Asteroid {
             }, false );
 
         });
-
-        this.loadingManager.onProgress  = function ( ) {
-
-            document.getElementById("end_game").style.display = "none";
-        
-        };
 
         this.camera.position.set(0,0.3,0); //0.3 troisieme personne, 2/3 vu en follow, 
         this.camera.lookAt( this.scene.position );
@@ -91,46 +97,59 @@ class Asteroid {
             emissiveMap:envPlayer,
         });
 
-        var mapBullet = textureLoader.load('../medias/models/bullet/obj/textures/bullet.png');
-        var materialBullet = new THREE.MeshPhongMaterial({map:mapBullet});
-
         var map = textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg');
         var material = new THREE.MeshPhongMaterial({map:map})
 
         var mapCoin = textureLoader.load('../medias/models/collectable/coin/textures/Coin_Gold_albedo.png');
         var materialCoin = new THREE.MeshPhongMaterial({map:mapCoin});
 
-        var mapShield = textureLoader.load('../medias/models/collectable/shield/texture_shield.png');
-        var materialShield = new THREE.MeshPhongMaterial({map:mapShield});
-
         var mapEnnemySS = textureLoader.load('../medias/models/Ennemy/textures/E-45 _col.jpg');
         var materialEnnemySS = new THREE.MeshPhongMaterial({map:mapEnnemySS});
+        /* 
+        *   Balle Joueur
+        */
+        const geometryBullet = new THREE.CylinderBufferGeometry(0.01,0.01,0.1,5,1,false); 
+        const materialBullet = new THREE.MeshLambertMaterial( );
+        materialBullet.color.set(0xff0000);
+        materialBullet.emissive.set(0xff000d);
 
-        const geometryAsteroid = new THREE.CylinderBufferGeometry(0.01,0.01,0.1,5,1,false); 
-        const materialAsteroid = new THREE.MeshLambertMaterial( );
-        
-        materialAsteroid.color.set(0xff0000)
-        materialAsteroid.emissive.set(0xff000d)
-
-        const materialArrow = new THREE.MeshLambertMaterial( );
-        
-        materialArrow.color.set(0x0000ff)
-        materialArrow.emissive.set(0xd000ff)
-
-
-        const cylinderMesh = new THREE.Mesh( geometryAsteroid, materialAsteroid);
+        const geometryBulletPlayer = new THREE.CylinderGeometry( 0.01,0.01,0.1,5,1,false );
+        const materialBulletPlayer = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+        const bulletPlayer = new THREE.Mesh( geometryBulletPlayer, materialBulletPlayer );
+        bulletPlayer.name="BulletPlayer";
+        bulletPlayer.rotateX( (Math.PI / 180) *90 );
+        /* 
+        *   Balle Ennemy
+        */
+        const cylinderMesh = new THREE.Mesh( geometryBullet, materialBullet);
         cylinderMesh.name="BulletEnnemy";
         cylinderMesh.rotateX( (Math.PI / 180) *90 );
 
-        const ArrowMesh = new THREE.Mesh( geometryAsteroid, materialArrow);
+        /* 
+        *   Item +1 Bullet
+        */
+        const materialArrow = new THREE.MeshLambertMaterial( );
+        materialArrow.color.set(0x0000ff);
+        materialArrow.emissive.set(0xd000ff);
+        const ArrowMesh = new THREE.Mesh( geometryBullet, materialArrow);
         ArrowMesh.name="ArrowItem";
         ArrowMesh.rotateZ( (Math.PI / 180) * 25);
 
         /* 
+        *   Shield
+        */
+        const geometryShield = new THREE.SphereGeometry( 0.23, 12, 10 );
+        const materialShield = new THREE.MeshStandardMaterial( { color: 0xffdd00, emissive: 0xecc70e, transparent:true, opacity:0.5, alphaTest:0.1 } );
+        const shieldMesh = new THREE.Mesh( geometryShield, materialShield );
+        shieldMesh.name="ShieldItem";
+
+        /* 
         * ModelManager
         */
-        this.modelManager.push(cylinderMesh); this.modelManager.push(ArrowMesh);
-
+        this.modelManager.push(cylinderMesh); 
+        this.modelManager.push(ArrowMesh);
+        this.modelManager.push(bulletPlayer);
+        this.modelManager.push(shieldMesh);
         loaderObj.load('../medias/models/low_poly.obj',  ( object ) => {
 
             object.traverse( function ( child ) {
@@ -140,20 +159,6 @@ class Asteroid {
             } );
 
             object.name="SpaceRock";
-            this.modelManager.push(object);
-           
-        }); 
-
-        loaderObj.load('../medias/models/bullet/obj/rocket.obj',  ( object ) => {
-
-            object.traverse( function ( child ) {
-
-                if ( child.isMesh ) child.material = materialBullet;
-            
-            } );
-
-            object.name="Bullet";
-            
             this.modelManager.push(object);
            
         }); 
@@ -185,20 +190,6 @@ class Asteroid {
             this.modelManager.push(object)
 
         });
-
-        loaderObj.load("../medias/models/collectable/shield/shield.obj", (object) => {
-
-            object.traverse( function ( child ) {
-
-                if ( child.isMesh ) child.material = materialShield;
-
-            });
-            
-            object.children[0].rotateX( (Math.PI / 180) *90 );
-            object.name="ShieldItem";
-            this.modelManager.push(object)
-
-        });
         
         loaderObj.load("../medias/models/collectable/coin/Coin.obj", (object) => {
 
@@ -212,13 +203,6 @@ class Asteroid {
             this.modelManager.push(object)
 
         });
-
-       /* loaderObj.load("../medias/models/bullet/obj/rocket.obj", (object) => {
-/
-            object.name="ArrowItem";
-            this.modelManager.push(object)
-            
-        });*/
         
         loaderObj.load('../medias/models/Player/SpaceShip.obj',  (object) => {
 
@@ -273,39 +257,44 @@ class Asteroid {
 
     LoadScene(){
 
+        let container = document.querySelector('#siapp');
+        let w = container.clientWidth;
+        let h = container.clientHeight;
+        
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+        this.renderer.setPixelRatio(window.devicePixelRatio)
+        this.renderer.setSize(w, h);
+        container.appendChild( this.renderer.domElement );
+
         var gridHelper = new THREE.GridHelper( 40, 40 );
         this.scene.add( gridHelper );
         
         this.scene.add( new THREE.AxesHelper() );
         let light = new THREE.DirectionalLight( 0xffffff, 1 );
-        light.position.set( 50, 50, 50 );
+        light.position.set( 0, 10, 0 );
         this.scene.add(light);
-        
-        this.renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true });
-        this.renderer.setSize( window.innerWidth, window.innerHeight );
-        this.renderer.autoClear = false
-        document.body.appendChild( this.renderer.domElement );
 
     }
 
     LoadProps() {
 
-        let playerModel; let rockModel; let bulletModel; let heartModel ; let coinModel;
-         let shieldModel;let ennemy_ssModel; 
+        let playerModel; let rockModel; let heartModel ; let coinModel;let ennemy_ssModel; 
 
         let bulletEnnemy = new Object3D();
+        let bulletPlayer = new Object3D();
         let arrowModel = new Object3D();
+        let shieldModel = new Object3D();
         this.modelManager.forEach((e) => {
 
             if(e.name == "SpaceShip")  playerModel = e;
 
             if(e.name == "SpaceRock") rockModel = e
 
-            if(e.name == "Bullet")  bulletModel = e;
+            if(e.name == "BulletPlayer")  bulletPlayer.add(e);
 
             if(e.name == "BulletEnnemy")  bulletEnnemy.add(e);
 
-            if(e.name == "ShieldItem") shieldModel = e;
+            if(e.name == "ShieldItem") shieldModel.add(e);
 
             if(e.name == "HeartItem") heartModel = e;
 
@@ -340,6 +329,7 @@ class Asteroid {
             renderer : this.renderer,
             scene : this.scene,
             camera : this.camera,
+            loop : this.loop,
 
         }
 
@@ -357,7 +347,7 @@ class Asteroid {
             arrow : new Arrow(this.scene, arrowModel,0),
             shield: new Shield(this.scene, shieldModel,0),
             heart :  new Heart(this.scene, heartModel,0),
-            basicBullet : new BasicBullet(this.scene, bulletModel, audio),
+            basicBullet : new BasicBullet(this.scene, bulletPlayer, audio),
             ennemyBullet: new BasicBullet(this.scene, bulletEnnemy, audio),
 
         }
@@ -375,7 +365,7 @@ class Asteroid {
 
     }
 
-    OnPlayerBegin( event ) {
+    OnPlayerBegin( event ) { // nom a changer
 
         
         if (event.code == 'Space') {
@@ -383,7 +373,9 @@ class Asteroid {
             document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown',  this.remove);
            
-            this.gm.GetComponent("LevelSystem").StartLevel();
+            this.gm.GetComponent("DisplaySystem").printUIHeader(1,0);
+            this.gm.GetComponent("LevelSystem").StartLevel(false);
+
         }
 
     }

@@ -29,11 +29,13 @@ class BasicAsteroid extends GameObject{
         
         super.Instantiate(o,p,r,s);
 
-        this.GetComponent("AsteroidMovement").InitComponent();
-
         o.position.copy(p);
         o.rotation.copy(r);
         o.scale.copy(new THREE.Vector3(s,s,s))
+ 
+        let aste_mvt = this.GetComponent("AsteroidMovement");
+        aste_mvt.velocity.set(p.x,0,Math.random() * 5);
+        aste_mvt.gravity = (this.scale.x * 20);
 
         if (o.children[0].material.color.getHexString() !== 'ffffff')  o.children[0].material.color.set(0xffffff);
 

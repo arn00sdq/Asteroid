@@ -126,7 +126,7 @@ class GameObjectManager{
 
     CollisionPlayerHandler(player, object){
       
-      if (object.name == "Asteroid" || object.name == "EnnemyBullet"){
+      if ((object.name == "Asteroid" || object.name == "EnnemyBullet") && !player.immune){
 
         let playerHealth = player.GetComponent("PlayerHealthSystem");
 
@@ -155,11 +155,12 @@ class GameObjectManager{
 
       let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
 
-      if (object.name == "Player" && object.immune == false) asteroidHealth.Damage("max")
+      if (object.name == "Player" && object.immune == false) asteroidHealth.Damage("max");
 
       if(object.name == "BasicBullet"){
 
         let bullet = object.GetComponent("BulletDamageSystem");
+        
         asteroidHealth.Damage(bullet.damageAmount);
 
       }
@@ -195,7 +196,7 @@ class GameObjectManager{
 
         this.level_sys_comp.InstantiateGameObject(e , position,rotation, scale)
 
-        e.GetComponent("AsteroidMovement").direction = dir;
+
 
       }
 
@@ -252,8 +253,8 @@ class GameObjectManager{
           case "Shield":
             this.parent.shield.nb -= 1
             this.sound_sys.PlayCoinPickUp();
-            
-            if(!this.joker_sys.hasShield) this.joker_sys.PlayerProtection(object,joker, 3000);
+            console.log(object.position)
+            if(!this.joker_sys.hasShield) this.joker_sys.PlayerProtection(object,this.parent.shield, 3000);
             
             break;
 

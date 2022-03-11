@@ -10,12 +10,19 @@ class GameManager {
 
     constructor(models, utils, animation,audio){
 
-        this.components = {}
+        this.components = {};
 
-        this.renderer = utils.renderer
+        /*
+        * Utils
+        */
+        this.renderer = utils.renderer;
         this.scene = utils.scene;
         this.camera = utils.camera;
+        this.loop = utils.loop;
 
+        /*
+        * Models
+        */
         this.player = models.player;
         this.asteroid = models.asteroid; 
         this.heart = models.heart;
@@ -26,17 +33,48 @@ class GameManager {
         this.ennemyBullet = models.ennemyBullet;
         this.ennemy_ss = models.ennemy_ss;
 
+        /*
+        * Audio
+        */
         this.audio = audio
 
+        /*
+        * Anim
+        */
         this.mixer = animation.mixer;
         this.idle = animation.idleAction;
 
+        /*
+        * GM
+        */
         this.limite = 15;
-
         this.score = 0;
         this.ennemy = null;
+        this.input = null;
 
-        this.playerInput = this.player.GetComponent("CharacterControllerInput").keys;
+        /*
+        * Timer
+        */
+        this.timeElapsed = 0;
+        this.prevTime = 0;
+        this.seconds = 0;
+        this.stopWatchInterval;
+        /*
+        * Global Key
+        */
+
+        this.Globalkey = {
+      
+            pause: false,
+            restart: false,
+            video: false,
+            audio: false,
+            quit: false,
+      
+          };
+
+        document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
+        document.addEventListener('click', (e) => this.OnClick(e), false);
 
         this.InitComponent(models,audio);
 
@@ -78,14 +116,13 @@ class GameManager {
         this.basicBullet.InitMesh(new THREE.Vector3(1,1,1));
         this.ennemyBullet.InitMesh(new THREE.Vector3(1,1,1));
 
-
-
     }
 
     ValueInitialisation(){
 
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
         this.player.audio_syst = this.GetComponent("SoundSystem");
+        this.input = this.player.GetComponent("CharacterControllerInput").keys;
 
         this.ennemy_ss.weaponParams = this.ennemyBullet;
         this.ennemy_ss.asteroid = this.asteroid;
@@ -98,21 +135,118 @@ class GameManager {
 
     OnPlayerEnd() {
 
-        document.getElementById("end_game").style.display = "";
+        this.Globalkey.pause = true;
+        this.GetComponent("DisplaySystem").printDeath(this.score);
 
     }
 
+    OnPlayerBegin( event ) {
+
+           
+        this.GetComponent("DisplaySystem").printUIHeader(1,0);
+        this.GetComponent("LevelSystem").StartLevel(true);
+
+
+    }
+
+    OnKeyDown(event) {
+
+        switch (event.keyCode) {
+    
+          case 27:
+    
+            if(!this.Globalkey.pause){
+    
+              this.Globalkey.pause = true;
+              this.GetComponent("DisplaySystem").printPause();
+    
+            }else{
+    
+              this.Globalkey.pause = false;
+              this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
+    
+            }
+            
+            break;
+        }
+
+    }
+
+    OnClick(event){
+
+        switch(event.target.id){
+
+            case "resume":
+                this.Globalkey.pause = false;
+                this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score); 
+                break;
+            case "restart":
+
+                this.Globalkey.pause = false;
+                this.timeElapsed = 0;
+                this.score = 0;
+
+                this.player.ResetPlayer();
+
+                this.GameRestart();
+
+                break;
+            case "audio":
+                break;
+            case "video":
+                break;
+            case "quit":
+                document.location.href = "index.html";
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
+    GameRestart(){
+
+        var to_remove = [];
+
+        this.scene.traverse ( function( child ) {
+            if ( ( child.type == "Object3D")  && !child.userData.keepMe === true ) {
+                to_remove.push( child );
+            }
+        } );
+
+        for ( var i = 0; i < to_remove.length; i++ ) {
+            this.scene.remove( to_remove[i] );
+        }
+
+        this.OnPlayerBegin();
+
+    }
 
     RAF() { // transformer en update ?
 
-            this.id = requestAnimationFrame((t) => {
-  
+            if(!this.Globalkey.pause){
 
-                this.RAF();
+                this.loop.now = window.performance.now();
+                this.loop.dt = this.loop.dt + Math.min(1, (this.loop.now - this.loop.last) / 1000);
+
+                while(this.loop.dt > this.loop.slowStep) this.loop.dt = this.loop.dt - this.loop.slowStep;
+
+                this.prevTime = Date.now() - this.loop.slowStep;
+                this.timeElapsed += Date.now() - this.prevTime;
+                this.tempTime = this.timeElapsed;
                 this.renderer.render(this.scene, this.camera);
-                this.Step(t);
+                this.loop.last = this.loop.now;
+                this.Step(this.tempTime);
+
+            }else{
+                
+                
+                this.prevTime = null;
+
+            }
     
-             });  
+            requestAnimationFrame(this.RAF.bind(this));
 
       }
     

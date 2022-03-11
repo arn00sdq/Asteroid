@@ -10,7 +10,11 @@
 		<script src="../js/three/three.js"></script>
 		<script src="../js/three/three.min.js"></script>
 		<script src="../js/asteroid.js" type="module"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>"
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+		<div id="siapp" style="touch-action: none;">
+		
+		</div>
 
 		<section id="loading-screen">
 			<div id="loader"></div>
@@ -19,16 +23,6 @@
 		<div class="global_message" id="start_game">
 			<div id="infos_start">Pressez la touche espace pour commencer</div>
 		</div> 
-
-		<div class="global_message" id="end_game">
-			<div id="infos_end">Vous etes mort</div>
-		</div> 
-		
-		<div id="header_ui">
-			<div> Vie :  <span id="life"></span> </div>
-			<div> Restant : <span id="remaining_asteroid"></span> </div>
-			<div> Score : <span id="score"></span> </div>
-		</div>
 
 		<script type="x-shader/x-vertex" id="vertexShader"></script>
 		<script type="x-shader/x-fragment" id="fragmentShader"></script>

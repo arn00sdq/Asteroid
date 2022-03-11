@@ -1,8 +1,25 @@
-body { margin: 0; }
+html, body, #siapp {
+	width: 100%;
+	height: 100%;
+	background: gray;
+  }
+  
+body, #siapp {
+	margin: 0;
+	overflow: hidden;
+  }
+  
+canvas {
+	width: 100%;
+	height: 100%;
+  }
 
+/*
+* Header
+*/
 
 #header_ui{
-	margin-top: 2vh;
+	margin-top: 3vh;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -15,18 +32,9 @@ body { margin: 0; }
 	color: white;
 }
 
-.global_message {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background-color:black;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	opacity: 0;
-
-}
+/*
+* Start msg
+*/
 
 #infos_start{
 
@@ -38,12 +46,129 @@ body { margin: 0; }
 
 }
 
-#infos_end{
+/*
+* Death menu
+*/
 
+#death_section{
+
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	margin-left: 40%;
+	margin-top: 10vh;
+	align-items: center;
+
+}
+
+#header_death{
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+	padding: 0px 0px 22px 0px;
+
+}
+
+#player_death_msg{
+
+	font-size: 1.7em;
+	color: darkred;
+
+}
+
+#score_final{
+
+	font-size: 1.2em;
+	margin-top: 3.5vh;
 	color: white;
-	font-size: 20px;;
-	opacity: 0.3;
+
+}
+
+#death_section  #button_section_menu{
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+#death_section button {
+
+	text-align: center;
+	width: 15vw;
+    height: 6vh;
+	margin: 19px 0px 0px 0px;
+
+}
+/*
+* Pause menu
+*/
+
+#pause_menu_section{
+
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	margin-left: 40%;
+	margin-top: 10vh;
+	align-items: flex-start;
+
+}
+
+#pause_menu_section #title_game_menu{
+
+	font-size: 1.5em;
+    margin-bottom: 2vh;
+	color: whitesmoke;
 	
+}
+
+
+#pause_menu_section #title_menu{
+
+	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-size: 2.5em;
+    margin-bottom: 4vh;
+	color:gray
+
+}
+
+#pause_menu_section #button_section_menu{
+
+	display: flex;
+	flex-direction: column;
+
+}
+
+#pause_menu_section #button_section_menu button{
+
+	display: flex;
+	flex-direction: column;
+	width: 18vw;
+	height: 6vh;
+	margin: 8px 0px 0px 0px;
+
+}
+
+
+button:hover{
+
+	background-color: white;
+	color: #373c3e;
+
+}
+
+button{
+
+	background-color: #373c3e; 
+	color: white;
+	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	cursor: pointer;
+	font-size: 1.2em;
+	letter-spacing: 1px;
+	text-align: left;
+	border: none;
+	transition: 0.3;
 
 }
 

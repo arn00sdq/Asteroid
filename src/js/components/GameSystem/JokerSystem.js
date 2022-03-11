@@ -37,39 +37,26 @@ class JokerSystem{
         player.immune = true;
         this.hasShield = true;
         
-        this.nbShield  = 4;
+        let shieldClone = shield.clone();
+        shieldClone.scene = shield.scene;
 
-        let parentVector  = new THREE.Vector3;
-        parentVector.setFromMatrixPosition(player.matrixWorld)
+        shieldClone.RemoveRigidBody(shieldClone);
+        console.log(shieldClone)
+        player.add(shieldClone)
 
-        let zPos = new THREE.Vector3(0,0,0.1).add(parentVector);
-        let r = zPos.distanceTo(new THREE.Vector3(0,0,-0.5).add(parentVector));
-        
-        for(let i = 0; i <2 ; i++){
-
-            let shieldClone = shield.clone();
-            shieldClone.scene = shield.scene;
-
-            let x = new THREE.Vector3( r * Math.cos(THREE.MathUtils.degToRad(360.0) / ( i +1  ) ),0,0);
-            let z =  new THREE.Vector3(0,0, r * Math.sin( THREE.MathUtils.degToRad(360.0) / ( i + 1  ) ));
-            let posShield = x.add(z).add(zPos)
-
-            shieldClone.AddComponent(new JokerFollowPlayer(shieldClone,player,x,z));
-            shieldClone.RemoveRigidBody(shieldClone);
-            shieldClone.InstantiateAndDestroy(shieldClone,posShield, new THREE.Euler(0,0,0),0.1,3000)
-
-        }
 
         setTimeout(() => {
 
             player.immune = false;
             this.hasShield = false;
+            shieldClone.removeFromParent()
 
         }, seconds);
+        
 
     }
 
-    JokerSpawnSystem(timeElapsed){
+    JokerSpawnSystem(timeElapsed ){
 
         if(this.nextJoker !== Math.round(timeElapsed)){
     
@@ -97,9 +84,8 @@ class JokerSystem{
                 let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
                 let scale = 1;
                 let currentJoker = this.jokerAv[random];
-
-                switch(currentJoker.constructor.name){ //model adjustment
-
+                switch(currentJoker.constructor.name){ 
+                    
                     case "Arrow":
                         scale = 1;
                         break;
@@ -109,9 +95,6 @@ class JokerSystem{
                     case "Heart":
                         position.y = -0.05
                         scale = 0.002;
-                        break;
-                    case "Shield":
-                        scale = 0.1;
                         break;
                 }
                 
@@ -127,7 +110,7 @@ class JokerSystem{
 
     Update(timeElapsed){
 
-        this.JokerSpawnSystem(timeElapsed);
+        this.JokerSpawnSystem(timeElapsed * 1000);
         
 
     }

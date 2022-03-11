@@ -11,7 +11,7 @@ class BulletMouvement{
         
         let palier = timeElapsed / 7;
 
-        this.parent.translateZ(  0.01 * Math.log(palier) + 0.06); 
+        this.parent.translateZ(  0.01  + 0.06); 
         if(this.parent.position.y > 0)  this.parent.position.y = 0 
 
     }
