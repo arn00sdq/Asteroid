@@ -1,3 +1,7 @@
+/*
+* Global
+*/
+
 html, body, #siapp {
 	width: 100%;
 	height: 100%;
@@ -100,6 +104,7 @@ canvas {
 	margin: 19px 0px 0px 0px;
 
 }
+
 /*
 * Pause menu
 */
@@ -150,6 +155,64 @@ canvas {
 
 }
 
+/*
+* Stage Completed menu
+*/
+
+#stage_comp_section{
+
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	margin-left: 40%;
+	margin-top: 10vh;
+	align-items: center;
+
+}
+
+#header_stage_comp{
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+	padding: 0px 0px 22px 0px;
+
+}
+
+#stage_comp_msg{
+
+	font-size: 1.7em;
+	color: gray;
+
+}
+
+#score_stage_comp{
+
+	font-size: 1.2em;
+	margin-top: 3.5vh;
+	color: white;
+
+}
+
+#stage_comp_section  #button_section_menu{
+
+    display: flex;
+    flex-direction: row;
+
+}
+
+#stage_comp_section button {
+
+	text-align: center;
+	width: 15vw;
+    height: 6vh;
+	margin: 0px 19px 0px 0px;
+
+}
+
+/*
+* Button
+*/
 
 button:hover{
 
@@ -171,6 +234,10 @@ button{
 	transition: 0.3;
 
 }
+
+/*
+* Anim
+*/
 
 @keyframes text_shrink{
 

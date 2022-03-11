@@ -347,6 +347,8 @@ class GameObjectManager{
       this.parent.ennemy = nbEnnemyFrame;
       this.parent.GetComponent("DisplaySystem").PrintEnnemy(nbEnnemyFrame);
 
+      if(nbEnnemyFrame == 0) this.parent.StageCompleted();
+
     }
 
   }

@@ -374,7 +374,7 @@ class Asteroid {
             document.removeEventListener('keydown',  this.remove);
            
             this.gm.GetComponent("DisplaySystem").printUIHeader(1,0);
-            this.gm.GetComponent("LevelSystem").StartLevel(false);
+            this.gm.GetComponent("LevelSystem").StartLevel(1,true);
 
         }
 

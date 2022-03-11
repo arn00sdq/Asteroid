@@ -67,6 +67,7 @@ class GameManager {
       
             pause: false,
             restart: false,
+            next: false,
             video: false,
             audio: false,
             quit: false,
@@ -140,12 +141,10 @@ class GameManager {
 
     }
 
-    OnPlayerBegin( event ) {
+    StageCompleted(){
 
-           
-        this.GetComponent("DisplaySystem").printUIHeader(1,0);
-        this.GetComponent("LevelSystem").StartLevel(true);
-
+        this.Globalkey.pause = true;
+        this.GetComponent("DisplaySystem").printStageCompleted(this.score);
 
     }
 
@@ -173,7 +172,7 @@ class GameManager {
     }
 
     OnClick(event){
-
+        console.log(event.target.id)
         switch(event.target.id){
 
             case "resume":
@@ -181,15 +180,13 @@ class GameManager {
                 this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score); 
                 break;
             case "restart":
-
-                this.Globalkey.pause = false;
-                this.timeElapsed = 0;
-                this.score = 0;
-
-                this.player.ResetPlayer();
-
-                this.GameRestart();
-
+                this.ResetLevel();
+                this.GetComponent("LevelSystem").StartLevel(this.GetComponent("LevelSystem").currentLevel, false);
+                break;
+            case "next":
+                this.ResetLevel();
+                let currentLevel = this.GetComponent("LevelSystem").currentLevel + 1;
+                this.GetComponent("LevelSystem").StartLevel(currentLevel, false);
                 break;
             case "audio":
                 break;
@@ -205,7 +202,21 @@ class GameManager {
 
     }
 
-    GameRestart(){
+    ResetLevel(){
+
+        this.Globalkey.pause = true;
+        this.timeElapsed = 0;
+        this.score = 0;
+
+        this.player.ResetPlayer();
+
+        this.RemoveProps();
+
+        this.GetComponent("DisplaySystem").printUIHeader(1,0);
+
+    }
+
+    RemoveProps(){
 
         var to_remove = [];
 
@@ -219,11 +230,9 @@ class GameManager {
             this.scene.remove( to_remove[i] );
         }
 
-        this.OnPlayerBegin();
-
     }
 
-    RAF() { // transformer en update ?
+    RAF() {
 
             if(!this.Globalkey.pause){
 

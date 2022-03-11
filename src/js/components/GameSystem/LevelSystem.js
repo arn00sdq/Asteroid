@@ -4,7 +4,7 @@ class LevelSystem{
 
         this.parent = parent;
 
-        this.level = 1;
+        this.currentLevel = 1;
 
     }
 
@@ -56,31 +56,39 @@ class LevelSystem{
 
     }
 
-    StartLevel(restart){
+    StartLevel(level,init){
         
-        switch (this.level){
+        switch (level){
 
             case 1:
                 this.AsteroidWave(this.parent.asteroid, 10);
                 //this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
                 break;
             case 2:
-                this.BossWave(this.parent.asteroid);
+                this.AsteroidWave(this.parent.asteroid, 1);
                 break;
             case 3:
                 this.AsteroidWave(this.parent.asteroid, 1);
                 break;   
         }
 
-        this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004 )
+        this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004)
 
-        if(!restart) this.parent.RAF();
+        if(init){
+
+            this.parent.RAF();
+
+        }else{
+
+            this.parent.Globalkey.pause = false;
+
+        }
 
     }
 
     AsteroidWave(asteroid, nbAsteroid){
 
-        for (let index = 0; index < 15; index++) {
+        for (let index = 0; index < nbAsteroid; index++) {
 
             let position = new THREE.Vector3( ( ( Math.random() *  ( 8.5 - 4.5 ) ) + 4.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,

@@ -51,6 +51,28 @@ class DisplaySystem{
 
     }
 
+    printStageCompleted(score){
+
+        let ui_header = `
+        <div id="stage_comp_section">
+
+            <div id="header_stage_comp">
+                <div id="stage_comp_msg">Stage completed</div>
+                <div id="score_stage_comp">Score : ${score} </div>
+            </div>
+    
+            <div id="button_section_menu">
+                <button id="next">Next</button>
+                <button id="quit">Quit</button>
+            </div>
+
+        </div> 
+        `
+
+        this.printAPP(ui_header)
+
+    }
+
     printPause(){
 
         let ui_pause = `
