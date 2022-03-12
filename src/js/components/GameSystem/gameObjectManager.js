@@ -171,11 +171,7 @@ class GameObjectManager{
 
           if (asteroid.nbBreak < 2){
 
-            let dir = new THREE.Vector3();
-            dir.copy( asteroid.position ).sub( object.position ).normalize();
-            dir.y = 0;
-
-            this.Asteroid_Subdivision(asteroid,dir);
+            this.Asteroid_Subdivision(asteroid);
 
           } 
 
@@ -185,7 +181,7 @@ class GameObjectManager{
 
     }
 
-    Asteroid_Subdivision(e,dir){
+    Asteroid_Subdivision(e){
 
       for (let index = 1; index <= 2; index++) {
 
@@ -194,9 +190,10 @@ class GameObjectManager{
         let rotation = new THREE.Euler(0,0 ,0);
         let scale = 0.75*e.scale.x;
 
-        this.level_sys_comp.InstantiateGameObject(e , position,rotation, scale)
+        let signe = index == 1 ? 1 : -1
+        let velocity = new THREE.Vector3(1,0,(e.position.x/e.position.z)*signe).multiplyScalar(5)
 
-
+        this.level_sys_comp.InstantiateGameObject(e , position,rotation, scale, velocity)
 
       }
 

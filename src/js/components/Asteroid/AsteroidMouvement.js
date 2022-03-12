@@ -6,6 +6,7 @@ class AsteroidMovement {
 
       this.shift = new THREE.Vector3();
       this.velocity = new THREE.Vector3();
+      this.forward = new THREE.Vector3();
 
       this.gravity = 0;
 
@@ -93,14 +94,15 @@ class AsteroidMovement {
   Move(timeElapsed){
 
     this.shift.set(this.velocity.x,0,this.velocity.z).multiplyScalar( 0.003);
+    //this.shift.set(0,0,0).multiplyScalar( 0.003);
     this.parent.position.add(this.shift)
 
   }
   Turn(timeElapsed){
 
     //this.shift.set(this.velocity.z,0,this.velocity.z).add(this.directionLerp).multiplyScalar( 0.002);
-
-    this.velocity.add(this.directionToTurn)
+    this.directionLerp.lerp(this.directionToTurn,0.1)
+    this.velocity.add(this.directionLerp)
     this.shift.set(this.velocity.x,0,this.velocity.z).multiplyScalar( 0.003);
     this.parent.position.add(this.shift)
     

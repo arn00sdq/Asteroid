@@ -12,7 +12,7 @@ class BasicAsteroid extends GameObject{
 
         this.name = "Asteroid"
         this.nbBreak = nbBreak;
-        this.life = 35;
+        this.life = 15;
         
         this.InitComponent();
 
@@ -25,7 +25,7 @@ class BasicAsteroid extends GameObject{
 
     }
 
-    Instantiate(o,p,r,s){
+    Instantiate(o,p,r,s,v){
         
         super.Instantiate(o,p,r,s);
 
@@ -34,7 +34,16 @@ class BasicAsteroid extends GameObject{
         o.scale.copy(new THREE.Vector3(s,s,s))
  
         let aste_mvt = this.GetComponent("AsteroidMovement");
-        aste_mvt.velocity.set(p.x,0,Math.random() * 5);
+        if(v !== undefined){
+
+            aste_mvt.velocity = v
+
+        }else{
+
+            aste_mvt.velocity = new THREE.Vector3(Math.ceil(Math.random() * ( 6 - 3) + 3 ) * (Math.round(Math.random()) ? 1 : -1),0,Math.ceil(Math.random() * ( 6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1));
+
+        }
+
         aste_mvt.gravity = (this.scale.x * 20);
 
         if (o.children[0].material.color.getHexString() !== 'ffffff')  o.children[0].material.color.set(0xffffff);

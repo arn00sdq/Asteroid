@@ -32,6 +32,8 @@ class BasicBullet extends GameObject{
         o.position.copy(p);
         o.rotation.copy(r);
 
+        let bullet_mvt = this.GetComponent("BulletMouvement");
+        bullet_mvt.velocity.set(0,0,1);
         this.SetInvulnerability(100);
         
         this.scene.add(o);
