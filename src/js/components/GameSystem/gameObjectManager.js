@@ -167,15 +167,16 @@ class GameObjectManager{
 
       if(asteroid.life == 0) {
 
-          asteroid.nbBreak += 1;
+        this.level_sys_comp.InstantiateParticule(this.parent.particuleExplosion,asteroid.position)
+        asteroid.nbBreak += 1;
 
-          if (asteroid.nbBreak < 2){
+        if (asteroid.nbBreak < 2){
 
-            this.Asteroid_Subdivision(asteroid);
+          this.Asteroid_Subdivision(asteroid);
 
-          } 
+        } 
 
-          asteroid.Destroy(asteroid);
+        asteroid.Destroy(asteroid);
 
       }
 

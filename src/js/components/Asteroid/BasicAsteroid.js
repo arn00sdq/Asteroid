@@ -9,7 +9,7 @@ class BasicAsteroid extends GameObject{
         super(scene,model);
 
         this.components = {};
-
+        
         this.name = "Asteroid"
         this.nbBreak = nbBreak;
         this.life = 15;

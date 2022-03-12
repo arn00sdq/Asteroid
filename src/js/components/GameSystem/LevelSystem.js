@@ -28,6 +28,18 @@ class LevelSystem{
 
     }
 
+    InstantiateParticule(particule,position){
+
+        let particule_clone = particule.clone();
+        particule_clone.scene = particule.scene;
+        console.log(particule_clone)
+
+        //this.SetCloneValue(object_clone, object);
+
+        particule_clone.Instantiate(particule_clone,position, new THREE.Euler(0,0,0),1);
+
+    }
+
     SetCloneValue(destination, source){
 
         for (const property in destination) {
@@ -61,6 +73,7 @@ class LevelSystem{
         switch (level){
 
             case 1:
+                //this.parent.particuleExplosion.AddParticles();
                 this.AsteroidWave(this.parent.asteroid, 10);
                 //this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
                 break;
@@ -88,7 +101,7 @@ class LevelSystem{
 
     AsteroidWave(asteroid, nbAsteroid){
 
-        for (let index = 0; index < nbAsteroid; index++) {
+        for (let index = 0; index < 2; index++) {
 
             let position = new THREE.Vector3( ( ( Math.random() *  ( 8.5 - 4.5 ) ) + 4.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,

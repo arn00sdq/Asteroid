@@ -8,7 +8,7 @@ import SoundSystem from "./SoundSystem.js";
 
 class GameManager {
 
-    constructor(models, utils, animation,audio){
+    constructor(models, utils, animation,audio, particule){
 
         this.components = {};
 
@@ -43,6 +43,12 @@ class GameManager {
         */
         this.mixer = animation.mixer;
         this.idle = animation.idleAction;
+
+        /*
+        * Anim
+        */
+
+        this.particuleExplosion = particule.particuleExplosion;
 
         /*
         * GM

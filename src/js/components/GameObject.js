@@ -10,6 +10,7 @@ class GameObject extends THREE.Object3D{
         
         super();
 
+        if (!model) model = "";
         if (!audio) audio = "";
         
         this.components = {};
