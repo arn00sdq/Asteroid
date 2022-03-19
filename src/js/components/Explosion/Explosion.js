@@ -159,7 +159,6 @@ class Explosion extends GameObject {
 
     Instantiate(o,p,r,s){
         
-        console.log(o)
         super.Instantiate(o,p,r,s);
 
         o.position.copy(p);

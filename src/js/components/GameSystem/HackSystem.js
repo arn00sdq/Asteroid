@@ -85,24 +85,20 @@ class HackSystem{
     KillThemAll(){ 
 
         let playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
-        let objectManager = this.parent.GetComponent("GameObjectManager");
 
         if (playerInput.kta){
 
             playerInput.kta = false;
             let scene = this.parent.scene;
-
-            scene.children.forEach( (e) => {
-
-                if (e.name == "Asteroid"){
-
-                    e.nbBreak += 1;
-                    if (e.nbBreak < 2)  objectManager.Asteroid_Subdivision(e);
-                    e.Destroy(e);
+            
+            scene.traverse(function(obj){
+                if (obj.name == "Asteroid"){
+                   
+                    scene.remove(obj)
 
                 }
 
-            });
+            })
 
         }
 

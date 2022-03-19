@@ -53,7 +53,7 @@ class GameManager {
         /*
         * GM
         */
-        this.limite = 15;
+        this.limit = 10;
         this.score = 0;
         this.ennemy = null;
         this.input = null;

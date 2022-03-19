@@ -5,6 +5,8 @@ class JokerSystem{
     constructor(parent,models){
 
         this.parent = parent;
+
+        this.edgeLimit = this.parent.limit;
         
         this.nextJoker = null;
 
@@ -78,9 +80,11 @@ class JokerSystem{
 
             if(this.nextJoker % 1 == 0 && this.jokerAv.length > 0){
 
-                let position = new THREE.Vector3( ( ( Math.random() *  ( 9.5 - 1.5 ) ) + 1.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) ,  0  , ( ( Math.random() *  ( 9.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 ))
+                let position = new THREE.Vector3( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) )  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+                                                  0 ,
+                                                  ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 2 ) ) )  * ( Math.round( Math.random() ) ? 1 : -1 ) 
+                                            )
                 let rotation = new THREE.Euler(0,0,0);      
-
                 let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
                 let scale = 1;
                 let currentJoker = this.jokerAv[random];

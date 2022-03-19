@@ -1,6 +1,7 @@
 import AsteroidMovement from "./AsteroidMouvement.js";
 import AsteroidHealthSystem from "./AsteroidHealthSystem.js";
 import GameObject from "../GameObject.js";
+import { BoxHelper } from "../../three/three.module.js";
 
 class BasicAsteroid extends GameObject{
 
@@ -32,6 +33,11 @@ class BasicAsteroid extends GameObject{
         o.position.copy(p);
         o.rotation.copy(r);
         o.scale.copy(new THREE.Vector3(s,s,s))
+
+        const sphere = new THREE.SphereGeometry();
+        const object = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( 0xff0000 ) );
+        const box = new THREE.BoxHelper( object, 0xffff00 );
+        this.children[0].add( box );
  
         let aste_mvt = this.GetComponent("AsteroidMovement");
         if(v !== undefined){

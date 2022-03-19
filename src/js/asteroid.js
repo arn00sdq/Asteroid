@@ -129,12 +129,10 @@ class Asteroid {
         /* 
         *   Item +1 Bullet
         */
-        const materialArrow = new THREE.MeshLambertMaterial();
-        materialArrow.color.set(0x0000ff);
-        materialArrow.emissive.set(0xd000ff);
-        const ArrowMesh = new THREE.Mesh(geometryBullet, materialArrow);
+        const geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
+        const materialz = new THREE.MeshBasicMaterial( {color: 0xff0000} );
+        const ArrowMesh = new THREE.Mesh( geometry, materialz );
         ArrowMesh.name = "ArrowItem";
-        ArrowMesh.rotateZ((Math.PI / 180) * 25);
 
         /* 
         *   Shield
@@ -342,7 +340,7 @@ class Asteroid {
 
         const particule = {
 
-           particuleExplosion : new Explosion(this.scene),
+           particuleExplosion : new Explosion(this.scene,this.camera),
 
         }
 

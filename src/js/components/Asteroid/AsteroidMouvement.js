@@ -28,9 +28,7 @@ class AsteroidMovement {
 
       if(this.parent.children[0] !== null){
 
-        this.parent.children[0].rotation.x = (this.parent.children[0].rotation.x + (Math.PI / 180) * 0.016 * 10 );
-        this.parent.children[0].rotation.y = (this.parent.children[0].rotation.y + (Math.PI / 180) * 0.016 * 10 );
-        this.parent.children[0].rotation.z = (this.parent.children[0].rotation.z + (Math.PI / 180) * 0.016 * 10);
+       // this.parent.children[0].rotateY( (Math.PI / 180) *  Math.random() * 1);
   
       }
 
@@ -44,11 +42,12 @@ class AsteroidMovement {
       let condition = this.PerceptObstacle();
       if (condition){
 
-        this.Turn(timeElapsed);
+        //this.Turn(timeElapsed);
+        this.Move(timeElapsed)
 
       } else{
 
-        this.Move(timeElapsed)
+        this.Turn(timeElapsed)
       }
       
 

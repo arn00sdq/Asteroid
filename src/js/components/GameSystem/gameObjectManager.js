@@ -3,7 +3,7 @@ class GameObjectManager{
     constructor(parent) {
       
       this.parent = parent;
-      this.edge_limit = 15;
+      this.edge_limit = parent.limit;
 
       this.level_sys_comp = this.parent.GetComponent("LevelSystem");
       this.sound_sys = this.parent.GetComponent("SoundSystem");
@@ -34,6 +34,7 @@ class GameObjectManager{
     }
 
     collision_handler(e,e2){
+
 
       switch(e.constructor.name){
 
@@ -160,19 +161,21 @@ class GameObjectManager{
       if(object.name == "BasicBullet"){
 
         let bullet = object.GetComponent("BulletDamageSystem");
-        
         asteroidHealth.Damage(bullet.damageAmount);
 
       }
 
+      
+
       if(asteroid.life == 0) {
 
-        this.level_sys_comp.InstantiateParticule(this.parent.particuleExplosion,asteroid.position)
+       // this.level_sys_comp.InstantiateParticule(this.parent.particuleExplosion,asteroid.position)
+       
         asteroid.nbBreak += 1;
 
         if (asteroid.nbBreak < 2){
 
-          this.Asteroid_Subdivision(asteroid);
+          this.Asteroid_Subdivision(asteroid,object);
 
         } 
 
@@ -182,18 +185,28 @@ class GameObjectManager{
 
     }
 
-    Asteroid_Subdivision(e){
+    Asteroid_Subdivision(e,object){
+
+      let dir = new THREE.Vector3();
+      if (object.name == "Player"){
+
+        dir.set(1,0,0.5);
+
+      }else{
+
+        dir = object.GetComponent("BulletMouvement").forward;
+
+      }
 
       for (let index = 1; index <= 2; index++) {
-
-        let position = new THREE.Vector3(e.position.x + Math.random() *  0.2, 0 ,
-                                             e.position.z + Math.random() *  0.5);
+        
+        let signe = index == 1 ? 1 : -1;
+        let position = new THREE.Vector3(e.position.x + Math.random() *0.3, 0 ,
+                                             e.position.z + Math.random() *0.3 );
         let rotation = new THREE.Euler(0,0 ,0);
         let scale = 0.75*e.scale.x;
 
-        let signe = index == 1 ? 1 : -1
-        let velocity = new THREE.Vector3(1,0,(e.position.x/e.position.z)*signe).multiplyScalar(5)
-
+        let velocity = new THREE.Vector3(Math.random()* 1,0,(dir.x/dir.z)*signe).normalize().multiplyScalar(10)
         this.level_sys_comp.InstantiateGameObject(e , position,rotation, scale, velocity)
 
       }
@@ -205,9 +218,13 @@ class GameObjectManager{
       if(object.name == "Asteroid" || object.name == "EnnemySpaceship" ){
 
         bullet.Destroy(bullet)
+        let bulletDamage = bullet.GetComponent("BulletDamageSystem").damageAmount;
+        if (bulletDamage > 0){
 
-        let playerHitSound = new THREE.Audio( this.parent.audio.listener );
-        this.sound_sys.PlayHitBullet(playerHitSound, 0,0.2);
+          let playerHitSound = new THREE.Audio( this.parent.audio.listener );
+          this.sound_sys.PlayHitBullet(playerHitSound, 0,0.2);
+
+        }   
 
       } 
 
@@ -251,7 +268,6 @@ class GameObjectManager{
           case "Shield":
             this.parent.shield.nb -= 1
             this.sound_sys.PlayCoinPickUp();
-            console.log(object.position)
             if(!this.joker_sys.hasShield) this.joker_sys.PlayerProtection(object,this.parent.shield, 3000);
             
             break;
@@ -346,7 +362,7 @@ class GameObjectManager{
       this.parent.GetComponent("DisplaySystem").PrintEnnemy(nbEnnemyFrame);
 
       if(nbEnnemyFrame == 0) this.parent.StageCompleted();
-
+     
     }
 
   }

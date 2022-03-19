@@ -19,7 +19,7 @@ class PlayerShootProjectiles{
 
     }
 
-    Shoot(){
+    Shoot(timeElapsed){
 
       for (let i = 0; i < this.cannon.length; i++) {
 
@@ -32,11 +32,11 @@ class PlayerShootProjectiles{
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
         this.temp.y = -0.2;
         this.spawnRot =  this.parent.rotation;
-        
-        this.weaponParams.GetComponent("BulletDamageSystem").Start(this.temp);
 
         bulletClone.SetRigidBody(bulletClone);
         bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 0.0009);
+
+        bulletClone.GetComponent("BulletDamageSystem").startTime = timeElapsed;
        
         this.parent.audio_syst.PlayBulletShoot(this.audio.listener, Math.random() * 0.2, 0.2);
 
@@ -101,7 +101,7 @@ class PlayerShootProjectiles{
 
         if ( input.keys.shoot && this.canShoot ){ 
         
-          this.Shoot()
+          this.Shoot(timeElapsed * 1000)
           this.canShoot = false
 
           setTimeout(() => {

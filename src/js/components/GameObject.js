@@ -28,7 +28,7 @@ class GameObject extends THREE.Object3D{
     * @param {THREE.Vector3}  scale 
     */
     InitMesh(scale){
-        
+    
         this.model.children.forEach( (e) => {
 
             
@@ -36,7 +36,8 @@ class GameObject extends THREE.Object3D{
 
         })
 
-        this.children[0].scale.copy(scale)
+        console.log(this,scale)
+       // this.children[0].scale.copy(scale)
         
     }  
 

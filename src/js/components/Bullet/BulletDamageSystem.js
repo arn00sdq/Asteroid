@@ -10,19 +10,17 @@ class BulletDamageSystem{
         this.DistanceTravelled = 0;
         this.lastPosition  = new THREE.Vector3;
 
-    }
-
-    Start(pos){
-
-        this.lastPosition = pos.clone();
+        this.startTime = 0;
 
     }
+
+    Start(){}
 
     Update(timeElapsed){
 
-        let DistanceTravelled = this.parent.position.distanceTo(this.lastPosition)
-        this.damageAmount = this.damage - (DistanceTravelled /2)
-        
+        //console.log(this.startTime)
+        let bulletCurrentTime = timeElapsed *1000 - this.startTime;
+        this.damageAmount = this.damage - Math.round(bulletCurrentTime) *2
 
         if(this.damageAmount <= 0)  this.damageAmount = 0 /*this.parent.Destroy(this.parent)*/
 

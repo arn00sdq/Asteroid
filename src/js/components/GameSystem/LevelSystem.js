@@ -5,6 +5,7 @@ class LevelSystem{
         this.parent = parent;
 
         this.currentLevel = 1;
+        this.edgeLimit = this.parent.limit;
 
     }
 
@@ -23,8 +24,11 @@ class LevelSystem{
 
         object_clone.Instantiate(object_clone,position, rotation, scale,velocity);
         object_clone.SetRigidBody(object_clone);
-
+        if(object.name == "Asteroid") console.log(object_clone,position)
         this.UpdateValue(object_clone, object);
+        
+
+        
 
     }
 
@@ -32,7 +36,6 @@ class LevelSystem{
 
         let particule_clone = particule.clone();
         particule_clone.scene = particule.scene;
-        console.log(particule_clone)
 
         //this.SetCloneValue(object_clone, object);
 
@@ -101,13 +104,12 @@ class LevelSystem{
 
     AsteroidWave(asteroid, nbAsteroid){
 
-        for (let index = 0; index < 2; index++) {
+        for (let index = 0; index < 5; index++) {
 
-            let position = new THREE.Vector3( ( ( Math.random() *  ( 8.5 - 4.5 ) ) + 4.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+            let position = new THREE.Vector3( ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) ) + ( this.edgeLimit / 3 )) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
-                                              ( ( Math.random() *  ( 8.5 - 1 ) ) + 1  ) * ( Math.round( Math.random() ) ? 1 : -1 )
-                                            )
-                                            
+                                              ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 2 ) ) ) + ( this.edgeLimit / 3.5 )) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                            )                       
             let rotation = new THREE.Euler( 0,0,0);
             let scale = (Math.random() * (0.03 -0.015)) + 0.015;
             this.InstantiateGameObject(asteroid, position, rotation, scale)
@@ -120,11 +122,11 @@ class LevelSystem{
 
         for (let index = 0; index < nb_ennemy_ss; index++) {
 
-            let position = new THREE.Vector3( ( ( Math.random() *  ( 8.5 - 4.5 ) ) + 4.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+            let position = new THREE.Vector3( ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 2 ) ) ) + ( this.edgeLimit / 2 )) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
-                                              ( ( Math.random() *  ( 8.5 - 1 ) ) + 1  ) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                              ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 3 ) ) ) + ( this.edgeLimit / 3 )) * ( Math.round( Math.random() ) ? 1 : -1 )
                                             )
-
+            
             let rotation = new THREE.Euler(0,0,0);
             let scale = 0.08;
 
@@ -144,7 +146,6 @@ class LevelSystem{
         let rotation = new THREE.Euler(0,0,0);
         let scale = 10;
         this.InstantiateGameObject(asteroid, position, rotation, scale );
-        console.log("Vague2")
 
     }
 

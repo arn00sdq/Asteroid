@@ -6,9 +6,12 @@ class BulletMouvement{
         
         this.velocity = new THREE.Vector3();
         this.forward = new THREE.Vector3();
+        this.direction = new THREE.Vector3();
         this.speed = 0.1;
 
     }
+
+    Start(){}
 
     Update(timeElapsed){
         
@@ -16,6 +19,7 @@ class BulletMouvement{
 
         this.forward.set(0, 0, 1);
         this.forward.applyQuaternion(this.parent.quaternion);
+
         this.forward.normalize();
         this.forward.multiplyScalar(this.velocity.z * 0.1);
 

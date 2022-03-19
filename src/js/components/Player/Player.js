@@ -55,7 +55,7 @@ class Player extends GameObject{
 
     InitValue(){
 
-       if (this.constructor.name =="Player") this.GetComponent("PlayerShootProjectiles").AddProjectile( 1 );
+        if (this.constructor.name =="Player") this.GetComponent("PlayerShootProjectiles").AddProjectile( 1 );
 
     }
 
