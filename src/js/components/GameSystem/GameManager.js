@@ -72,6 +72,7 @@ class GameManager {
         this.Globalkey = {
       
             pause: false,
+            keyboard: false,
             restart: false,
             next: false,
             video: false,
@@ -158,21 +159,38 @@ class GameManager {
 
         switch (event.keyCode) {
     
-          case 27:
+            case 27:
     
-            if(!this.Globalkey.pause){
-    
-              this.Globalkey.pause = true;
-              this.GetComponent("DisplaySystem").printPause();
-    
-            }else{
-    
-              this.Globalkey.pause = false;
-              this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
-    
-            }
+                if(!this.Globalkey.pause){
+        
+                this.Globalkey.pause = true;
+                this.GetComponent("DisplaySystem").printPause();
+        
+                }else{
+        
+                this.Globalkey.pause = false;
+                this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
+        
+                }
+                
+                break;
+            case 72:
+                if(!this.Globalkey.keyboard){
+        
+                    this.Globalkey.keyboard = true;
+                    this.Globalkey.pause = true;
+                    this.GetComponent("DisplaySystem").printKeyboardShortcut();
             
-            break;
+                    }else{
+            
+                    this.Globalkey.keyboard = false;
+                    this.Globalkey.pause = false;
+                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
+            
+                }
+                    
+                break;
+            
         }
 
     }
