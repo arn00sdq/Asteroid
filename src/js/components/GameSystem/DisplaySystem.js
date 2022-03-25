@@ -178,6 +178,99 @@ class DisplaySystem{
 
     }
 
+    printAudioUIMenu(){
+        
+        let sound_sys = this.parent.GetComponent("SoundSystem");
+
+        let audioUI = `
+        <div id="tb">
+            <div class="option_menu">
+                <div class="name_menu_section">
+                    <span class="#">Audio</span>
+                </div>
+                <div class="option_hr"></div>    
+                <div class="option_input_section">
+                    <div class="audio_input_field">
+                        <span class="option_input_name">Master Volume</span>
+                        <input class="range" id="range_master_volume" type="range" name="" min="0"  max="100" value="${sound_sys.masterVolume * 100}">
+                        <div class="box_input_val">
+                            <span id="sp_master_volume">${sound_sys.masterVolume}</span>
+                        </div>
+                    </div>
+                    <div class="option_hr"></div>    
+                    <div class="audio_input_field">
+                        <span class="option_input_name">Sfx volume</span>
+                        <input class="range" id="range_sfx_volume" type="range" name="" min="0"  max="100" value="${sound_sys.sfxVolume  * 100}">
+                        <div class="box_input_val">
+                            <span id="sp_sfx_volume">${sound_sys.sfxVolume}</span>
+                        </div> 
+                    </div>
+                    <div class="option_hr"></div>    
+                    <div class="audio_input_field">
+                        <span class="option_input_name">Music Volume</span>
+                        <input class="range" id="range_music_volume" type="range" name="" min="0"  max="100" value="${sound_sys.musicVolume  * 100}" >
+                        <div class="box_input_val">
+                            <span id="sp_music_volume">${sound_sys.musicVolume}</span>
+                        </div>                   
+                    </div>
+                </div>
+                <div class="footer_menu">
+                    <div class="redirection_menu">
+                        <span id="retour">Retour</span>
+                    </div>              
+                </div>
+            </div>
+        </div>           
+        ` 
+        this.printAPP(audioUI)
+
+    }
+
+    printVideoUIMenu(){
+        let videoUI = `
+        <div id="tb">
+            <div class="option_menu">
+                <div class="name_menu_section">
+                    <span class="#">Video</span>
+                </div>
+                <div class="option_input_section">
+                    <div class="audio_input_field">
+                        <span class="option_input_name">Brightness</span>
+                        <input class="range" id="brighteness" type="range" name="" min="0"  max="100" value="0">
+                        <div class="box_input_val">
+                            <span class="sp_brighteness">0.0</span>
+                        </div>
+                    </div>
+                    <div class="option_hr"></div>
+                    <div class="audio_input_field">
+                        <span class="option_input_name">Effect</span>
+                        <div>
+                            <label class="opt_check_container">
+                                <input type="checkbox">
+                                <div class="opt_checkmark"></div>
+                            </label>                     
+                        </div>
+                    </div>
+                    <div class="option_hr"></div>    
+                    <div class="audio_input_field">
+                        <span class="option_input_name">Target FPS</span>
+                        <div class="option_com_soon">
+                            Prochainement !
+                        </div>
+                    </div>
+                </div>
+                <div class="footer_menu">
+                    <div class="redirection_menu">
+                        <span id="retour">Retour</span>
+                    </div>              
+                </div>
+            </div>
+        </div>
+        ` 
+        this.printAPP(videoUI)
+
+    }
+
     printPause(){
 
         let ui_pause = `
@@ -224,5 +317,6 @@ class DisplaySystem{
     Update(){}
 
 }
+
 
 export default DisplaySystem

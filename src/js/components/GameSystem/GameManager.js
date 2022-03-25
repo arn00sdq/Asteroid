@@ -83,6 +83,7 @@ class GameManager {
 
         document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
         document.addEventListener('click', (e) => this.OnClick(e), false);
+        document.addEventListener("change", (e) => this.OnChange(e), false);
 
         this.InitComponent(models,audio);
 
@@ -155,77 +156,6 @@ class GameManager {
 
     }
 
-    OnKeyDown(event) {
-
-        switch (event.keyCode) {
-    
-            case 27:
-    
-                if(!this.Globalkey.pause){
-        
-                this.Globalkey.pause = true;
-                this.GetComponent("DisplaySystem").printPause();
-        
-                }else{
-        
-                this.Globalkey.pause = false;
-                this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
-        
-                }
-                
-                break;
-            case 72:
-                if(!this.Globalkey.keyboard){
-        
-                    this.Globalkey.keyboard = true;
-                    this.Globalkey.pause = true;
-                    this.GetComponent("DisplaySystem").printKeyboardShortcut();
-            
-                    }else{
-            
-                    this.Globalkey.keyboard = false;
-                    this.Globalkey.pause = false;
-                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
-            
-                }
-                    
-                break;
-            
-        }
-
-    }
-
-    OnClick(event){
-        console.log(event.target.id)
-        switch(event.target.id){
-
-            case "resume":
-                this.Globalkey.pause = false;
-                this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score); 
-                break;
-            case "restart":
-                this.ResetLevel();
-                this.GetComponent("LevelSystem").StartLevel(this.GetComponent("LevelSystem").currentLevel, false);
-                break;
-            case "next":
-                this.ResetLevel();
-                let currentLevel = this.GetComponent("LevelSystem").currentLevel + 1;
-                this.GetComponent("LevelSystem").StartLevel(currentLevel, false);
-                break;
-            case "audio":
-                break;
-            case "video":
-                break;
-            case "quit":
-                document.location.href = "index.html";
-                break;
-            default:
-                break;
-
-        }
-
-    }
-
     ResetLevel(){
 
         this.Globalkey.pause = true;
@@ -252,6 +182,108 @@ class GameManager {
 
         for ( var i = 0; i < to_remove.length; i++ ) {
             this.scene.remove( to_remove[i] );
+        }
+
+    }
+
+    OnKeyDown(event) {
+
+        switch (event.keyCode) {
+    
+            case 27:
+    
+                if(!this.Globalkey.pause){
+
+                    this.Globalkey.pause = true;
+                    this.GetComponent("DisplaySystem").printPause();
+        
+                }else{
+           
+                    document.querySelector('canvas').style.opacity = 1;
+                    this.Globalkey.pause = false;
+                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
+        
+                }
+                
+                break;
+            case 72:
+                if(!this.Globalkey.keyboard){
+        
+                    this.Globalkey.keyboard = true;
+                    this.Globalkey.pause = true;
+                    this.GetComponent("DisplaySystem").printKeyboardShortcut();
+            
+                    }else{
+            
+                    this.Globalkey.keyboard = false;
+                    this.Globalkey.pause = false;
+                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
+            
+                }
+                    
+                break;
+            
+        }
+
+    }
+
+    OnClick(event){
+
+        switch(event.target.id){
+
+            case "retour":
+                 this.GetComponent("DisplaySystem").printPause();
+                break;
+            case "resume":
+                this.Globalkey.pause = false;
+                this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score); 
+                break;
+            case "restart":
+                this.ResetLevel();
+                this.GetComponent("LevelSystem").StartLevel(this.GetComponent("LevelSystem").currentLevel, false);
+                break;
+            case "next":
+                this.ResetLevel();
+                let currentLevel = this.GetComponent("LevelSystem").currentLevel + 1;
+                this.GetComponent("LevelSystem").StartLevel(currentLevel, false);
+                break;
+            case "audio":
+                this.GetComponent("DisplaySystem").printAudioUIMenu();
+                break;
+            case "video":
+                this.GetComponent("DisplaySystem").printVideoUIMenu();
+                break;
+            case "quit":
+                document.location.href = "index.html";
+                break;
+            default:
+                break;
+
+        }
+
+    }
+
+    OnChange(event){
+
+        let sound_sys = this.GetComponent("SoundSystem");
+        
+        switch(event.target.id){
+
+            case "range_master_volume":  
+                sound_sys.masterVolume = event.target.value /100;     
+                document.getElementById("sp_master_volume").innerHTML = sound_sys.masterVolume;
+                break;
+            case "range_sfx_volume":  
+                sound_sys.sfxVolume = event.target.value /100;     
+                document.getElementById("sp_sfx_volume").innerHTML = sound_sys.sfxVolume;
+                break;
+            case "range_music_volume":  
+                sound_sys.musicVolume = event.target.value /100;     
+                document.getElementById("sp_music_volume").innerHTML = sound_sys.musicVolume;
+                break;
+            default:
+                break;
+
         }
 
     }

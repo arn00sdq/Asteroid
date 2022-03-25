@@ -260,8 +260,9 @@ class Asteroid {
         let w = container.clientWidth;
         let h = container.clientHeight;
 
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+        this.renderer = new THREE.WebGLRenderer({  antialias: true, preserveDrawingBuffer: true });
         this.renderer.setPixelRatio(window.devicePixelRatio)
+        this.renderer.setClearColor( 0xffffff, 0 );
         this.renderer.setSize(w, h);
         container.appendChild(this.renderer.domElement);
 

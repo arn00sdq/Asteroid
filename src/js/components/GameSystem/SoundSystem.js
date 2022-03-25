@@ -7,6 +7,10 @@ class SoundSystem{
         this.audioManager = audio.audioManager
         this.sound = audio.sound;
 
+        this.masterVolume = 1;
+        this.sfxVolume = 1;
+        this.musicVolume = 1;
+
     }
 
     PlayCoinPickUp(){
@@ -16,7 +20,7 @@ class SoundSystem{
         if (this.sound.isPlaying)  this.sound.stop()
         this.sound.setBuffer( CoinBuffer );
         this.sound.setLoop( false );
-        this.sound.setVolume( 1 );
+        this.sound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
         this.sound.play();
 
     }
@@ -29,7 +33,7 @@ class SoundSystem{
 
         this.sound.setBuffer( heartBuffer );
         this.sound.setLoop( false );
-        this.sound.setVolume( 1 );
+        this.sound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
         this.sound.play();
 
     }
@@ -42,7 +46,7 @@ class SoundSystem{
 
         audio.setBuffer( bulletBuffer );
         audio.setLoop( false );
-        audio.setVolume( volume );
+        audio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
         audio.play(delay);
 
     }
@@ -53,7 +57,7 @@ class SoundSystem{
 
         audio.setBuffer( bulletBuffer );
         audio.setLoop( false );
-        audio.setVolume( volume );
+        audio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
 
         audio.play(delay);
 
@@ -65,7 +69,7 @@ class SoundSystem{
 
         audio.setBuffer( bulletBuffer );
         audio.setLoop( false );
-        audio.setVolume( volume );
+        audio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
         audio.play(delay);
 
     }

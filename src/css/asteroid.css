@@ -117,6 +117,8 @@ canvas {
 	margin-top: 10vh;
 	align-items: flex-start;
 
+	
+
 }
 
 #pause_menu_section #title_game_menu{
@@ -232,6 +234,181 @@ button{
 	border: none;
 	transition: 0.3;
 
+}
+
+/*
+* Common option menu
+*/
+#tb{
+	width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.1);
+    position: absolute;
+
+}
+
+.option_menu{
+	z-index: 1;
+	position: absolute;
+	margin-top: 10vh;
+	margin-left:30%;
+	width: 44vw;
+	display: flex;
+	flex-direction: column;
+	background: #282424;
+	clip-path: polygon( 0 0%, 0% 0, 95% 0, 106% 9%, 100% 91%, 100% 100%, 0% 100%, 0% 100%, 0% 1% );
+
+}
+
+
+.name_menu_section{
+	padding: 4px 0px 4px 35px;
+	background: black;
+
+}
+
+.name_menu_section span{
+	text-shadow: -1px 1px 0 #000,
+                          1px 1px 0 #000,
+                         1px -1px 0 #000,
+                        -1px -1px 0 #000;
+	font-size: 1.5em;
+	color:white;
+}
+
+.option_input_section{
+	display: flex;
+	flex-direction: column;
+	background:#282424;
+}
+
+.footer_menu{
+
+	display: flex;
+    justify-content: center;
+	border-top: 1px solid #3C3636;
+    padding: 11px;
+
+}
+
+.redirection_menu{
+	border: 2px solid white;
+    padding: 5px;
+    cursor: pointer;
+
+
+}
+
+.redirection_menu span{
+	color: white
+}
+
+.option_hr{
+	border-top: 1px solid #3C3636;
+    width: 100%;
+
+}
+
+/*
+* Video
+*/
+
+.opt_check_container input {
+	display: none;
+}
+  
+.opt_checkmark {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+	height: 25px;
+	width: 25px;
+	background-color: #eee;
+}
+  
+.opt_check_container:hover input ~ .opt_checkmark {
+	background-color: #ccc;
+}
+  
+.opt_check_container input:checked ~ .opt_checkmark {
+	background-color: orange;
+}
+  
+.opt_checkmark:after {
+	content: "";
+	display: none;
+}
+  
+.opt_check_container input:checked ~ .opt_checkmark:after {
+	display: block;
+}
+  
+.opt_check_container .opt_checkmark:after {
+	width: 5px;
+	height: 10px;
+	border: solid white;
+	border-width: 0 3px 3px 0;
+	transform: rotate(45deg);
+}
+
+/*
+* Audio
+*/
+
+.audio_input_field{
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	margin: 22px;
+}
+
+.option_input_name{
+	text-shadow: -1px 1px 0 #000,
+                          1px 1px 0 #000,
+                         1px -1px 0 #000,
+                        -1px -1px 0 #000;
+	width: 8vw;
+	font-size: 1.1em;
+	color: white;
+}
+
+.box_input_val{
+	display: flex;
+	margin-left: 2vw;
+    height: 24px;
+    width: 39px;
+    box-shadow: inset 0px 0px 2px black;
+    justify-content: center;
+    align-items: center;
+}
+
+.box_input_val span{
+	font-size: 1em;
+	color: white;
+	font-weight: 400;
+}
+
+.range{
+	-webkit-appearance: none;  /* Override default CSS styles */
+	appearance: none;
+	width: 400px;
+	height: 10px;
+	background: #111000;
+	outline:none;
+	border-radius: 15px;
+	overflow: hidden;
+}
+
+.range::-webkit-slider-thumb{
+	-webkit-appearance: none;
+	appearance: none;
+	width: 13px;
+	height: 20px;
+	border-radius: 50%;
+	background: orange;
+	cursor: pointer;
+	box-shadow: -407px 0 0 400px orange;
 }
 
 /*
