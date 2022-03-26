@@ -156,7 +156,7 @@ class GameManager {
     StageCompleted(){
 
         this.Globalkey.pause = true;
-        this.GetComponent("DisplaySystem").printStageCompleted(this.score);
+        this.GetComponent("DisplaySystem").printStageCompleted(this.score);//a regler le score arrive avant
 
     }
 

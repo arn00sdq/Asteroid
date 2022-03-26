@@ -48,8 +48,8 @@ class DisplaySystem{
                 <span id="remaining_asteroid"></span> 
             </div>
             <div id="score_section"> 
-                
-                <span id="sp_score">${score}</span> 
+                <span id="score_title">Score</span>
+                <span id="sp_score">00000</span> 
                 
             </div>
         </div>
@@ -66,16 +66,23 @@ class DisplaySystem{
 
     printScore(score,increment, points){
         
+        let length_score = score.toString().length;
+        let score_to_print = ``;
+        
+        for(let k =0; k <5 - length_score; k++) score_to_print += `0`
+
+        score_to_print += `${score}`
         let append_sp_points = `
             <span id="score_title">Score</span>
-            <span id="sp_score">000${score}</span> 
+            <span id="sp_score">${score_to_print}</span> 
         `
+        
         for(let i =0 ; i < increment; i++){
             let posW = Math.random() * 30;
             append_sp_points += `<span id="sp_points" style="right:${posW}px" class="active">+${points}</span>`
         }
-        
-        if(score !== undefined) document.getElementById("score_section").innerHTML = append_sp_points;
+         let score_section = document.getElementById("score_section").innerHTML
+        if (score_section !== null) score_section = append_sp_points;
         
 
     }
