@@ -49,6 +49,7 @@ class PlayerShootProjectiles{
     AddProjectile(nbCannon){ 
 
       this.nbCannon += nbCannon;
+      if(this.nbCannon > 4) this.nbCannon = 4;
       this.cannon = [];
 
       switch (this.nbCannon){

@@ -81,8 +81,7 @@ class DisplaySystem{
             let posW = Math.random() * 30;
             append_sp_points += `<span id="sp_points" style="right:${posW}px" class="active">+${points}</span>`
         }
-         let score_section = document.getElementById("score_section").innerHTML
-        if (score_section !== null) score_section = append_sp_points;
+         if (document.getElementById("score_section") !== null ) document.getElementById("score_section").innerHTML = append_sp_points;
         
 
     }
