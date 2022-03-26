@@ -39,11 +39,19 @@ class DisplaySystem{
 
         let ui_header = `
         <div id="header_ui">
-
-            <div> Vie :  <span id="life">${life}</span> </div>
-            <div> Restant : <span id="remaining_asteroid"></span> </div>
-            <div> Score : <span id="score">${score}</span> </div>
-
+            <div id="life_section">  
+                <span id="life_title">Vie</span> 
+                <span id="life">${life}</span>
+            </div>
+            <div id="ennemy_r_section">  
+                <span id="remaining_title">Restant</span> 
+                <span id="remaining_asteroid"></span> 
+            </div>
+            <div id="score_section"> 
+                
+                <span id="sp_score">${score}</span> 
+                
+            </div>
         </div>
 
         <div class="endurance_bar">
@@ -53,6 +61,36 @@ class DisplaySystem{
         `
 
         this.printAPP(ui_header)
+
+    }
+
+    printScore(score,increment, points){
+        
+        let append_sp_points = `
+            <span id="score_title">Score</span>
+            <span id="sp_score">000${score}</span> 
+        `
+        for(let i =0 ; i < increment; i++){
+            let posW = Math.random() * 30;
+            append_sp_points += `<span id="sp_points" style="right:${posW}px" class="active">+${points}</span>`
+        }
+        
+        if(score !== undefined) document.getElementById("score_section").innerHTML = append_sp_points;
+        
+
+    }
+
+    PrintLife(life) {
+
+        if(life !== undefined) document.getElementById("life").innerHTML = life;
+
+    }
+
+    PrintEnnemy(nbEnnemyFrame){
+
+        this.ennemy = nbEnnemyFrame;
+        if (document.getElementById("remaining_asteroid") !== null)
+            document.getElementById("remaining_asteroid").innerHTML = this.ennemy;
 
     }
 
@@ -298,25 +336,7 @@ class DisplaySystem{
 
     }
     
-    printScore(score){
-        
-        if(score !== undefined) document.getElementById("score").innerHTML = score;
 
-    }
-
-    PrintLife(life) {
-
-        if(life !== undefined) document.getElementById("life").innerHTML = life;
-
-    }
-
-    PrintEnnemy(nbEnnemyFrame){
-
-        this.ennemy = nbEnnemyFrame;
-        if (document.getElementById("remaining_asteroid") !== null)
-            document.getElementById("remaining_asteroid").innerHTML = this.ennemy;
-
-    }
 
 
     Update(){}

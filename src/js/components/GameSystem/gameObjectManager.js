@@ -137,6 +137,7 @@ class GameObjectManager{
         playerHealth.Damage(1);
         player.SetInvulnerability(2000);
 
+        this.parent.playerLife =player.life
         this.parent.GetComponent("DisplaySystem").PrintLife(player.life);
         
         if(player.life == 0){
@@ -176,7 +177,12 @@ class GameObjectManager{
         if (asteroid.nbBreak < 2){
 
           this.Asteroid_Subdivision(asteroid,object);
+          this.parent.score += 4;
+          this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 2,2);
 
+        }else{
+          this.parent.score += 5;
+          this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 1,10);
         } 
 
         asteroid.Destroy(asteroid);

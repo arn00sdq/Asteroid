@@ -55,7 +55,8 @@ class GameManager {
         */
         this.limit = 10;
         this.score = 0;
-        this.ennemy = null;
+        this.playerLife = 1;
+        this.ennemyRemaining = null;
         this.input = null;
 
         /*
