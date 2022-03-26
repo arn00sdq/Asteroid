@@ -36,6 +36,38 @@ canvas {
 }
 
 /*
+* Footer UI
+*/
+
+.endurance_bar{
+	display: flex;
+	position: absolute;
+	bottom: 10vh;
+	margin-left: 5vw;
+	width: 30vw;
+	border-radius: 5px;
+	box-shadow: inset 5px 5px 10px #2c2c2c,
+				inset -5px -5px 10px;
+}
+
+.endurance_bar .endurance_stat{
+	padding: 8px 0px;
+	border-radius: 5px;
+	text-shadow: 0 0 5px #000;
+}
+
+#endurance{
+	background: #3755cc;
+	width: 100%;
+	/*animation: htmlSlide 1.5s cubic-bezier(0.33,1,0.68,1) forwards;*/
+}
+
+@keyframes htmlSlide{
+	0%{width:0%;}
+	100%{width:100%;}
+}
+
+/*
 * Start msg
 */
 

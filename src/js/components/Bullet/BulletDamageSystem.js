@@ -18,7 +18,6 @@ class BulletDamageSystem{
 
     Update(timeElapsed){
 
-        //console.log(this.startTime)
         let bulletCurrentTime = timeElapsed *1000 - this.startTime;
         this.damageAmount = this.damage - Math.round(bulletCurrentTime) *2
 

@@ -45,6 +45,11 @@ class DisplaySystem{
             <div> Score : <span id="score">${score}</span> </div>
 
         </div>
+
+        <div class="endurance_bar">
+            <div class="endurance_stat" id="endurance">
+            </div>
+        </div>
         `
 
         this.printAPP(ui_header)

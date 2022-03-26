@@ -1,4 +1,4 @@
-class CharacterMouvement { // composant script
+class CharacterMouvement { 
 
   constructor(parent) {
 
@@ -6,7 +6,12 @@ class CharacterMouvement { // composant script
     this.decceleration = new THREE.Vector3(-0.0005, -0.0001, -0.3);
     this.acceleration = new THREE.Vector3(0.8, 0.2, 1.0);
     this.velocity = new THREE.Vector3(0, 0, 0);
-    this.speed = 0.0
+    this.speed = 0.0;
+
+    this.stamina = 100;
+    this.stamina_consumed = 40;//par seconde
+    this.stamina_regain = 10;
+    this.startTime = null;
 
   }
 
@@ -43,13 +48,19 @@ class CharacterMouvement { // composant script
 
     }
 
+    if (input.keys.shift) {
+
+      velocity.z += acc.z * TiS;
+
+    }
+
     if (input.keys.backward) {
 
       velocity.z -= acc.z * TiS;
 
     }
 
-    if (velocity.z > 3.5) velocity.z = 3
+    this.StaminaSystem(velocity,input,timeInSeconds);
 
     if (input.keys.left) {
 
@@ -84,6 +95,40 @@ class CharacterMouvement { // composant script
     pos.add(forward);
     pos.add(sideways);
     
+  }
+
+  StaminaSystem(velocity,input,timeInSeconds){
+
+    if(this.stamina < 100 && !input.keys.shift) this.StaminaIncreased();
+
+    if (velocity.z > 3.5 && !input.keys.shift){
+
+      velocity.z = 3;
+
+    }else if(input.keys.shift){
+
+      if( this.startTime == null ) this.startTime  = timeInSeconds * 1000;
+      this.StaminaConsumed(timeInSeconds);
+
+    }else if(!input.keys.shift) this.startTime = null
+
+  }
+
+  StaminaConsumed(timeInSeconds){
+
+    this.stamina -= this.stamina_consumed /60;
+    if(this.stamina < 0) this.stamina=  0;
+    
+    document.getElementById("endurance").style.width = this.stamina +"%";
+
+  }
+
+  StaminaIncreased(){
+
+    this.stamina += this.stamina_regain /60;
+    if(this.stamina > 100) this.stamina =  100;
+    document.getElementById("endurance").style.width = this.stamina +"%";
+
   }
 
 };

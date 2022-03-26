@@ -43,7 +43,7 @@ class Player extends GameObject{
         this.life = 1;
 
         this.comp_projectile = this.GetComponent("PlayerShootProjectiles");
-        this.comp_projectile.nbCannon = 0;
+        this.comp_projectile.nbCannon = 1;
         this.comp_projectile.indexMissile = 1;
         this.comp_projectile.cannon.splice(1);
 
