@@ -24,7 +24,6 @@ class LevelSystem{
 
         object_clone.Instantiate(object_clone,position, rotation, scale,velocity);
         object_clone.SetRigidBody(object_clone);
-        if(object.name == "Asteroid") console.log(object_clone,position)
         this.UpdateValue(object_clone, object);
         
 

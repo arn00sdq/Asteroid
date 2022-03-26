@@ -377,9 +377,9 @@ class Asteroid {
 
         if (event.code == 'Space') {
 
-            document.getElementById("start_game").style.display = "none";
+           // document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
-
+            this.gm.Globalkey.start = true ;
             this.gm.GetComponent("DisplaySystem").printUIHeader(1, 0);
             this.gm.GetComponent("LevelSystem").StartLevel(1, true);
 

@@ -15,6 +15,8 @@ class PlayerCameraSystem {
         this.dis = 0;
         this.offset = 0.3;
 
+        this.limit = null;
+
         this.parent.add(this.follow)
 
 
@@ -40,9 +42,8 @@ class PlayerCameraSystem {
 
         this.b.copy(this.goal.position);
 
-        if ((limitA) > 15) {
+        if ((limitA) > this.limit) {
 
-            console.log("ddd")
             this.goal.position.x = - this.parent.position.x;
             this.goal.position.z = - this.parent.position.z;
             this.a.copy(this.goal.position);

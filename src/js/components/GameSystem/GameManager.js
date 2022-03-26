@@ -70,7 +70,8 @@ class GameManager {
         */
 
         this.Globalkey = {
-      
+            
+            start: false,
             pause: false,
             keyboard: false,
             restart: false,
@@ -131,6 +132,8 @@ class GameManager {
 
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
         this.player.audio_syst = this.GetComponent("SoundSystem");
+        this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
+
         this.input = this.player.GetComponent("CharacterControllerInput").keys;
 
         this.ennemy_ss.weaponParams = this.ennemyBullet;
@@ -199,7 +202,6 @@ class GameManager {
         
                 }else{
            
-                    document.querySelector('canvas').style.opacity = 1;
                     this.Globalkey.pause = false;
                     this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
         
