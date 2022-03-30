@@ -30,7 +30,7 @@ class PlayerShootProjectiles{
         bulletClone.index = this.indexMissile;
         
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
-        this.temp.y = -0.2;
+        this.temp.y = -0;
         this.spawnRot =  this.parent.rotation;
 
         bulletClone.SetRigidBody(bulletClone);

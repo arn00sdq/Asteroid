@@ -95,7 +95,7 @@ class LevelSystem{
 
         }else{
 
-            this.parent.Globalkey.pause = false;
+            this.parent.state.pause = false;
 
         }
 

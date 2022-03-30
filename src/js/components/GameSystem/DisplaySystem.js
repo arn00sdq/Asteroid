@@ -295,8 +295,8 @@ class DisplaySystem{
                         <span class="option_input_name">Effect</span>
                         <div>
                             <label class="opt_check_container">
-                                <input type="checkbox">
-                                <div class="opt_checkmark"></div>
+                                <input type="checkbox"${this.parent.state.postProcess == true ? "checked" : ""}>
+                                <div id="sp_post_process" class="opt_checkmark"></div>
                             </label>                     
                         </div>
                     </div>

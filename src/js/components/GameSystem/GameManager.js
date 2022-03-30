@@ -4,17 +4,19 @@ import LevelSystem from "./LevelSystem.js";
 import GameObjectManager from "./gameObjectManager.js";
 import HackSystem from "./HackSystem.js";
 import SoundSystem from "./SoundSystem.js";
+import MenuSystem from "./MenuSystem.js";
 
 
 class GameManager {
 
-    constructor(models, utils, animation,audio, particule){
+    constructor(models, utils, animation, audio, particule) {
 
         this.components = {};
 
         /*
         * Utils
         */
+        this.composer = utils.composer;
         this.renderer = utils.renderer;
         this.scene = utils.scene;
         this.camera = utils.camera;
@@ -24,7 +26,7 @@ class GameManager {
         * Models
         */
         this.player = models.player;
-        this.asteroid = models.asteroid; 
+        this.asteroid = models.asteroid;
         this.heart = models.heart;
         this.coin = models.coin;
         this.arrow = models.arrow;
@@ -70,42 +72,36 @@ class GameManager {
         * Global Key
         */
 
-        this.Globalkey = {
-            
+        this.state = {
+
             start: false,
             pause: false,
             keyboard: false,
-            restart: false,
-            next: false,
-            video: false,
-            audio: false,
-            quit: false,
-      
-          };
+            postProcess:false,
+        };
 
         document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
-        document.addEventListener('click', (e) => this.OnClick(e), false);
-        document.addEventListener("change", (e) => this.OnChange(e), false);
 
-        this.InitComponent(models,audio);
+        this.InitComponent(models, audio);
 
     }
 
-    InitComponent(models,audio){
+    InitComponent(models, audio) {
 
-        
+
         this.AddComponent(new LevelSystem(this));
-        this.AddComponent(new SoundSystem(this,this.audio));
-        this.AddComponent(new JokerSystem(this,models));
+        this.AddComponent(new SoundSystem(this, this.audio));
+        this.AddComponent(new JokerSystem(this, models));
         this.AddComponent(new DisplaySystem(this));
         this.AddComponent(new HackSystem(this));
         this.AddComponent(new GameObjectManager(this));
-        
+        this.AddComponent(new MenuSystem(this));
+
     }
 
     AddComponent(c) {
 
-        this.components[c.constructor.name] = c;   
+        this.components[c.constructor.name] = c;
 
     }
 
@@ -115,21 +111,21 @@ class GameManager {
 
     }
 
-    ModelInitialisation(){
+    ModelInitialisation() {
 
-        this.asteroid.InitMesh(new THREE.Vector3(1,1,1));
-        this.player.InitMesh(new THREE.Vector3(1,1,1));
-        this.ennemy_ss.InitMesh(new THREE.Vector3(1,1,1));
-        this.heart.InitMesh(new THREE.Vector3(1,1,1));
-        this.coin.InitMesh(new THREE.Vector3(1,1,1));
-        this.arrow.InitMesh(new THREE.Vector3(1,1,1));
-        this.shield.InitMesh(new THREE.Vector3(1,1,1));
-        this.basicBullet.InitMesh(new THREE.Vector3(1,1,1));
-        this.ennemyBullet.InitMesh(new THREE.Vector3(1,1,1));
+        this.asteroid.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.player.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.ennemy_ss.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.heart.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.coin.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.arrow.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.shield.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.basicBullet.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.ennemyBullet.InitMesh(new THREE.Vector3(1, 1, 1));
 
     }
 
-    ValueInitialisation(){
+    ValueInitialisation() {
 
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
         this.player.audio_syst = this.GetComponent("SoundSystem");
@@ -148,21 +144,21 @@ class GameManager {
 
     OnPlayerEnd() {
 
-        this.Globalkey.pause = true;
+        this.state.pause = true;
         this.GetComponent("DisplaySystem").printDeath(this.score);
 
     }
 
-    StageCompleted(){
+    StageCompleted() {
 
-        this.Globalkey.pause = true;
+        this.state.pause = true;
         this.GetComponent("DisplaySystem").printStageCompleted(this.score);//a regler le score arrive avant
 
     }
 
-    ResetLevel(){
+    ResetLevel() {
 
-        this.Globalkey.pause = true;
+        this.state.pause = true;
         this.timeElapsed = 0;
         this.score = 0;
 
@@ -170,22 +166,22 @@ class GameManager {
 
         this.RemoveProps();
 
-        this.GetComponent("DisplaySystem").printUIHeader(1,0);
+        this.GetComponent("DisplaySystem").printUIHeader(1, 0);
 
     }
 
-    RemoveProps(){
+    RemoveProps() {
 
         var to_remove = [];
 
-        this.scene.traverse ( function( child ) {
-            if ( ( child.type == "Object3D")  && !child.userData.keepMe === true ) {
-                to_remove.push( child );
+        this.scene.traverse(function (child) {
+            if ((child.type == "Object3D") && !child.userData.keepMe === true) {
+                to_remove.push(child);
             }
-        } );
+        });
 
-        for ( var i = 0; i < to_remove.length; i++ ) {
-            this.scene.remove( to_remove[i] );
+        for (var i = 0; i < to_remove.length; i++) {
+            this.scene.remove(to_remove[i]);
         }
 
     }
@@ -193,132 +189,84 @@ class GameManager {
     OnKeyDown(event) {
 
         switch (event.keyCode) {
-    
-            case 27:
-    
-                if(!this.Globalkey.pause){
 
-                    this.Globalkey.pause = true;
+            case 27:
+
+                if (!this.state.pause) {
+
+                    this.state.pause = true;
                     this.GetComponent("DisplaySystem").printPause();
-        
-                }else{
-           
-                    this.Globalkey.pause = false;
-                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
-        
+
+                } else {
+
+                    this.state.pause = false;
+                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life, this.score);
+
                 }
-                
+
                 break;
             case 72:
-                if(!this.Globalkey.keyboard){
-        
-                    this.Globalkey.keyboard = true;
-                    this.Globalkey.pause = true;
+                if (!this.state.keyboard) {
+
+                    this.state.keyboard = true;
+                    this.state.pause = true;
                     this.GetComponent("DisplaySystem").printKeyboardShortcut();
-            
-                    }else{
-            
-                    this.Globalkey.keyboard = false;
-                    this.Globalkey.pause = false;
-                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score);
-            
+
+                } else {
+
+                    this.state.keyboard = false;
+                    this.state.pause = false;
+                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life, this.score);
+
                 }
-                    
-                break;
-            
-        }
 
-    }
-
-    OnClick(event){
-
-        switch(event.target.id){
-
-            case "retour":
-                 this.GetComponent("DisplaySystem").printPause();
-                break;
-            case "resume":
-                this.Globalkey.pause = false;
-                this.GetComponent("DisplaySystem").printUIHeader(this.player.life,this.score); 
-                break;
-            case "restart":
-                this.ResetLevel();
-                this.GetComponent("LevelSystem").StartLevel(this.GetComponent("LevelSystem").currentLevel, false);
-                break;
-            case "next":
-                this.ResetLevel();
-                let currentLevel = this.GetComponent("LevelSystem").currentLevel + 1;
-                this.GetComponent("LevelSystem").StartLevel(currentLevel, false);
-                break;
-            case "audio":
-                this.GetComponent("DisplaySystem").printAudioUIMenu();
-                break;
-            case "video":
-                this.GetComponent("DisplaySystem").printVideoUIMenu();
-                break;
-            case "quit":
-                document.location.href = "index.html";
-                break;
-            default:
                 break;
 
         }
 
     }
 
-    OnChange(event){
-
-        let sound_sys = this.GetComponent("SoundSystem");
-        
-        switch(event.target.id){
-
-            case "range_master_volume":  
-                sound_sys.masterVolume = event.target.value /100;     
-                document.getElementById("sp_master_volume").innerHTML = sound_sys.masterVolume;
-                break;
-            case "range_sfx_volume":  
-                sound_sys.sfxVolume = event.target.value /100;     
-                document.getElementById("sp_sfx_volume").innerHTML = sound_sys.sfxVolume;
-                break;
-            case "range_music_volume":  
-                sound_sys.musicVolume = event.target.value /100;     
-                document.getElementById("sp_music_volume").innerHTML = sound_sys.musicVolume;
-                break;
-            default:
-                break;
-
-        }
-
-    }
 
     RAF() {
+        requestAnimationFrame(this.RAF.bind(this));
+        if (!this.state.pause) {
 
-            if(!this.Globalkey.pause){
+            this.loop.now = window.performance.now();
+            this.loop.dt = this.loop.dt + Math.min(1, (this.loop.now - this.loop.last) / 1000);
 
-                this.loop.now = window.performance.now();
-                this.loop.dt = this.loop.dt + Math.min(1, (this.loop.now - this.loop.last) / 1000);
+            while (this.loop.dt > this.loop.slowStep) this.loop.dt = this.loop.dt - this.loop.slowStep;
 
-                while(this.loop.dt > this.loop.slowStep) this.loop.dt = this.loop.dt - this.loop.slowStep;
+            this.prevTime = Date.now() - this.loop.slowStep;
+            this.timeElapsed += Date.now() - this.prevTime;
+            this.tempTime = this.timeElapsed;
+            if(this.state.postProcess){
 
-                this.prevTime = Date.now() - this.loop.slowStep;
-                this.timeElapsed += Date.now() - this.prevTime;
-                this.tempTime = this.timeElapsed;
-                this.renderer.render(this.scene, this.camera);
-                this.loop.last = this.loop.now;
-                this.Step(this.tempTime);
+                //this.composer.render(this.tempTime);
+                console.log("post")
 
             }else{
-                
-                
-                this.prevTime = null;
+
+                this.renderer.render(this.scene, this.camera);
+                console.log("normal")
 
             }
-    
-            requestAnimationFrame(this.RAF.bind(this));
 
-      }
-    
-    Step(timeElapsed) {  
+            
+            this.loop.last = this.loop.now;
+            this.Step(this.tempTime);
+
+        } else {
+
+            this.prevTime = null;
+
+        }
+
+
+
+    }
+
+
+    Step(timeElapsed) {
 
         for (let k in this.components) {
 
@@ -329,13 +277,13 @@ class GameManager {
         if (this.player.GetComponent("CharacterControllerInput").keys.screenshot) {
             this.player.GetComponent("CharacterControllerInput").keys.screenshot = false;
 
-            html2canvas(document.querySelector("canvas")).then(function (canvas){
+            html2canvas(document.querySelector("canvas")).then(function (canvas) {
 
                 var win = window.open();
-                win.document.write('<iframe src="' + canvas.toDataURL("png")  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen> </iframe>');
-            
+                win.document.write('<iframe src="' + canvas.toDataURL("png") + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen> </iframe>');
+
             })
-              
+
         }
 
     }

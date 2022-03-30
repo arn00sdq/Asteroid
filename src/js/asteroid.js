@@ -5,6 +5,12 @@ import GameManager from "./components/GameSystem/GameManager.js";
 
 import { OBJLoader } from "./Loader/OBJLoader.js"
 import { Object3D, TextureLoader } from "./three/three.module.js";
+
+import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/RenderPass.js";
+import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/ShaderPass.js";
+import { PixelShader  } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/shaders/PixelShader.js";
+
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
 import Arrow from "./components/Joker/Arrow.js";
@@ -260,11 +266,21 @@ class Asteroid {
         let w = container.clientWidth;
         let h = container.clientHeight;
 
+        /* renderer */
         this.renderer = new THREE.WebGLRenderer({  antialias: true, preserveDrawingBuffer: true });
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.setClearColor( 0xffffff, 0 );
         this.renderer.setSize(w, h);
         container.appendChild(this.renderer.domElement);
+
+        /* post process */
+        this.composer = new EffectComposer( this.renderer );
+		this.composer.addPass( new RenderPass( this.scene, this.camera ) );
+
+		var pixelPass = new ShaderPass( PixelShader );
+		pixelPass.uniforms[ 'resolution' ].value = new THREE.Vector2( window.innerWidth, window.innerHeight );
+		pixelPass.uniforms[ 'resolution' ].value.multiplyScalar( window.devicePixelRatio );
+		this.composer.addPass( pixelPass );
 
         var gridHelper = new THREE.GridHelper(40, 40);
         this.scene.add(gridHelper);
@@ -327,6 +343,7 @@ class Asteroid {
 
         const utils = {
 
+            composer: this.composer,
             renderer: this.renderer,
             scene: this.scene,
             camera: this.camera,
@@ -365,8 +382,6 @@ class Asteroid {
 
         this.remove = null;
 
-        this.renderer.render(this.scene, this.camera);
-
         document.addEventListener('keydown', this.remove = this.OnPlayerBegin.bind(this))
         document.addEventListener('mousewheel', this.OnMouseWheel.bind(this), false);
 
@@ -379,7 +394,7 @@ class Asteroid {
 
            // document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
-            this.gm.Globalkey.start = true ;
+            this.gm.state.start = true ;
             this.gm.GetComponent("DisplaySystem").printUIHeader(1, 0);
             this.gm.GetComponent("LevelSystem").StartLevel(1, true);
 
@@ -401,6 +416,7 @@ class Asteroid {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
+        this.composer.setSize( window.innerWidth, window.innerHeight );
 
     }
 
