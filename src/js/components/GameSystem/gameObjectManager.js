@@ -115,7 +115,7 @@ class GameObjectManager{
 
     DetectEdge(object){  
       
-      if(object.position.distanceTo(new THREE.Vector3(0,0,0) ) > this.edge_limit){
+      if( (object.position.distanceTo(new THREE.Vector3(0,0,0) ) > this.edge_limit) && object.userData.type !=="BackGround"){
 
         object.position.x = - object.position.x
         object.position.y =   object.position.y

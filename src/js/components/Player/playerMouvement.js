@@ -4,9 +4,10 @@ class CharacterMouvement {
 
     this.parent = parent;
     this.decceleration = new THREE.Vector3(-0.0005, -0.0001, -0.3);
-    this.acceleration = new THREE.Vector3(0.08, 0.02, 0.3);
+    this.acceleration = new THREE.Vector3(0.08, 0.02, 0.2);
     this.velocity = new THREE.Vector3(0, 0, 0);
     this.speed = 0.0;
+    this.temp = new THREE.Vector3();
 
     this.stamina = 100;
     this.stamina_consumed = 40;//par seconde
@@ -56,6 +57,14 @@ class CharacterMouvement {
       velocity.z += acc.z * TiS;
 
     }
+    this.temp = velocity;
+
+    if (velocity.z > 0.035 && !input.keys.shift){
+
+      this.temp = new THREE.Vector3(velocity.x,velocity.y,0.03);
+      this.velocity.lerp(this.temp,1);
+
+    }
 
     if (input.keys.backward) {
 
@@ -76,8 +85,7 @@ class CharacterMouvement {
 
     }
 
-    console.log(velocity.z)
-    controlObject.position.add( this.direction.multiplyScalar(velocity.z) );
+    controlObject.position.add( this.direction.multiplyScalar(this.temp.z) );
     this.direction = this.direction_copy.clone();
 
     
@@ -87,11 +95,7 @@ class CharacterMouvement {
 
     if(this.stamina < 100 && !input.keys.shift) this.StaminaIncreased();
 
-    if (velocity.z > 0.035 && !input.keys.shift){
-
-      velocity.z = 0.03;
-
-    }else if(input.keys.shift){
+    if(input.keys.shift){
 
       if( this.startTime == null ) this.startTime  = timeInSeconds * 1000;
       this.StaminaConsumed(timeInSeconds);

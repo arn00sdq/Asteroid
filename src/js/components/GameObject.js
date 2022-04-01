@@ -143,6 +143,16 @@ class GameObject extends THREE.Object3D{
     }
 
     /**
+    *- Enleve le composant du modele 
+    * @param {THREE.Object3D}  c 
+    */
+    RemoveComponent(c) {
+
+        delete this.components[c];  
+
+    }
+
+    /**
     * Retourne le composant
     * @param {THREE.Object3D}  c 
     */

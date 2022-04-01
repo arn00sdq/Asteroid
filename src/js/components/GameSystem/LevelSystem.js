@@ -16,19 +16,18 @@ class LevelSystem{
 
     }
 
-    InstantiateGameObject(object,position, rotation, scale, velocity){
+    InstantiateGameObject(object,position, rotation, scale, velocity, opt){
 
         let object_clone = object.clone();
 
         this.SetCloneValue(object_clone, object);
-
+        if(opt =="BackGround" ){
+            object_clone.userData.type = "BackGround";
+        }
         object_clone.Instantiate(object_clone,position, rotation, scale,velocity);
         object_clone.SetRigidBody(object_clone);
         this.UpdateValue(object_clone, object);
         
-
-        
-
     }
 
     InstantiateParticule(particule,position){
@@ -72,6 +71,7 @@ class LevelSystem{
 
     StartLevel(level,init){
         
+        this.loadBackGround(this.parent.asteroid);
         switch (level){
 
             case 1:
@@ -96,6 +96,22 @@ class LevelSystem{
         }else{
 
             this.parent.state.pause = false;
+
+        }
+
+    }
+
+    loadBackGround(asteroid){
+
+        for (let index = 0; index < 20; index++) {
+
+            let position = new THREE.Vector3(  ( Math.random() * this.edgeLimit )  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+                                                  -5 ,
+                                                ( Math.random() * this.edgeLimit ) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                            )                       
+            let rotation = new THREE.Euler( 0,0,0);
+            let scale = (Math.random() * (0.03 -0.015)) + 0.015;
+            this.InstantiateGameObject(asteroid, position, rotation, scale,null, "BackGround")
 
         }
 

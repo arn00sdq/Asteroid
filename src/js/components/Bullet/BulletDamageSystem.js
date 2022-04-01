@@ -21,7 +21,12 @@ class BulletDamageSystem{
         let bulletCurrentTime = timeElapsed *1000 - this.startTime;
         this.damageAmount = this.damage - Math.round(bulletCurrentTime) *2
 
-        if(this.damageAmount <= 0)  this.damageAmount = 0 /*this.parent.Destroy(this.parent)*/
+        if(this.damageAmount <= 0){
+
+            this.damageAmount = 0;
+            this.parent.Destroy(this.parent); 
+
+        }  
 
     }
 

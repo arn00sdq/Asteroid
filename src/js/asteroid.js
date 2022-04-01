@@ -9,7 +9,7 @@ import { Object3D, TextureLoader } from "./three/three.module.js";
 import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/ShaderPass.js";
-import { PixelShader  } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/shaders/PixelShader.js";
+import { PixelShader } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/shaders/PixelShader.js";
 
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
@@ -135,9 +135,9 @@ class Asteroid {
         /* 
         *   Item +1 Bullet
         */
-        const geometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
-        const materialz = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-        const ArrowMesh = new THREE.Mesh( geometry, materialz );
+        const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+        const materialz = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const ArrowMesh = new THREE.Mesh(geometry, materialz);
         ArrowMesh.name = "ArrowItem";
 
         /* 
@@ -147,6 +147,20 @@ class Asteroid {
         const materialShield = new THREE.MeshStandardMaterial({ color: 0xffdd00, emissive: 0xecc70e, transparent: true, opacity: 0.5, alphaTest: 0.1 });
         const shieldMesh = new THREE.Mesh(geometryShield, materialShield);
         shieldMesh.name = "ShieldItem";
+
+        /*
+        * planet 
+        */
+        const earthMaterial = new THREE.MeshPhongMaterial({
+            map: textureLoader.load("../medias/images/earth/earth.jpg"),
+            normalMap: textureLoader.load("../medias/images/earth/earth_normal_map.jpg"),
+            specularMap: textureLoader.load("../medias/images/earth/earth_specular_map.tif")
+        });
+        const earthGeometry = new THREE.SphereBufferGeometry(20, 50, 50);
+        this.earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+        this.earthMesh.position.set(0,-20,60)
+
+        this.scene.add(this.earthMesh);
 
         /* 
         * ModelManager
@@ -260,39 +274,6 @@ class Asteroid {
 
     }
 
-    LoadScene() {
-
-        let container = document.querySelector('#siapp');
-        let w = container.clientWidth;
-        let h = container.clientHeight;
-
-        /* renderer */
-        this.renderer = new THREE.WebGLRenderer({  antialias: true, preserveDrawingBuffer: true });
-        this.renderer.setPixelRatio(window.devicePixelRatio)
-        this.renderer.setClearColor( 0xffffff, 0 );
-        this.renderer.setSize(w, h);
-        container.appendChild(this.renderer.domElement);
-
-        /* post process */
-        this.composer = new EffectComposer( this.renderer );
-		this.composer.addPass( new RenderPass( this.scene, this.camera ) );
-
-		var pixelPass = new ShaderPass( PixelShader );
-		pixelPass.uniforms[ 'resolution' ].value = new THREE.Vector2( window.innerWidth, window.innerHeight );
-		pixelPass.uniforms[ 'resolution' ].value.multiplyScalar( window.devicePixelRatio );
-		this.composer.addPass( pixelPass );
-
-        var gridHelper = new THREE.GridHelper(40, 40);
-        this.scene.add(gridHelper);
-
-        this.scene.add(new THREE.AxesHelper());
-        let light = new THREE.DirectionalLight(0xffffff, 1);
-        light.position.set(0, 10, 0);
-
-        this.scene.add(light);
-
-    }
-
     LoadProps() {
 
         let playerModel; let rockModel; let heartModel; let coinModel; let ennemy_ssModel;
@@ -358,7 +339,7 @@ class Asteroid {
 
         const particule = {
 
-           particuleExplosion : new Explosion(this.scene,this.camera),
+            particuleExplosion: new Explosion(this.scene, this.camera),
 
         }
 
@@ -387,14 +368,47 @@ class Asteroid {
 
     }
 
+    LoadScene() {
+
+        let container = document.querySelector('#siapp');
+        let w = container.clientWidth;
+        let h = container.clientHeight;
+
+        /* renderer */
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+        this.renderer.setPixelRatio(window.devicePixelRatio)
+        this.renderer.setClearColor(0xffffff, 0);
+        this.renderer.setSize(w, h);
+        container.appendChild(this.renderer.domElement);
+
+        /* post process */
+        this.composer = new EffectComposer(this.renderer);
+        this.composer.addPass(new RenderPass(this.scene, this.camera));
+
+        var pixelPass = new ShaderPass(PixelShader);
+        pixelPass.uniforms['resolution'].value = new THREE.Vector2(window.innerWidth, window.innerHeight);
+        pixelPass.uniforms['resolution'].value.multiplyScalar(window.devicePixelRatio);
+        this.composer.addPass(pixelPass);
+
+        var gridHelper = new THREE.GridHelper(40, 40);
+        this.scene.add(gridHelper);
+
+        this.scene.add(new THREE.AxesHelper());
+        const light = new THREE.AmbientLight(0xffffff, 1)
+        light.position.set(0, 10, 0)
+
+        this.scene.add(light);
+
+    }
+
     OnPlayerBegin(event) { // nom a changer
 
 
         if (event.code == 'Space') {
 
-           // document.getElementById("start_game").style.display = "none";
+            // document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
-            this.gm.state.start = true ;
+            this.gm.state.start = true;
             this.gm.GetComponent("DisplaySystem").printUIHeader(1, 0);
             this.gm.GetComponent("LevelSystem").StartLevel(1, true);
 
@@ -416,7 +430,7 @@ class Asteroid {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.composer.setSize( window.innerWidth, window.innerHeight );
+        this.composer.setSize(window.innerWidth, window.innerHeight);
 
     }
 

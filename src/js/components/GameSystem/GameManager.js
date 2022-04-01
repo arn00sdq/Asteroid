@@ -242,12 +242,10 @@ class GameManager {
             if(this.state.postProcess){
 
                 //this.composer.render(this.tempTime);
-                console.log("post")
 
             }else{
 
                 this.renderer.render(this.scene, this.camera);
-                console.log("normal")
 
             }
 
