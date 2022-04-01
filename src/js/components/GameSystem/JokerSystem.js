@@ -10,7 +10,7 @@ class JokerSystem{
         
         this.nextJoker = null;
 
-        this.joker = [models.heart, models.arrow, models.coin,models.shield];
+        this.joker = [models.heart, models.firepower, models.coin,models.shield];
         this.jokerAv = []
         this.jokerUnv = []
 
@@ -90,9 +90,6 @@ class JokerSystem{
                 let currentJoker = this.jokerAv[random];
                 switch(currentJoker.constructor.name){ 
                     
-                    case "Arrow":
-                        scale = 1;
-                        break;
                     case "Coin":
                         scale = 0.08;
                         break;

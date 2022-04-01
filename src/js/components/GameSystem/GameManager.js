@@ -29,7 +29,7 @@ class GameManager {
         this.asteroid = models.asteroid;
         this.heart = models.heart;
         this.coin = models.coin;
-        this.arrow = models.arrow;
+        this.firepower = models.firepower;
         this.shield = models.shield;
         this.basicBullet = models.basicBullet;
         this.ennemyBullet = models.ennemyBullet;
@@ -118,7 +118,7 @@ class GameManager {
         this.ennemy_ss.InitMesh(new THREE.Vector3(1, 1, 1));
         this.heart.InitMesh(new THREE.Vector3(1, 1, 1));
         this.coin.InitMesh(new THREE.Vector3(1, 1, 1));
-        this.arrow.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.firepower.InitMesh(new THREE.Vector3(1, 1, 1));
         this.shield.InitMesh(new THREE.Vector3(1, 1, 1));
         this.basicBullet.InitMesh(new THREE.Vector3(1, 1, 1));
         this.ennemyBullet.InitMesh(new THREE.Vector3(1, 1, 1));

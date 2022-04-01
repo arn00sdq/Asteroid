@@ -61,7 +61,7 @@ class GameObjectManager{
           this.CollisionJokerHandler(e, e2);
           break;
 
-        case "Arrow":
+        case "FirePower":
           this.CollisionJokerHandler(e, e2);
           break;
 
@@ -97,7 +97,7 @@ class GameObjectManager{
             this.CollisionJokerHandler(e2, e);
             break;
 
-        case "Arrow":
+        case "FirePower":
             this.CollisionJokerHandler(e2, e);
             break;
         case "Shield":
@@ -153,7 +153,7 @@ class GameObjectManager{
 
     CollisionAsteroidHandler(asteroid, object){
 
-      if(object.name == "Heart" || object.name == "Shield"|| object.name ==  "Coin"|| object.name == "Arrow" ||  object.name ==  "Asteroid" ) return;
+      if(object.name == "Heart" || object.name == "Shield"|| object.name ==  "Coin"|| object.name == "FirePower" ||  object.name ==  "Asteroid" ) return;
 
       let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
 
@@ -267,8 +267,8 @@ class GameObjectManager{
             this.joker_sys.PlayerAddLife(object, 1);
             this.sound_sys.PlayHeartPickUp();
             break;
-          case "Arrow":
-            this.parent.arrow.nb -= 1
+          case "FirePower":
+            this.parent.firepower.nb -= 1
             this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
             break;
           case "Shield":

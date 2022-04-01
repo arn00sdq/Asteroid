@@ -13,7 +13,7 @@ import { PixelShader } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples
 
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
-import Arrow from "./components/Joker/Arrow.js";
+import FirePower from "./components/Joker/FirePower.js";
 import Shield from "./components/Joker/Shield.js";
 import EnnemySpaceship from "./components/EnnemySpaceship/EnnemySpaceship.js";
 import Explosion from "./components/Explosion/Explosion.js";
@@ -41,7 +41,7 @@ class Asteroid {
         const fps = 60;
         const slow = 1;
         this.loop.dt = 0,
-            this.loop.now = window.performance.now();
+        this.loop.now = window.performance.now();
         this.loop.last = this.loop.now;
         this.loop.fps = fps;
         this.loop.step = 1 / this.loop.fps;
@@ -104,14 +104,9 @@ class Asteroid {
             emissiveMap: envPlayer,
         });
 
-        var map = textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg');
-        var material = new THREE.MeshPhongMaterial({ map: map })
-
-        var mapCoin = textureLoader.load('../medias/models/collectable/coin/textures/Coin_Gold_albedo.png');
-        var materialCoin = new THREE.MeshPhongMaterial({ map: mapCoin });
-
-        var mapEnnemySS = textureLoader.load('../medias/models/Ennemy/textures/E-45 _col.jpg');
-        var materialEnnemySS = new THREE.MeshPhongMaterial({ map: mapEnnemySS });
+        var material = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg') })
+        var materialCoin = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/collectable/coin/textures/Coin_Gold_albedo.png') });
+        var materialEnnemySS = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/Ennemy/textures/E-45 _col.jpg') });
         /* 
         *   Balle Joueur
         */
@@ -135,10 +130,10 @@ class Asteroid {
         /* 
         *   Item +1 Bullet
         */
-        const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-        const materialz = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-        const ArrowMesh = new THREE.Mesh(geometry, materialz);
-        ArrowMesh.name = "ArrowItem";
+        const firePowerGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+        const firePowerMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load("../medias/images/power-up/firepower.PNG") ,color: 0xff0000 });
+        const firePower = new THREE.Mesh(firePowerGeometry, firePowerMaterial);
+        firePower.name = "firePowerItem";
 
         /* 
         *   Shield
@@ -166,7 +161,7 @@ class Asteroid {
         * ModelManager
         */
         this.modelManager.push(cylinderMesh);
-        this.modelManager.push(ArrowMesh);
+        this.modelManager.push(firePower);
         this.modelManager.push(bulletPlayer);
         this.modelManager.push(shieldMesh);
         loaderObj.load('../medias/models/low_poly.obj', (object) => {
@@ -280,7 +275,7 @@ class Asteroid {
 
         let bulletEnnemy = new Object3D();
         let bulletPlayer = new Object3D();
-        let arrowModel = new Object3D();
+        let firePowerModel = new Object3D();
         let shieldModel = new Object3D();
         this.modelManager.forEach((e) => {
 
@@ -298,7 +293,7 @@ class Asteroid {
 
             if (e.name == "CoinItem") coinModel = e;
 
-            if (e.name == "ArrowItem") arrowModel.add(e);
+            if (e.name == "firePowerItem") firePowerModel.add(e);
 
             if (e.name == "EnnemySpaceship") ennemy_ssModel = e
 
@@ -349,7 +344,7 @@ class Asteroid {
             ennemy_ss: new EnnemySpaceship(this.scene, ennemy_ssModel),
             asteroid: new BasicAsteroid(this.scene, rockModel, 0),
             coin: new Coin(this.scene, coinModel, 0),
-            arrow: new Arrow(this.scene, arrowModel, 0),
+            firepower: new FirePower(this.scene, firePowerModel, 0),
             shield: new Shield(this.scene, shieldModel, 0),
             heart: new Heart(this.scene, heartModel, 0),
             basicBullet: new BasicBullet(this.scene, bulletPlayer, audio),
@@ -440,7 +435,6 @@ class Asteroid {
         this.LoadProps();
 
     }
-
 
 }
 

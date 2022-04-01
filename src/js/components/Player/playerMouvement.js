@@ -76,12 +76,12 @@ class CharacterMouvement {
 
     if (input.keys.left) {
 
-      controlObject.rotateY((Math.PI/180) * 5);
+      controlObject.rotateY((Math.PI/180) * 3);
 
     }
     if (input.keys.right) {
 
-      controlObject.rotateY( - (Math.PI/180) * 5);
+      controlObject.rotateY( - (Math.PI/180) * 3);
 
     }
 

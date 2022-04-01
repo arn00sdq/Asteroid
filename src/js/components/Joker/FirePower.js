@@ -1,14 +1,14 @@
 import GameObject from "../GameObject.js";
 import JokerMovement from "./JokerMovement.js";
 
-class Arrow extends GameObject{
+class FirePower extends GameObject{
 
     constructor(scene, model,nb){
 
         super(scene, model);
 
         this.components = {}
-        this.name = "Arrow";
+        this.name = "FirePower";
 
         this.limit = 1;
         this.nb = nb;    
@@ -41,4 +41,4 @@ class Arrow extends GameObject{
 
 }
 
-export default Arrow
+export default FirePower
