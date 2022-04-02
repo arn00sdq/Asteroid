@@ -8,18 +8,24 @@ import PlayerCameraSystem from './PlayerCameraSystem.js';
 
 class Player extends GameObject{ 
 
-    constructor(params, model, audio) {
+    constructor(model, audio, params) {
 
-        super(params.scene,model,audio);
+        super(model,audio);
 
         this.components = {};
         this.name = "Player";
-        
         this.params = params;
         
-        this.immune = false;
+        this.hasJoker = {
+
+            immune: false,
+            fireRate: false,
+
+        };
+        
 
         this.audio_syst = null;
+        this.stageSystem = null;
 
         this.life = 1;
 

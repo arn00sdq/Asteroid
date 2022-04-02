@@ -4,6 +4,7 @@ class GameObjectManager{
       
       this.parent = parent;
       this.edge_limit = parent.limit;
+      this.edge_limit_background = parent.limit_background
 
       this.level_sys_comp = this.parent.GetComponent("LevelSystem");
       this.sound_sys = this.parent.GetComponent("SoundSystem");
@@ -13,11 +14,11 @@ class GameObjectManager{
 
     Detect_collision() {
 
-      this.parent.scene.children.forEach( e =>  { 
+      this.parent.currentScene.children.forEach( e =>  { 
         
         if( (e.userData.box3 !== null) && (e.children[0])){
 
-          this.parent.scene.children.forEach(e2 => {
+          this.parent.currentScene.children.forEach(e2 => {
 
           if((e !== e2) &&  (e2.userData.box3 && e.userData.box3) && e2.children[0] && e.children[0]){
 
@@ -34,7 +35,6 @@ class GameObjectManager{
     }
 
     collision_handler(e,e2){
-
 
       switch(e.constructor.name){
 
@@ -65,6 +65,10 @@ class GameObjectManager{
           this.CollisionJokerHandler(e, e2);
           break;
 
+        case "FireRate":
+            this.CollisionJokerHandler(e, e2);
+          break;
+
         case "Shield":
           this.CollisionJokerHandler(e, e2);
             break;
@@ -74,7 +78,7 @@ class GameObjectManager{
 
       }
 
-      switch(e2.constructor.name){
+      /*switch(e2.constructor.name){
 
         case "BasicAsteroid":
           this.CollisionAsteroidHandler(e2, e);
@@ -109,25 +113,43 @@ class GameObjectManager{
         case "EnnemyBullet":
           this.CollisionEnnemyBulletHandler(e2, e);
             break;
-      }
+      }*/
 
     }
 
     DetectEdge(object){  
       
-      if( (object.position.distanceTo(new THREE.Vector3(0,0,0) ) > this.edge_limit) && object.userData.type !=="BackGround"){
+      if(object.userData.type == "Planet") return;
 
-        object.position.x = - object.position.x
-        object.position.y =   object.position.y
-        object.position.z = - object.position.z
+      if(object.userData.type == "BackGround"){
+
+        if( (object.position.distanceTo(new THREE.Vector3(0,0,0) ) > this.edge_limit_background)){
+
+          object.position.x = - object.position.x
+          object.position.y =   object.position.y
+          object.position.z = - object.position.z
+  
+        }
+
+      }else{
+
+        if( (object.position.distanceTo(new THREE.Vector3(0,0,0) ) > this.edge_limit)){
+
+          object.position.x = - object.position.x
+          object.position.y =   object.position.y
+          object.position.z = - object.position.z
+  
+        }
 
       }
+
+      
 
     }
 
     CollisionPlayerHandler(player, object){
       
-      if ((object.name == "Asteroid" || object.name == "EnnemyBullet") && !player.immune){
+      if ((object.name == "Asteroid" || object.name == "EnnemyBullet") && !player.hasJoker.immune){
 
         let playerHealth = player.GetComponent("PlayerHealthSystem");
 
@@ -157,17 +179,16 @@ class GameObjectManager{
 
       let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
 
-      if (object.name == "Player" && object.immune == false) asteroidHealth.Damage("max");
+      if (object.name == "Player" && object.hasJoker.immune == false) asteroidHealth.Damage("max");
 
       if(object.name == "BasicBullet"){
 
+       
         let bullet = object.GetComponent("BulletDamageSystem");
         asteroidHealth.Damage(bullet.damageAmount);
 
       }
-
       
-
       if(asteroid.life == 0) {
 
        // this.level_sys_comp.InstantiateParticule(this.parent.particuleExplosion,asteroid.position)
@@ -271,11 +292,14 @@ class GameObjectManager{
             this.parent.firepower.nb -= 1
             this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
             break;
+          case "FireRate":
+              this.parent.firerate.nb -= 1
+              if(!object.hasJoker.firerate) this.joker_sys.IncreaseFireRate(object,5000);
+            break;
           case "Shield":
-            this.parent.shield.nb -= 1
-            this.sound_sys.PlayCoinPickUp();
-            if(!this.joker_sys.hasShield) this.joker_sys.PlayerProtection(object,this.parent.shield, 3000);
-            
+              this.parent.shield.nb -= 1
+              this.sound_sys.PlayCoinPickUp();
+              if(!object.hasJoker.immune) this.joker_sys.PlayerProtection(object,this.parent.shield, 3000);
             break;
 
         }  
@@ -316,7 +340,7 @@ class GameObjectManager{
       
       if (nbBullet >40){
 
-          this.parent.scene.traverse( function(child ) {
+          this.parent.currentScene.traverse( function(child ) {
               
               if(child.name == "BasicBullet" && bulletToRemove > 0){
                   
@@ -330,7 +354,7 @@ class GameObjectManager{
       }
 
       objectsToRemove.forEach(node => {
-        this.parent.scene.remove( node );
+        this.parent.currentScene.remove( node );
       });
 
   }
@@ -340,7 +364,7 @@ class GameObjectManager{
 
       let nbEnnemyFrame = 0;let playerLife; let countBullet = 0;
 
-      this.parent.scene.children.forEach(e => {
+      this.parent.currentScene.children.forEach(e => {
 
         if(e.type == "Object3D"){ 
 
@@ -367,7 +391,7 @@ class GameObjectManager{
       this.parent.ennemy = nbEnnemyFrame;
       this.parent.GetComponent("DisplaySystem").PrintEnnemy(nbEnnemyFrame);
 
-      if(nbEnnemyFrame == 0) this.parent.StageCompleted();
+      //if(nbEnnemyFrame == 0) this.parent.StageCompleted();
      
     }
 

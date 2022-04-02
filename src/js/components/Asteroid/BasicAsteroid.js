@@ -4,82 +4,73 @@ import StaticAsteroid from "./StaticAsteroid.js";
 import GameObject from "../GameObject.js";
 import { BoxHelper } from "../../three/three.module.js";
 
-class BasicAsteroid extends GameObject{
+class BasicAsteroid extends GameObject {
 
-    constructor(scene,model,nbBreak){
+    constructor(model, nbBreak) {
 
-        super(scene,model);
+        super(model);
 
         this.components = {};
-        
+
         this.name = "Asteroid"
         this.nbBreak = nbBreak;
         this.life = 15;
-        
+
         this.InitComponent();
 
     }
-    
-    InitComponent(){
 
-       
+    InitComponent() {
+
+
         this.AddComponent(new AsteroidMovement(this))
         this.AddComponent(new AsteroidHealthSystem(this))
 
     }
 
-    Instantiate(o,p,r,s,v){
-        
-        super.Instantiate(o,p,r,s);
+    Instantiate(o, p, r, s, v) {
+
+        super.Instantiate(o, p, r, s);
 
         o.position.copy(p);
         o.rotation.copy(r);
-        o.scale.copy(new THREE.Vector3(s,s,s))
-        if(this.userData.type == "BackGround"){
-            
-            this.RemoveComponent("AsteroidMovement");
-            this.AddComponent(new StaticAsteroid(this));
+        o.scale.copy(new THREE.Vector3(s, s, s))
 
-        }else{
+        let aste_mvt = this.GetComponent("AsteroidMovement");
 
-            const sphere = new THREE.SphereGeometry();
-            const object = new THREE.Mesh( sphere, new THREE.MeshBasicMaterial( 0xff0000 ) );
-            const box = new THREE.BoxHelper( object, 0xffff00 );
-            this.children[0].add( box );
-            let aste_mvt = this.GetComponent("AsteroidMovement");
-            if(v !== undefined){
+        if (v !== undefined) {
 
-                aste_mvt.velocity = v
+            aste_mvt.velocity = v;
 
-            }else{
+        } else {
 
-                aste_mvt.velocity = new THREE.Vector3(Math.ceil(Math.random() * ( 6 - 3) + 3 ) * (Math.round(Math.random()) ? 1 : -1),0,Math.ceil(Math.random() * ( 6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1));
-
-            }
-
-            aste_mvt.gravity = (this.scale.x * 20);
-
-            if (o.children[0].material.color.getHexString() !== 'ffffff')  o.children[0].material.color.set(0xffffff);
-
-            this.SetInvulnerability(500);
-            this.life = this.life / (this.nbBreak + 1);
+            aste_mvt.velocity = new THREE.Vector3(Math.ceil(Math.random() * (6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1), 0, Math.ceil(Math.random() * (6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1));
 
         }
 
-        
-        
+        aste_mvt.gravity = (this.scale.x * 20);
+
+        if (o.children[0].material.color.getHexString() !== 'ffffff') o.children[0].material.color.set(0xffffff);
+
+        if(o.userData.type == "BackGround") o.children[0].material.color.set(new THREE.Color("rgb(84, 83, 83)"));
+
+        this.SetInvulnerability(500);
+        this.life = this.life / (this.nbBreak + 1);
+
         this.scene.add(o);
-        
+
+    
+
     }
 
-    Destroy(object){
+    Destroy(object) {
 
         super.Destroy(object);
 
         object.mesh = null;
-       
+
         this.scene.remove(object);
-            
+
     }
 
 }

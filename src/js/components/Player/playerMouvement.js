@@ -58,21 +58,13 @@ class CharacterMouvement {
 
     }
     this.temp = velocity;
-
-    if (velocity.z > 0.035 && !input.keys.shift){
-
-      this.temp = new THREE.Vector3(velocity.x,velocity.y,0.03);
-      this.velocity.lerp(this.temp,1);
-
-    }
+    this.StaminaSystem(velocity,input,timeInSeconds);
 
     if (input.keys.backward) {
 
       velocity.z -= acc.z * TiS;
 
     }
-
-    this.StaminaSystem(velocity,input,timeInSeconds);
 
     if (input.keys.left) {
 
@@ -92,15 +84,36 @@ class CharacterMouvement {
   }
 
   StaminaSystem(velocity,input,timeInSeconds){
+    
+    if(!input.keys.shift){
 
-    if(this.stamina < 100 && !input.keys.shift) this.StaminaIncreased();
+      if(this.stamina < 100) this.StaminaIncreased();
 
-    if(input.keys.shift){
+      if(velocity.z > 0.035){
 
-      if( this.startTime == null ) this.startTime  = timeInSeconds * 1000;
-      this.StaminaConsumed(timeInSeconds);
+        this.temp = new THREE.Vector3(velocity.x,velocity.y,0.03);
+        this.velocity.lerp(this.temp,1);
 
-    }else if(!input.keys.shift) this.startTime = null
+      }
+
+      this.startTime = null;
+
+    }else{
+
+      if(this.stamina != 0){
+
+        if( this.startTime == null ) this.startTime  = timeInSeconds * 1000;
+
+        this.StaminaConsumed(timeInSeconds);
+
+      }else{
+
+        this.temp = new THREE.Vector3(velocity.x,velocity.y,0.03);
+        this.velocity.lerp(this.temp,1);
+
+      }
+
+    }
 
   }
 

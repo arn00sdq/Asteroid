@@ -4,6 +4,7 @@ class PlayerShootProjectiles{
 
       this.parent = parent;
       this.audio = audio;
+      this.fireRate = 500;
 
       this.weaponParams = null;
 
@@ -23,20 +24,21 @@ class PlayerShootProjectiles{
 
       for (let i = 0; i < this.cannon.length; i++) {
 
-        let bulletClone = this.weaponParams.clone();
+        /*let bulletClone = this.weaponParams.clone(); // = basicbullet
 
-        bulletClone.spaceShip = this.parent;
-        bulletClone.scene = this.weaponParams.scene;
-        bulletClone.index = this.indexMissile;
+        this.weaponParams.spaceShip = this.parent;
+        this.weaponParams.scene = this.weaponParams.scene;
+        this.weaponParams.index = this.indexMissile;*/
         
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
         this.temp.y = -0;
         this.spawnRot =  this.parent.rotation;
 
-        bulletClone.SetRigidBody(bulletClone);
-        bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 0.0009);
+        this.weaponParams.timerInstantiate = timeElapsed;
 
-        bulletClone.GetComponent("BulletDamageSystem").startTime = timeElapsed;
+        this.parent.stageSystem.InstantiateGameObject(this.weaponParams,this.temp, this.spawnRot, 0.0009)
+        //bulletClone.SetRigidBody(bulletClone);
+        //bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 0.0009);
        
         this.parent.audio_syst.PlayBulletShoot(this.audio.listener, Math.random() * 0.2, 0.2);
 
@@ -109,7 +111,7 @@ class PlayerShootProjectiles{
 
             this.canShoot = true;
   
-          }, 500);   
+          }, this.fireRate);   
           
         }
 

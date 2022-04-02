@@ -320,6 +320,34 @@ class DisplaySystem{
 
     }
 
+    printUIStartMenu(){
+        let startMenuUI = `
+        <div id="startMenuLayout">
+            <div id="startMenuHeader">
+                <span id="titleGame">Asteroid</span>
+            </div>
+            <div id="startMenuBody">
+                <div id="startMenuSelection">
+                    <div id="startMenuB1">
+                        <span class="startMenuBtn" id="startMenuPG">PLAY GAME</span>
+                    </div>
+                    <div id="startMenuB2">
+                        <span class="startMenuBtn" id="startMenuOPT">OPTION</span>
+                    </div>
+                    <div id="startMenuB3">
+                        <span class="startMenuBtn" id="startMenCRD">CREDITS</span>
+                    </div>
+                    <div id="startMenuB4">
+                        <span class="startMenuBtn" id="startMenuEX">EXIT</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        ` 
+        this.printAPP(videoUI)
+
+    }
+
     printPause(){
 
         let ui_pause = `

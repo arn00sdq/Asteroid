@@ -2,11 +2,11 @@ class GameObject extends THREE.Object3D{
 
     /**
     *
-    * @param {THREE.Scene}  scene 
-    * @param {THREE.Mesh}  model
-    * @param {THREE.Audio} [audio] 
+    * @param {THREE.Object3D}  model 
+    * @param {THREE.Mesh}  audio
+    * @param {THREE.Audio} [params] 
     */
-    constructor(scene, model, audio){
+    constructor(model, audio, params){
         
         super();
 
@@ -15,7 +15,7 @@ class GameObject extends THREE.Object3D{
         
         this.components = {};
         this.model = model;
-        this.scene = scene;
+        this.scene = null;
         this.name = null;
         this.audio = audio;
         this.nb = 0;
@@ -95,7 +95,6 @@ class GameObject extends THREE.Object3D{
                 e.scale.copy(new THREE.Vector3(s,s,s))
             }
         })
-            
         this.scene.add(o);
         
     }

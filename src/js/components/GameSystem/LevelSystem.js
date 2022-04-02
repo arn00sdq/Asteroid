@@ -7,26 +7,42 @@ class LevelSystem{
         this.currentLevel = 1;
         this.edgeLimit = this.parent.limit;
 
+        this.StateScene = {
+
+            startmenu:false,
+            stage1:true,
+            stage2:false,
+            stage3:false,
+
+            stageClear : false,
+
+        }
+
     }
 
     InstantiatePlayer(player,position, rotation, scale){
         
-        player.SetRigidBody(player)
+        player.scene = this.parent.currentScene;
         player.Instantiate(player,position, rotation, scale);
+        player.SetRigidBody(player);
 
     }
 
     InstantiateGameObject(object,position, rotation, scale, velocity, opt){
 
+        object.scene = this.parent.currentScene;
         let object_clone = object.clone();
 
         this.SetCloneValue(object_clone, object);
-        if(opt =="BackGround" ){
-            object_clone.userData.type = "BackGround";
+
+        if(opt !== undefined ){
+            object_clone.userData.type = opt;
         }
+        
         object_clone.Instantiate(object_clone,position, rotation, scale,velocity);
         object_clone.SetRigidBody(object_clone);
         this.UpdateValue(object_clone, object);
+
         
     }
 
@@ -69,28 +85,76 @@ class LevelSystem{
 
     }
 
-    StartLevel(level,init){
-        
-        this.loadBackGround(this.parent.asteroid);
-        switch (level){
+    ResetLevel() {// levelSystem
 
-            case 1:
-                //this.parent.particuleExplosion.AddParticles();
-                this.AsteroidWave(this.parent.asteroid, 10);
-                //this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
-                break;
-            case 2:
-                this.AsteroidWave(this.parent.asteroid, 1);
-                break;
-            case 3:
-                this.AsteroidWave(this.parent.asteroid, 1);
-                break;   
+        this.parent.state.pause = true;
+        this.timeElapsed = 0;
+        this.score = 0;
+
+        this.parent.player.ResetPlayer();
+
+        this.RemoveProps();
+
+        this.parent.GetComponent("DisplaySystem").printUIHeader(1, 0);
+
+    }
+
+    RemoveProps() {// level_system
+
+        var to_remove = [];
+
+        this.parent.currentScene.traverse(function (child) {
+            if ((child.type == "Object3D") && !child.userData.keepMe === true) {
+                to_remove.push(child);
+            }
+        });
+
+        for (var i = 0; i < to_remove.length; i++) {
+            this.parent.currentScene.remove(to_remove[i]);
         }
 
-        this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004)
+    }
+
+    /* ----------- Delimitation ------------ */
+
+    ScenePicker(level,init){
+        
+        this.RemoveProps();
+        let displaySystem = this.parent.GetComponent("DisplaySystem");
+        
+        switch (level){
+
+            case "StartMenu":
+                displaySystem.printUIStartMenu();
+                this.LoadStartMenuScene();
+                this.loadPlanetBackStartMenu(this.parent.earth);
+                break;
+
+            case "Stage1":   
+                displaySystem.printUIHeader(this.player.life, this.score);
+                this.LoadGameScene();          
+                this.loadAsteroidBackGround(this.parent.asteroid,50);
+                this.loadPlanetBackGroundStageOne(this.parent.earth);
+                this.AsteroidWave(this.parent.asteroid, 10);
+                this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
+                //this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
+                break;
+
+            case "Stage1":
+                displaySystem.printUIHeader(this.player.life, this.score);
+                this.LoadGameScene();
+                this.AsteroidWave(this.parent.asteroid, 1);
+                break;
+
+            case "Stage2":
+                this.LoadGameScene();
+                displaySystem.printUIHeader(this.player.life, this.score);
+                this.AsteroidWave(this.parent.asteroid, 1);
+                break;   
+
+        }
 
         if(init){
-
             this.parent.RAF();
 
         }else{
@@ -101,17 +165,98 @@ class LevelSystem{
 
     }
 
-    loadBackGround(asteroid){
+    LoadGameScene() {
 
-        for (let index = 0; index < 20; index++) {
+        let gridHelper = new THREE.GridHelper(40, 40);
+        const light = new THREE.AmbientLight(0xffffff, 1);
+        light.position.set(0, 10, 0);
 
-            let position = new THREE.Vector3(  ( Math.random() * this.edgeLimit )  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+        let stageScene = new THREE.Scene();
+
+        stageScene.add(gridHelper);
+        stageScene.add(new THREE.AxesHelper());  
+        stageScene.add(light);
+
+        this.parent.currentScene = stageScene;
+        this.parent.currentCamera = this.parent.inGameCamera;
+
+    }
+
+    LoadStartMenuScene(){
+
+        let sceneStartMenu = new THREE.Scene();
+        let startMenuCam = this.parent.startMenuCamera;
+        startMenuCam.lookAt(new THREE.Vector3(-11,0,0));
+
+        this.parent.currentScene = sceneStartMenu;
+        this.parent.currentCamera = this.parent.startMenuCamera;
+
+        const _VS = `
+        varying vec3 vertexNormal;
+        void main() {
+            
+            vertexNormal = normalize(normalMatrix * normal);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+        }`
+        ;
+
+        const _FS = `
+        varying vec3 vertexNormal;
+        
+        void main() {
+            
+            float intensity = pow(0.5 - dot( vertexNormal, vec3(0,0,1.0)),2.0);
+            gl_FragColor = vec4(0.3,0.6,1.0,1.0) * intensity;
+
+        }`;
+        const atmosphere = new THREE.Mesh(
+            new THREE.SphereGeometry(5, 50, 50),
+            new THREE.ShaderMaterial({
+                vertexShader: _VS,
+                fragmentShader: _FS,
+                blending: THREE.AdditiveBlending,
+                side: THREE.BackSide
+    
+            })
+
+        ) 
+        
+        atmosphere.scale.set(1.1,1.1,1.1);
+        this.parent.currentScene.add(atmosphere);
+
+    }
+
+    loadPlanetBackStartMenu(earth){
+
+        let position = new THREE.Vector3(0,0,0);
+        let rotation = new THREE.Euler(0,0,0);
+        let scale = 1;
+        this.InstantiateGameObject(earth, position, rotation, scale,undefined, "Planet")
+
+    } 
+
+    loadPlanetBackGroundStageOne(earth){
+
+        let position = new THREE.Vector3(0,-20,60);
+        let rotation = new THREE.Euler( 0,0,0);
+        let scale = 1;
+        this.InstantiateGameObject(earth, position, rotation, scale,undefined, "Planet")
+
+    } 
+    
+
+    loadAsteroidBackGround(asteroid,number){
+
+        for (let index = 0; index < number; index++) {
+
+            let position = new THREE.Vector3(  ( Math.random() * 30 )  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   -5 ,
-                                                ( Math.random() * this.edgeLimit ) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                                ( Math.random() * 30 ) * ( Math.round( Math.random() ) ? 1 : -1 )
                                             )                       
             let rotation = new THREE.Euler( 0,0,0);
             let scale = (Math.random() * (0.03 -0.015)) + 0.015;
-            this.InstantiateGameObject(asteroid, position, rotation, scale,null, "BackGround")
+            this.InstantiateGameObject(asteroid, position, rotation, scale,undefined, "BackGround")
 
         }
 
@@ -166,12 +311,12 @@ class LevelSystem{
 
     Update(timeElapsed){
 
-        if(this.parent.ennemy == 0){
+       /* if(this.parent.ennemy == 0){
 
             this.level++;
-            this.StartLevel();
+            this.ScenePicker();
 
-        }
+        }*/
 
 
     }

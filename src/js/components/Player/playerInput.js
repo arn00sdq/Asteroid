@@ -2,6 +2,7 @@ class CharacterControllerInput {
   constructor(parent) {
 
     this.parent = parent;
+    
 
     this.cam_sys = this.parent.GetComponent("PlayerCameraSystem");
 

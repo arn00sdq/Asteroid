@@ -3,9 +3,9 @@ import JokerMovement from "./JokerMovement.js";
 
 class FirePower extends GameObject{
 
-    constructor(scene, model,nb){
+    constructor(model,nb){
 
-        super(scene, model);
+        super(model);
 
         this.components = {}
         this.name = "FirePower";
@@ -30,8 +30,6 @@ class FirePower extends GameObject{
         o.position.copy(p);
         o.rotation.copy(r);
         o.scale.copy(new THREE.Vector3(s,s,s))
-
-        this.SetInvulnerability(100);
 
         this.nb += 1;
 

@@ -4,14 +4,15 @@ import GameObject from "../GameObject.js";
 
 class BasicBullet extends GameObject{ 
 
-    constructor(scene, model, audio) {
+    constructor(model, audio) {
 
-        super(scene, model, audio);
+        super(model, audio);
 
         this.components = {};
         this.name = "BasicBullet";
 
         this.spaceShip = null;
+        this.timerInstantiate = null;
 
         this.index = 0;
         this.InitComponent();

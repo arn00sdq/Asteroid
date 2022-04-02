@@ -10,7 +10,7 @@ class JokerSystem{
         
         this.nextJoker = null;
 
-        this.joker = [models.heart, models.firepower, models.coin,models.shield];
+        this.joker = [models.heart, models.firepower, models.coin,models.shield,models.firerate];
         this.jokerAv = []
         this.jokerUnv = []
 
@@ -36,25 +36,39 @@ class JokerSystem{
 
     PlayerProtection(player,shield, seconds){
         
-        player.immune = true;
-        this.hasShield = true;
+        player.hasJoker.immune = true;
         
         let shieldClone = shield.clone();
         shieldClone.scene = shield.scene;
 
         shieldClone.RemoveRigidBody(shieldClone);
-        console.log(shieldClone)
         player.add(shieldClone)
 
 
         setTimeout(() => {
 
-            player.immune = false;
-            this.hasShield = false;
+            player.hasJoker.immune = false;
             shieldClone.removeFromParent()
 
         }, seconds);
         
+
+    }
+
+    IncreaseFireRate(player,seconds){
+
+        player.hasJoker.firerate = true;
+        let player_shoot = player.GetComponent("PlayerShootProjectiles");
+        player_shoot.fireRate = 200;
+        console.log("piou")
+
+        setTimeout(() => {
+
+            console.log("fin")
+            player.hasJoker.firerate = false;
+            player_shoot.fireRate = 500;
+
+        }, seconds);
 
     }
 
@@ -78,7 +92,7 @@ class JokerSystem{
 
             this.nextJoker =  Math.round(timeElapsed);
 
-            if(this.nextJoker % 1 == 0 && this.jokerAv.length > 0){
+            if(this.nextJoker % 5 == 0 && this.jokerAv.length > 0){
 
                 let position = new THREE.Vector3( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) )  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
@@ -88,6 +102,7 @@ class JokerSystem{
                 let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
                 let scale = 1;
                 let currentJoker = this.jokerAv[random];
+
                 switch(currentJoker.constructor.name){ 
                     
                     case "Coin":

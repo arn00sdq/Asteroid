@@ -24,11 +24,11 @@ class MenuSystem{
                 this.ui_display.printUIHeader(this.parent.player.life, this.parent.score);
                 break;
             case "restart":
-                this.parent.ResetLevel();
+                this.parent.GetComponent("LevelSystem").ResetLevel();
                 this.level_system.StartLevel(this.level_system.currentLevel, false);
                 break;
             case "next":
-                this.parent.ResetLevel();
+                this.parent.GetComponent("LevelSystem").ResetLevel();
                 let currentLevel = this.level_system.currentLevel + 1;
                 this.level_system.StartLevel(currentLevel, false);
                 break;

@@ -10,7 +10,6 @@ class BulletDamageSystem{
         this.DistanceTravelled = 0;
         this.lastPosition  = new THREE.Vector3;
 
-        this.startTime = 0;
 
     }
 
@@ -18,9 +17,8 @@ class BulletDamageSystem{
 
     Update(timeElapsed){
 
-        let bulletCurrentTime = timeElapsed *1000 - this.startTime;
+        let bulletCurrentTime = timeElapsed *1000 - this.parent.timerInstantiate;
         this.damageAmount = this.damage - Math.round(bulletCurrentTime) *2
-
         if(this.damageAmount <= 0){
 
             this.damageAmount = 0;

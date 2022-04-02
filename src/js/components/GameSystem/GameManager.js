@@ -5,6 +5,7 @@ import GameObjectManager from "./gameObjectManager.js";
 import HackSystem from "./HackSystem.js";
 import SoundSystem from "./SoundSystem.js";
 import MenuSystem from "./MenuSystem.js";
+import SceneSystem from "./SceneManager.js";
 
 
 class GameManager {
@@ -12,6 +13,9 @@ class GameManager {
     constructor(models, utils, animation, audio, particule) {
 
         this.components = {};
+        
+        this.currentScene = new THREE.Scene();
+        this.currentCamera = new THREE.Camera();
 
         /*
         * Utils
@@ -19,7 +23,8 @@ class GameManager {
         this.composer = utils.composer;
         this.renderer = utils.renderer;
         this.scene = utils.scene;
-        this.camera = utils.camera;
+        this.inGameCamera = utils.inGameCamera;
+        this.startMenuCamera = utils.startMenuCamera;
         this.loop = utils.loop;
 
         /*
@@ -29,7 +34,9 @@ class GameManager {
         this.asteroid = models.asteroid;
         this.heart = models.heart;
         this.coin = models.coin;
+        this.earth = models.earth;
         this.firepower = models.firepower;
+        this.firerate = models.firerate;
         this.shield = models.shield;
         this.basicBullet = models.basicBullet;
         this.ennemyBullet = models.ennemyBullet;
@@ -56,6 +63,7 @@ class GameManager {
         * GM
         */
         this.limit = 10;
+        this.limit_background = 40;
         this.score = 0;
         this.playerLife = 1;
         this.ennemyRemaining = null;
@@ -96,6 +104,7 @@ class GameManager {
         this.AddComponent(new HackSystem(this));
         this.AddComponent(new GameObjectManager(this));
         this.AddComponent(new MenuSystem(this));
+        this.AddComponent(new SceneSystem(this));
 
     }
 
@@ -113,23 +122,27 @@ class GameManager {
 
     ModelInitialisation() {
 
-        this.asteroid.InitMesh(new THREE.Vector3(1, 1, 1));
-        this.player.InitMesh(new THREE.Vector3(1, 1, 1));
-        this.ennemy_ss.InitMesh(new THREE.Vector3(1, 1, 1));
-        this.heart.InitMesh(new THREE.Vector3(1, 1, 1));
-        this.coin.InitMesh(new THREE.Vector3(1, 1, 1));
-        this.firepower.InitMesh(new THREE.Vector3(1, 1, 1));
-        this.shield.InitMesh(new THREE.Vector3(1, 1, 1));
-        this.basicBullet.InitMesh(new THREE.Vector3(1, 1, 1));
-        this.ennemyBullet.InitMesh(new THREE.Vector3(1, 1, 1));
+        this.asteroid.InitMesh();
+        this.player.InitMesh();
+        this.ennemy_ss.InitMesh();
+        this.heart.InitMesh();
+        this.coin.InitMesh();
+        this.earth.InitMesh();
+        this.firepower.InitMesh();
+        this.firerate.InitMesh();
+        this.shield.InitMesh();
+        this.basicBullet.InitMesh();
+        this.ennemyBullet.InitMesh();
 
     }
 
     ValueInitialisation() {
 
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
+        this.player.GetComponent("PlayerCameraSystem").limit = this.limi
+        this.player.stageSystem = this.GetComponent("LevelSystem");
         this.player.audio_syst = this.GetComponent("SoundSystem");
-        this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
+        
 
         this.input = this.player.GetComponent("CharacterControllerInput").keys;
 
@@ -149,40 +162,10 @@ class GameManager {
 
     }
 
-    StageCompleted() {
+    StageCompleted() {//level system
 
         this.state.pause = true;
         this.GetComponent("DisplaySystem").printStageCompleted(this.score);//a regler le score arrive avant
-
-    }
-
-    ResetLevel() {
-
-        this.state.pause = true;
-        this.timeElapsed = 0;
-        this.score = 0;
-
-        this.player.ResetPlayer();
-
-        this.RemoveProps();
-
-        this.GetComponent("DisplaySystem").printUIHeader(1, 0);
-
-    }
-
-    RemoveProps() {
-
-        var to_remove = [];
-
-        this.scene.traverse(function (child) {
-            if ((child.type == "Object3D") && !child.userData.keepMe === true) {
-                to_remove.push(child);
-            }
-        });
-
-        for (var i = 0; i < to_remove.length; i++) {
-            this.scene.remove(to_remove[i]);
-        }
 
     }
 
@@ -245,7 +228,8 @@ class GameManager {
 
             }else{
 
-                this.renderer.render(this.scene, this.camera);
+                this.renderer.render(this.currentScene, this.currentCamera);
+
 
             }
 
@@ -267,7 +251,6 @@ class GameManager {
     Step(timeElapsed) {
 
         for (let k in this.components) {
-
             this.components[k].Update(timeElapsed * 0.001);
 
         }

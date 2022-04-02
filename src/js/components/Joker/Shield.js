@@ -3,9 +3,9 @@ import JokerMovement from "./JokerMovement.js";
 
 class Shield extends GameObject{
 
-    constructor(scene, model, nb){
+    constructor(model, nb){
 
-        super(scene, model);
+        super(model);
 
         this.components = {};
         this.name = "Shield";

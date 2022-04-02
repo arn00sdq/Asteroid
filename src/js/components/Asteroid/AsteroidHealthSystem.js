@@ -11,6 +11,7 @@ class AsteroidHealthSystem{
 
     Damage(lifeAmount){
 
+
         if(lifeAmount == "max"){
 
             this.parent.life = 0;

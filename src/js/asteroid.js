@@ -14,9 +14,11 @@ import { PixelShader } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
 import FirePower from "./components/Joker/FirePower.js";
+import FireRate from "./components/Joker/FireRate.js";
 import Shield from "./components/Joker/Shield.js";
 import EnnemySpaceship from "./components/EnnemySpaceship/EnnemySpaceship.js";
 import Explosion from "./components/Explosion/Explosion.js";
+import Earth from "./components/Planet/Earth.js";
 
 class Asteroid {
     constructor() {
@@ -24,20 +26,54 @@ class Asteroid {
         this.Initialize();
         this.LoadModel();
         this.LoadAudio();
-        this.LoadScene();
 
     }
 
     Initialize() {
 
-        this.camera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.001, 10000);
-        this.camera.fov = 112.5
+        /*camera*/
 
+        this.inGameCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.001, 10000);
+        this.inGameCamera.fov = 112.5
+        this.inGameCamera.position.set(0, 0.3, 0); 
+
+        this.cameraStartMenu = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 2 , 500);
+        this.cameraStartMenu.position.set(5,0,15);
+
+        /*camera tps*/
+        this.goal = new THREE.Object3D;
+        this.follow = new THREE.Object3D;
+        this.follow.name = "FollowPlayer"
+        this.follow.position.z = - 0.3;
+        this.goal.add(this.inGameCamera);
+
+        /*scene*/
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x000000);
+        this.sceneStartMenu = new THREE.Scene();
 
+        /*renderer*/
+        let container = document.querySelector('#siapp');
+        let w = container.clientWidth;
+        let h = container.clientHeight;
+
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+        this.renderer.setPixelRatio(window.devicePixelRatio)
+        this.renderer.setClearColor(0xffffff, 0);
+        this.renderer.setSize(w, h);
+        container.appendChild(this.renderer.domElement);
+
+        /* post process */
+        this.composer = new EffectComposer(this.renderer);
+        this.composer.addPass(new RenderPass(this.scene, this.inGameCamera));
+
+        var pixelPass = new ShaderPass(PixelShader);
+        pixelPass.uniforms['resolution'].value = new THREE.Vector2(window.innerWidth, window.innerHeight);
+        pixelPass.uniforms['resolution'].value.multiplyScalar(window.devicePixelRatio);
+        this.composer.addPass(pixelPass);
+
+        /*timer*/
         this.loop = {}
-
         const fps = 60;
         const slow = 1;
         this.loop.dt = 0,
@@ -48,6 +84,7 @@ class Asteroid {
         this.loop.slow = slow;
         this.loop.slowStep = this.loop.slow * this.loop.step;
 
+        /*loading*/
         this.loadingManager = new THREE.LoadingManager(() => {
 
             const loadingScreen = document.getElementById('loading-screen');
@@ -59,17 +96,11 @@ class Asteroid {
 
         });
 
-        this.camera.position.set(0, 0.3, 0); //0.3 troisieme personne, 2/3 vu en follow, 
-        this.camera.lookAt(this.scene.position);
+
+        this.inGameCamera.lookAt(this.scene.position);
 
         this.listener = new THREE.AudioListener();
-        this.camera.add(this.listener);
-
-        this.goal = new THREE.Object3D;
-        this.follow = new THREE.Object3D;
-        this.follow.name = "FollowPlayer"
-        this.follow.position.z = - 0.3;
-        this.goal.add(this.camera);
+        this.inGameCamera.add(this.listener);
 
         window.addEventListener('resize', () => {
 
@@ -136,6 +167,14 @@ class Asteroid {
         firePower.name = "firePowerItem";
 
         /* 
+        *   Item +1 Bullet
+        */
+        const fireRateGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+        const fireRateMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load("../medias/images/power-up/firerate.png") ,color: 0xEFDEDE });
+        const fireRate = new THREE.Mesh(fireRateGeometry, fireRateMaterial);
+        fireRate.name = "fireRateItem";
+
+        /* 
         *   Shield
         */
         const geometryShield = new THREE.SphereGeometry(0.23, 12, 10);
@@ -146,22 +185,55 @@ class Asteroid {
         /*
         * planet 
         */
-        const earthMaterial = new THREE.MeshPhongMaterial({
-            map: textureLoader.load("../medias/images/earth/earth.jpg"),
-            normalMap: textureLoader.load("../medias/images/earth/earth_normal_map.jpg"),
-            specularMap: textureLoader.load("../medias/images/earth/earth_specular_map.tif")
-        });
-        const earthGeometry = new THREE.SphereBufferGeometry(20, 50, 50);
-        this.earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
-        this.earthMesh.position.set(0,-20,60)
+        const _VS = `
+        varying vec2 vertexUV;
+        varying vec3 vertexNormal;
 
-        this.scene.add(this.earthMesh);
+        void main() {
+            vertexUV = uv;
+            vertexNormal = normalize(normalMatrix * normal);
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+     
+        }`;
+
+        const _FS = `
+        uniform sampler2D globeTexture;
+
+        varying vec2 vertexUV;
+        varying vec3 vertexNormal;
+        
+        void main() {
+            
+            float intensity = 1.05 - dot( vertexNormal, vec3(1.0,0.0,0.0));
+            vec3 atmosphere = vec3(0.1,0.2 ,0.4) * pow(intensity,1.0);
+            gl_FragColor = vec4(atmosphere + texture2D(globeTexture,vertexUV).xyz, 1.0 );
+
+        }`;
+        const earthMaterial = new THREE.ShaderMaterial({
+            vertexShader: _VS,
+            fragmentShader: _FS,
+            uniforms:{
+                globeTexture: {
+                    value: textureLoader.load("../medias/images/earth/earth2.jpg"),
+                    
+                },
+                
+            }
+           /* normalMap: textureLoader.load("../medias/images/earth/earth_normal_map.jpg"),
+            specularMap: textureLoader.load("../medias/images/earth/earth_specular_map.tif")*/
+        });
+        const earthGeometry = new THREE.SphereBufferGeometry(5, 50, 50);
+        const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+        earthMesh.rotateY((Math.PI / 180)* 280)
+        earthMesh.name = "EarthItem";
 
         /* 
         * ModelManager
         */
         this.modelManager.push(cylinderMesh);
         this.modelManager.push(firePower);
+        this.modelManager.push(fireRate);
+        this.modelManager.push(earthMesh);
         this.modelManager.push(bulletPlayer);
         this.modelManager.push(shieldMesh);
         loaderObj.load('../medias/models/low_poly.obj', (object) => {
@@ -271,12 +343,10 @@ class Asteroid {
 
     LoadProps() {
 
-        let playerModel; let rockModel; let heartModel; let coinModel; let ennemy_ssModel;
+        let playerModel, rockModel,heartModel, coinModel, ennemy_ssModel;
+        let bulletEnnemy = new Object3D(); let bulletPlayer= new Object3D(); let firePowerModel= new Object3D(); 
+        let fireRateModel= new Object3D(); let shieldModel= new Object3D(); let earthModel = new Object3D();
 
-        let bulletEnnemy = new Object3D();
-        let bulletPlayer = new Object3D();
-        let firePowerModel = new Object3D();
-        let shieldModel = new Object3D();
         this.modelManager.forEach((e) => {
 
             if (e.name == "SpaceShip") playerModel = e;
@@ -289,16 +359,19 @@ class Asteroid {
 
             if (e.name == "ShieldItem") shieldModel.add(e);
 
+            if (e.name == "EarthItem") earthModel.add(e);
+
             if (e.name == "HeartItem") heartModel = e;
 
             if (e.name == "CoinItem") coinModel = e;
 
             if (e.name == "firePowerItem") firePowerModel.add(e);
 
+            if (e.name == "fireRateItem") fireRateModel.add(e);
+
             if (e.name == "EnnemySpaceship") ennemy_ssModel = e
 
         })
-
         const audio = {
 
             audioManager: this.audioManager,
@@ -310,7 +383,7 @@ class Asteroid {
         this.params = {
 
             goal: this.goal,
-            camera: this.camera,
+            camera: this.inGameCamera,
             follow: this.follow,
 
             scene: this.scene,
@@ -322,7 +395,9 @@ class Asteroid {
             composer: this.composer,
             renderer: this.renderer,
             scene: this.scene,
-            camera: this.camera,
+            sceneStartMenu: this.sceneStartMenu,
+            inGameCamera: this.inGameCamera,
+            startMenuCamera: this.cameraStartMenu,
             loop: this.loop,
 
         }
@@ -334,21 +409,23 @@ class Asteroid {
 
         const particule = {
 
-            particuleExplosion: new Explosion(this.scene, this.camera),
+            particuleExplosion: new Explosion(this.scene, this.inGameCamera),
 
         }
 
         const models = {
 
-            player: new Player(this.params, playerModel, audio),
-            ennemy_ss: new EnnemySpaceship(this.scene, ennemy_ssModel),
-            asteroid: new BasicAsteroid(this.scene, rockModel, 0),
-            coin: new Coin(this.scene, coinModel, 0),
-            firepower: new FirePower(this.scene, firePowerModel, 0),
-            shield: new Shield(this.scene, shieldModel, 0),
-            heart: new Heart(this.scene, heartModel, 0),
-            basicBullet: new BasicBullet(this.scene, bulletPlayer, audio),
-            ennemyBullet: new BasicBullet(this.scene, bulletEnnemy, audio),
+            player: new Player(playerModel, audio,this.params),//A changer pour le joueur ?
+            ennemy_ss: new EnnemySpaceship(ennemy_ssModel,0),
+            asteroid: new BasicAsteroid(rockModel, 0),
+            coin: new Coin(coinModel, 0),
+            earth: new Earth(earthModel,0),
+            firepower: new FirePower(firePowerModel, 0),
+            firerate: new FireRate(fireRateModel, 0),
+            shield: new Shield(shieldModel, 0),
+            heart: new Heart(heartModel, 0),
+            basicBullet: new BasicBullet(bulletPlayer, audio),
+            ennemyBullet: new BasicBullet(bulletEnnemy, audio),
 
         }
 
@@ -363,39 +440,6 @@ class Asteroid {
 
     }
 
-    LoadScene() {
-
-        let container = document.querySelector('#siapp');
-        let w = container.clientWidth;
-        let h = container.clientHeight;
-
-        /* renderer */
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
-        this.renderer.setPixelRatio(window.devicePixelRatio)
-        this.renderer.setClearColor(0xffffff, 0);
-        this.renderer.setSize(w, h);
-        container.appendChild(this.renderer.domElement);
-
-        /* post process */
-        this.composer = new EffectComposer(this.renderer);
-        this.composer.addPass(new RenderPass(this.scene, this.camera));
-
-        var pixelPass = new ShaderPass(PixelShader);
-        pixelPass.uniforms['resolution'].value = new THREE.Vector2(window.innerWidth, window.innerHeight);
-        pixelPass.uniforms['resolution'].value.multiplyScalar(window.devicePixelRatio);
-        this.composer.addPass(pixelPass);
-
-        var gridHelper = new THREE.GridHelper(40, 40);
-        this.scene.add(gridHelper);
-
-        this.scene.add(new THREE.AxesHelper());
-        const light = new THREE.AmbientLight(0xffffff, 1)
-        light.position.set(0, 10, 0)
-
-        this.scene.add(light);
-
-    }
-
     OnPlayerBegin(event) { // nom a changer
 
 
@@ -404,8 +448,7 @@ class Asteroid {
             // document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("DisplaySystem").printUIHeader(1, 0);
-            this.gm.GetComponent("LevelSystem").StartLevel(1, true);
+            this.gm.GetComponent("LevelSystem").ScenePicker("StartMenu", true);
 
         }
 
@@ -415,15 +458,15 @@ class Asteroid {
 
         var fovMAX = 160;
         var fovMIN = 1;
-        this.camera.fov -= event.wheelDeltaY * 0.05;
-        this.camera.fov = Math.max(Math.min(this.camera.fov, fovMAX), fovMIN);
-        this.camera.updateProjectionMatrix();
+        this.inGameCamera.fov -= event.wheelDeltaY * 0.05;
+        this.inGameCamera.fov = Math.max(Math.min(this.inGameCamera.fov, fovMAX), fovMIN);
+        this.inGameCamera.updateProjectionMatrix();
     }
 
     OnWindowResize() {
 
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
+        this.inGameCamera.aspect = window.innerWidth / window.innerHeight;
+        this.inGameCamera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.composer.setSize(window.innerWidth, window.innerHeight);
 
