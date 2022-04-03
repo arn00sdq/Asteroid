@@ -170,6 +170,9 @@ export function _VSBooster() {
     varying vec2 vUv;
     varying float noise;
     uniform float time;
+    uniform float boostLengthZ;
+    uniform float boostLengthX;
+    uniform float boostPower;
 
     float turbulence( vec3 p ) {
 
@@ -178,7 +181,7 @@ export function _VSBooster() {
 
     for (float f = 1.0 ; f <= 10.0 ; f++ ){
         float power = pow( 2.0, f );
-        t += abs( pnoise( vec3( power * p ), vec3( 10.0, 10.0, 10.0 ) ) / power );
+        t += abs( pnoise( vec3( power * p ), vec3( 10.0, 10.0, boostPower ) ) / power );
     }
 
     return t;
@@ -187,7 +190,7 @@ export function _VSBooster() {
 
     void main() {
             
-        vec3 scale = vec3(0.03,0.01,0.01);
+        vec3 scale = vec3(boostLengthX,0.01,boostLengthZ);
         vertexNormal = normalize(normalMatrix * normal );
         noise = 10.0 *  -.10 * turbulence( .5 * normal );
         float b = 5.0 * pnoise( 0.05 * position+ vec3( 2.0 * time ), vec3( 100.0 ) );

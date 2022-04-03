@@ -236,7 +236,19 @@ class Asteroid {
                 uniforms: {
                     time: { // float initialized to 0
                       type: "f",
-                      value: 0.0
+                      value: 0.05
+                    },
+                    boostLengthZ:{
+                        type:"f",
+                        value:0.03
+                    },
+                    boostLengthX:{
+                        type:"f",
+                        value:0.03
+                    },
+                    boostPower:{
+                        type:"f",
+                        value:0.03,
                     }
                 },
                 blending: THREE.AdditiveBlending,

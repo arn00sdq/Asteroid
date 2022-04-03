@@ -147,14 +147,19 @@ class GameManager {
 
     ValueInitialisation() {
 
+        /* Player init */
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
         this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
+
         this.player.stageSystem = this.GetComponent("LevelSystem");
         this.player.audio_syst = this.GetComponent("SoundSystem");
+
         this.player.add(this.booster);
 
-        console.log(this.player.children)
+        const booster = this.player.children.find( e =>e.name =="booster"  )
+        booster.position.set(0,-0.01,-0.15)
         
+        /* */
         this.input = this.player.GetComponent("CharacterControllerInput").keys;
 
         this.ennemy_ss.weaponParams = this.ennemyBullet;
