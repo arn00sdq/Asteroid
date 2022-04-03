@@ -23,7 +23,11 @@ class CharacterMouvement {
 
   Update(timeInSeconds) {
 
-    const TiS = 0.0016
+    const booster = this.parent.children.find( e =>e.name =="booster"  )
+    console.log(timeInSeconds)//0.016
+    booster.material.uniforms[ 'time' ].value = 0.016*100;
+
+    const TiS = 0.0016;
 
     const input = this.parent.GetComponent('CharacterControllerInput');
 

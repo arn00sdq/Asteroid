@@ -20,7 +20,8 @@ import EnnemySpaceship from "./components/EnnemySpaceship/EnnemySpaceship.js";
 import Earth from "./components/Planet/Earth.js";
 
 import { _FS,_VS } from "./components/Planet/glslEarth.js";
-import {_FSAT, _VSAT } from "./components/Planet/glslAtmosphere.js"
+import {_FSAT, _VSAT } from "./components/Planet/glslAtmosphere.js";
+import {_FSBooster, _VSBooster} from "./components/Player/booster.js"
 
 class Asteroid {
     constructor() {
@@ -169,7 +170,7 @@ class Asteroid {
         firePower.name = "firePowerItem";
 
         /* 
-        *   Item +1 Bullet
+        *   Cooldown fireRate
         */
         const fireRateGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
         const fireRateMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load("../medias/images/power-up/cooldown.png") ,color: 0xEFDEDE });
@@ -183,6 +184,7 @@ class Asteroid {
         const materialShield = new THREE.MeshStandardMaterial({ color: 0xffdd00, emissive: 0xecc70e, transparent: true, opacity: 0.5, alphaTest: 0.1 });
         const shieldMesh = new THREE.Mesh(geometryShield, materialShield);
         shieldMesh.name = "ShieldItem";
+        
 
         /*
         * planet 
@@ -211,7 +213,7 @@ class Asteroid {
         */
 
         this.atmosphere = new THREE.Mesh(
-            new THREE.SphereGeometry(5, 50, 50),
+            new THREE.SphereGeometry(6, 50, 50),
             new THREE.ShaderMaterial({
                 vertexShader: _VSAT(),
                 fragmentShader: _FSAT(),
@@ -221,6 +223,30 @@ class Asteroid {
             })
 
         )
+
+        /*
+        * Booster
+        */
+
+        this.booster = new THREE.Mesh(
+            new THREE.SphereGeometry(0.1, 50, 50),
+            new THREE.ShaderMaterial({
+                vertexShader: _VSBooster(),
+                fragmentShader: _FSBooster(),
+                uniforms: {
+                    time: { // float initialized to 0
+                      type: "f",
+                      value: 0.0
+                    }
+                },
+                blending: THREE.AdditiveBlending,
+                side: THREE.BackSide
+    
+            })
+
+        )
+        this.booster.name = "booster";
+        this.booster.rotateY( (Math.PI / 180) * 90)
 
         /* 
         * ModelManager
@@ -252,7 +278,7 @@ class Asteroid {
 
             });
 
-            object.children[0].rotateY((Math.PI / 180) * 180);
+            object.children[0].rotateY();
             object.name = "EnnemySpaceship";
             this.modelManager.push(object);
 
@@ -396,6 +422,13 @@ class Asteroid {
             idleAction: null/* this.idleAction*/,
         }
 
+        const shaders ={
+
+            astmosphere :  this.atmosphere,
+            booster : this.booster,
+ 
+         }
+
         const models = {
 
             player: new Player(playerModel, audio,this.params),//A changer pour le joueur ?
@@ -409,12 +442,6 @@ class Asteroid {
             heart: new Heart(heartModel, 0),
             basicBullet: new BasicBullet(bulletPlayer, audio),
             ennemyBullet: new BasicBullet(bulletEnnemy, audio),
-
-        }
-
-        const shaders ={
-
-           astmosphere :  this.atmosphere,
 
         }
 
@@ -437,7 +464,7 @@ class Asteroid {
             // document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").ScenePicker("StartMenu", true);
+            this.gm.GetComponent("LevelSystem").ScenePicker("Stage1", true);
 
         }
 

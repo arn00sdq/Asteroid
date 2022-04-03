@@ -49,10 +49,11 @@ class GameManager {
         this.audio = audio;
 
         /*
-        *
+        * Shader
         */
 
         this.atmosphere = shaders.astmosphere;
+        this.booster = shaders.booster;
 
         /*
         * Anim
@@ -147,11 +148,13 @@ class GameManager {
     ValueInitialisation() {
 
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
-        this.player.GetComponent("PlayerCameraSystem").limit = this.limi
+        this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
         this.player.stageSystem = this.GetComponent("LevelSystem");
         this.player.audio_syst = this.GetComponent("SoundSystem");
-        
+        this.player.add(this.booster);
 
+        console.log(this.player.children)
+        
         this.input = this.player.GetComponent("CharacterControllerInput").keys;
 
         this.ennemy_ss.weaponParams = this.ennemyBullet;
