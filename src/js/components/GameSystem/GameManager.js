@@ -10,7 +10,7 @@ import SceneSystem from "./SceneManager.js";
 
 class GameManager {
 
-    constructor(models, utils, animation, audio, particule) {
+    constructor(models, utils, animation, audio, shaders) {
 
         this.components = {};
         
@@ -22,7 +22,7 @@ class GameManager {
         */
         this.composer = utils.composer;
         this.renderer = utils.renderer;
-        this.scene = utils.scene;
+        this.currentScene = utils.scene;
         this.inGameCamera = utils.inGameCamera;
         this.startMenuCamera = utils.startMenuCamera;
         this.loop = utils.loop;
@@ -30,6 +30,7 @@ class GameManager {
         /*
         * Models
         */
+        this.models = models;
         this.player = models.player;
         this.asteroid = models.asteroid;
         this.heart = models.heart;
@@ -45,7 +46,13 @@ class GameManager {
         /*
         * Audio
         */
-        this.audio = audio
+        this.audio = audio;
+
+        /*
+        *
+        */
+
+        this.atmosphere = shaders.astmosphere;
 
         /*
         * Anim
@@ -53,11 +60,6 @@ class GameManager {
         this.mixer = animation.mixer;
         this.idle = animation.idleAction;
 
-        /*
-        * Anim
-        */
-
-        this.particuleExplosion = particule.particuleExplosion;
 
         /*
         * GM
@@ -111,6 +113,12 @@ class GameManager {
     AddComponent(c) {
 
         this.components[c.constructor.name] = c;
+
+    }
+
+    RemoveComponent(c) {
+
+        delete this.components[c];  
 
     }
 
@@ -227,6 +235,7 @@ class GameManager {
                 //this.composer.render(this.tempTime);
 
             }else{
+
 
                 this.renderer.render(this.currentScene, this.currentCamera);
 

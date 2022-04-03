@@ -17,8 +17,10 @@ import FirePower from "./components/Joker/FirePower.js";
 import FireRate from "./components/Joker/FireRate.js";
 import Shield from "./components/Joker/Shield.js";
 import EnnemySpaceship from "./components/EnnemySpaceship/EnnemySpaceship.js";
-import Explosion from "./components/Explosion/Explosion.js";
 import Earth from "./components/Planet/Earth.js";
+
+import { _FS,_VS } from "./components/Planet/glslEarth.js";
+import {_FSAT, _VSAT } from "./components/Planet/glslAtmosphere.js"
 
 class Asteroid {
     constructor() {
@@ -57,7 +59,7 @@ class Asteroid {
         let w = container.clientWidth;
         let h = container.clientHeight;
 
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+        this.renderer = new THREE.WebGLRenderer({ antialias:true, preserveDrawingBuffer: true });
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.setClearColor(0xffffff, 0);
         this.renderer.setSize(w, h);
@@ -170,7 +172,7 @@ class Asteroid {
         *   Item +1 Bullet
         */
         const fireRateGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-        const fireRateMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load("../medias/images/power-up/firerate.png") ,color: 0xEFDEDE });
+        const fireRateMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load("../medias/images/power-up/cooldown.png") ,color: 0xEFDEDE });
         const fireRate = new THREE.Mesh(fireRateGeometry, fireRateMaterial);
         fireRate.name = "fireRateItem";
 
@@ -185,33 +187,10 @@ class Asteroid {
         /*
         * planet 
         */
-        const _VS = `
-        varying vec2 vertexUV;
-        varying vec3 vertexNormal;
-
-        void main() {
-            vertexUV = uv;
-            vertexNormal = normalize(normalMatrix * normal);
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-     
-        }`;
-
-        const _FS = `
-        uniform sampler2D globeTexture;
-
-        varying vec2 vertexUV;
-        varying vec3 vertexNormal;
-        
-        void main() {
-            
-            float intensity = 1.05 - dot( vertexNormal, vec3(1.0,0.0,0.0));
-            vec3 atmosphere = vec3(0.1,0.2 ,0.4) * pow(intensity,1.0);
-            gl_FragColor = vec4(atmosphere + texture2D(globeTexture,vertexUV).xyz, 1.0 );
-
-        }`;
+        console.log(_FS)
         const earthMaterial = new THREE.ShaderMaterial({
-            vertexShader: _VS,
-            fragmentShader: _FS,
+            vertexShader: _VS(),
+            fragmentShader: _FS(),
             uniforms:{
                 globeTexture: {
                     value: textureLoader.load("../medias/images/earth/earth2.jpg"),
@@ -226,6 +205,22 @@ class Asteroid {
         const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
         earthMesh.rotateY((Math.PI / 180)* 280)
         earthMesh.name = "EarthItem";
+
+        /*
+        * Atmosphere
+        */
+
+        this.atmosphere = new THREE.Mesh(
+            new THREE.SphereGeometry(5, 50, 50),
+            new THREE.ShaderMaterial({
+                vertexShader: _VSAT(),
+                fragmentShader: _FSAT(),
+                blending: THREE.AdditiveBlending,
+                side: THREE.BackSide
+    
+            })
+
+        )
 
         /* 
         * ModelManager
@@ -263,12 +258,6 @@ class Asteroid {
 
         });
 
-        loaderObj.load('../medias/models/explosion.obj', (object) => {
-
-            object.name = "Explosion";
-            this.modelManager.push(object);
-
-        });
 
         loaderObj.load("../medias/models/collectable/Love.obj", (object) => {
 
@@ -386,7 +375,7 @@ class Asteroid {
             camera: this.inGameCamera,
             follow: this.follow,
 
-            scene: this.scene,
+           // scene: this.stageScene,
 
         }
 
@@ -394,7 +383,7 @@ class Asteroid {
 
             composer: this.composer,
             renderer: this.renderer,
-            scene: this.scene,
+            scene: this.stageScene,
             sceneStartMenu: this.sceneStartMenu,
             inGameCamera: this.inGameCamera,
             startMenuCamera: this.cameraStartMenu,
@@ -405,12 +394,6 @@ class Asteroid {
         const animations = {
             mixer: null/*this.animationsManager[0]*/,
             idleAction: null/* this.idleAction*/,
-        }
-
-        const particule = {
-
-            particuleExplosion: new Explosion(this.scene, this.inGameCamera),
-
         }
 
         const models = {
@@ -429,7 +412,13 @@ class Asteroid {
 
         }
 
-        this.gm = new GameManager(models, utils, animations, audio, particule)
+        const shaders ={
+
+           astmosphere :  this.atmosphere,
+
+        }
+
+        this.gm = new GameManager(models, utils, animations, audio, shaders)
         this.gm.ModelInitialisation();
         this.gm.ValueInitialisation();
 

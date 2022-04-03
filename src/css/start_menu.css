@@ -1,0 +1,69 @@
+@font-face {
+    font-family: "SpaceGrotesk";
+    src: url("./typo/grotesk/SpaceGrotesk-Light.otf");
+}
+
+#startMenuLayout{
+
+    margin-top: 5vh;
+    margin-left: 5vw;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+
+}
+
+#startMenuHeader{
+
+
+    display: flex;
+    flex-direction: row;
+
+}
+
+#titleGame{
+
+    font-family: 'SpaceGrotesk';
+    font-size: 7vh;
+    color: white;
+}
+
+#startMenuBody{
+
+    margin-top: 16vh;
+    display: flex;
+    flex-direction: row;
+
+}
+
+#startMenuSelection{
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+.startMenuBtn{
+
+    margin: 4vh 0 0 0;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.startMenuSPAN{
+
+    font-family: 'SpaceGrotesk';
+    font-size: 3vh;
+    color: white;
+
+    background: none;
+
+}
+
+.startMenuSPAN:hover{
+
+    background: white;
+    color:#373c3e;
+
+}

@@ -324,27 +324,30 @@ class DisplaySystem{
         let startMenuUI = `
         <div id="startMenuLayout">
             <div id="startMenuHeader">
-                <span id="titleGame">Asteroid</span>
+                <span id="titleGame">ASTEROID</span>
             </div>
             <div id="startMenuBody">
                 <div id="startMenuSelection">
-                    <div id="startMenuB1">
-                        <span class="startMenuBtn" id="startMenuPG">PLAY GAME</span>
+                    <div class="startMenuBtn" id="startMenuB1">
+                        <button class="startMenuSPAN" id="play">PLAY GAME</button>
                     </div>
-                    <div id="startMenuB2">
-                        <span class="startMenuBtn" id="startMenuOPT">OPTION</span>
+                    <div class="startMenuBtn" id="startMenuB2">
+                        <button class="startMenuSPAN" id="video">VIDEO</button>
                     </div>
-                    <div id="startMenuB3">
-                        <span class="startMenuBtn" id="startMenCRD">CREDITS</span>
+                    <div class="startMenuBtn" id="startMenuB2">
+                        <button class="startMenuSPAN" id="audio">AUDIO</button>
                     </div>
-                    <div id="startMenuB4">
-                        <span class="startMenuBtn" id="startMenuEX">EXIT</span>
+                    <div class="startMenuBtn" id="startMenuB3">
+                        <button class="startMenuSPAN" id="credit">CREDITS</button>
+                    </div>
+                    <div class="startMenuBtn" id="startMenuB4">
+                        <button class="startMenuSPAN" id="quit">EXIT</button>
                     </div>
                 </div>
             </div>
         </div>
         ` 
-        this.printAPP(videoUI)
+        this.printAPP(startMenuUI)
 
     }
 

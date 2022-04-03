@@ -1,13 +1,15 @@
+import JokerSystem from "./JokerSystem.js";
+
 class LevelSystem{
 
     constructor(parent){
 
         this.parent = parent;
 
-        this.currentLevel = 1;
+        this.currentLevel = "";
         this.edgeLimit = this.parent.limit;
 
-        this.StateScene = {
+        this.stateScene = {
 
             startmenu:false,
             stage1:true,
@@ -85,7 +87,7 @@ class LevelSystem{
 
     }
 
-    ResetLevel() {// levelSystem
+    ResetLevel() {
 
         this.parent.state.pause = true;
         this.timeElapsed = 0;
@@ -95,7 +97,7 @@ class LevelSystem{
 
         this.RemoveProps();
 
-        this.parent.GetComponent("DisplaySystem").printUIHeader(1, 0);
+        this.ScenePicker(this.currentLevel,false)
 
     }
 
@@ -119,42 +121,54 @@ class LevelSystem{
 
     ScenePicker(level,init){
         
-        this.RemoveProps();
-        let displaySystem = this.parent.GetComponent("DisplaySystem");
+        //this.RemoveProps();
+       let displaySystem = this.parent.GetComponent("DisplaySystem");
+       this.currentLevel = level;
         
         switch (level){
 
             case "StartMenu":
                 displaySystem.printUIStartMenu();
+                this.parent.RemoveComponent("JokerSystem")
+
                 this.LoadStartMenuScene();
                 this.loadPlanetBackStartMenu(this.parent.earth);
                 break;
 
             case "Stage1":   
-                displaySystem.printUIHeader(this.player.life, this.score);
+
+            
+                displaySystem.printUIHeader(this.parent.player.life, this.parent.score);
+                this.parent.components.JokerSystem == undefined ?
+                this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models)) : ``;
+
                 this.LoadGameScene();          
                 this.loadAsteroidBackGround(this.parent.asteroid,50);
                 this.loadPlanetBackGroundStageOne(this.parent.earth);
                 this.AsteroidWave(this.parent.asteroid, 10);
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
-                //this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
-                break;
-
-            case "Stage1":
-                displaySystem.printUIHeader(this.player.life, this.score);
-                this.LoadGameScene();
-                this.AsteroidWave(this.parent.asteroid, 1);
+                
                 break;
 
             case "Stage2":
+                displaySystem.printUIHeader(this.player.life, this.score);
+                this.LoadGameScene();
+                this.AsteroidWave(this.parent.asteroid, 1);
+                //this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
+                this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
+                break;
+
+            case "Stage3":
                 this.LoadGameScene();
                 displaySystem.printUIHeader(this.player.life, this.score);
                 this.AsteroidWave(this.parent.asteroid, 1);
+                this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 break;   
 
         }
 
         if(init){
+            console.log("ca commence")
             this.parent.RAF();
 
         }else{
@@ -167,11 +181,11 @@ class LevelSystem{
 
     LoadGameScene() {
 
+        let stageScene = new THREE.Scene();
+
         let gridHelper = new THREE.GridHelper(40, 40);
         const light = new THREE.AmbientLight(0xffffff, 1);
-        light.position.set(0, 10, 0);
-
-        let stageScene = new THREE.Scene();
+        light.position.set(0, 10, 0);   
 
         stageScene.add(gridHelper);
         stageScene.add(new THREE.AxesHelper());  
@@ -191,57 +205,35 @@ class LevelSystem{
         this.parent.currentScene = sceneStartMenu;
         this.parent.currentCamera = this.parent.startMenuCamera;
 
-        const _VS = `
-        varying vec3 vertexNormal;
-        void main() {
-            
-            vertexNormal = normalize(normalMatrix * normal);
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-
-        }`
-        ;
-
-        const _FS = `
-        varying vec3 vertexNormal;
-        
-        void main() {
-            
-            float intensity = pow(0.5 - dot( vertexNormal, vec3(0,0,1.0)),2.0);
-            gl_FragColor = vec4(0.3,0.6,1.0,1.0) * intensity;
-
-        }`;
-        const atmosphere = new THREE.Mesh(
-            new THREE.SphereGeometry(5, 50, 50),
-            new THREE.ShaderMaterial({
-                vertexShader: _VS,
-                fragmentShader: _FS,
-                blending: THREE.AdditiveBlending,
-                side: THREE.BackSide
-    
-            })
-
-        ) 
-        
-        atmosphere.scale.set(1.1,1.1,1.1);
-        this.parent.currentScene.add(atmosphere);
-
     }
 
     loadPlanetBackStartMenu(earth){
 
+        let atmosphere = this.parent.atmosphere;
+        
+        atmosphere.scale.set(1.1,1.1,1.1);
+        this.parent.currentScene.add(atmosphere);
+
         let position = new THREE.Vector3(0,0,0);
         let rotation = new THREE.Euler(0,0,0);
         let scale = 1;
-        this.InstantiateGameObject(earth, position, rotation, scale,undefined, "Planet")
+        this.InstantiateGameObject(earth, position, rotation, scale,undefined, "Planet");
+        
 
     } 
 
     loadPlanetBackGroundStageOne(earth){
 
+        let atmosphere = this.parent.atmosphere;
+        
+        atmosphere.scale.set(1.1,1.1,1.1);
+        atmosphere.position.set(0,-20,60)
+        this.parent.currentScene.add(atmosphere);
+
         let position = new THREE.Vector3(0,-20,60);
         let rotation = new THREE.Euler( 0,0,0);
         let scale = 1;
-        this.InstantiateGameObject(earth, position, rotation, scale,undefined, "Planet")
+        this.InstantiateGameObject(earth, position, rotation, scale,undefined, "Planet");
 
     } 
     
@@ -272,7 +264,7 @@ class LevelSystem{
                                             )                       
             let rotation = new THREE.Euler( 0,0,0);
             let scale = (Math.random() * (0.03 -0.015)) + 0.015;
-            this.InstantiateGameObject(asteroid, position, rotation, scale)
+            this.InstantiateGameObject(asteroid, position, rotation, scale,undefined, "Ennemy")
 
         }
 

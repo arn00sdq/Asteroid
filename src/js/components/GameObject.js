@@ -6,15 +6,16 @@ class GameObject extends THREE.Object3D{
     * @param {THREE.Mesh}  audio
     * @param {THREE.Audio} [params] 
     */
-    constructor(model, audio, params){
+    constructor(model, audio){
         
         super();
-
+        
         if (!model) model = "";
         if (!audio) audio = "";
-        
+
         this.components = {};
         this.model = model;
+
         this.scene = null;
         this.name = null;
         this.audio = audio;
