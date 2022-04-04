@@ -18,10 +18,12 @@ import FireRate from "./components/Joker/FireRate.js";
 import Shield from "./components/Joker/Shield.js";
 import EnnemySpaceship from "./components/EnnemySpaceship/EnnemySpaceship.js";
 import Earth from "./components/Planet/Earth.js";
+import Sun from "./components/Planet/Sun.js";
 
 import { _FS,_VS } from "./components/Planet/glslEarth.js";
 import {_FSAT, _VSAT } from "./components/Planet/glslAtmosphere.js";
-import {_FSBooster, _VSBooster} from "./components/Player/booster.js"
+import {_FSBooster, _VSBooster} from "./components/Player/booster.js";
+import {_FSSunShader, _VSSunShader} from "./components/Planet/glslSunShader.js"
 
 class Asteroid {
     constructor() {
@@ -184,7 +186,83 @@ class Asteroid {
         const materialShield = new THREE.MeshStandardMaterial({ color: 0xffdd00, emissive: 0xecc70e, transparent: true, opacity: 0.5, alphaTest: 0.1 });
         const shieldMesh = new THREE.Mesh(geometryShield, materialShield);
         shieldMesh.name = "ShieldItem";
+
+        /*
+        * Sun 
+        */
+        console.log(_FS)
+        const sunMaterial = new THREE.ShaderMaterial({
+            vertexShader: _VS(),
+            fragmentShader: _FS(),
+            uniforms:{
+                globeTexture: {
+                    value: textureLoader.load("../medias/images/sun/sun.jpg"),
+                    
+                },
+                
+            }
+           /* normalMap: textureLoader.load("../medias/images/earth/earth_normal_map.jpg"),
+            specularMap: textureLoader.load("../medias/images/earth/earth_specular_map.tif")*/
+        });
+        const sunGeometry = new THREE.SphereBufferGeometry(5, 50, 50);
+        const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+        sunMesh.rotateY((Math.PI / 180)* 280)
+        sunMesh.name = "SunItem";
+
+        /*
+        * SunAtmosphere
+        */
         
+        this.sunAtmosphere = new THREE.Mesh(
+            new THREE.SphereGeometry(5, 50, 50),
+            new THREE.ShaderMaterial( 
+                {
+                    uniforms: { 
+                        sunTexture: {
+                            value: textureLoader.load("../medias/images/sun/glow2.png")
+                        } 
+                    },
+                    vertexShader: _VSSunShader(),
+                    fragmentShader: _FSSunShader(),
+                    side: THREE.DoubleSide,
+                    blending: THREE.AdditiveBlending,
+                    transparent: true,
+            })
+        );
+
+        /*
+        * Star
+        */
+
+            const starGeometry = new THREE.BufferGeometry();
+            const starMaterial = new THREE.PointsMaterial({
+                color : 0xffffff,
+                }
+            )
+
+            const starVertices = []
+            for (let i=0; i<5000; i++){
+                const x = ( (Math.random()  * 2000)   * ( Math.round( Math.random() ) ? 1 : -1 ));
+                const y = ( ((Math.random()  *  (2000 - 500)) + 500)   * ( Math.round( Math.random() ) ? 1 : -1 ));
+                const z = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
+                starVertices.push(x,y,z);
+            }
+            for (let i=0; i<5000; i++){
+                const x = ( ((Math.random()  *  (2000 - 500)) + 500)   * ( Math.round( Math.random() ) ? 1 : -1 ));
+                const y = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
+                const z = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
+                starVertices.push(x,y,z);
+            }
+           for (let i=0; i<5000; i++){
+                const x = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
+                const y = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
+                const z = ( ((Math.random()  *  (2000 - 500)) + 500)   * ( Math.round( Math.random() ) ? 1 : -1 ));
+                starVertices.push(x,y,z);
+            }
+            
+            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute( starVertices,3))
+
+            this.stars = new THREE.Points(starGeometry,starMaterial);
 
         /*
         * planet 
@@ -263,12 +341,10 @@ class Asteroid {
         /* 
         * ModelManager
         */
-        this.modelManager.push(cylinderMesh);
-        this.modelManager.push(firePower);
-        this.modelManager.push(fireRate);
-        this.modelManager.push(earthMesh);
-        this.modelManager.push(bulletPlayer);
-        this.modelManager.push(shieldMesh);
+        this.modelManager.push(cylinderMesh);this.modelManager.push(firePower);this.modelManager.push(fireRate);
+        this.modelManager.push(earthMesh);this.modelManager.push(bulletPlayer);this.modelManager.push(shieldMesh);
+        this.modelManager.push(sunMesh)
+
         loaderObj.load('../medias/models/low_poly.obj', (object) => {
 
             object.traverse(function (child) {
@@ -373,6 +449,7 @@ class Asteroid {
         let playerModel, rockModel,heartModel, coinModel, ennemy_ssModel;
         let bulletEnnemy = new Object3D(); let bulletPlayer= new Object3D(); let firePowerModel= new Object3D(); 
         let fireRateModel= new Object3D(); let shieldModel= new Object3D(); let earthModel = new Object3D();
+        let sunModel = new Object3D();
 
         this.modelManager.forEach((e) => {
 
@@ -387,6 +464,8 @@ class Asteroid {
             if (e.name == "ShieldItem") shieldModel.add(e);
 
             if (e.name == "EarthItem") earthModel.add(e);
+
+            if (e.name == "SunItem") sunModel.add(e);
 
             if (e.name == "HeartItem") heartModel = e;
 
@@ -437,7 +516,9 @@ class Asteroid {
         const shaders ={
 
             astmosphere :  this.atmosphere,
+            sunAtmosphere: this.sunAtmosphere,
             booster : this.booster,
+            stars: this.stars,
  
          }
 
@@ -448,6 +529,7 @@ class Asteroid {
             asteroid: new BasicAsteroid(rockModel, 0),
             coin: new Coin(coinModel, 0),
             earth: new Earth(earthModel,0),
+            sun: new Earth(sunModel,0),
             firepower: new FirePower(firePowerModel, 0),
             firerate: new FireRate(fireRateModel, 0),
             shield: new Shield(shieldModel, 0),

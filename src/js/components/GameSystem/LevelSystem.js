@@ -137,14 +137,12 @@ class LevelSystem{
 
             case "Stage1":   
 
-            
                 displaySystem.printUIHeader(this.parent.player.life, this.parent.score);
                 this.parent.components.JokerSystem == undefined ?
                 this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models)) : ``;
-
                 this.LoadGameScene();          
                 this.loadAsteroidBackGround(this.parent.asteroid,50);
-                this.loadPlanetBackGroundStageOne(this.parent.earth);
+                this.loadPlanetBackGroundStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 this.AsteroidWave(this.parent.asteroid, 10);
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 
@@ -183,13 +181,11 @@ class LevelSystem{
 
         let stageScene = new THREE.Scene();
 
-        let gridHelper = new THREE.GridHelper(40, 40);
-        const light = new THREE.AmbientLight(0xffffff, 1);
-        light.position.set(0, 10, 0);   
+        //let gridHelper = new THREE.GridHelper(40, 40);
 
-        stageScene.add(gridHelper);
+
+        //stageScene.add(gridHelper);
         stageScene.add(new THREE.AxesHelper());  
-        stageScene.add(light);
 
         this.parent.currentScene = stageScene;
         this.parent.currentCamera = this.parent.inGameCamera;
@@ -222,18 +218,49 @@ class LevelSystem{
 
     } 
 
-    loadPlanetBackGroundStageOne(earth){
+    loadPlanetBackGroundStageOne(model){
 
+        /*atmosphere earth*/
         let atmosphere = this.parent.atmosphere;
-        
-        atmosphere.scale.set(1.1,1.1,1.1);
-        atmosphere.position.set(0,-20,60)
+        atmosphere.scale.set(2.6,2.6,2.6);
+        atmosphere.position.set(0,-20,50);
         this.parent.currentScene.add(atmosphere);
 
-        let position = new THREE.Vector3(0,-20,60);
-        let rotation = new THREE.Euler( 0,0,0);
-        let scale = 1;
-        this.InstantiateGameObject(earth, position, rotation, scale,undefined, "Planet");
+        /*earth*/
+        model.earth.scale.set(2.6,2.6,2.6)
+        let positionEarth = new THREE.Vector3(0,-20,50);
+        let rotationEarth  = new THREE.Euler( 0,0,0);
+        let scaleEarth  = 1;
+        
+        /*sun*/
+
+        model.sun.scale.set(10.6,10.6,10.6)
+        let positionSun = new THREE.Vector3(-100,50,-450);
+        let rotationSun = new THREE.Euler( 0,0,0);
+        let scaleSun = 1;
+
+        /*light*/
+        const spotLight = new THREE.SpotLight(0xF7DF29,2,500,(Math.PI/180)*50);
+        spotLight.position.set(-100,-5,-150);
+        spotLight.target.position.set(0,-20,50);
+        this.parent.currentScene.add(spotLight);
+
+        const ambientLight = new THREE.AmbientLight(0xFFFFFF,0.1);
+        ambientLight.position.set(0,0,0);
+        this.parent.currentScene.add(ambientLight);
+
+        /*atmosphere sun*/
+        let sunAtmosphere = this.parent.sunAtmosphere;
+        sunAtmosphere.scale.set(12,12,12);
+        sunAtmosphere.position.set(-100,50,-450);
+        this.parent.currentScene.add(sunAtmosphere);
+        
+        //star
+        this.parent.currentScene.add(model.stars);
+
+        //Instate go
+        this.InstantiateGameObject(model.earth, positionEarth, rotationEarth, scaleEarth,undefined, "Planet");
+        this.InstantiateGameObject(model.sun, positionSun, rotationSun, scaleSun,undefined, "Planet");
 
     } 
     

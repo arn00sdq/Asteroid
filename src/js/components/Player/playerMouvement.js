@@ -25,8 +25,8 @@ class CharacterMouvement {
     this.boostLengthZ = 0.02;
     this.boostLengthX = 0.03;
 
-    this.boostLengthStepZ = 0.05;
-    this.boostLengthStepX = 0.07;
+    this.boostLengthStepZ = 0.04;
+    this.boostLengthStepX = 0.05;
 
     this.boostLengthDownStep = 0.0003 ;
     this.boostLengthDownStepBackWard = 0.003 ;
@@ -81,7 +81,6 @@ class CharacterMouvement {
       if(this.boostLengthX > 0.075) this.boostLengthX = 0.075
       if(this.boostLengthZ >  0.05) this.boostLengthZ =  0.05
       
-      console.log(this.boostLengthX,this.boostLengthZ);
       booster.material.uniforms[ 'time' ].value = 0.05;
       booster.material.uniforms[ 'boostLengthZ' ].value = this.boostLengthZ;
       booster.material.uniforms[ 'boostLengthX' ].value = this.boostLengthX;

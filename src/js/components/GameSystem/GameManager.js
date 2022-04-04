@@ -23,6 +23,7 @@ class GameManager {
         this.composer = utils.composer;
         this.renderer = utils.renderer;
         this.currentScene = utils.scene;
+        
         this.inGameCamera = utils.inGameCamera;
         this.startMenuCamera = utils.startMenuCamera;
         this.loop = utils.loop;
@@ -36,6 +37,7 @@ class GameManager {
         this.heart = models.heart;
         this.coin = models.coin;
         this.earth = models.earth;
+        this.sun = models.sun;
         this.firepower = models.firepower;
         this.firerate = models.firerate;
         this.shield = models.shield;
@@ -54,6 +56,8 @@ class GameManager {
 
         this.atmosphere = shaders.astmosphere;
         this.booster = shaders.booster;
+        this.sunAtmosphere = shaders.sunAtmosphere;
+        this.stars = shaders.stars
 
         /*
         * Anim
@@ -131,12 +135,14 @@ class GameManager {
 
     ModelInitialisation() {
 
+        // boucle for Each plus tard
         this.asteroid.InitMesh();
         this.player.InitMesh();
         this.ennemy_ss.InitMesh();
         this.heart.InitMesh();
         this.coin.InitMesh();
         this.earth.InitMesh();
+        this.sun.InitMesh();
         this.firepower.InitMesh();
         this.firerate.InitMesh();
         this.shield.InitMesh();
@@ -159,7 +165,7 @@ class GameManager {
         const booster = this.player.children.find( e =>e.name =="booster"  )
         booster.position.set(0,-0.01,-0.15)
         
-        /* */
+        /* ---- */
         this.input = this.player.GetComponent("CharacterControllerInput").keys;
 
         this.ennemy_ss.weaponParams = this.ennemyBullet;
