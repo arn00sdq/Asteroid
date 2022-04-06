@@ -182,13 +182,7 @@ class LevelSystem{
     LoadGameScene() {
 
         let stageScene = new THREE.Scene();
-
-        //let gridHelper = new THREE.GridHelper(40, 40);
-
-
-        //stageScene.add(gridHelper);
-        //stageScene.add(new THREE.AxesHelper());  
-
+        
         this.parent.currentScene = stageScene;
         this.parent.currentCamera = this.parent.inGameCamera;
 

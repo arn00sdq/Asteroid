@@ -22,7 +22,6 @@ class GameManager {
         this.currentScene = new THREE.Scene();
         this.currentCamera = new THREE.Camera();
 
-
         /*
         * Utils
         */
@@ -114,7 +113,7 @@ class GameManager {
 
 
         this.AddComponent(new LevelSystem(this));
-        this.AddComponent(new SoundSystem(this, this.audio));
+        this.AddComponent(new SoundSystem(this, audio));
         this.AddComponent(new JokerSystem(this, models));
         this.AddComponent(new DisplaySystem(this));
         this.AddComponent(new HackSystem(this));
@@ -144,19 +143,7 @@ class GameManager {
 
     ModelInitialisation() {
 
-        // boucle for Each plus tard
-        this.asteroid.InitMesh();
-        this.player.InitMesh();
-        this.ennemy_ss.InitMesh();
-        this.heart.InitMesh();
-        this.coin.InitMesh();
-        this.earth.InitMesh();
-        this.sun.InitMesh();
-        this.firepower.InitMesh();
-        this.firerate.InitMesh();
-        this.shield.InitMesh();
-        this.basicBullet.InitMesh();
-        this.ennemyBullet.InitMesh();
+        for(const [key,values] of Object.entries(this.models)) values.InitMesh();
 
     }
 
@@ -165,17 +152,13 @@ class GameManager {
         /* Player init */
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
         this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
-
         this.player.stageSystem = this.GetComponent("LevelSystem");
         this.player.audio_syst = this.GetComponent("SoundSystem");
-
         this.player.add(this.booster);
        
         const booster = this.player.children.find( e =>e.name =="booster"  )
-
         booster.position.set(0,-0.01,-0.155)
         
-        /* ---- */
         this.input = this.player.GetComponent("CharacterControllerInput").keys;
 
         this.ennemy_ss.weaponParams = this.ennemyBullet;
@@ -254,7 +237,7 @@ class GameManager {
     RAF() {
         
         requestAnimationFrame(this.RAF.bind(this));
-        console.log(this.state.postProcess)
+
         if (!this.state.pause) {
 
             this.loop.now = window.performance.now();
