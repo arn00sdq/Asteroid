@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 class PlayerShootProjectiles{
 
     constructor(parent,audio){

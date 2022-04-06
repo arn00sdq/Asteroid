@@ -3,15 +3,35 @@
 	<head>
 		<meta charset="utf-8">
 		<title>My first three.js app</title>
-		<link rel="stylesheet" href="../css/home_page.css">
+		<link rel="stylesheet" href="../css/loading_scene.css">
+		<link rel="stylesheet" href="../css/start_menu.css">
+		<link rel="stylesheet" href="../css/asteroid.css">
+		<link rel="stylesheet" href="../css/keyboard.css">
 	</head>
 	<body>
-		<div id="wrapper">
-			<h1>Asterroid</h1>
-			<a target="_top" href="game.html" id="start" class="btn blue">Play Game</a>
-			<a href="option.html" id="option" class="btn cancel">Options</a>
-			<a href="#" id="credit" class="btn grey ">Credit</a>
+		<script type="importmap">
+			{
+			  "imports": {
+				"three": "https://unpkg.com/three@0.128/build/three.module.js"
+			  }
+			}
+		  </script>
+		<script src="../js/asteroid.js" type="module"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+		<div id="siapp" style="touch-action: none;">
+		
 		</div>
 
+		<section id="loading-screen">
+			<div id="loader"></div>
+		</section>
+
+		<div class="global_message" id="start_game">
+			<div id="infos_start">Pressez la touche espace pour commencer</div>
+		</div> 
+
+		<script type="x-shader/x-vertex" id="vertexShader"></script>
+		<script type="x-shader/x-fragment" id="fragmentShader"></script>
 	</body>
 </html>

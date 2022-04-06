@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 class PlayerCameraSystem {
 
     constructor(parent, params) {

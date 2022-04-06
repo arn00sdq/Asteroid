@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import PlayerShootProjectiles from './PlayerShootProjectiles.js';
 import CharacterControllerInput from './playerInput.js';
 import CharacterMouvement  from './playerMouvement.js';

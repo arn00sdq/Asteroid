@@ -1,4 +1,6 @@
-import JokerFollowPlayer from "../Joker/JokerFollowPlayer.js";
+import * as THREE from 'three';
+
+import { Object3D } from "../../three/three.module.js";
 
 class JokerSystem{
 
@@ -92,7 +94,7 @@ class JokerSystem{
 
             this.nextJoker =  Math.round(timeElapsed);
 
-            if(this.nextJoker % 5 == 0 && this.jokerAv.length > 0){
+            if(this.nextJoker % 1 == 0 && this.jokerAv.length > 0){
 
                 let position = new THREE.Vector3( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) )  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
@@ -114,7 +116,7 @@ class JokerSystem{
                         break;
                 }
                 
-                this.level_sys_comp.InstantiateGameObject(currentJoker,position,rotation,scale);
+                this.level_sys_comp.InstantiateGameObject(currentJoker,position,rotation,scale,undefined,"joker");
                 
             } 
         }

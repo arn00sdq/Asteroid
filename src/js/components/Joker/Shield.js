@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import GameObject from "../GameObject.js";
 import JokerMovement from "./JokerMovement.js";
 
@@ -12,7 +14,8 @@ class Shield extends GameObject{
    
         this.limit = 1;
         this.nb = nb;
-
+        this.layers.enable(0);
+        console.log(this)
         this.InitComponent();
 
     }

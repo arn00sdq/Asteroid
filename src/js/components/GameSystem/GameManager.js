@@ -1,3 +1,13 @@
+import { _FSBloom, _VSBloom}  from "../../components/Shader/bloom.js"
+
+import * as THREE from 'three';
+import { _FS,_VS } from "../Planet/glslEarth.js";
+
+import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/EffectComposer.js";
+import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/RenderPass.js";
+import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/ShaderPass.js";
+import { UnrealBloomPass  } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/UnrealBloomPass.js";
+
 import DisplaySystem from "./DisplaySystem.js";
 import JokerSystem from "./JokerSystem.js";
 import LevelSystem from "./LevelSystem.js";
@@ -6,16 +16,17 @@ import HackSystem from "./HackSystem.js";
 import SoundSystem from "./SoundSystem.js";
 import MenuSystem from "./MenuSystem.js";
 import SceneSystem from "./SceneManager.js";
+import { Object3D, TextureLoader } from '../../three/three.module.js';
 
 
 class GameManager {
 
-    constructor(models, utils, animation, audio, shaders) {
+    constructor(models, utils, audio, shaders, postProcess) {
 
         this.components = {};
-        
         this.currentScene = new THREE.Scene();
         this.currentCamera = new THREE.Camera();
+
 
         /*
         * Utils
@@ -57,13 +68,18 @@ class GameManager {
         this.atmosphere = shaders.astmosphere;
         this.booster = shaders.booster;
         this.sunAtmosphere = shaders.sunAtmosphere;
-        this.stars = shaders.stars
+        this.stars = shaders.stars;
 
         /*
-        * Anim
+        * PostProcess
         */
-        this.mixer = animation.mixer;
-        this.idle = animation.idleAction;
+        this.materials = {},
+        this.bloomLayer = postProcess.bloomLayer;
+       /* this.finalComposer = postProcess.finalComposer;
+        this.bloomComposer = postProcess.finalComposer;
+
+        this.bloomPass = postProcess.bloomPass,
+        this.finalPass = postProcess.finalPass,*/
 
 
         /*
@@ -161,8 +177,9 @@ class GameManager {
         this.player.audio_syst = this.GetComponent("SoundSystem");
 
         this.player.add(this.booster);
-
+       
         const booster = this.player.children.find( e =>e.name =="booster"  )
+
         booster.position.set(0,-0.01,-0.15)
         
         /* ---- */
@@ -173,6 +190,43 @@ class GameManager {
         this.ennemy_ss.target = this.player;
 
         this.ennemyBullet.name = "EnnemyBullet";
+
+
+    }
+
+    PostProcessRender(){
+
+        const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+        bloomPass.threshold =0;
+        bloomPass.exposure =1;
+		bloomPass.strength = 5;
+		bloomPass.radius =1;
+
+        const renderScene = new RenderPass( this.currentScene, this.currentCamera );
+        
+        this.bloomComposer  = new EffectComposer(this.renderer);
+        this.bloomComposer.renderToScreen = false;
+        this.bloomComposer.addPass( renderScene );
+		this.bloomComposer.addPass( bloomPass );
+
+        this.finalPass = new ShaderPass(
+            new THREE.ShaderMaterial( {
+                uniforms: {
+                    baseTexture: { value: null },
+                    bloomTexture: { value: this.bloomComposer.renderTarget2.texture }
+                },
+                vertexShader: _VSBloom(),
+                fragmentShader: _FSBloom(),
+                defines: {}
+            } ), 'baseTexture'
+        );
+        this.finalPass.needsSwap = true;
+
+        this.finalComposer = new EffectComposer( this.renderer );
+
+        this.finalComposer.addPass( renderScene );
+        this.finalComposer.addPass( this.finalPass );
+
 
 
     }
@@ -233,14 +287,15 @@ class GameManager {
 
 
     RAF() {
+        
         requestAnimationFrame(this.RAF.bind(this));
+
         if (!this.state.pause) {
 
             this.loop.now = window.performance.now();
             this.loop.dt = this.loop.dt + Math.min(1, (this.loop.now - this.loop.last) / 1000);
 
             while (this.loop.dt > this.loop.slowStep) this.loop.dt = this.loop.dt - this.loop.slowStep;
-
             this.prevTime = Date.now() - this.loop.slowStep;
             this.timeElapsed += Date.now() - this.prevTime;
             this.tempTime = this.timeElapsed;
@@ -251,12 +306,19 @@ class GameManager {
             }else{
 
 
-                this.renderer.render(this.currentScene, this.currentCamera);
+				//this.bloomComposer.render();
+
+				//this.finalComposer.render();
+               
+               // this.currentCamera.layers.set(0);
+               this.renderBloom();
+              //  this.currentCamera.layers.set(0);
+                 this.finalComposer.render();
+              //  this.renderer.render(this.currentScene, this.currentCamera);
 
 
             }
-
-            
+ 
             this.loop.last = this.loop.now;
             this.Step(this.tempTime);
 
@@ -266,10 +328,36 @@ class GameManager {
 
         }
 
+    }
+
+    renderBloom( ) {
+
+        let that = this;
+
+        this.currentScene.traverse( function(child ) {
+          
+            if(!child.isMesh || child.name == "SunItem" || child.name == "EarthItem")  return;
+            
+            that.materials[child.uuid] = child.material;
+            child.material = new THREE.MeshBasicMaterial( { color: 'black' } );   
+         
+
+        },true)
+
+        console.log(`---------------------------------------------------`);
+        this.bloomComposer.render();
+
+        this.currentScene.traverse( function(child ) {
+
+            if(!child.isMesh || child.name == "SunItem" || child.name == "EarthItem")  return;
+            
+            child.material = that.materials[ child.uuid ];
+            delete that.materials[ child.parent.uuid ];
+
+        },true)
 
 
     }
-
 
     Step(timeElapsed) {
 

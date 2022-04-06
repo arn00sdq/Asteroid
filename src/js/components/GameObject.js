@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 class GameObject extends THREE.Object3D{
 
     /**
@@ -32,7 +34,6 @@ class GameObject extends THREE.Object3D{
     
         this.model.children.forEach( (e) => {
 
-            
             this.add(e)
 
         })
@@ -93,9 +94,11 @@ class GameObject extends THREE.Object3D{
         o.rotation.copy(r);
         o.children.forEach( e => {
             if (e.constructor.name == "Mesh") {
+                
                 e.scale.copy(new THREE.Vector3(s,s,s))
             }
         })
+
         this.scene.add(o);
         
     }

@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import GameObject from "../GameObject.js";
 import JokerMovement from "./JokerMovement.js";
 

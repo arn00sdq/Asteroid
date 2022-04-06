@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import AsteroidMovement from "./AsteroidMouvement.js";
 import AsteroidHealthSystem from "./AsteroidHealthSystem.js";
 import StaticAsteroid from "./StaticAsteroid.js";

@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 import Player from "./components/Player/Player.js";
 import BasicBullet from "./components/Bullet/BasicBullet.js";
 import BasicAsteroid from "./components/Asteroid/BasicAsteroid.js";
@@ -9,7 +11,7 @@ import { Object3D, TextureLoader } from "./three/three.module.js";
 import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/ShaderPass.js";
-import { PixelShader } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/shaders/PixelShader.js";
+import { UnrealBloomPass  } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/UnrealBloomPass.js";
 
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
@@ -24,6 +26,7 @@ import { _FS,_VS } from "./components/Planet/glslEarth.js";
 import {_FSAT, _VSAT } from "./components/Planet/glslAtmosphere.js";
 import {_FSBooster, _VSBooster} from "./components/Player/booster.js";
 import {_FSSunShader, _VSSunShader} from "./components/Planet/glslSunShader.js"
+import { _FSBloom, _VSBloom}  from "./components/Shader/bloom.js"
 
 class Asteroid {
     constructor() {
@@ -54,7 +57,6 @@ class Asteroid {
 
         /*scene*/
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x000000);
         this.sceneStartMenu = new THREE.Scene();
 
         /*renderer*/
@@ -63,19 +65,19 @@ class Asteroid {
         let h = container.clientHeight;
 
         this.renderer = new THREE.WebGLRenderer({ antialias:true, preserveDrawingBuffer: true });
+
         this.renderer.setPixelRatio(window.devicePixelRatio)
-        this.renderer.setClearColor(0xffffff, 0);
         this.renderer.setSize(w, h);
+        //this.renderer.toneMapping = THREE.ReinhardToneMapping;
         container.appendChild(this.renderer.domElement);
 
         /* post process */
-        this.composer = new EffectComposer(this.renderer);
-        this.composer.addPass(new RenderPass(this.scene, this.inGameCamera));
+        this.bloomLayer = new THREE.Layers();
+		this.bloomLayer.set(2 );
 
-        var pixelPass = new ShaderPass(PixelShader);
-        pixelPass.uniforms['resolution'].value = new THREE.Vector2(window.innerWidth, window.innerHeight);
-        pixelPass.uniforms['resolution'].value.multiplyScalar(window.devicePixelRatio);
-        this.composer.addPass(pixelPass);
+        
+
+       
 
         /*timer*/
         this.loop = {}
@@ -129,15 +131,11 @@ class Asteroid {
 
         const textureLoader = new TextureLoader(this.loadingManager);
 
-        var mapPlayer = textureLoader.load('../medias/models/Player/textures/Andorian (4).png');
-        var normalPlayer1 = textureLoader.load('../medias/models/Player/textures/Andorian (3).png');
-        var normalPlayer2 = textureLoader.load('../medias/models/Player/textures/Husnock (3).png');
-        var envPlayer = textureLoader.load('../medias/models/Player/textures/env.png');
         var materialPlayer = new THREE.MeshPhongMaterial({
-            map: mapPlayer,
-            normalMap: normalPlayer1,
-            bumpMap: normalPlayer2,
-            emissiveMap: envPlayer,
+            map: textureLoader.load('../medias/models/Player/textures/Andorian (4).png'),
+            normalMap: textureLoader.load('../medias/models/Player/textures/Andorian (3).png'),
+            bumpMap: textureLoader.load('../medias/models/Player/textures/Husnock (3).png'),
+            emissiveMap: textureLoader.load('../medias/models/Player/textures/env.png'),
         });
 
         var material = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg') })
@@ -146,19 +144,20 @@ class Asteroid {
         /* 
         *   Balle Joueur
         */
-        const geometryBullet = new THREE.CylinderBufferGeometry(0.01, 0.01, 0.1, 5, 1, false);
-        const materialBullet = new THREE.MeshLambertMaterial();
-        materialBullet.color.set(0xff0000);
-        materialBullet.emissive.set(0xff000d);
 
-        const geometryBulletPlayer = new THREE.CylinderGeometry(0.01, 0.01, 0.1, 5, 1, false);
-        const materialBulletPlayer = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-        const bulletPlayer = new THREE.Mesh(geometryBulletPlayer, materialBulletPlayer);
+
+        const bulletPlayer = new THREE.Mesh(
+            new THREE.CylinderGeometry(5, 50, 50),
+            new THREE.MeshBasicMaterial({ color: 0xffff00 }));
         bulletPlayer.name = "BulletPlayer";
         bulletPlayer.rotateX((Math.PI / 180) * 90);
         /* 
         *   Balle Ennemy
         */
+        const geometryBullet = new THREE.CylinderBufferGeometry(0.01, 0.01, 0.1, 5, 1, false);
+        const materialBullet = new THREE.MeshLambertMaterial();
+        materialBullet.color.set(0xff0000);
+        materialBullet.emissive.set(0xff000d);
         const cylinderMesh = new THREE.Mesh(geometryBullet, materialBullet);
         cylinderMesh.name = "BulletEnnemy";
         cylinderMesh.rotateX((Math.PI / 180) * 90);
@@ -167,7 +166,9 @@ class Asteroid {
         *   Item +1 Bullet
         */
         const firePowerGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-        const firePowerMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load("../medias/images/power-up/firepower.PNG") ,color: 0xff0000 });
+        const firePowerMaterial = new THREE.MeshBasicMaterial({ 
+            map: textureLoader.load("../medias/images/power-up/firepower.PNG") ,
+            color: 0xff0000 });
         const firePower = new THREE.Mesh(firePowerGeometry, firePowerMaterial);
         firePower.name = "firePowerItem";
 
@@ -190,7 +191,6 @@ class Asteroid {
         /*
         * Sun 
         */
-        console.log(_FS)
         const sunMaterial = new THREE.ShaderMaterial({
             vertexShader: _VS(),
             fragmentShader: _FS(),
@@ -206,9 +206,9 @@ class Asteroid {
         });
         const sunGeometry = new THREE.SphereBufferGeometry(5, 50, 50);
         const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+        sunMesh.layers.set(0);
         sunMesh.rotateY((Math.PI / 180)* 280)
         sunMesh.name = "SunItem";
-
         /*
         * SunAtmosphere
         */
@@ -267,7 +267,6 @@ class Asteroid {
         /*
         * planet 
         */
-        console.log(_FS)
         const earthMaterial = new THREE.ShaderMaterial({
             vertexShader: _VS(),
             fragmentShader: _FS(),
@@ -278,11 +277,10 @@ class Asteroid {
                 },
                 
             }
-           /* normalMap: textureLoader.load("../medias/images/earth/earth_normal_map.jpg"),
-            specularMap: textureLoader.load("../medias/images/earth/earth_specular_map.tif")*/
         });
-        const earthGeometry = new THREE.SphereBufferGeometry(5, 50, 50);
+        const earthGeometry = new THREE.SphereBufferGeometry(5 , 50, 50);
         const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+        earthMesh.layers.set(0);
         earthMesh.rotateY((Math.PI / 180)* 280)
         earthMesh.name = "EarthItem";
 
@@ -291,7 +289,7 @@ class Asteroid {
         */
 
         this.atmosphere = new THREE.Mesh(
-            new THREE.SphereGeometry(6, 50, 50),
+            new THREE.SphereGeometry(5, 50, 50),
             new THREE.ShaderMaterial({
                 vertexShader: _VSAT(),
                 fragmentShader: _FSAT(),
@@ -299,7 +297,6 @@ class Asteroid {
                 side: THREE.BackSide
     
             })
-
         )
 
         /*
@@ -349,7 +346,10 @@ class Asteroid {
 
             object.traverse(function (child) {
 
-                if (child.isMesh) child.material = material;
+                if (child.isMesh){ 
+                    child.name = "spaceRock";
+                    child.material = material
+                };
 
             });
 
@@ -368,6 +368,7 @@ class Asteroid {
 
             object.children[0].rotateY();
             object.name = "EnnemySpaceship";
+
             this.modelManager.push(object);
 
         });
@@ -397,11 +398,15 @@ class Asteroid {
 
             object.traverse(function (child) {
 
-                if (child.isMesh) child.material = materialPlayer;
+                if (child.isMesh){
+                    child.name = "playerMesh";
+                    child.material = materialPlayer;
+                } 
 
             });
 
             object.name = "SpaceShip";
+           // console.log(object)
             this.modelManager.push(object);
 
         });
@@ -498,7 +503,6 @@ class Asteroid {
 
         const utils = {
 
-            composer: this.composer,
             renderer: this.renderer,
             scene: this.stageScene,
             sceneStartMenu: this.sceneStartMenu,
@@ -513,7 +517,19 @@ class Asteroid {
             idleAction: null/* this.idleAction*/,
         }
 
-        const shaders ={
+        const postProcess = {
+
+            finalComposer: this.finalComposer,
+            bloomComposer : null,
+            bloomLayer: this.bloomLayer,
+
+            bloomPass: null,
+            finalPass : this.finalPass,
+
+
+        }
+
+        const shaders = {     
 
             astmosphere :  this.atmosphere,
             sunAtmosphere: this.sunAtmosphere,
@@ -529,7 +545,7 @@ class Asteroid {
             asteroid: new BasicAsteroid(rockModel, 0),
             coin: new Coin(coinModel, 0),
             earth: new Earth(earthModel,0),
-            sun: new Earth(sunModel,0),
+            sun: new Sun(sunModel,0),
             firepower: new FirePower(firePowerModel, 0),
             firerate: new FireRate(fireRateModel, 0),
             shield: new Shield(shieldModel, 0),
@@ -539,7 +555,7 @@ class Asteroid {
 
         }
 
-        this.gm = new GameManager(models, utils, animations, audio, shaders)
+        this.gm = new GameManager(models, utils, audio, shaders, postProcess)
         this.gm.ModelInitialisation();
         this.gm.ValueInitialisation();
 
@@ -578,7 +594,8 @@ class Asteroid {
         this.inGameCamera.aspect = window.innerWidth / window.innerHeight;
         this.inGameCamera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.composer.setSize(window.innerWidth, window.innerHeight);
+      /*  this.bloomComposer.setSize( window.innerWidth, window.innerHeight );
+		this.finalComposer.setSize( window.innerWidth, window.innerHeight );*/
 
     }
 
@@ -590,7 +607,6 @@ class Asteroid {
     }
 
 }
-
 let _App = new Asteroid();
 
 
