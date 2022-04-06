@@ -578,7 +578,7 @@ class Asteroid {
             // document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").ScenePicker("Stage1", true);
+            this.gm.GetComponent("LevelSystem").ScenePicker("StartMenu", true);
 
         }
 
@@ -598,8 +598,8 @@ class Asteroid {
         this.inGameCamera.aspect = window.innerWidth / window.innerHeight;
         this.inGameCamera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-      /*  this.bloomComposer.setSize( window.innerWidth, window.innerHeight );
-		this.finalComposer.setSize( window.innerWidth, window.innerHeight );*/
+        this.bloomComposer.setSize( window.innerWidth, window.innerHeight );
+		this.finalComposer.setSize( window.innerWidth, window.innerHeight );
 
     }
 

@@ -59,17 +59,6 @@ class LevelSystem{
         
     }
 
-    InstantiateParticule(particule,position){
-
-        let particule_clone = particule.clone();
-        particule_clone.scene = particule.scene;
-
-        //this.SetCloneValue(object_clone, object);
-
-        particule_clone.Instantiate(particule_clone,position, new THREE.Euler(0,0,0),1);
-
-    }
-
     SetCloneValue(destination, source){
 
         for (const property in destination) {
@@ -143,7 +132,7 @@ class LevelSystem{
                 this.parent.RemoveComponent("JokerSystem")
 
                 this.LoadStartMenuScene();
-                this.loadPlanetBackStartMenu(this.parent.earth);
+                this.loadPlanetBackStartMenu({earth : this.parent.earth, stars : this.parent.stars});
                 break;
 
             case "Stage1":   
@@ -179,7 +168,7 @@ class LevelSystem{
         this.parent.PostProcessRender();    
 
         if(init){
-            console.log("ca commence")
+
             this.parent.RAF();
 
         }else{
@@ -216,19 +205,20 @@ class LevelSystem{
 
     }
 
-    loadPlanetBackStartMenu(earth){
+    loadPlanetBackStartMenu(model){
 
         let atmosphere = this.parent.atmosphere;
-        
         atmosphere.scale.set(1.1,1.1,1.1);
         this.parent.currentScene.add(atmosphere);
 
-        let position = new THREE.Vector3(0,0,0);
-        let rotation = new THREE.Euler(0,0,0);
-        let scale = 1;
-        this.InstantiateGameObject(earth, position, rotation, scale,undefined, "Planet");
-        
+        let positionEarth = new THREE.Vector3(0,0,0);
+        let rotationEarth = new THREE.Euler(0,0,0);
+        let scaleEarth = 1;
+        this.InstantiatePlanet(model.earth, positionEarth, rotationEarth, scaleEarth, "Planet");
 
+        this.parent.currentScene.add(model.stars);
+        
+        console.log(this.parent.currentScene)
     } 
 
     loadPlanetBackGroundStageOne(model){
@@ -237,8 +227,7 @@ class LevelSystem{
         let atmosphere = this.parent.atmosphere;
         atmosphere.scale.set(2.7,2.7,2.7);
         atmosphere.position.set(0,-20,100);
-        atmosphere.layers.set(2)
-        //this.parent.currentScene.add(atmosphere);
+       // this.parent.currentScene.add(atmosphere);
 
         /*earth*/
         model.earth.scale.set(2.6,2.6,2.6)
@@ -266,8 +255,7 @@ class LevelSystem{
         let sunAtmosphere = this.parent.sunAtmosphere;
         sunAtmosphere.scale.set(12,12,12);
         sunAtmosphere.position.set(-100,50,-450);
-        sunAtmosphere.layers.set(2)
-        this.parent.currentScene.add(sunAtmosphere);
+        //this.parent.currentScene.add(sunAtmosphere);
         
         //star
         this.parent.currentScene.add(model.stars);

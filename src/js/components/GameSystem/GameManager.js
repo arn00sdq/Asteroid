@@ -254,7 +254,7 @@ class GameManager {
     RAF() {
         
         requestAnimationFrame(this.RAF.bind(this));
-
+        console.log(this.state.postProcess)
         if (!this.state.pause) {
 
             this.loop.now = window.performance.now();
@@ -266,13 +266,12 @@ class GameManager {
             this.tempTime = this.timeElapsed;
             if(this.state.postProcess){
 
-                //this.composer.render(this.tempTime);
+                this.renderBloom();
+                this.finalComposer.render();
 
             }else{
                
                this.renderer.render(this.currentScene,this.currentCamera)
-               /* this.renderBloom();
-                this.finalComposer.render();*/
 
             }
  
