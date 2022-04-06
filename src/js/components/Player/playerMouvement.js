@@ -21,14 +21,14 @@ class CharacterMouvement {
 
     /* anim */
     
-    this.boostLengthZ = 0.02;
-    this.boostLengthX = 0.03;
+    this.boostLengthZ = 50;
+    this.boostLengthX = 70;
 
-    this.boostLengthStepZ = 0.04;
-    this.boostLengthStepX = 0.05;
+    this.boostLengthStepZ = 60;
+    this.boostLengthStepX = 60;
 
-    this.boostLengthDownStep = 0.0003 ;
-    this.boostLengthDownStepBackWard = 0.003 ;
+    this.boostLengthDownStep = 0.3 ;
+    this.boostLengthDownStepBackWard = 3 ;
 
   }
 
@@ -46,9 +46,10 @@ class CharacterMouvement {
     const booster = this.parent.children.find( e =>e.name =="booster" )
     const input = this.parent.GetComponent('CharacterControllerInput');
     const velocity = this.velocity;
+    const controlObject = this.parent;
+    const acc = this.acceleration.clone();
 
     const frameDecceleration = new THREE.Vector3(
-
       velocity.x * this.decceleration.x,
       velocity.y * this.decceleration.y,
       velocity.z * this.decceleration.z
@@ -58,11 +59,6 @@ class CharacterMouvement {
     frameDecceleration.z = Math.sign(frameDecceleration.z) * Math.min(
       Math.abs(frameDecceleration.z), Math.abs(velocity.z));
     velocity.add(frameDecceleration);
-
-    const controlObject = this.parent;
-    const acc = this.acceleration.clone();
-
-    /*anim booster*/
     
     let bp = this.oscillate(timeInSeconds *0.01,0.03,0.09);
     booster.material.uniforms[ 'boostPower' ].value = bp;
@@ -74,33 +70,18 @@ class CharacterMouvement {
       this.direction_copy = this.direction.clone();
 
       let os = this.oscillate(timeInSeconds *50,0.03,0.09);
-      this.boostLengthZ =  THREE.MathUtils.lerp(this.boostLengthZ,this.boostLengthZ + this.boostLengthStepZ,timeInSeconds);
-      this.boostLengthX =  THREE.MathUtils.lerp(this.boostLengthX,this.boostLengthX + this.boostLengthStepX,timeInSeconds);
-
-      if(this.boostLengthX > 0.075) this.boostLengthX = 0.075
-      if(this.boostLengthZ >  0.05) this.boostLengthZ =  0.05
-      
-      booster.material.uniforms[ 'time' ].value = 0.05;
-      booster.material.uniforms[ 'boostLengthZ' ].value = this.boostLengthZ;
-      booster.material.uniforms[ 'boostLengthX' ].value = this.boostLengthX;
-    
+      this.BoosterMode("forward",booster)
 
     }else{
 
-      this.boostLengthZ -= this.boostLengthDownStep;
-      this.boostLengthX -= this.boostLengthDownStep;
-  
-      if(this.boostLengthX < 0.03) this.boostLengthX = 0.03;
-      if(this.boostLengthZ < 0.02) this.boostLengthZ = 0.02;
-  
-      booster.material.uniforms[ 'boostLengthZ' ].value = this.boostLengthZ;
-      booster.material.uniforms[ 'boostLengthX' ].value = this.boostLengthX;
+      this.BoosterMode("freeWheel",booster)
 
     }
 
     if (input.keys.shift) {
 
       velocity.z += acc.z * TiS;
+      this.BoosterMode("acceleration",booster);
 
     }
 
@@ -110,15 +91,7 @@ class CharacterMouvement {
     if (input.keys.backward) {
 
       velocity.z -= acc.z * TiS;
-
-      this.boostLengthZ -= this.boostLengthDownStepBackWard;
-      this.boostLengthX -= this.boostLengthDownStepBackWard;
-  
-      if(this.boostLengthX < 0.03) this.boostLengthX = 0.03;
-      if(this.boostLengthZ < 0.02) this.boostLengthZ = 0.02;
-  
-      booster.material.uniforms[ 'boostLengthZ' ].value = this.boostLengthZ;
-      booster.material.uniforms[ 'boostLengthX' ].value = this.boostLengthX;
+      this.BoosterMode("brake",booster);
 
     }
 
@@ -137,6 +110,57 @@ class CharacterMouvement {
     this.direction = this.direction_copy.clone();
 
     
+  }
+
+  BoosterMode(mode,booster){
+
+    switch (mode){
+
+      case "forward":
+
+        this.boostLengthZ =  THREE.MathUtils.lerp(this.boostLengthZ,this.boostLengthZ + this.boostLengthStepZ,0.01);
+        this.boostLengthX =  THREE.MathUtils.lerp(this.boostLengthX,this.boostLengthX + this.boostLengthStepX,0.01);
+  
+        if(this.boostLengthZ >  80) this.boostLengthZ =  100
+        if(this.boostLengthX > 140) this.boostLengthX = 140
+
+        booster.material.uniforms[ 'time' ].value = 0.05;
+        break;
+
+      case "forward":
+
+        this.boostLengthZ =  THREE.MathUtils.lerp(this.boostLengthZ,this.boostLengthZ + this.boostLengthStepZ,0.05);
+        this.boostLengthX =  THREE.MathUtils.lerp(this.boostLengthX,this.boostLengthX + this.boostLengthStepX,0.05);
+  
+        if(this.boostLengthZ >  120) this.boostLengthZ =  120
+        if(this.boostLengthX > 200) this.boostLengthX = 200
+
+        booster.material.uniforms[ 'time' ].value = 0.05;
+        break;
+      case "brake":
+
+        this.boostLengthZ -= this.boostLengthDownStepBackWard;
+        this.boostLengthX -= this.boostLengthDownStepBackWard;
+    
+        if(this.boostLengthX < 70) this.boostLengthX = 70;
+        if(this.boostLengthZ < 50) this.boostLengthZ = 50;
+
+        break;
+      case "freeWheel":
+
+        this.boostLengthZ -= this.boostLengthDownStep;
+        this.boostLengthX -= this.boostLengthDownStep;
+    
+        if(this.boostLengthX < 70) this.boostLengthX = 70;
+        if(this.boostLengthZ < 50) this.boostLengthZ = 50;
+
+        break;
+
+    }
+
+    booster.material.uniforms[ 'boostLengthZ' ].value = this.boostLengthZ;
+    booster.material.uniforms[ 'boostLengthX' ].value = this.boostLengthX;
+
   }
 
   StaminaSystem(velocity,input,timeInSeconds){

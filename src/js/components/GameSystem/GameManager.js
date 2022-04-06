@@ -1,12 +1,9 @@
+import * as THREE from 'three';
+
+import { _FS,_VS } from "../Planet/glslEarth.js";
 import { _FSBloom, _VSBloom}  from "../../components/Shader/bloom.js"
 
-import * as THREE from 'three';
-import { _FS,_VS } from "../Planet/glslEarth.js";
-
-import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/RenderPass.js";
-import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/ShaderPass.js";
-import { UnrealBloomPass  } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/UnrealBloomPass.js";
 
 import DisplaySystem from "./DisplaySystem.js";
 import JokerSystem from "./JokerSystem.js";
@@ -16,8 +13,6 @@ import HackSystem from "./HackSystem.js";
 import SoundSystem from "./SoundSystem.js";
 import MenuSystem from "./MenuSystem.js";
 import SceneSystem from "./SceneManager.js";
-import { Object3D, TextureLoader } from '../../three/three.module.js';
-
 
 class GameManager {
 
@@ -74,13 +69,11 @@ class GameManager {
         * PostProcess
         */
         this.materials = {},
-        this.bloomLayer = postProcess.bloomLayer;
-       /* this.finalComposer = postProcess.finalComposer;
-        this.bloomComposer = postProcess.finalComposer;
+        this.finalComposer = postProcess.finalComposer;
+        this.bloomComposer = postProcess.bloomComposer;
 
         this.bloomPass = postProcess.bloomPass,
-        this.finalPass = postProcess.finalPass,*/
-
+        this.finalPass = postProcess.finalPass,
 
         /*
         * GM
@@ -180,7 +173,7 @@ class GameManager {
        
         const booster = this.player.children.find( e =>e.name =="booster"  )
 
-        booster.position.set(0,-0.01,-0.15)
+        booster.position.set(0,-0.01,-0.155)
         
         /* ---- */
         this.input = this.player.GetComponent("CharacterControllerInput").keys;
@@ -196,38 +189,13 @@ class GameManager {
 
     PostProcessRender(){
 
-        const bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-        bloomPass.threshold =0;
-        bloomPass.exposure =1;
-		bloomPass.strength = 5;
-		bloomPass.radius =1;
+        const renderScene = new RenderPass( this.currentScene, this.currentCamera ); 
 
-        const renderScene = new RenderPass( this.currentScene, this.currentCamera );
-        
-        this.bloomComposer  = new EffectComposer(this.renderer);
-        this.bloomComposer.renderToScreen = false;
         this.bloomComposer.addPass( renderScene );
-		this.bloomComposer.addPass( bloomPass );
-
-        this.finalPass = new ShaderPass(
-            new THREE.ShaderMaterial( {
-                uniforms: {
-                    baseTexture: { value: null },
-                    bloomTexture: { value: this.bloomComposer.renderTarget2.texture }
-                },
-                vertexShader: _VSBloom(),
-                fragmentShader: _FSBloom(),
-                defines: {}
-            } ), 'baseTexture'
-        );
-        this.finalPass.needsSwap = true;
-
-        this.finalComposer = new EffectComposer( this.renderer );
+		this.bloomComposer.addPass( this.bloomPass );
 
         this.finalComposer.addPass( renderScene );
         this.finalComposer.addPass( this.finalPass );
-
-
 
     }
 
@@ -278,13 +246,10 @@ class GameManager {
                     this.GetComponent("DisplaySystem").printUIHeader(this.player.life, this.score);
 
                 }
-
                 break;
-
         }
 
     }
-
 
     RAF() {
         
@@ -304,18 +269,10 @@ class GameManager {
                 //this.composer.render(this.tempTime);
 
             }else{
-
-
-				//this.bloomComposer.render();
-
-				//this.finalComposer.render();
                
-               // this.currentCamera.layers.set(0);
-               this.renderBloom();
-              //  this.currentCamera.layers.set(0);
-                 this.finalComposer.render();
-              //  this.renderer.render(this.currentScene, this.currentCamera);
-
+               this.renderer.render(this.currentScene,this.currentCamera)
+               /* this.renderBloom();
+                this.finalComposer.render();*/
 
             }
  
@@ -336,20 +293,20 @@ class GameManager {
 
         this.currentScene.traverse( function(child ) {
           
-            if(!child.isMesh || child.name == "SunItem" || child.name == "EarthItem")  return;
+            if( (!child.isMesh && child.constructor.name !== "Points") || child.name == "SunItem" || child.name == "EarthItem")  return;
             
             that.materials[child.uuid] = child.material;
+            
             child.material = new THREE.MeshBasicMaterial( { color: 'black' } );   
          
 
         },true)
 
-        console.log(`---------------------------------------------------`);
         this.bloomComposer.render();
-
+       
         this.currentScene.traverse( function(child ) {
 
-            if(!child.isMesh || child.name == "SunItem" || child.name == "EarthItem")  return;
+            if((!child.isMesh && child.constructor.name !== "Points")  || child.name == "SunItem" || child.name == "EarthItem")  return;
             
             child.material = that.materials[ child.uuid ];
             delete that.materials[ child.parent.uuid ];

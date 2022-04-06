@@ -8,10 +8,9 @@ import GameManager from "./components/GameSystem/GameManager.js";
 import { OBJLoader } from "./Loader/OBJLoader.js"
 import { Object3D, TextureLoader } from "./three/three.module.js";
 
-import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/EffectComposer.js";
-import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/RenderPass.js";
-import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/ShaderPass.js";
-import { UnrealBloomPass  } from "https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/EffectComposer.js";
+import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/ShaderPass.js";
+import { UnrealBloomPass  } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/UnrealBloomPass.js";
 
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
@@ -72,12 +71,28 @@ class Asteroid {
         container.appendChild(this.renderer.domElement);
 
         /* post process */
-        this.bloomLayer = new THREE.Layers();
-		this.bloomLayer.set(2 );
 
-        
+        this.bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
+        this.bloomPass.threshold =0;
+        this.bloomPass.exposure =0.5;
+		this.bloomPass.strength = 2;
+		this.bloomPass.radius =0.5;
+        this.bloomComposer  = new EffectComposer(this.renderer);
+        this.bloomComposer.renderToScreen = false;
 
-       
+        this.finalPass = new ShaderPass(
+            new THREE.ShaderMaterial( {
+                uniforms: {
+                    baseTexture: { value: null },
+                    bloomTexture: { value: this.bloomComposer.renderTarget2.texture }
+                },
+                vertexShader: _VSBloom(),
+                fragmentShader: _FSBloom(),
+                defines: {}
+            } ), 'baseTexture'
+        );
+        this.finalPass.needsSwap = true;
+        this.finalComposer = new EffectComposer( this.renderer );
 
         /*timer*/
         this.loop = {}
@@ -201,12 +216,10 @@ class Asteroid {
                 },
                 
             }
-           /* normalMap: textureLoader.load("../medias/images/earth/earth_normal_map.jpg"),
-            specularMap: textureLoader.load("../medias/images/earth/earth_specular_map.tif")*/
+
         });
         const sunGeometry = new THREE.SphereBufferGeometry(5, 50, 50);
         const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
-        sunMesh.layers.set(0);
         sunMesh.rotateY((Math.PI / 180)* 280)
         sunMesh.name = "SunItem";
         /*
@@ -280,7 +293,6 @@ class Asteroid {
         });
         const earthGeometry = new THREE.SphereBufferGeometry(5 , 50, 50);
         const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
-        earthMesh.layers.set(0);
         earthMesh.rotateY((Math.PI / 180)* 280)
         earthMesh.name = "EarthItem";
 
@@ -406,7 +418,6 @@ class Asteroid {
             });
 
             object.name = "SpaceShip";
-           // console.log(object)
             this.modelManager.push(object);
 
         });
@@ -512,20 +523,13 @@ class Asteroid {
 
         }
 
-        const animations = {
-            mixer: null/*this.animationsManager[0]*/,
-            idleAction: null/* this.idleAction*/,
-        }
-
         const postProcess = {
 
             finalComposer: this.finalComposer,
-            bloomComposer : null,
-            bloomLayer: this.bloomLayer,
-
-            bloomPass: null,
             finalPass : this.finalPass,
 
+            bloomComposer : this.bloomComposer,
+            bloomPass: this.bloomPass,
 
         }
 
