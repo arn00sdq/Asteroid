@@ -237,7 +237,6 @@ class GameManager {
     RAF() {
         
         requestAnimationFrame(this.RAF.bind(this));
-
         if (!this.state.pause) {
 
             this.loop.now = window.performance.now();

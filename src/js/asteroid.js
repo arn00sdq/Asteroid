@@ -253,30 +253,8 @@ class Asteroid {
                 }
             )
 
-            const starVertices = []
-            for (let i=0; i<5000; i++){
-                const x = ( (Math.random()  * 2000)   * ( Math.round( Math.random() ) ? 1 : -1 ));
-                const y = ( ((Math.random()  *  (2000 - 500)) + 500)   * ( Math.round( Math.random() ) ? 1 : -1 ));
-                const z = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
-                starVertices.push(x,y,z);
-            }
-            for (let i=0; i<5000; i++){
-                const x = ( ((Math.random()  *  (2000 - 500)) + 500)   * ( Math.round( Math.random() ) ? 1 : -1 ));
-                const y = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
-                const z = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
-                starVertices.push(x,y,z);
-            }
-           for (let i=0; i<5000; i++){
-                const x = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
-                const y = ( (Math.random() * 2000)  * ( Math.round( Math.random() ) ? 1 : -1));
-                const z = ( ((Math.random()  *  (2000 - 500)) + 500)   * ( Math.round( Math.random() ) ? 1 : -1 ));
-                starVertices.push(x,y,z);
-            }
-            
-            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute( starVertices,3))
-
             this.stars = new THREE.Points(starGeometry,starMaterial);
-
+            
         /*
         * planet 
         */

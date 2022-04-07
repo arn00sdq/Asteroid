@@ -59,6 +59,32 @@ class LevelSystem{
         
     }
 
+    GeneratingStars(star,min,max){
+
+        const starVertices = []
+        for (let i=0; i<5000; i++){
+            const x = ( (Math.random()  * max)   * ( Math.round( Math.random() ) ? 1 : -1 ));
+            const y = ( ((Math.random()  *  (max - min)) + min)   * ( Math.round( Math.random() ) ? 1 : -1 ));
+            const z = ( (Math.random() * max)  * ( Math.round( Math.random() ) ? 1 : -1));
+            starVertices.push(x,y,z);
+        }
+        for (let i=0; i<5000; i++){
+            const x = ( ((Math.random()  *  (max - min)) + min)   * ( Math.round( Math.random() ) ? 1 : -1 ));
+            const y = ( (Math.random() * max)  * ( Math.round( Math.random() ) ? 1 : -1));
+            const z = ( (Math.random() * max)  * ( Math.round( Math.random() ) ? 1 : -1));
+            starVertices.push(x,y,z);
+        }
+       for (let i=0; i<5000; i++){
+            const x = ( (Math.random() * max)  * ( Math.round( Math.random() ) ? 1 : -1));
+            const y = ( (Math.random() * max)  * ( Math.round( Math.random() ) ? 1 : -1));
+            const z = ( ((Math.random()  *  (max - min)) + min)   * ( Math.round( Math.random() ) ? 1 : -1 ));
+            starVertices.push(x,y,z);
+        }
+        
+        star.geometry.setAttribute('position', new THREE.Float32BufferAttribute( starVertices,3))
+
+    }
+
     SetCloneValue(destination, source){
 
         for (const property in destination) {
@@ -130,7 +156,6 @@ class LevelSystem{
             case "StartMenu":
                 displaySystem.printUIStartMenu();
                 this.parent.RemoveComponent("JokerSystem")
-
                 this.LoadStartMenuScene();
                 this.loadPlanetBackStartMenu({earth : this.parent.earth, stars : this.parent.stars});
                 break;
@@ -182,7 +207,7 @@ class LevelSystem{
     LoadGameScene() {
 
         let stageScene = new THREE.Scene();
-        
+
         this.parent.currentScene = stageScene;
         this.parent.currentCamera = this.parent.inGameCamera;
 
@@ -210,6 +235,7 @@ class LevelSystem{
         let scaleEarth = 1;
         this.InstantiatePlanet(model.earth, positionEarth, rotationEarth, scaleEarth, "Planet");
 
+        this.GeneratingStars(model.stars,200,500);
         this.parent.currentScene.add(model.stars);
         
         console.log(this.parent.currentScene)
@@ -218,16 +244,19 @@ class LevelSystem{
     loadPlanetBackGroundStageOne(model){
 
         /*atmosphere earth*/
+
         let atmosphere = this.parent.atmosphere;
         atmosphere.scale.set(2.7,2.7,2.7);
         atmosphere.position.set(0,-20,100);
        // this.parent.currentScene.add(atmosphere);
 
         /*earth*/
+
         model.earth.scale.set(2.6,2.6,2.6)
         let positionEarth = new THREE.Vector3(0,-20,100);
         let rotationEarth  = new THREE.Euler( 0,0,0);
         let scaleEarth  = 1;
+
         /*sun*/
 
         model.sun.scale.set(10.6,10.6,10.6)
@@ -236,6 +265,7 @@ class LevelSystem{
         let scaleSun = 1;
 
         /*light*/
+
         const spotLight = new THREE.SpotLight(0xF7AB29,2,500,(Math.PI/180)*50);
         spotLight.position.set(-100,-5,-150);
         spotLight.target.position.set(0,-20,50);
@@ -246,12 +276,14 @@ class LevelSystem{
         this.parent.currentScene.add(ambientLight);
 
         /*atmosphere sun*/
+
         let sunAtmosphere = this.parent.sunAtmosphere;
         sunAtmosphere.scale.set(12,12,12);
         sunAtmosphere.position.set(-100,50,-450);
         //this.parent.currentScene.add(sunAtmosphere);
         
         //star
+        this.GeneratingStars(model.stars,500,2000);
         this.parent.currentScene.add(model.stars);
 
         //Instate go
@@ -279,7 +311,7 @@ class LevelSystem{
 
     AsteroidWave(asteroid, nbAsteroid){
 
-        for (let index = 0; index < 5; index++) {
+        for (let index = 0; index < nbAsteroid; index++) {
 
             let position = new THREE.Vector3( ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) ) + ( this.edgeLimit / 3 )) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
@@ -308,19 +340,6 @@ class LevelSystem{
             this.InstantiateGameObject(ennemy_ss, position, rotation, scale)
 
         }
-
-    }
-
-    BossWave(asteroid){
-
-        let position = new THREE.Vector3( ( ( Math.random() *  ( 10.5 - 8.5 ) ) + 8.5 ) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
-                                                  0 ,
-                                              ( ( Math.random() *  ( 10.5 - 2 ) ) + 2  ) * ( Math.round( Math.random() ) ? 1 : -1 )
-                                            )
-
-        let rotation = new THREE.Euler(0,0,0);
-        let scale = 10;
-        this.InstantiateGameObject(asteroid, position, rotation, scale );
 
     }
 
