@@ -24,7 +24,7 @@ class CharacterMouvement {
     this.boostLengthZ = 50;
     this.boostLengthX = 70;
 
-    this.boostLengthStepZ = 60;
+    this.boostLengthStepZ = 40;
     this.boostLengthStepX = 60;
 
     this.boostLengthDownStep = 0.3 ;
@@ -70,7 +70,7 @@ class CharacterMouvement {
       this.direction_copy = this.direction.clone();
 
       let os = this.oscillate(timeInSeconds *50,0.03,0.09);
-      this.BoosterMode("forward",booster)
+      if (!input.keys.shift) this.BoosterMode("forward",booster)
 
     }else{
 
@@ -127,7 +127,7 @@ class CharacterMouvement {
         booster.material.uniforms[ 'time' ].value = 0.05;
         break;
 
-      case "forward":
+      case "acceleration":
 
         this.boostLengthZ =  THREE.MathUtils.lerp(this.boostLengthZ,this.boostLengthZ + this.boostLengthStepZ,0.05);
         this.boostLengthX =  THREE.MathUtils.lerp(this.boostLengthX,this.boostLengthX + this.boostLengthStepX,0.05);
