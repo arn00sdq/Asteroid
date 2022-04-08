@@ -138,8 +138,9 @@ class LevelSystem{
 
     /* ----------- Delimitation ------------ */
 
-    scenePicker(level,init){
+    scenePicker(level,init,switchScene){
         
+        if(switchScene == undefined) switchScene = false;
         //this.removeProps();
        let displaySystem = this.parent.GetComponent("DisplaySystem");
        this.currentLevel = level;
@@ -148,11 +149,12 @@ class LevelSystem{
 
             case "StartMenu":
                 this.loadScene(level);
-                this.loadUI(stage);
+                this.loadUI(level,displaySystem);
+                this.loadProps(level)
+                this.loadPlanetStartMenu({earth : this.parent.earth, stars : this.parent.stars});
                 break;
 
             case "Stage1":   
-            console.log("init")
                 this.loadScene(level);
                 this.loadUI(level,displaySystem);
                 this.loadProps(level);
@@ -179,8 +181,9 @@ class LevelSystem{
 
         }
 
-        this.parent.PostProcessRender();    
+        this.parent.PostProcessRender(switchScene); 
         this.gameActive(init);
+        
 
     }
 

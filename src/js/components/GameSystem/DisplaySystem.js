@@ -265,7 +265,7 @@ class DisplaySystem{
                 </div>
                 <div class="footer_menu">
                     <div class="redirection_menu">
-                        <span name="retour">Retour</span>
+                        <button class="retour" name="retour">Retour</span>
                     </div>              
                 </div>
             </div>
@@ -326,7 +326,7 @@ class DisplaySystem{
                 </div>
                 <div class="footer_menu">
                     <div class="redirection_menu">
-                        <span id="retour">Retour</span>
+                        <button class="retour" name="retour">Retour</span>
                     </div>              
                 </div>
             </div>
@@ -345,19 +345,19 @@ class DisplaySystem{
             <div id="startMenuBody">
                 <div id="startMenuSelection">
                     <div class="startMenuBtn" id="startMenuB1">
-                        <button class="startMenuSPAN" id="play">PLAY GAME</button>
+                        <button class="startMenuSPAN" name="play">PLAY GAME</button>
                     </div>
                     <div class="startMenuBtn" id="startMenuB2">
-                        <button class="startMenuSPAN" id="video">VIDEO</button>
+                        <button class="startMenuSPAN" name="video">VIDEO</button>
                     </div>
                     <div class="startMenuBtn" id="startMenuB2">
-                        <button class="startMenuSPAN" id="audio">AUDIO</button>
+                        <button class="startMenuSPAN" name="audio">AUDIO</button>
                     </div>
                     <div class="startMenuBtn" id="startMenuB3">
-                        <button class="startMenuSPAN" id="credit">CREDITS</button>
+                        <button class="startMenuSPAN" name="credit">CREDITS</button>
                     </div>
                     <div class="startMenuBtn" id="startMenuB4">
-                        <button class="startMenuSPAN" id="quit">EXIT</button>
+                        <button class="startMenuSPAN" name="quit">EXIT</button>
                     </div>
                 </div>
             </div>

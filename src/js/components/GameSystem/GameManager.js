@@ -177,7 +177,7 @@ class GameManager {
 
     }
 
-    PostProcessRender(){
+    PostProcessRender(switchScene){
 
         let containRenderPass1 = false; let containRenderPass2 = false; let containBloom = false; let containOutline = false; let containFXAA = false;
         let pass = this.GetComponent("MenuSystem").video;
@@ -192,6 +192,18 @@ class GameManager {
         
         if (!containRenderPass1) this.bloomComposer.addPass(renderScene);
         if (!containRenderPass2) this.finalComposer.addPass(renderScene);
+
+        if(switchScene){
+
+            this.bloomComposer.passes.shift();
+            this.bloomComposer.insertPass(renderScene, 0);
+
+            this.finalComposer.passes.shift();
+            this.finalComposer.insertPass(renderScene, 0);
+
+            console.log(this.finalComposer)
+
+        }
 
         if (pass.bloom == false && containBloom){
 
@@ -234,6 +246,8 @@ class GameManager {
         switch (event.keyCode) {
 
             case 27:
+
+                if(this.GetComponent("LevelSystem").currentLevel == "StartMenu") break;
 
                 if (!this.state.pause) {
 
@@ -279,7 +293,6 @@ class GameManager {
             this.prevTime = Date.now() - this.loop.slowStep;
             this.timeElapsed += Date.now() - this.prevTime;
             this.tempTime = this.timeElapsed;
-
             if(this.postProActive){
 
                 this.renderBloom();

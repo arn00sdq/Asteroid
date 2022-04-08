@@ -25,9 +25,9 @@ class MenuSystem{
     OnClick(event) {
 
         switch (event.target.name) {
-
+           
             case "play":
-                this.levelSystem.scenePicker("Stage1",false);
+                this.levelSystem.scenePicker("Stage1",false,true);
                 break;
             case "retour":
                 this.levelSystem.currentLevel == "StartMenu" ? this.uiDisplay.printUIStartMenu() : this.uiDisplay.printPause();

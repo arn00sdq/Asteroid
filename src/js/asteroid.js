@@ -576,7 +576,7 @@ class Asteroid {
             // document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").scenePicker("Stage1", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
 
         }
 
