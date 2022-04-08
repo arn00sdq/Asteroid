@@ -239,7 +239,7 @@ class DisplaySystem{
                 </div>
                 <div class="option_hr"></div>    
                 <div class="option_input_section">
-                    <div class="audio_input_field">
+                    <div class="slider_input_field">
                         <span class="option_input_name">Master Volume</span>
                         <input class="range" id="range_master_volume" type="range" name="" min="0"  max="100" value="${sound_sys.masterVolume * 100}">
                         <div class="box_input_val">
@@ -247,7 +247,7 @@ class DisplaySystem{
                         </div>
                     </div>
                     <div class="option_hr"></div>    
-                    <div class="audio_input_field">
+                    <div class="slider_input_field">
                         <span class="option_input_name">Sfx volume</span>
                         <input class="range" id="range_sfx_volume" type="range" name="" min="0"  max="100" value="${sound_sys.sfxVolume  * 100}">
                         <div class="box_input_val">
@@ -255,7 +255,7 @@ class DisplaySystem{
                         </div> 
                     </div>
                     <div class="option_hr"></div>    
-                    <div class="audio_input_field">
+                    <div class="slider_input_field">
                         <span class="option_input_name">Music Volume</span>
                         <input class="range" id="range_music_volume" type="range" name="" min="0"  max="100" value="${sound_sys.musicVolume  * 100}" >
                         <div class="box_input_val">
@@ -277,7 +277,7 @@ class DisplaySystem{
 
     printVideoUIMenu(){
 
-        let menuVar = this.parent.GetComponent("MenuSystem");
+        let videoParam = this.parent.GetComponent("MenuSystem").video;
 
         let videoUI = `
         <div id="tb">
@@ -286,18 +286,18 @@ class DisplaySystem{
                     <span class="#">Video</span>
                 </div>
                 <div class="option_input_section">
-                    <div class="arrow_option_field">
+                    <div class="slider_input_field">
                         <span class="option_input_name">Brightness</span>
-                        <input class="range" id="brighteness" type="range" name="" min="0"  max="100" value="0">
+                        <input class="range" id="range_brightness" type="range" name="" min="0"  max="100" value="${videoParam.brightness * 100}">
                         <div class="box_input_val">
-                            <span class="sp_brighteness">0.0</span>
+                            <span id="sp_brighteness">${videoParam.brightness}</span>
                         </div>
                     </div>
                     <div class="arrow_option_field">
                         <span class="option_input_name">FXAA</span>
                         <div class="arrow_picker">
                             <button name="fxaa_post_process"  class="arrow left"></button>
-                            <div class="value_arrow" >${menuVar.postProcess.fxaa == true ? "On" : "Off"}</div>
+                            <div class="value_arrow" >${videoParam.fxaa == true ? "On" : "Off"}</div>
                             <button name="fxaa_post_process" class="arrow right"></button>                
                         </div>
                     </div>
@@ -305,7 +305,7 @@ class DisplaySystem{
                         <span class="option_input_name">Outline</span>
                         <div class="arrow_picker">
                             <button name="outline_post_process" class="arrow left"></button>
-                            <div class="value_arrow" >${menuVar.postProcess.outline == true ? "On" : "Off"}</div>
+                            <div class="value_arrow" >${videoParam.outline == true ? "On" : "Off"}</div>
                             <button name="outline_post_process" class="arrow right"></button>                
                         </div>
                     </div>
@@ -313,7 +313,7 @@ class DisplaySystem{
                         <span class="option_input_name">Bloom</span>
                         <div class="arrow_picker">
                             <button  name="bloom_post_process" class="arrow left"></button>
-                            <div class="value_arrow" >${menuVar.postProcess.bloom == true ? "On" : "Off"}</div>
+                            <div class="value_arrow" >${videoParam.bloom == true ? "On" : "Off"}</div>
                             <button name="bloom_post_process" class="arrow right"></button>                
                         </div>
                     </div>

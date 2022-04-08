@@ -5,11 +5,11 @@ class MenuSystem{
         this.parent = parent;
 
         
-        this.postProcess = {
+        this.video = {//rename en video 
 
-
-            bloom:false,
-            outline:false,
+            brightness:0.2,
+            bloom:true,
+            outline:true,
             fxaa:false,
 
         }
@@ -52,19 +52,19 @@ class MenuSystem{
                 this.uiDisplay.printVideoUIMenu();
                 break;
             case "fxaa_post_process":
-                this.postProcess.fxaa == false ? this.postProcess.fxaa = true: this.postProcess.fxaa=false;
+                this.video.fxaa == false ? this.video.fxaa = true: this.video.fxaa=false;
                 this.checkPostProcess();
                 this.uiDisplay.printVideoUIMenu();
                 this.parent.PostProcessRender();
                 break;
             case "outline_post_process":
-                this.postProcess.outline == false ? this.postProcess.outline = true: this.postProcess.outline=false;
+                this.video.outline == false ? this.video.outline = true: this.video.outline=false;
                 this.checkPostProcess();
                 this.uiDisplay.printVideoUIMenu();
                 this.parent.PostProcessRender();
                 break;
             case "bloom_post_process":
-                this.postProcess.bloom == false ? this.postProcess.bloom = true: this.postProcess.bloom=false;
+                this.video.bloom == false ? this.video.bloom = true: this.video.bloom=false;
                 this.checkPostProcess();
                 this.uiDisplay.printVideoUIMenu();
                 this.parent.PostProcessRender();
@@ -87,17 +87,22 @@ class MenuSystem{
         switch (event.target.id) {
 
             case "range_master_volume":
-                soundSystem.masterVolume = event.target.value / 100;
+                this.soundSystem.masterVolume = event.target.value / 100;
                 document.getElementById("sp_master_volume").innerHTML = soundSystem.masterVolume;
                 break;
             case "range_sfx_volume":
-                soundSystem.sfxVolume = event.target.value / 100;
+                this.soundSystem.sfxVolume = event.target.value / 100;
                 document.getElementById("sp_sfx_volume").innerHTML = soundSystem.sfxVolume;
                 break;
             case "range_music_volume":
-                soundSystem.musicVolume = event.target.value / 100;
+                this.soundSystem.musicVolume = event.target.value / 100;
                 document.getElementById("sp_music_volume").innerHTML = soundSystem.musicVolume;
                 break;
+            case "range_brightness":
+                this.video.brightness = event.target.value/100;
+                document.getElementById("sp_brighteness").innerHTML = this.video.brightness;
+                let ambientLight = this.parent.currentScene.children.find(e => e.constructor.name == "AmbientLight")
+                ambientLight.intensity =  this.video.brightness;
             default:
                 break;
 
@@ -108,9 +113,9 @@ class MenuSystem{
     checkPostProcess(){
 
         this.parent.postProActive = false;
-        Object.keys(this.postProcess).forEach( e => {
+        Object.keys(this.video).forEach( e => {
 
-            if (this.postProcess[e] == true) this.parent.postProActive = true;
+            if (this.video[e] == true) this.parent.postProActive = true;
 
         });
 

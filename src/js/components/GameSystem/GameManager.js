@@ -69,7 +69,7 @@ class GameManager {
         */
         this.materials = {};
         this.selectedObjects = [];
-        this.postProActive = false;
+        this.postProActive = true;
 
         this.finalComposer = postProcess.finalComposer;
         this.bloomComposer = postProcess.bloomComposer;
@@ -180,7 +180,7 @@ class GameManager {
     PostProcessRender(){
 
         let containRenderPass1 = false; let containRenderPass2 = false; let containBloom = false; let containOutline = false; let containFXAA = false;
-        let pass = this.GetComponent("MenuSystem").postProcess;
+        let pass = this.GetComponent("MenuSystem").video;
         const renderScene = new RenderPass( this.currentScene, this.currentCamera ); 
 
         this.bloomComposer.passes.forEach( e => { if (e.constructor.name == "RenderPass") containRenderPass1 = true})
@@ -211,6 +211,7 @@ class GameManager {
 
         if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
         if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);     
+
 
     }
 

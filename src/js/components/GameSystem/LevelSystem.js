@@ -124,23 +124,15 @@ class LevelSystem{
 
         this.removeProps();
 
-        this.scenePicker(this.currentLevel,false)
-
     }
 
     removeProps() {
 
-        var to_remove = [];
-
-        this.parent.currentScene.traverse(function (child) {
-            if ((child.type == "Object3D") && !child.userData.keepMe === true) {
-                to_remove.push(child);
-            }
-        });
-
-        for (var i = 0; i < to_remove.length; i++) {
-            this.parent.currentScene.remove(to_remove[i]);
-        }
+        let obj;
+        for( var i = this.parent.currentScene.children.length - 1; i >= 0; i--) { 
+            obj = this.parent.currentScene.children[i];
+            this.parent.currentScene.remove(obj); 
+       }
 
     }
 
@@ -160,6 +152,7 @@ class LevelSystem{
                 break;
 
             case "Stage1":   
+            console.log("init")
                 this.loadScene(level);
                 this.loadUI(level,displaySystem);
                 this.loadProps(level);
@@ -252,7 +245,7 @@ class LevelSystem{
                 this.loadPlanetStartMenu({earth : this.parent.earth, stars : this.parent.stars});
                 break;
             case "Stage1":
-                this.loadAsteroidBackGround(this.parent.asteroid,1);
+                this.loadAsteroidBackGround(this.parent.asteroid,50);
                 this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 break;
             case "Stage2":
@@ -269,7 +262,7 @@ class LevelSystem{
             case "StartMenu":
                 break;
             case "Stage1":
-                this.asteroidWave(this.parent.asteroid, 1);
+                this.asteroidWave(this.parent.asteroid, 5);
                 break;
             case "Stage2":
                 this.asteroidWave(this.parent.asteroid, 1);
@@ -328,7 +321,8 @@ class LevelSystem{
         spotLight.target.position.set(0,-20,50);
         this.parent.currentScene.add(spotLight);
 
-        const ambientLight = new THREE.AmbientLight(0xFFFFFF,0.2);
+        let brightVal = this.parent.GetComponent("MenuSystem").video.brightness;
+        const ambientLight = new THREE.AmbientLight(0xFFFFFF,brightVal);
         ambientLight.position.set(0,0,0);
         this.parent.currentScene.add(ambientLight);
 

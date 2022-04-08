@@ -442,7 +442,16 @@ button{
 	border-width: 0 3px 3px 0;
 	transform: rotate(45deg);
 }
+	/* Slider section */
+.slider_input_field{
 
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin: 22px;
+	justify-content: space-between	;
+
+}
 	/* Arrow */
 
 .arrow {
