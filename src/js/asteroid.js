@@ -11,6 +11,9 @@ import { Object3D, TextureLoader } from "./three/three.module.js";
 import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/EffectComposer.js";
 import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/ShaderPass.js";
 import { UnrealBloomPass  } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { OutlinePass } from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/postprocessing/OutlinePass.js";
+import { FXAAShader } from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/shaders/FXAAShader.js"
+
 
 import Heart from "./components/Joker/Heart.js";
 import Coin from "./components/Joker/Coin.js";
@@ -31,8 +34,8 @@ class Asteroid {
     constructor() {
 
         this.Initialize();
-        this.LoadModel();
-        this.LoadAudio();
+        this.loadModel();
+        this.loadAudio();
 
     }
 
@@ -55,7 +58,7 @@ class Asteroid {
         this.goal.add(this.inGameCamera);
 
         /*scene*/
-        this.scene = new THREE.Scene();
+        this.stageScene = new THREE.Scene();
         this.sceneStartMenu = new THREE.Scene();
 
         /*renderer*/
@@ -71,6 +74,8 @@ class Asteroid {
         container.appendChild(this.renderer.domElement);
 
         /* post process */
+
+            /*----- UnrealBloom Pass -----*/
 
         this.bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
         this.bloomPass.threshold =0;
@@ -93,6 +98,21 @@ class Asteroid {
         );
         this.finalPass.needsSwap = true;
         this.finalComposer = new EffectComposer( this.renderer );
+
+            /*----- Outline Pass -----*/
+
+        this.outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), this.stageScene, this.inGameCamera );
+        this.outlinePass.edgeStrength = 3;
+        this.outlinePass.pulsePeriod = 4;
+        this.outlinePass.edgeGlow = 0.076;
+        this.outlinePass.edgeThickness = 1.35;
+        this.outlinePass.visibleEdgeColor.set('#ffffff');
+        this.outlinePass.hiddenEdgeColor.set('#190a05');
+            /*----- FXAA Pass -----*/
+        
+        this.effectFXAA = new ShaderPass( FXAAShader );
+        this.effectFXAA.name = "FXAAPass";
+        this.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
 
         /*timer*/
         this.loop = {}
@@ -119,20 +139,20 @@ class Asteroid {
         });
 
 
-        this.inGameCamera.lookAt(this.scene.position);
+        this.inGameCamera.lookAt(this.stageScene.position);
 
         this.listener = new THREE.AudioListener();
         this.inGameCamera.add(this.listener);
 
         window.addEventListener('resize', () => {
 
-            this.OnWindowResize();
+            this.onWindowResize();
 
         }, false);
 
     }
 
-    LoadModel() {
+    loadModel() {
 
         this.modelManager = [];
         this.animationsManager = [];
@@ -402,7 +422,7 @@ class Asteroid {
 
     }
 
-    LoadAudio() {
+    loadAudio() {
 
         this.audioManager = [];
 
@@ -438,7 +458,7 @@ class Asteroid {
 
     }
 
-    LoadProps() {
+    loadProps() {
 
         let playerModel, rockModel,heartModel, coinModel, ennemy_ssModel;
         let bulletEnnemy = new Object3D(); let bulletPlayer= new Object3D(); let firePowerModel= new Object3D(); 
@@ -486,14 +506,12 @@ class Asteroid {
             camera: this.inGameCamera,
             follow: this.follow,
 
-           // scene: this.stageScene,
-
         }
 
         const utils = {
 
             renderer: this.renderer,
-            scene: this.stageScene,
+            stageScene: this.stageScene,
             sceneStartMenu: this.sceneStartMenu,
             inGameCamera: this.inGameCamera,
             startMenuCamera: this.cameraStartMenu,
@@ -504,10 +522,12 @@ class Asteroid {
         const postProcess = {
 
             finalComposer: this.finalComposer,
-            finalPass : this.finalPass,
-
             bloomComposer : this.bloomComposer,
+
             bloomPass: this.bloomPass,
+            effectFXAA: this.effectFXAA,
+            outlinePass: this.outlinePass,
+            finalPass : this.finalPass,         
 
         }
 
@@ -522,7 +542,7 @@ class Asteroid {
 
         const models = {
 
-            player: new Player(playerModel, audio,this.params),//A changer pour le joueur ?
+            player: new Player(playerModel, audio,this.params),
             ennemy_ss: new EnnemySpaceship(ennemy_ssModel,0),
             asteroid: new BasicAsteroid(rockModel, 0),
             coin: new Coin(coinModel, 0),
@@ -543,12 +563,12 @@ class Asteroid {
 
         this.remove = null;
 
-        document.addEventListener('keydown', this.remove = this.OnPlayerBegin.bind(this))
-        document.addEventListener('mousewheel', this.OnMouseWheel.bind(this), false);
+        document.addEventListener('keydown', this.remove = this.onPlayerBegin.bind(this))
+        document.addEventListener('mousewheel', this.onMouseWheel.bind(this), false);
 
     }
 
-    OnPlayerBegin(event) { // nom a changer
+    onPlayerBegin(event) { // nom a changer
 
 
         if (event.code == 'Space') {
@@ -556,13 +576,13 @@ class Asteroid {
             // document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").ScenePicker("StartMenu", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("Stage1", true);
 
         }
 
     }
 
-    OnMouseWheel(event) {
+    onMouseWheel(event) {
 
         var fovMAX = 160;
         var fovMIN = 1;
@@ -571,7 +591,7 @@ class Asteroid {
         this.inGameCamera.updateProjectionMatrix();
     }
 
-    OnWindowResize() {
+    onWindowResize() {
 
         this.inGameCamera.aspect = window.innerWidth / window.innerHeight;
         this.inGameCamera.updateProjectionMatrix();
@@ -584,7 +604,7 @@ class Asteroid {
     onTransitionEnd(event) {
 
         event.target.remove();
-        this.LoadProps();
+        this.loadProps();
 
     }
 

@@ -35,9 +35,10 @@ class LevelSystem{
     InstantiateGameObject(object,position, rotation, scale, velocity, opt){
 
         object.scene = this.parent.currentScene;
+
         let object_clone = object.clone();
 
-        this.SetCloneValue(object_clone, object);
+        this.setCloneValue(object_clone, object);
 
         if(opt !== undefined ){
             object_clone.userData.type = opt;
@@ -45,7 +46,7 @@ class LevelSystem{
 
         object_clone.Instantiate(object_clone,position, rotation, scale,velocity);
         object_clone.SetRigidBody(object_clone);
-        this.UpdateValue(object_clone, object);
+        this.updateValue(object_clone, object);
 
         
     }
@@ -59,7 +60,7 @@ class LevelSystem{
         
     }
 
-    GeneratingStars(star,min,max){
+    generatingStars(star,min,max){
 
         const starVertices = []
         for (let i=0; i<5000; i++){
@@ -85,7 +86,7 @@ class LevelSystem{
 
     }
 
-    SetCloneValue(destination, source){
+    setCloneValue(destination, source){
 
         for (const property in destination) {
 
@@ -103,7 +104,7 @@ class LevelSystem{
 
     }
 
-    UpdateValue(destination, source){
+    updateValue(destination, source){
 
         for (const [key, value] of Object.entries(source)) {
 
@@ -113,7 +114,7 @@ class LevelSystem{
 
     }
 
-    ResetLevel() {
+    resetLevel() {
 
         this.parent.state.pause = true;
         this.timeElapsed = 0;
@@ -121,13 +122,13 @@ class LevelSystem{
 
         this.parent.player.ResetPlayer();
 
-        this.RemoveProps();
+        this.removeProps();
 
-        this.ScenePicker(this.currentLevel,false)
+        this.scenePicker(this.currentLevel,false)
 
     }
 
-    RemoveProps() {// level_system
+    removeProps() {
 
         var to_remove = [];
 
@@ -145,52 +146,52 @@ class LevelSystem{
 
     /* ----------- Delimitation ------------ */
 
-    ScenePicker(level,init){
+    scenePicker(level,init){
         
-        //this.RemoveProps();
+        //this.removeProps();
        let displaySystem = this.parent.GetComponent("DisplaySystem");
        this.currentLevel = level;
         
         switch (level){
 
             case "StartMenu":
-                displaySystem.printUIStartMenu();
-                this.parent.RemoveComponent("JokerSystem")
-                this.LoadStartMenuScene();
-                this.loadPlanetBackStartMenu({earth : this.parent.earth, stars : this.parent.stars});
+                this.loadScene(level);
+                this.loadUI(stage);
                 break;
 
             case "Stage1":   
-
-                displaySystem.printUIHeader(this.parent.player.life, this.parent.score);
-                this.parent.components.JokerSystem == undefined ?
-                this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models)) : ``;
-                this.LoadGameScene();          
-                this.loadAsteroidBackGround(this.parent.asteroid,1);
-                this.loadPlanetBackGroundStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
-                this.AsteroidWave(this.parent.asteroid, 1);
+                this.loadScene(level);
+                this.loadUI(level,displaySystem);
+                this.loadProps(level);
+                this.loadWave(level)
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 
                 break;
 
             case "Stage2":
-                displaySystem.printUIHeader(this.player.life, this.score);
-                this.LoadGameScene();
-                this.AsteroidWave(this.parent.asteroid, 1);
-                //this.EnnemySpaceshipWave(this.parent.ennemy_ss,1)
+                this.loadScene(level);
+                this.loadUI(level,displaySystem);
+                this.loadProps(level);
+                this.loadWave(level)
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 break;
 
             case "Stage3":
-                this.LoadGameScene();
-                displaySystem.printUIHeader(this.player.life, this.score);
-                this.AsteroidWave(this.parent.asteroid, 1);
+                this.loadScene(level);
+                this.loadUI(level,displaySystem);
+                this.loadProps(level);
+                this.loadWave(level)
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 break;   
 
         }
 
         this.parent.PostProcessRender();    
+        this.gameActive(init);
+
+    }
+
+    gameActive(init){
 
         if(init){
 
@@ -204,27 +205,84 @@ class LevelSystem{
 
     }
 
-    LoadGameScene() {
+    loadScene(level) {
 
-        let stageScene = new THREE.Scene();
+        switch(level){
+            case "StartMenu":          
+                let sceneStartMenu = new THREE.Scene();
+                this.parent.currentScene = sceneStartMenu;
 
-        this.parent.currentScene = stageScene;
-        this.parent.currentCamera = this.parent.inGameCamera;
+                this.parent.currentCamera = this.parent.startMenuCamera;
+                this.parent.currentCamera.lookAt(new THREE.Vector3(-11,0,0));
+
+                this.parent.RemoveComponent("JokerSystem");
+                break;
+            case "Stage1":
+                this.parent.currentScene = this.parent.stageScene;
+                this.parent.currentCamera = this.parent.inGameCamera;
+                this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
+                break;
+        }
+        
+    }
+
+    loadUI(level,displaySystem){
+
+        switch(level){
+            case "StartMenu":
+                displaySystem.printUIStartMenu();
+                break;
+            case "Stage1":
+                displaySystem.printUIHeader(this.parent.player.life, this.parent.score);
+                break;
+            case "Stage2":
+                displaySystem.printUIHeader(this.parent.player.life, this.parent.score);
+                break;
+            case "Stage3":
+                displaySystem.printUIHeader(this.parent.player.life, this.parent.score);
+                break;
+            
+        }
+    }
+
+    loadProps(level){
+
+        switch(level){
+            case "StartMenu":
+                this.loadPlanetStartMenu({earth : this.parent.earth, stars : this.parent.stars});
+                break;
+            case "Stage1":
+                this.loadAsteroidBackGround(this.parent.asteroid,1);
+                this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
+                break;
+            case "Stage2":
+                break;
+            case "Stage3":
+                break;
+        }
 
     }
 
-    LoadStartMenuScene(){
+    loadWave(level){
 
-        let sceneStartMenu = new THREE.Scene();
-        let startMenuCam = this.parent.startMenuCamera;
-        startMenuCam.lookAt(new THREE.Vector3(-11,0,0));
-
-        this.parent.currentScene = sceneStartMenu;
-        this.parent.currentCamera = this.parent.startMenuCamera;
+        switch(level){
+            case "StartMenu":
+                break;
+            case "Stage1":
+                this.asteroidWave(this.parent.asteroid, 1);
+                break;
+            case "Stage2":
+                this.asteroidWave(this.parent.asteroid, 1);
+                //this.ennemySpaceshipWave(this.parent.ennemy_ss,1)
+                break;
+            case "Stage3":
+                this.asteroidWave(this.parent.asteroid, 1);
+                break;
+        }
 
     }
 
-    loadPlanetBackStartMenu(model){
+    loadPlanetStartMenu(model){
 
         let atmosphere = this.parent.atmosphere;
         atmosphere.scale.set(1.1,1.1,1.1);
@@ -235,13 +293,12 @@ class LevelSystem{
         let scaleEarth = 1;
         this.InstantiatePlanet(model.earth, positionEarth, rotationEarth, scaleEarth, "Planet");
 
-        this.GeneratingStars(model.stars,200,500);
+        this.generatingStars(model.stars,200,500);
         this.parent.currentScene.add(model.stars);
         
-        console.log(this.parent.currentScene)
     } 
 
-    loadPlanetBackGroundStageOne(model){
+    loadPlanetStageOne(model){
 
         /*atmosphere earth*/
 
@@ -283,7 +340,7 @@ class LevelSystem{
         //this.parent.currentScene.add(sunAtmosphere);
         
         //star
-        this.GeneratingStars(model.stars,500,2000);
+        this.generatingStars(model.stars,500,2000);
         this.parent.currentScene.add(model.stars);
 
         //Instate go
@@ -309,7 +366,7 @@ class LevelSystem{
 
     }
 
-    AsteroidWave(asteroid, nbAsteroid){
+    asteroidWave(asteroid, nbAsteroid){
 
         for (let index = 0; index < nbAsteroid; index++) {
 
@@ -325,7 +382,7 @@ class LevelSystem{
 
     }
 
-    EnnemySpaceshipWave(ennemy_ss, nb_ennemy_ss){
+    ennemySpaceshipWave(ennemy_ss, nb_ennemy_ss){
 
         for (let index = 0; index < nb_ennemy_ss; index++) {
 
@@ -348,7 +405,7 @@ class LevelSystem{
        /* if(this.parent.ennemy == 0){
 
             this.level++;
-            this.ScenePicker();
+            this.scenePicker();
 
         }*/
 

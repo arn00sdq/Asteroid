@@ -25,8 +25,8 @@ class DisplaySystem{
             </div>
     
             <div id="button_section_menu">
-                <button id="restart">Restart</button>
-                <button id="quit">Quit</button>
+                <button name="restart">Restart</button>
+                <button name="quit">Quit</button>
             </div>
 
         </div> 
@@ -111,8 +111,8 @@ class DisplaySystem{
             </div>
     
             <div id="button_section_menu">
-                <button id="next">Next</button>
-                <button id="quit">Quit</button>
+                <button name="next">Next</button>
+                <button name="quit">Quit</button>
             </div>
 
         </div> 
@@ -243,7 +243,7 @@ class DisplaySystem{
                         <span class="option_input_name">Master Volume</span>
                         <input class="range" id="range_master_volume" type="range" name="" min="0"  max="100" value="${sound_sys.masterVolume * 100}">
                         <div class="box_input_val">
-                            <span id="sp_master_volume">${sound_sys.masterVolume}</span>
+                            <span name="sp_master_volume">${sound_sys.masterVolume}</span>
                         </div>
                     </div>
                     <div class="option_hr"></div>    
@@ -251,7 +251,7 @@ class DisplaySystem{
                         <span class="option_input_name">Sfx volume</span>
                         <input class="range" id="range_sfx_volume" type="range" name="" min="0"  max="100" value="${sound_sys.sfxVolume  * 100}">
                         <div class="box_input_val">
-                            <span id="sp_sfx_volume">${sound_sys.sfxVolume}</span>
+                            <span name="sp_sfx_volume">${sound_sys.sfxVolume}</span>
                         </div> 
                     </div>
                     <div class="option_hr"></div>    
@@ -259,13 +259,13 @@ class DisplaySystem{
                         <span class="option_input_name">Music Volume</span>
                         <input class="range" id="range_music_volume" type="range" name="" min="0"  max="100" value="${sound_sys.musicVolume  * 100}" >
                         <div class="box_input_val">
-                            <span id="sp_music_volume">${sound_sys.musicVolume}</span>
+                            <span name="sp_music_volume">${sound_sys.musicVolume}</span>
                         </div>                   
                     </div>
                 </div>
                 <div class="footer_menu">
                     <div class="redirection_menu">
-                        <span id="retour">Retour</span>
+                        <span name="retour">Retour</span>
                     </div>              
                 </div>
             </div>
@@ -276,6 +276,9 @@ class DisplaySystem{
     }
 
     printVideoUIMenu(){
+
+        let menuVar = this.parent.GetComponent("MenuSystem");
+
         let videoUI = `
         <div id="tb">
             <div class="option_menu">
@@ -283,25 +286,38 @@ class DisplaySystem{
                     <span class="#">Video</span>
                 </div>
                 <div class="option_input_section">
-                    <div class="audio_input_field">
+                    <div class="arrow_option_field">
                         <span class="option_input_name">Brightness</span>
                         <input class="range" id="brighteness" type="range" name="" min="0"  max="100" value="0">
                         <div class="box_input_val">
                             <span class="sp_brighteness">0.0</span>
                         </div>
                     </div>
-                    <div class="option_hr"></div>
-                    <div class="audio_input_field">
-                        <span class="option_input_name">Effect</span>
-                        <div>
-                            <label class="opt_check_container">
-                                <input type="checkbox"${this.parent.state.postProcess == true ? "checked" : ""}>
-                                <div id="sp_post_process" class="opt_checkmark"></div>
-                            </label>                     
+                    <div class="arrow_option_field">
+                        <span class="option_input_name">FXAA</span>
+                        <div class="arrow_picker">
+                            <button name="fxaa_post_process"  class="arrow left"></button>
+                            <div class="value_arrow" >${menuVar.postProcess.fxaa == true ? "On" : "Off"}</div>
+                            <button name="fxaa_post_process" class="arrow right"></button>                
                         </div>
                     </div>
-                    <div class="option_hr"></div>    
-                    <div class="audio_input_field">
+                    <div class="arrow_option_field">
+                        <span class="option_input_name">Outline</span>
+                        <div class="arrow_picker">
+                            <button name="outline_post_process" class="arrow left"></button>
+                            <div class="value_arrow" >${menuVar.postProcess.outline == true ? "On" : "Off"}</div>
+                            <button name="outline_post_process" class="arrow right"></button>                
+                        </div>
+                    </div>
+                    <div class="arrow_option_field">
+                        <span class="option_input_name">Bloom</span>
+                        <div class="arrow_picker">
+                            <button  name="bloom_post_process" class="arrow left"></button>
+                            <div class="value_arrow" >${menuVar.postProcess.bloom == true ? "On" : "Off"}</div>
+                            <button name="bloom_post_process" class="arrow right"></button>                
+                        </div>
+                    </div>
+                    <div class="arrow_option_field">
                         <span class="option_input_name">Target FPS</span>
                         <div class="option_com_soon">
                             Prochainement !
@@ -360,11 +376,11 @@ class DisplaySystem{
                 <div id="title_menu">Pause Menu</div>
             </div>
             <div id="button_section_menu">
-                <button id="resume">Resume</button>
-                <button id="restart">Restart</button>
-                <button id="video">Video</button>
-                <button id="audio">Audio</button>
-                <button id="quit">Quit</button>
+                <button name="resume">Resume</button>
+                <button name="restart">Restart</button>
+                <button name="video">Video</button>
+                <button name="audio">Audio</button>
+                <button name="quit">Quit</button>
             </div>
         </div>
     `

@@ -4,6 +4,16 @@ class MenuSystem{
 
         this.parent = parent;
 
+        
+        this.postProcess = {
+
+
+            bloom:false,
+            outline:false,
+            fxaa:false,
+
+        }
+
         this.uiDisplay = this.parent.GetComponent("DisplaySystem");
         this.levelSystem = this.parent.GetComponent("LevelSystem");
         this.soundSystem = this.parent.GetComponent("SoundSystem");
@@ -14,10 +24,10 @@ class MenuSystem{
 
     OnClick(event) {
 
-        switch (event.target.id) {
+        switch (event.target.name) {
 
             case "play":
-                this.levelSystem .ScenePicker("Stage1",false);
+                this.levelSystem.scenePicker("Stage1",false);
                 break;
             case "retour":
                 this.levelSystem.currentLevel == "StartMenu" ? this.uiDisplay.printUIStartMenu() : this.uiDisplay.printPause();
@@ -27,13 +37,13 @@ class MenuSystem{
                 this.uiDisplay.printUIHeader(this.parent.player.life, this.parent.score);
                 break;
             case "restart":
-                this.levelSystem .ResetLevel(this.levelSystem.currentLevel);
-                this.levelSystem.ScenePicker(this.levelSystem.currentLevel, false);
+                this.levelSystem.resetLevel(this.levelSystem.currentLevel);
+                this.levelSystem.scenePicker(this.levelSystem.currentLevel, false);
                 break;
             case "next":
-                this.levelSystem .ResetLevel();
+                this.levelSystem.resetLevel();
                 let currentLevel = this.levelSystem.currentLevel + 1;
-                this.levelSystem.StartLevel(currentLevel, false);
+                this.levelSystem.startLevel(currentLevel, false);
                 break;
             case "audio":
                 this.uiDisplay.printAudioUIMenu();
@@ -41,9 +51,24 @@ class MenuSystem{
             case "video":
                 this.uiDisplay.printVideoUIMenu();
                 break;
-            case "sp_post_process":
-                this.parent.state.postProcess == false ? this.parent.state.postProcess = true: this.parent.state.postProcess=false;
+            case "fxaa_post_process":
+                this.postProcess.fxaa == false ? this.postProcess.fxaa = true: this.postProcess.fxaa=false;
+                this.checkPostProcess();
+                this.uiDisplay.printVideoUIMenu();
+                this.parent.PostProcessRender();
                 break;
+            case "outline_post_process":
+                this.postProcess.outline == false ? this.postProcess.outline = true: this.postProcess.outline=false;
+                this.checkPostProcess();
+                this.uiDisplay.printVideoUIMenu();
+                this.parent.PostProcessRender();
+                break;
+            case "bloom_post_process":
+                this.postProcess.bloom == false ? this.postProcess.bloom = true: this.postProcess.bloom=false;
+                this.checkPostProcess();
+                this.uiDisplay.printVideoUIMenu();
+                this.parent.PostProcessRender();
+            break;
             case "quit":
                 document.location.href = "index.html";
                 break;
@@ -51,6 +76,9 @@ class MenuSystem{
                 break;
 
         }
+
+
+
 
     }
 
@@ -74,6 +102,17 @@ class MenuSystem{
                 break;
 
         }
+
+    }
+
+    checkPostProcess(){
+
+        this.parent.postProActive = false;
+        Object.keys(this.postProcess).forEach( e => {
+
+            if (this.postProcess[e] == true) this.parent.postProActive = true;
+
+        });
 
     }
 

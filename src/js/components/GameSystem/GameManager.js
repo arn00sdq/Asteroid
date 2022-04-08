@@ -27,8 +27,8 @@ class GameManager {
         */
         this.composer = utils.composer;
         this.renderer = utils.renderer;
-        this.currentScene = utils.scene;
-        
+        this.stageScene = utils.stageScene;
+
         this.inGameCamera = utils.inGameCamera;
         this.startMenuCamera = utils.startMenuCamera;
         this.loop = utils.loop;
@@ -67,10 +67,15 @@ class GameManager {
         /*
         * PostProcess
         */
-        this.materials = {},
+        this.materials = {};
+        this.selectedObjects = [];
+        this.postProActive = false;
+
         this.finalComposer = postProcess.finalComposer;
         this.bloomComposer = postProcess.bloomComposer;
 
+        this.effectFXAA = postProcess.effectFXAA,
+        this.outlinePass = postProcess.outlinePass,
         this.bloomPass = postProcess.bloomPass,
         this.finalPass = postProcess.finalPass,
 
@@ -91,8 +96,9 @@ class GameManager {
         this.prevTime = 0;
         this.seconds = 0;
         this.stopWatchInterval;
+
         /*
-        * Global Key
+        * Global 
         */
 
         this.state = {
@@ -100,8 +106,9 @@ class GameManager {
             start: false,
             pause: false,
             keyboard: false,
-            postProcess:false,
+
         };
+
 
         document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
 
@@ -172,13 +179,38 @@ class GameManager {
 
     PostProcessRender(){
 
+        let containRenderPass1 = false; let containRenderPass2 = false; let containBloom = false; let containOutline = false; let containFXAA = false;
+        let pass = this.GetComponent("MenuSystem").postProcess;
         const renderScene = new RenderPass( this.currentScene, this.currentCamera ); 
 
-        this.bloomComposer.addPass( renderScene );
-		this.bloomComposer.addPass( this.bloomPass );
+        this.bloomComposer.passes.forEach( e => { if (e.constructor.name == "RenderPass") containRenderPass1 = true})
+        this.finalComposer.passes.forEach( e => { if (e.constructor.name == "RenderPass") containRenderPass2 = true})
 
-        this.finalComposer.addPass( renderScene );
-        this.finalComposer.addPass( this.finalPass );
+        this.bloomComposer.passes.forEach( e => { if (e.constructor.name == "UnrealBloomPass") containBloom = true })
+        this.finalComposer.passes.forEach( e => { if (e.constructor.name == "OutlinePass") containOutline = true })
+        this.finalComposer.passes.forEach( e => { if (e.name == "FXAAPass") containFXAA = true })
+        
+        if (!containRenderPass1) this.bloomComposer.addPass(renderScene);
+        if (!containRenderPass2) this.finalComposer.addPass(renderScene);
+
+        if (pass.bloom == false && containBloom){
+
+            this.bloomComposer.removePass(this.bloomPass);
+            this.finalComposer.removePass(this.finalPass);
+
+        } 
+        if (pass.bloom == true && !containBloom ){
+
+            this.bloomComposer.addPass(this.bloomPass);
+            this.finalComposer.addPass(this.finalPass);
+
+        } 
+
+        if (pass.outline == false && containOutline) this.finalComposer.removePass(this.outlinePass);
+        if (pass.outline == true && !containOutline) this.finalComposer.addPass(this.outlinePass);     
+
+        if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
+        if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);     
 
     }
 
@@ -189,7 +221,7 @@ class GameManager {
 
     }
 
-    StageCompleted() {//level system
+    StageCompleted() {
 
         this.state.pause = true;
         this.GetComponent("DisplaySystem").printStageCompleted(this.score);//a regler le score arrive avant
@@ -246,9 +278,11 @@ class GameManager {
             this.prevTime = Date.now() - this.loop.slowStep;
             this.timeElapsed += Date.now() - this.prevTime;
             this.tempTime = this.timeElapsed;
-            if(this.state.postProcess){
+
+            if(this.postProActive){
 
                 this.renderBloom();
+                this.outlinePass.selectedObjects = this.selectedObjects;
                 this.finalComposer.render();
 
             }else{

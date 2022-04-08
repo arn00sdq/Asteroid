@@ -365,12 +365,18 @@ class GameObjectManager{
   Update(timeElapsed) {
 
     let nbEnnemyFrame = 0;let playerLife; let countBullet = 0;
-
+    this.parent.selectedObjects = [];
     this.parent.currentScene.children.forEach(e => {
 
       if(e.type == "Object3D"){ 
 
         if(e.userData.type == "Ennemy") nbEnnemyFrame++ ;
+
+        if(e.userData.type == "joker"){
+         
+          this.parent.selectedObjects.push(e.children.find(e =>  e.constructor.name == "Mesh"));
+
+        } ;
 
         if(e.name == "Player") playerLife = e.life ;
 
@@ -378,13 +384,12 @@ class GameObjectManager{
     
         
         this.DetectEdge(e);
-
         e.Update(timeElapsed);
 
       }
 
     }); 
-    
+
     this.Detect_collision()
     this.CheckBullet(countBullet);
 
