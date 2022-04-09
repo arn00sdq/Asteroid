@@ -7,18 +7,14 @@ class JokerSystem{
     constructor(parent,models){
 
         this.parent = parent;
-
         this.edgeLimit = this.parent.limit;
         
         this.nextJoker = null;
-
         this.joker = [models.heart, models.firepower, models.coin,models.shield,models.firerate];
         this.jokerAv = []
         this.jokerUnv = []
 
-        this.hasShield = false;
-
-        this.level_sys_comp = this.parent.GetComponent("LevelSystem");
+        this.levelSystem = this.parent.GetComponent("LevelSystem");
 
     }
 
@@ -60,15 +56,13 @@ class JokerSystem{
     IncreaseFireRate(player,seconds){
 
         player.hasJoker.firerate = true;
-        let player_shoot = player.GetComponent("PlayerShootProjectiles");
-        player_shoot.fireRate = 200;
-        console.log("piou")
+        let playerShoot = player.GetComponent("PlayerShootProjectiles");
+        playerShoot.fireRate = 200;
 
         setTimeout(() => {
 
-            console.log("fin")
             player.hasJoker.firerate = false;
-            player_shoot.fireRate = 500;
+            playerShoot.fireRate = 500;
 
         }, seconds);
 
@@ -116,7 +110,7 @@ class JokerSystem{
                         break;
                 }
                 
-                this.level_sys_comp.InstantiateGameObject(currentJoker,position,rotation,scale,undefined,"joker");
+                this.levelSystem.InstantiateGameObject(currentJoker,position,rotation,scale,undefined,"joker");
                 
             } 
         }

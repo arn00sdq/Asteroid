@@ -8,7 +8,7 @@ class GameObjectManager{
     this.edge_limit = parent.limit;
     this.edge_limit_background = parent.limit_background
 
-    this.level_sys_comp = this.parent.GetComponent("LevelSystem");
+    this.levelSystem = this.parent.GetComponent("LevelSystem");
     this.sound_sys = this.parent.GetComponent("SoundSystem");
     this.joker_sys = this.parent.GetComponent("JokerSystem");
     
@@ -166,8 +166,15 @@ class GameObjectManager{
       
       if(player.life == 0){
 
+        this.levelSystem.InstantiateExplosion(this.parent.explosion, player.position, new THREE.Euler(0,0,0),1);
         player.Destroy(player);
-        this.parent.OnPlayerEnd();
+
+        setTimeout(() => {
+          
+          this.parent.OnPlayerEnd();
+
+      }, 1000);
+        
         
       }
 
@@ -206,7 +213,7 @@ class GameObjectManager{
         this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 1,10);
       } 
       console.log(asteroid.position)
-      this.level_sys_comp.InstantiateExplosion(this.parent.explosion, asteroid.position, new THREE.Euler(0,0,0),1);
+      this.levelSystem.InstantiateExplosion(this.parent.explosion, asteroid.position, new THREE.Euler(0,0,0),1);
       asteroid.Destroy(asteroid);
 
     }
@@ -235,7 +242,7 @@ class GameObjectManager{
       let scale = 0.75*e.scale.x;
 
       let velocity = new THREE.Vector3(Math.random()* 1,0,(dir.x/dir.z)*signe).normalize().multiplyScalar(10)
-      this.level_sys_comp.InstantiateGameObject(e , position,rotation, scale, velocity)
+      this.levelSystem.InstantiateGameObject(e , position,rotation, scale, velocity)
 
     }
 

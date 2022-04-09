@@ -38,8 +38,7 @@ class HackSystem{
     NextJoker() {
 
         let playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
-        let joker_sys = this.parent.GetComponent("JokerSystem");
-        
+        let jokerSystem = this.parent.GetComponent("JokerSystem");
         let player = this.parent.player;
 
         if (playerInput.nj){
@@ -49,34 +48,39 @@ class HackSystem{
             switch (this.indexJoker){
 
                 case 0:
-                    joker_sys.PlayerAddLife(player,1);
+                    jokerSystem.PlayerAddLife(player,1);
                     this.sound_sys.PlayHeartPickUp();
-                    console.log("vie supplémentaire");
                     break;
 
                 case 1:
-                    joker_sys.PlayerAddCoin(this.parent.score, 1);
+                    jokerSystem.PlayerAddCoin(this.parent.score, 1);
                     this.sound_sys.PlayCoinPickUp();
-                    console.log("Piece en +");
                     break;
                 case 2:
                     player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
-                    console.log("Cannon en plus");
                     break;
                 case 3:
  
-                    if(joker_sys.hasShield == false){
+                    if(player.hasJoker.immune == false){
 
-                        joker_sys.PlayerProtection(this.parent.player, this.parent.shield,3000);
-                        console.log("Protection");
-
+                        jokerSystem.PlayerProtection(player, this.parent.shield,3000);
                     }
-                    
                     break;
+
+                case 4:
+                    
+                    if(player.hasJoker.fireRate == false){
+
+                        jokerSystem.IncreaseFireRate(player,5000);
+    
+                    }
+
+                break;
+
 
             }
 
-            this.indexJoker == this.jokerSytem.joker.length ? this.indexJoker = 0 : this.indexJoker ++;
+            this.indexJoker == this.jokerSytem.joker.length - 1 ? this.indexJoker = 0 : this.indexJoker ++;
 
         }
 
@@ -85,20 +89,17 @@ class HackSystem{
     KillThemAll(){ 
 
         let playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
+        let scene = this.parent.currentScene;
 
         if (playerInput.kta){
 
             playerInput.kta = false;
-            let scene = this.parent.scene;
-            
-            scene.traverse(function(obj){
-                if (obj.name == "Asteroid"){
-                   
-                    scene.remove(obj)
 
-                }
-
-            })
+            for( var i = scene.children.length - 1; i >= 0; i--) { 
+                let obj = scene.children[i];
+                if(obj.name == "Asteroid") scene.remove(obj); 
+                
+            }
 
         }
 

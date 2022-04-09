@@ -146,7 +146,7 @@ class LevelSystem{
         for( var i = this.parent.currentScene.children.length - 1; i >= 0; i--) { 
             obj = this.parent.currentScene.children[i];
             this.parent.currentScene.remove(obj); 
-       }
+        }
 
     }
 
