@@ -113,9 +113,6 @@ class GameManager {
 
         };
 
-
-        document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
-
         this.InitComponent(models, audio);
 
     }
@@ -245,45 +242,6 @@ class GameManager {
 
     }
 
-    OnKeyDown(event) {
-
-        switch (event.keyCode) {
-
-            case 27:
-
-                if(this.GetComponent("LevelSystem").currentLevel == "StartMenu") break;
-
-                if (!this.state.pause) {
-
-                    this.state.pause = true;
-                    this.GetComponent("DisplaySystem").printPause();
-
-                } else {
-
-                    this.state.pause = false;
-                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life, this.score);
-
-                }
-
-                break;
-            case 72:
-                if (!this.state.keyboard) {
-
-                    this.state.keyboard = true;
-                    this.state.pause = true;
-                    this.GetComponent("DisplaySystem").printKeyboardShortcut();
-
-                } else {
-
-                    this.state.keyboard = false;
-                    this.state.pause = false;
-                    this.GetComponent("DisplaySystem").printUIHeader(this.player.life, this.score);
-
-                }
-                break;
-        }
-
-    }
 
     RAF() {
         

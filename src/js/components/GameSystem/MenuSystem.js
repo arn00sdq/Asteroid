@@ -20,6 +20,7 @@ class MenuSystem{
 
         document.addEventListener('click', (e) => this.OnClick(e), false);
         document.addEventListener("change", (e) => this.OnChange(e), false);
+        document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
     }
 
     OnClick(event) {
@@ -104,6 +105,49 @@ class MenuSystem{
             default:
                 break;
 
+        }
+
+    }
+
+    OnKeyDown(event) {
+
+        let parent = this.parent;
+        switch (event.keyCode) {
+
+            case 27:
+
+                if(parent.GetComponent("LevelSystem").currentLevel == "StartMenu") break;
+
+                if (!this.parent.state.pause) {
+
+                    parent.state.pause = true;
+                    this.uiDisplay.printPause();
+
+                } else {
+
+                    parent.state.pause = false;
+                    this.uiDisplay.printUIHeader(parent.player.life, parent.score);
+
+                }
+
+                break;
+            case 72:
+                
+                if (!this.parent.state.keyboard) {
+
+                    parent.state.keyboard = true;
+                    parent.state.pause = true;
+                    this.uiDisplay.printKeyboardShortcut();
+
+                } else {
+
+                    parent.state.keyboard = false;
+                    parent.state.pause = false;
+
+                    parent.GetComponent("LevelSystem").currentLevel == "StartMenu" ? this.uiDisplay.printUIStartMenu() : this.uiDisplay.printUIHeader(parent.player.life, parent.score);
+
+                }
+                break;
         }
 
     }
