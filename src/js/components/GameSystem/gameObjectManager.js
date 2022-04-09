@@ -156,7 +156,7 @@ class GameObjectManager{
       let playerHealth = player.GetComponent("PlayerHealthSystem");
 
       let playerHitSound = new THREE.Audio( this.parent.audio.listener );
-      this.sound_sys.PlayShipDamageTaken(playerHitSound, 0,0.2);
+      this.sound_sys.PlayShipDamageTaken();
 
       playerHealth.Damage(1);
       player.SetInvulnerability(2000);
@@ -214,6 +214,7 @@ class GameObjectManager{
       } 
       console.log(asteroid.position)
       this.levelSystem.InstantiateExplosion(this.parent.explosion, asteroid.position, new THREE.Euler(0,0,0),1);
+      this.sound_sys.PlayAsteroidDestruction(asteroid,0)
       asteroid.Destroy(asteroid);
 
     }
@@ -256,8 +257,8 @@ class GameObjectManager{
       let bulletDamage = bullet.GetComponent("BulletDamageSystem").damageAmount;
       if (bulletDamage > 0){
 
-        let playerHitSound = new THREE.Audio( this.parent.audio.listener );
-        this.sound_sys.PlayHitBullet(playerHitSound, 0,0.2);
+      //  let playerHitSound = new THREE.Audio( this.parent.audio.listener );
+        this.sound_sys.PlayHitBullet(object, 0);
 
       }   
 
@@ -270,9 +271,6 @@ class GameObjectManager{
     if(object.name == "Asteroid" || object.name == "Player" ){
 
       bullet.Destroy(bullet)
-
-      let playerHitSound = new THREE.Audio( this.parent.audio.listener );
-      this.sound_sys.PlayHitBullet(playerHitSound, 0,0.2);
 
     } 
 
@@ -306,7 +304,8 @@ class GameObjectManager{
           break;
         case "Shield":
             this.parent.shield.nb -= 1
-            this.sound_sys.PlayCoinPickUp();
+            this.sound_sys.PlayEnergyShield();
+            
             if(!object.hasJoker.immune) this.joker_sys.PlayerProtection(object,this.parent.shield, 3000);
           break;
 

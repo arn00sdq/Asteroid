@@ -475,7 +475,7 @@ class Asteroid {
 
         this.audioManager = [];
 
-        this.sound = new THREE.Audio(this.listener);
+        this.sound = new THREE.PositionalAudio(this.listener);
 
         const audioLoader = new THREE.AudioLoader(this.loadingManager);
         let me = this;
@@ -501,6 +501,21 @@ class Asteroid {
 
         audioLoader.load('../medias/sounds/ship/ship.mp3', function (buffer) {
             buffer.name = "ShipDamageTaken";
+            me.audioManager.push(buffer);
+        });
+        /*-*/
+        audioLoader.load('../medias/sounds/player/spawn-sound.mp3', function (buffer) {
+            buffer.name = "ShipRespawn";
+            me.audioManager.push(buffer);
+        });
+
+        audioLoader.load('../medias/sounds/shield/energy_shield.mp3', function (buffer) {
+            buffer.name = "EnergyShield";
+            me.audioManager.push(buffer);
+        });
+
+        audioLoader.load('../medias/sounds/asteroid/asteroid_explosion.mp3', function (buffer) {
+            buffer.name = "AsteroidExplosion";
             me.audioManager.push(buffer);
         });
 
@@ -546,7 +561,7 @@ class Asteroid {
         const audio = {
 
             audioManager: this.audioManager,
-            sound: this.sound,
+            //sound: this.sound,
             listener: this.listener
 
         }
@@ -600,17 +615,17 @@ class Asteroid {
 
             player: new Player(playerModel, audio,this.params),
             ennemy_ss: new EnnemySpaceship(ennemy_ssModel,0),
-            asteroid: new BasicAsteroid(rockModel, 0),
-            coin: new Coin(coinModel, 0),
-            earth: new Earth(earthModel,0),
-            sun: new Sun(sunModel,0),
-            firepower: new FirePower(firePowerModel, 0),
-            firerate: new FireRate(fireRateModel, 0),
-            shield: new Shield(shieldModel, 0),
-            heart: new Heart(heartModel, 0),
+            asteroid: new BasicAsteroid(rockModel,audio, 0),
+            coin: new Coin(coinModel,audio, 0),
+            earth: new Earth(earthModel,audio,0),
+            sun: new Sun(sunModel,audio, 0),
+            firepower: new FirePower(firePowerModel,audio, 0),
+            firerate: new FireRate(fireRateModel,audio, 0),
+            shield: new Shield(shieldModel,audio, 0),
+            heart: new Heart(heartModel,audio, 0),
             basicBullet: new BasicBullet(bulletPlayer, audio),
             ennemyBullet: new BasicBullet(bulletEnnemy, audio),
-            explosion: new Explosion(explosionModel),
+            explosion: new Explosion(explosionModel, audio),
         }
 
         this.gm = new GameManager(models, utils, audio, shaders, postProcess)
@@ -632,7 +647,7 @@ class Asteroid {
             document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("Stage1", true);
 
         }
 

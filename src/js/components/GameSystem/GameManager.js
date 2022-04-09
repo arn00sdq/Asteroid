@@ -151,7 +151,14 @@ class GameManager {
 
     ModelInitialisation() {
 
-        for(const [key,values] of Object.entries(this.models)) values.InitMesh();
+        for(const [key,values] of Object.entries(this.models)){
+
+            values.InitMesh();
+            /*console.log(this.audio.listener.context)
+            const sound = new THREE.Audio( this.audio.listener );*/
+            
+    
+        } 
 
     }
 
@@ -174,7 +181,6 @@ class GameManager {
         this.ennemy_ss.target = this.player;
 
         this.ennemyBullet.name = "EnnemyBullet";
-
 
     }
 
@@ -224,7 +230,6 @@ class GameManager {
 
         if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
         if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);  
-
 
     }
 

@@ -9,70 +9,112 @@ class SoundSystem{
         this.audioManager = audio.audioManager
         this.sound = audio.sound;
 
-        this.masterVolume = 1;
-        this.sfxVolume = 1;
-        this.musicVolume = 1;
+        this.masterVolume = 0.5;
+        this.sfxVolume = 0.5;
+        this.musicVolume = 0.5;
 
     }
 
     PlayCoinPickUp(){
 
         const CoinBuffer =  this.audioManager.find(e => e.name == "Coin");
+        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
 
-        if (this.sound.isPlaying)  this.sound.stop()
-        this.sound.setBuffer( CoinBuffer );
-        this.sound.setLoop( false );
-        this.sound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        this.sound.play();
+        if (playerAudio.isPlaying)  playerAudio.stop()
+        playerAudio.setBuffer( CoinBuffer );
+        playerAudio.setLoop( false );
+        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        playerAudio.play();
 
     }
 
     PlayHeartPickUp(){
 
-        const heartBuffer =  this.audioManager.find(e => e.name == "Heart");
+        const CoinBuffer =  this.audioManager.find(e => e.name == "Coin");
+        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
 
-        if (this.sound.isPlaying)  this.sound.stop()
-
-        this.sound.setBuffer( heartBuffer );
-        this.sound.setLoop( false );
-        this.sound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        this.sound.play();
+        if (playerAudio.isPlaying)  playerAudio.stop()
+        playerAudio.setBuffer( CoinBuffer );
+        playerAudio.setLoop( false );
+        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        playerAudio.play();
 
     }
 
-    PlayBulletShoot(listener, delay,volume){
-
-        let audio = new THREE.Audio( listener );
-
+    PlayBulletShoot(){
+      
         const bulletBuffer =  this.audioManager.find(e => e.name == "Bullet");
+        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
 
-        audio.setBuffer( bulletBuffer );
-        audio.setLoop( false );
-        audio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        audio.play(delay);
+        if (playerAudio.isPlaying)  playerAudio.stop()
+        playerAudio.setBuffer( bulletBuffer );
+        playerAudio.setLoop( false );
+        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        playerAudio.play();
 
     }
 
-    PlayHitBullet(audio, delay,volume){
+    PlayHitBullet(bullet, delay){
 
         const bulletBuffer =  this.audioManager.find(e => e.name == "BulletHit");
+        let bulletAudio =  bullet.children.find(e => e.constructor.name == "PositionalAudio");
 
-        audio.setBuffer( bulletBuffer );
-        audio.setLoop( false );
-        audio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        bulletAudio.setBuffer( bulletBuffer );
+        bulletAudio.setRefDistance( 1);
+        bulletAudio.setLoop( false );
+        bulletAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
 
-        audio.play(delay);
+        bulletAudio.play(delay);
 
     }
 
-    PlayShipDamageTaken(audio, delay,volume){
+    PlayShipDamageTaken(){
 
         const bulletBuffer =  this.audioManager.find(e => e.name == "ShipDamageTaken");
+        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
 
-        audio.setBuffer( bulletBuffer );
-        audio.setLoop( false );
-        audio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        audio.play(delay);
+        playerAudio.setBuffer( bulletBuffer );
+        playerAudio.setLoop( false );
+        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        playerAudio.play(0);
+
+    }
+
+    PlayEnergyShield(){
+
+        const shieldBuffer =  this.audioManager.find(e => e.name == "EnergyShield");
+        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
+
+        playerAudio.setBuffer( shieldBuffer );
+        playerAudio.setLoop( true );
+        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        playerAudio.play();
+
+    }
+
+    PlayPlayerRespawn(){
+
+        const spawnBuffer =  this.audioManager.find(e => e.name == "ShipRespawn");
+        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
+
+        playerAudio.setBuffer( spawnBuffer );
+        playerAudio.setLoop( false );
+        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        playerAudio.play();
+
+    }
+
+    PlayAsteroidDestruction(asteroid, delay){
+
+        const exploBuffer =  this.audioManager.find(e => e.name == "AsteroidExplosion");
+
+        let exploAudio =  asteroid.children.find(e => e.constructor.name == "PositionalAudio");
+
+        exploAudio.setBuffer( exploBuffer );
+        exploAudio.setLoop( false );
+        exploAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+
+        exploAudio.play(delay);
 
     }
 

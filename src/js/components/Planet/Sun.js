@@ -4,9 +4,9 @@ import PlanetMouvement from "./PlanetMouvement.js";
 
 class Sun extends GameObject{ 
 
-    constructor(model) {
+    constructor(model, audio) {
 
-        super(model);
+        super(model,audio);
 
         this.components = {};
         this.name = "Sun";

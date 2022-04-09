@@ -33,9 +33,11 @@ class GameObject extends THREE.Object3D{
     InitMesh(scale){
     
         this.model.children.forEach( (e) => {
+            
+            if (e.constructor.name == "Mesh") 
 
             this.add(e)
-
+            
         })
 
         

@@ -17,19 +17,22 @@ class DisplaySystem{
     printDeath(score){
 
         let ui_death = `
-		<div id="death_section">
+        <div class="tb">
+            <div id="death_section">
 
-            <div id="header_death">
-                <div id="player_death_msg">Vous etes mort</div>
-                <div id="score_final">Score final : ${score}</div>
-            </div>
-    
-            <div id="button_section_menu">
-                <button name="restart">Restart</button>
-                <button name="quit">Quit</button>
-            </div>
+                <div id="header_death">
+                    <div id="player_death_msg">Vous etes mort</div>
+                    <div id="score_final">Score final : ${score}</div>
+                </div>
+        
+                <div id="button_section_menu">
+                    <button name="restart">Restart</button>
+                    <button name="quit">Quit</button>
+                </div>
 
-        </div> 
+            </div> 
+        </div>
+		
         `
         this.printAPP(ui_death)
 
@@ -233,7 +236,7 @@ class DisplaySystem{
         let sound_sys = this.parent.GetComponent("SoundSystem");
 
         let audioUI = `
-        <div id="tb">
+        <div class="tb">
             <div class="option_menu">
                 <div class="name_menu_section">
                     <span class="#">Audio</span>
@@ -281,7 +284,7 @@ class DisplaySystem{
         let videoParam = this.parent.GetComponent("MenuSystem").video;
 
         let videoUI = `
-        <div id="tb">
+        <div class="tb">
             <div class="option_menu">
                 <div class="name_menu_section">
                     <span class="#">Video</span>

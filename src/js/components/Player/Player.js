@@ -34,6 +34,7 @@ class Player extends GameObject{
         this.InitComponent();
         this.InitValue();
 
+
     }
 
     InitComponent(){

@@ -5,9 +5,9 @@ import JokerMovement from "./JokerMovement.js";
 
 class Coin extends GameObject{
 
-    constructor(model, nb){
+    constructor(model,audio, nb){
 
-        super(model);
+        super(model,audio);
         
         this.components = {}
         this.name = "Coin";

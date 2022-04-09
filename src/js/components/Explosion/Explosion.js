@@ -5,9 +5,9 @@ import ExplosionMouvement from './ExplosionMouvement.js';
 
 class Explosion extends GameObject{
 
-    constructor(model){
+    constructor(model, audio){
 
-        super(model);
+        super(model, audio);
 
         this.components = {}
         this.name = "Explosion";

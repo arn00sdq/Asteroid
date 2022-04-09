@@ -29,6 +29,7 @@ class LevelSystem{
         player.scene = this.parent.currentScene;
         player.Instantiate(player,position, rotation, scale);
         player.SetRigidBody(player);
+        player.add( new THREE.PositionalAudio(  this.parent.audio.listener ));
 
     }
 
@@ -42,7 +43,6 @@ class LevelSystem{
         if(opt !== undefined ){
             object_clone.userData.type = opt;
         }
-
         object_clone.Instantiate(object_clone,position, rotation, scale,velocity);
         object_clone.SetRigidBody(object_clone);
         this.updateValue(object_clone, object);
@@ -56,7 +56,6 @@ class LevelSystem{
         let object_clone = object.clone();
         this.setCloneValue(object_clone, object);
         object_clone.userData.type = opt;
-
         let mesh = object_clone.children.find(e => e.constructor.name == "Mesh");
         let shaderMat = Object.values(this.parent.shaders).find( val => val.parentName === object.constructor.name);
         mesh.material = shaderMat;
@@ -107,13 +106,13 @@ class LevelSystem{
     }
 
     setCloneValue(destination, source){
-
+       
         for (const property in destination) {
-
+            
             if(destination[property] == null && property !== "model")  destination[property] = source[property]
 
         }
-
+        
         let mesh = source.children.find(e => e.constructor.name == 'Mesh');
         destination.children.forEach((e) => { 
 
@@ -121,6 +120,8 @@ class LevelSystem{
             e.material = mesh.material.clone(); 
             
         });
+
+        destination.add( new THREE.PositionalAudio( this.parent.audio.listener ));
 
     }
 
@@ -161,8 +162,12 @@ class LevelSystem{
     scenePicker(level,init,switchScene){
         
         if(switchScene == undefined) switchScene = false;
+
         this.removeProps();
+
         let displaySystem = this.parent.GetComponent("DisplaySystem");
+        this.soundSystem  = this.parent.GetComponent("SoundSystem");
+        
         this.currentLevel = level;
         
         switch (level){
@@ -179,7 +184,7 @@ class LevelSystem{
                 this.loadProps(level);
                 this.loadWave(level)
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
-                
+                this.soundSystem.PlayPlayerRespawn();
                 //----
                 
                 break;

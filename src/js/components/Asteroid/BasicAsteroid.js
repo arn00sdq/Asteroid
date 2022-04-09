@@ -8,12 +8,12 @@ import { BoxHelper } from "../../three/three.module.js";
 
 class BasicAsteroid extends GameObject {
 
-    constructor(model, nbBreak) {
+    constructor(model,audio, nbBreak) {
 
-        super(model);
+        super(model,audio);
 
         this.components = {};
-
+        this.audio = audio;
         this.name = "Asteroid"
         this.nbBreak = nbBreak;
         this.life = 15;

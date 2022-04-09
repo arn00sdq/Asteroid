@@ -33,8 +33,8 @@ class PlayerShootProjectiles{
         this.weaponParams.timerInstantiate = timeElapsed;// a reglo
 
         this.parent.stageSystem.InstantiateGameObject(this.weaponParams,this.temp, this.spawnRot, 0.0009)
-       
-        this.parent.audio_syst.PlayBulletShoot(this.audio.listener, Math.random() * 0.2, 0.2);
+        
+        this.parent.audio_syst.PlayBulletShoot(Math.random() * 0.2, 0.2);
 
         this.indexMissile ++;
 
