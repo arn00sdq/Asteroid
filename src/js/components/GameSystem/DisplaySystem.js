@@ -207,6 +207,7 @@ class DisplaySystem{
             <div class="line lineEchap"><div class="text textEchap">Menu</div></div>
 
             <div class="line lineZ"><div class="text textZ">Avancer</div></div>
+            <div class="line lineShift"><div class="text textShift">Turbo</div></div>
             <div class="line lineQ"><div class="text textQ">Virage à </br> gauche</div></div>
             <div class="line lineD"><div class="text textD">Virage à </br> droite</div></div>
             <div class="line lineS"><div class="text textS">Reculer</div></div>
