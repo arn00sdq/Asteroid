@@ -60,11 +60,14 @@ class GameManager {
         * Shader
         */
 
+        this.shaders = shaders;
         this.atmosphere = shaders.astmosphere;
         this.booster = shaders.booster;
         this.sunAtmosphere = shaders.sunAtmosphere;
         this.stars = shaders.stars;
         this.explosionShader = shaders.explosionShader;
+        this.earthShader = shaders.earthShader
+        
         /*
         * PostProcess
         */
@@ -224,7 +227,7 @@ class GameManager {
 
         if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
         if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);  
-        
+
 
     }
 

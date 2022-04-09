@@ -37,11 +37,9 @@ class MenuSystem{
                 this.uiDisplay.printUIHeader(this.parent.player.life, this.parent.score);
                 break;
             case "restart":
-                this.levelSystem.resetLevel(this.levelSystem.currentLevel);
                 this.levelSystem.scenePicker(this.levelSystem.currentLevel, false);
                 break;
             case "next":
-                this.levelSystem.resetLevel();
                 let currentLevel = this.levelSystem.currentLevel + 1;
                 this.levelSystem.startLevel(currentLevel, false);
                 break;
@@ -70,7 +68,7 @@ class MenuSystem{
                 this.parent.PostProcessRender();
             break;
             case "quit":
-                document.location.href = "index.html";
+                this.levelSystem.currentLevel == "StartMenu" ? document.location.href = "index.html" : this.levelSystem.scenePicker("StartMenu",false,true);
                 break;
             default:
                 break;

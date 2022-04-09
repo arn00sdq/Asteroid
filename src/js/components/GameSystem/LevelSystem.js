@@ -37,7 +37,6 @@ class LevelSystem{
         object.scene = this.parent.currentScene;
 
         let object_clone = object.clone();
-
         this.setCloneValue(object_clone, object);
 
         if(opt !== undefined ){
@@ -54,8 +53,15 @@ class LevelSystem{
     InstantiatePlanet(object,position, rotation, scale, opt){
 
         object.scene = this.parent.currentScene;
-        object.userData.type = opt;
-        object.Instantiate(object,position, rotation, scale);
+        let object_clone = object.clone();
+        this.setCloneValue(object_clone, object);
+        object_clone.userData.type = opt;
+
+        let mesh = object_clone.children.find(e => e.constructor.name == "Mesh");
+        let shaderMat = Object.values(this.parent.shaders).find( val => val.parentName === object.constructor.name);
+        mesh.material = shaderMat;
+
+        object.Instantiate(object_clone,position, rotation, scale);
 
         
     }
@@ -155,9 +161,9 @@ class LevelSystem{
     scenePicker(level,init,switchScene){
         
         if(switchScene == undefined) switchScene = false;
-        //this.removeProps();
-       let displaySystem = this.parent.GetComponent("DisplaySystem");
-       this.currentLevel = level;
+        this.removeProps();
+        let displaySystem = this.parent.GetComponent("DisplaySystem");
+        this.currentLevel = level;
         
         switch (level){
 
@@ -165,7 +171,6 @@ class LevelSystem{
                 this.loadScene(level);
                 this.loadUI(level,displaySystem);
                 this.loadProps(level)
-                this.loadPlanetStartMenu({earth : this.parent.earth, stars : this.parent.stars});
                 break;
 
             case "Stage1":   
@@ -296,14 +301,13 @@ class LevelSystem{
 
     loadPlanetStartMenu(model){
 
-        let atmosphere = this.parent.atmosphere;
+        let atmosphere = this.parent.atmosphere; //manuel
         atmosphere.scale.set(1.1,1.1,1.1);
+        atmosphere.position.set(0,0,0);
         this.parent.currentScene.add(atmosphere);
 
-        let positionEarth = new THREE.Vector3(0,0,0);
-        let rotationEarth = new THREE.Euler(0,0,0);
-        let scaleEarth = 1;
-        this.InstantiatePlanet(model.earth, positionEarth, rotationEarth, scaleEarth, "Planet");
+        model.earth.scale.set(1,1,1);
+        this.InstantiatePlanet(model.earth, new THREE.Vector3(0,0,0),  new THREE.Euler(0,0,0), 1, "Planet");
 
         this.generatingStars(model.stars,200,500);
         this.parent.currentScene.add(model.stars);
@@ -311,13 +315,6 @@ class LevelSystem{
     } 
 
     loadPlanetStageOne(model){
-
-        /*atmosphere earth*/
-
-        let atmosphere = this.parent.atmosphere;
-        atmosphere.scale.set(2.7,2.7,2.7);
-        atmosphere.position.set(0,-20,100);
-       // this.parent.currentScene.add(atmosphere);
 
         /*earth*/
 

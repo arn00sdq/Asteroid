@@ -229,7 +229,7 @@ class Asteroid {
         /*
         * Sun 
         */
-        const sunMaterial = new THREE.ShaderMaterial({
+        this.sunMaterial = new THREE.ShaderMaterial({
             vertexShader: _VS(),
             fragmentShader: _FS(),
             uniforms:{
@@ -241,10 +241,15 @@ class Asteroid {
             }
 
         });
-        const sunGeometry = new THREE.SphereBufferGeometry(5, 50, 50);
-        const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+        this.sunMaterial.parentName = "Sun";
+
+        const sunMesh = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(5, 50, 50),
+            new ShaderMaterial(),
+        )
         sunMesh.rotateY((Math.PI / 180)* 280)
         sunMesh.name = "SunItem";
+
         /*
         * SunAtmosphere
         */
@@ -281,7 +286,7 @@ class Asteroid {
         /*
         * planet 
         */
-        const earthMaterial = new THREE.ShaderMaterial({
+        this.earthMaterial = new THREE.ShaderMaterial({
             vertexShader: _VS(),
             fragmentShader: _FS(),
             uniforms:{
@@ -292,8 +297,12 @@ class Asteroid {
                 
             }
         });
-        const earthGeometry = new THREE.SphereBufferGeometry(5 , 50, 50);
-        const earthMesh = new THREE.Mesh(earthGeometry, earthMaterial);
+        this.earthMaterial.parentName = "Earth";
+
+        const earthMesh = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(5 , 50, 50),
+            new ShaderMaterial(),
+        )
         earthMesh.rotateY((Math.PI / 180)* 280)
         earthMesh.name = "EarthItem";
 
@@ -344,7 +353,7 @@ class Asteroid {
         })
         const explosion = new THREE.Mesh(
             new THREE.IcosahedronGeometry(0.5,10),
-            new ShaderMaterial()
+            new ShaderMaterial(),
         )
         
         explosion.name = "explosion";
@@ -579,7 +588,10 @@ class Asteroid {
             sunAtmosphere: this.sunAtmosphere,
             booster : this.booster,
             stars: this.stars,
+
             explosionShader : this.shaderExplosion,
+            earthShader: this.earthMaterial,
+            sunShader: this.sunMaterial,
             
  
          }
@@ -617,10 +629,10 @@ class Asteroid {
 
         if (event.code == 'Space') {
 
-            // document.getElementById("start_game").style.display = "none";
+            document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").scenePicker("Stage1", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
 
         }
 
