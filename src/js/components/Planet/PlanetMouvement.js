@@ -5,17 +5,18 @@ class PlanetMouvement {
     constructor(parent) {
 
       this.parent = parent;
+      this.speedRotation = 10;
 
     }
         
     InitComponent() {}
-
-    Update(timeElapsed) {
+ 
+    Update(timeElapsed,timeInSecond) {
 
       if(this.parent.children[0] !== null){
 
-          this.parent.children[0].rotateY((Math.PI / 180) * 0.05);
-        } 
+          this.parent.children[0].rotateY((Math.PI / 180) * timeElapsed * this.speedRotation );
+        }  
         
 
     }

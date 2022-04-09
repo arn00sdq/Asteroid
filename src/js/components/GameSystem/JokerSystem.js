@@ -74,9 +74,9 @@ class JokerSystem{
 
     }
 
-    JokerSpawnSystem(timeElapsed ){
+    JokerSpawnSystem(timeElapsed,timeInSecond){
 
-        if(this.nextJoker !== Math.round(timeElapsed)){
+        if(this.nextJoker !== Math.round(timeInSecond)){
     
             this.joker.forEach( (e,index) => {        
                 
@@ -92,7 +92,7 @@ class JokerSystem{
 
             });
 
-            this.nextJoker =  Math.round(timeElapsed);
+            this.nextJoker =  Math.round(timeInSecond);
 
             if(this.nextJoker % 1 == 0 && this.jokerAv.length > 0){
 
@@ -121,14 +121,14 @@ class JokerSystem{
             } 
         }
 
-        if(this.nextJoker < Math.round(timeElapsed))  this.nextJoker = null
+        if(this.nextJoker < Math.round(timeInSecond))  this.nextJoker = null
 
 
     }
 
-    Update(timeElapsed){
+    Update(timeElapsed,timeInSecond){
 
-        this.JokerSpawnSystem(timeElapsed * 1000);
+        this.JokerSpawnSystem(timeElapsed,timeInSecond  * 1000);
         
 
     }

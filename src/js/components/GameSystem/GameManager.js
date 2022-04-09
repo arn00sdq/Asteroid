@@ -49,6 +49,7 @@ class GameManager {
         this.basicBullet = models.basicBullet;
         this.ennemyBullet = models.ennemyBullet;
         this.ennemy_ss = models.ennemy_ss;
+        this.explosion = models.explosion;
 
         /*
         * Audio
@@ -63,7 +64,7 @@ class GameManager {
         this.booster = shaders.booster;
         this.sunAtmosphere = shaders.sunAtmosphere;
         this.stars = shaders.stars;
-
+        this.explosionShader = shaders.explosionShader;
         /*
         * PostProcess
         */
@@ -222,8 +223,8 @@ class GameManager {
         if (pass.outline == true && !containOutline) this.finalComposer.addPass(this.outlinePass);     
 
         if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
-        if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);     
-
+        if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);  
+        
 
     }
 
@@ -288,7 +289,6 @@ class GameManager {
 
             this.loop.now = window.performance.now();
             this.loop.dt = this.loop.dt + Math.min(1, (this.loop.now - this.loop.last) / 1000);
-
             while (this.loop.dt > this.loop.slowStep) this.loop.dt = this.loop.dt - this.loop.slowStep;
             this.prevTime = Date.now() - this.loop.slowStep;
             this.timeElapsed += Date.now() - this.prevTime;
@@ -306,7 +306,7 @@ class GameManager {
             }
  
             this.loop.last = this.loop.now;
-            this.Step(this.tempTime);
+            this.Step(this.loop.dt,this.tempTime);
 
         } else {
 
@@ -345,10 +345,10 @@ class GameManager {
 
     }
 
-    Step(timeElapsed) {
+    Step(timeElapsed,timeInSecond) {
 
         for (let k in this.components) {
-            this.components[k].Update(timeElapsed * 0.001);
+            this.components[k].Update(timeElapsed,timeInSecond * 0.001);
 
         }
 

@@ -60,6 +60,20 @@ class LevelSystem{
         
     }
 
+    InstantiateExplosion(object,position,rotation,scale){
+
+        object.scene = this.parent.currentScene;
+        
+        let object_clone = object.clone();
+        this.setCloneValue(object_clone, object);
+
+        let mesh = object_clone.children.find(e => e.constructor.name == "Mesh")
+        mesh.material = this.parent.explosionShader;
+        mesh.material.uniforms[ 'opacity' ].value  = 1.0;
+        object_clone.Instantiate(object_clone,position, rotation, scale);
+
+    }
+
     generatingStars(star,min,max){
 
         const starVertices = []
@@ -161,6 +175,8 @@ class LevelSystem{
                 this.loadWave(level)
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 
+                //----
+                
                 break;
 
             case "Stage2":
@@ -248,7 +264,7 @@ class LevelSystem{
                 this.loadPlanetStartMenu({earth : this.parent.earth, stars : this.parent.stars});
                 break;
             case "Stage1":
-                this.loadAsteroidBackGround(this.parent.asteroid,50);
+                this.loadAsteroidBackGround(this.parent.asteroid,1);
                 this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 break;
             case "Stage2":

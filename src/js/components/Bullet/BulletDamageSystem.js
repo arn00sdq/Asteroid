@@ -17,10 +17,11 @@ class BulletDamageSystem{
 
     Start(){}
 
-    Update(timeElapsed){
+    Update(timeElapsed,timeInSecond){
 
-        let bulletCurrentTime = timeElapsed *1000 - this.parent.timerInstantiate;
-        this.damageAmount = this.damage - Math.round(bulletCurrentTime) *2
+        
+        let bulletCurrentTime = timeInSecond * 1000 - this.parent.timerInstantiate;
+        this.damageAmount = this.damage - Math.round(bulletCurrentTime) * 2
         if(this.damageAmount <= 0){
 
             this.damageAmount = 0;

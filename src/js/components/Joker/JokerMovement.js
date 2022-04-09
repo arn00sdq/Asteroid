@@ -5,8 +5,7 @@ class JokerMovement {
     constructor(parent) {
 
       this.parent = parent;
-      this.acceleration = new THREE.Vector3(1, 0.125, 2.0);
-      this.velocity = new THREE.Vector3(0,0,0);
+      this.speedRotation = 10;
 
     }
         
@@ -16,7 +15,7 @@ class JokerMovement {
 
       if(this.parent.children[0] !== null){
 
-          this.parent.children[0].rotateY((Math.PI / 180));
+          this.parent.children[0].rotateY((Math.PI / 180) * timeElapsed * this.speedRotation);
         } 
         
 

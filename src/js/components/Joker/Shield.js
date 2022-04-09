@@ -14,7 +14,6 @@ class Shield extends GameObject{
    
         this.limit = 1;
         this.nb = nb;
-        console.log(this)
         this.InitComponent();
 
     }

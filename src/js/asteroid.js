@@ -6,7 +6,7 @@ import BasicAsteroid from "./components/Asteroid/BasicAsteroid.js";
 import GameManager from "./components/GameSystem/GameManager.js";
 
 import { OBJLoader } from "./Loader/OBJLoader.js"
-import { Object3D, TextureLoader } from "./three/three.module.js";
+import { Object3D, ShaderMaterial, TextureLoader } from "./three/three.module.js";
 
 import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/EffectComposer.js";
 import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/ShaderPass.js";
@@ -29,6 +29,8 @@ import {_FSAT, _VSAT } from "./components/Planet/glslAtmosphere.js";
 import {_FSBooster, _VSBooster} from "./components/Player/booster.js";
 import {_FSSunShader, _VSSunShader} from "./components/Planet/glslSunShader.js"
 import { _FSBloom, _VSBloom}  from "./components/Shader/bloom.js"
+import { _FSExplosion, _VSExplosion}  from "./components/Shader/explosion.js"
+import Explosion from './components/Explosion/Explosion.js';
 
 class Asteroid {
     constructor() {
@@ -310,6 +312,43 @@ class Asteroid {
         )
 
         /*
+        * Explosion
+        */
+        
+        this.shaderExplosion = new THREE.ShaderMaterial({
+            vertexShader: _VSExplosion(),
+            fragmentShader: _FSExplosion(),
+            transparent: true,
+            uniforms:{
+                tExplosion: {
+                    value: textureLoader.load("../medias/images/explosion/explosion.png"),
+                    
+                },
+                time: { // float initialized to 0
+                    type: "f",
+                    value: 0.0
+                  },
+                growTime:{
+                    type: "f",
+                    value: 0.0
+                },
+                opacity:{
+                    type: "f",
+                    value: 1.0
+                },
+                weight: { type: "f", value: 10.0 }
+                
+            }
+
+        })
+        const explosion = new THREE.Mesh(
+            new THREE.IcosahedronGeometry(0.5,10),
+            new ShaderMaterial()
+        )
+        
+        explosion.name = "explosion";
+
+        /*
         * Booster
         */
 
@@ -323,11 +362,11 @@ class Asteroid {
                       type: "f",
                       value: 0.05
                     },
-                    boostLengthZ:{
+                    uniformZ:{
                         type:"f",
                         value:0.03
                     },
-                    boostLengthX:{
+                    uniformX:{
                         type:"f",
                         value:0.03
                     },
@@ -350,7 +389,7 @@ class Asteroid {
         */
         this.modelManager.push(cylinderMesh);this.modelManager.push(firePower);this.modelManager.push(fireRate);
         this.modelManager.push(earthMesh);this.modelManager.push(bulletPlayer);this.modelManager.push(shieldMesh);
-        this.modelManager.push(sunMesh)
+        this.modelManager.push(sunMesh); this.modelManager.push(explosion)
 
         loaderObj.load('../medias/models/low_poly.obj', (object) => {
 
@@ -463,7 +502,7 @@ class Asteroid {
         let playerModel, rockModel,heartModel, coinModel, ennemy_ssModel;
         let bulletEnnemy = new Object3D(); let bulletPlayer= new Object3D(); let firePowerModel= new Object3D(); 
         let fireRateModel= new Object3D(); let shieldModel= new Object3D(); let earthModel = new Object3D();
-        let sunModel = new Object3D();
+        let sunModel = new Object3D(); let explosionModel = new Object3D();
 
         this.modelManager.forEach((e) => {
 
@@ -478,6 +517,8 @@ class Asteroid {
             if (e.name == "ShieldItem") shieldModel.add(e);
 
             if (e.name == "EarthItem") earthModel.add(e);
+
+            if (e.name == "explosion") explosionModel.add(e);
 
             if (e.name == "SunItem") sunModel.add(e);
 
@@ -537,6 +578,8 @@ class Asteroid {
             sunAtmosphere: this.sunAtmosphere,
             booster : this.booster,
             stars: this.stars,
+            explosionShader : this.shaderExplosion,
+            
  
          }
 
@@ -554,7 +597,7 @@ class Asteroid {
             heart: new Heart(heartModel, 0),
             basicBullet: new BasicBullet(bulletPlayer, audio),
             ennemyBullet: new BasicBullet(bulletEnnemy, audio),
-
+            explosion: new Explosion(explosionModel),
         }
 
         this.gm = new GameManager(models, utils, audio, shaders, postProcess)
@@ -576,7 +619,7 @@ class Asteroid {
             // document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("Stage1", true);
 
         }
 

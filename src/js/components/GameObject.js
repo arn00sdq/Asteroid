@@ -38,7 +38,6 @@ class GameObject extends THREE.Object3D{
 
         })
 
-       // this.children[0].scale.copy(scale)
         
     }  
 
@@ -95,7 +94,7 @@ class GameObject extends THREE.Object3D{
         o.children.forEach( e => {
             if (e.constructor.name == "Mesh") {
                 
-                e.scale.copy(new THREE.Vector3(s,s,s))
+                e.scale.set(s,s,s)
             }
         })
 
@@ -169,15 +168,14 @@ class GameObject extends THREE.Object3D{
     * temps en seconde
     * @param {Number}  timeElapsed 
     */
-    Update(timeElapsed){
+    Update(timeElapsed,timeInSecond){
 
         if (this.userData.box3 !==null &&  this.userData.box3) this.userData.box3.setFromObject(this)
-        
         if(this.children[0] !== null){   
 
             for (let k in this.components) {
                 
-                this.components[k].Update(timeElapsed);
+                this.components[k].Update(timeElapsed,timeInSecond);
             }
         }
 

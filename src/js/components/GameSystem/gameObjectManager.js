@@ -193,8 +193,6 @@ class GameObjectManager{
     
     if(asteroid.life == 0) {
 
-     // this.level_sys_comp.InstantiateParticule(this.parent.particuleExplosion,asteroid.position)
-     
       asteroid.nbBreak += 1;
 
       if (asteroid.nbBreak < 2){
@@ -207,7 +205,8 @@ class GameObjectManager{
         this.parent.score += 5;
         this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 1,10);
       } 
-
+      console.log(asteroid.position)
+      this.level_sys_comp.InstantiateExplosion(this.parent.explosion, asteroid.position, new THREE.Euler(0,0,0),1);
       asteroid.Destroy(asteroid);
 
     }
@@ -362,7 +361,7 @@ class GameObjectManager{
 }
 
 
-  Update(timeElapsed) {
+  Update(timeElapsed,timeInSecond) {
 
     let nbEnnemyFrame = 0;let playerLife; let countBullet = 0;
     this.parent.selectedObjects = [];
@@ -384,7 +383,7 @@ class GameObjectManager{
     
         
         this.DetectEdge(e);
-        e.Update(timeElapsed);
+        e.Update(timeElapsed,timeInSecond);
 
       }
 

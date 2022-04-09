@@ -25,22 +25,14 @@ class PlayerShootProjectiles{
     Shoot(timeElapsed){
 
       for (let i = 0; i < this.cannon.length; i++) {
-
-        /*let bulletClone = this.weaponParams.clone(); // = basicbullet
-
-        this.weaponParams.spaceShip = this.parent;
-        this.weaponParams.scene = this.weaponParams.scene;
-        this.weaponParams.index = this.indexMissile;*/
         
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
         this.temp.y = -0;
         this.spawnRot =  this.parent.rotation;
 
-        this.weaponParams.timerInstantiate = timeElapsed;
+        this.weaponParams.timerInstantiate = timeElapsed;// a reglo
 
         this.parent.stageSystem.InstantiateGameObject(this.weaponParams,this.temp, this.spawnRot, 0.0009)
-        //bulletClone.SetRigidBody(bulletClone);
-        //bulletClone.Instantiate(bulletClone,this.temp, this.spawnRot, 0.0009);
        
         this.parent.audio_syst.PlayBulletShoot(this.audio.listener, Math.random() * 0.2, 0.2);
 
@@ -100,13 +92,13 @@ class PlayerShootProjectiles{
 
     }
 
-    Update(timeElapsed){
+    Update(timeElapsed,timeInSecond){
       
       const input = this.parent.GetComponent('CharacterControllerInput');
 
         if ( input.keys.shoot && this.canShoot ){ 
         
-          this.Shoot(timeElapsed * 1000)
+          this.Shoot(timeInSecond * 1000)
           this.canShoot = false
 
           setTimeout(() => {

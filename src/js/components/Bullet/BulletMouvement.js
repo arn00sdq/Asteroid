@@ -15,7 +15,7 @@ class BulletMouvement{
 
     Start(){}
 
-    Update(timeElapsed){
+    Update(timeElapsed,timeInSecond){
         
         let palier = timeElapsed / 7;
 
