@@ -1,5 +1,3 @@
-import * as THREE from 'three';
-
 class PlanetMouvement { 
 
     constructor(parent) {

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
-import { _FS,_VS } from "../Planet/glslEarth.js";
-import { _FSBloom, _VSBloom}  from "../../components/Shader/bloom.js"
+import { _FS,_VS } from "../Shader/Earth/glslEarth.js";
+import { _FSBloom, _VSBloom}  from "../Shader/Postprocess/bloom.js"
 
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/RenderPass.js";
 

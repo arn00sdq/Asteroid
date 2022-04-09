@@ -1,4 +1,4 @@
-import {_noise} from "./AshimaNoise.js"
+import {_noise} from "../Noise/AshimaNoise.js"
 
 export function _VSExplosion() {
     

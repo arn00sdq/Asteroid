@@ -1,4 +1,4 @@
-import {_noise} from "../Shader/AshimaNoise.js"
+import {_noise} from "../Noise/AshimaNoise.js"
 
 export function _VSBooster() {
     

@@ -23,14 +23,15 @@ import Shield from "./components/Joker/Shield.js";
 import EnnemySpaceship from "./components/EnnemySpaceship/EnnemySpaceship.js";
 import Earth from "./components/Planet/Earth.js";
 import Sun from "./components/Planet/Sun.js";
-
-import { _FS,_VS } from "./components/Planet/glslEarth.js";
-import {_FSAT, _VSAT } from "./components/Planet/glslAtmosphere.js";
-import {_FSBooster, _VSBooster} from "./components/Player/booster.js";
-import {_FSSunShader, _VSSunShader} from "./components/Planet/glslSunShader.js"
-import { _FSBloom, _VSBloom}  from "./components/Shader/bloom.js"
-import { _FSExplosion, _VSExplosion}  from "./components/Shader/explosion.js"
 import Explosion from './components/Explosion/Explosion.js';
+
+import { _FS,_VS } from "./components/Shader/Earth/glslEarth.js";
+import {_FSAT, _VSAT } from "./components/Shader/Earth/glslAtmosphere.js";
+import {_FSBooster, _VSBooster} from "./components/Shader/Player/booster.js";
+import {_FSSunShader, _VSSunShader} from "./components/Shader/Sun/glslSunShader.js"
+import { _FSBloom, _VSBloom}  from "./components/Shader/Postprocess/bloom.js"
+import { _FSExplosion, _VSExplosion}  from "./components/Shader/Explosion/explosion.js"
+
 
 class Asteroid {
     constructor() {
