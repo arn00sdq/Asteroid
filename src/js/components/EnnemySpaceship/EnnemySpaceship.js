@@ -4,9 +4,9 @@ import SpaceshipComportement from './SpaceshipComportement.js';
 
 class EnnemySpaceship extends GameObject{ 
 
-    constructor(scene, model, audio) {
+    constructor(model, audio) {
 
-        super(scene,model,audio);
+        super(model,audio);
 
         this.components = {};
         this.name = "EnnemySpaceship";
@@ -14,8 +14,12 @@ class EnnemySpaceship extends GameObject{
         this.asteroid = null;
         this.weaponParams = null;
         this.target = null;
+        
+        this.audio_syst = null;
+        this.stageSystem = null;
 
         this.InitComponent();
+        this.InitValue();
 
     }
 
@@ -24,7 +28,11 @@ class EnnemySpaceship extends GameObject{
         this.AddComponent( new SpaceshipComportement(this));
         this.AddComponent( new EnnemySSHealthSystem(this));
 
-        if (this.constructor.name =="EnnemySpaceship") this.GetComponent("SpaceshipComportement").AddProjectile(1);
+    }
+
+    InitValue(){
+
+        this.GetComponent("SpaceshipComportement").AddProjectile( 1 );
 
     }
 

@@ -33,10 +33,20 @@ class LevelSystem{
 
     }
 
+    InstantiateEnnemyS(ennemyShip,position, rotation, scale){
+        
+        ennemyShip.scene = this.parent.currentScene;
+        ennemyShip.scale.set(scale,scale,scale)
+        ennemyShip.Instantiate(ennemyShip,position, rotation, scale);
+        
+       // ennemyShip.SetRigidBody(player);
+      //  ennemyShip.add( new THREE.PositionalAudio(  this.parent.audio.listener ));
+
+    }
+
     InstantiateGameObject(object,position, rotation, scale, velocity, opt){
 
         object.scene = this.parent.currentScene;
-
         let object_clone = object.clone();
         this.setCloneValue(object_clone, object);
 
@@ -167,7 +177,7 @@ class LevelSystem{
 
         let displaySystem = this.parent.GetComponent("DisplaySystem");
         this.soundSystem  = this.parent.GetComponent("SoundSystem");
-        
+
         this.currentLevel = level;
         
         switch (level){
@@ -190,11 +200,13 @@ class LevelSystem{
                 break;
 
             case "Stage2":
+                console.log("-- Stage2 --")
                 this.loadScene(level);
                 this.loadUI(level,displaySystem);
                 this.loadProps(level);
                 this.loadWave(level)
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
+                this.soundSystem.PlayPlayerRespawn();
                 break;
 
             case "Stage3":
@@ -242,7 +254,18 @@ class LevelSystem{
             case "Stage1":
                 this.parent.currentScene = this.parent.stageScene;
                 this.parent.currentCamera = this.parent.inGameCamera;
-                this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
+
+                if (this.parent.components["JokerSystem"] === undefined)
+                    this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
+
+                break;
+            case "Stage2":
+                this.parent.currentScene = this.parent.stageScene;
+                this.parent.currentCamera = this.parent.inGameCamera;
+                             
+                if (this.parent.components["JokerSystem"] === undefined) 
+                    this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
+
                 break;
         }
         
@@ -278,6 +301,8 @@ class LevelSystem{
                 this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 break;
             case "Stage2":
+                this.loadAsteroidBackGround(this.parent.asteroid,1);
+                this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 break;
             case "Stage3":
                 break;
@@ -295,7 +320,7 @@ class LevelSystem{
                 break;
             case "Stage2":
                 this.asteroidWave(this.parent.asteroid, 1);
-                //this.ennemySpaceshipWave(this.parent.ennemy_ss,1)
+                this.ennemySpaceshipWave(this.parent.ennemy_ss,1)
                 break;
             case "Stage3":
                 this.asteroidWave(this.parent.asteroid, 1);
@@ -401,15 +426,14 @@ class LevelSystem{
 
         for (let index = 0; index < nb_ennemy_ss; index++) {
 
-            let position = new THREE.Vector3( ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 2 ) ) ) + ( this.edgeLimit / 2 )) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+            let position = new THREE.Vector3( ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) ) + ( this.edgeLimit / 3 )) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
-                                              ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 3 ) ) ) + ( this.edgeLimit / 3 )) * ( Math.round( Math.random() ) ? 1 : -1 )
-                                            )
-            
-            let rotation = new THREE.Euler(0,0,0);
-            let scale = 0.08;
+                                              ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 2 ) ) ) + ( this.edgeLimit / 3.5 )) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                            )                       
+            let rotation = new THREE.Euler( 0,0,0);
+            let scale = 0.4;
 
-            this.InstantiateGameObject(ennemy_ss, position, rotation, scale)
+            this.InstantiateGameObject(ennemy_ss, position, rotation, scale,undefined, "Ennemy")
 
         }
 

@@ -251,6 +251,8 @@ class GameObjectManager{
   
   CollisionBulletHandler(bullet, object){
 
+    if(bullet.name == "EnnemyBullet") return;
+
     if(object.name == "Asteroid" || object.name == "EnnemySpaceship" ){
 
       bullet.Destroy(bullet)
@@ -268,8 +270,10 @@ class GameObjectManager{
 
   CollisionEnnemyBulletHandler(bullet, object){
 
+    console.log(object.name)
     if(object.name == "Asteroid" || object.name == "Player" ){
 
+      
       bullet.Destroy(bullet)
 
     } 
@@ -415,7 +419,7 @@ class GameObjectManager{
     this.parent.ennemy = nbEnnemyFrame;
     this.parent.GetComponent("DisplaySystem").PrintEnnemy(nbEnnemyFrame);
 
-    //if(nbEnnemyFrame == 0) this.parent.StageCompleted();
+    if(nbEnnemyFrame == 0) this.parent.StageCompleted();
    
   }
 

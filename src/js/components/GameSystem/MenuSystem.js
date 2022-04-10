@@ -3,7 +3,7 @@ class MenuSystem{
     constructor(parent){
 
         this.parent = parent;
-
+        this.listLevel = ["StartMenu","Stage1","Stage2","Stage3"]
         
         this.video = {//rename en video 
 
@@ -41,8 +41,19 @@ class MenuSystem{
                 this.levelSystem.scenePicker(this.levelSystem.currentLevel, false);
                 break;
             case "next":
-                let currentLevel = this.levelSystem.currentLevel + 1;
-                this.levelSystem.startLevel(currentLevel, false);
+
+                let index = this.listLevel.indexOf(this.levelSystem.currentLevel);
+
+                if(index == this.listLevel.length){
+                    //print truc
+                }else{
+
+                    index += 1;//can't do ++ in list level
+                    this.levelSystem.currentLevel = this.listLevel[index];
+                    this.levelSystem.scenePicker(this.levelSystem.currentLevel , false, true);
+                    
+                }
+                
                 break;
             case "audio":
                 this.uiDisplay.printAudioUIMenu();

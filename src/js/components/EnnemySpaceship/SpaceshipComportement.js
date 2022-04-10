@@ -27,33 +27,25 @@ class SpaceshipComportement {
     AddProjectile(nbCannon){ //Composant ?
 
         this.nbCannon += nbCannon;
+        if(this.nbCannon > 4) this.nbCannon = 4;
         this.cannon = [];
   
         let zPos = new THREE.Vector3(0,0,0.5); // changez z ou x pour futur
         let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
-        
-        for(let i = 0; i < this.nbCannon ; i++){
 
-            this.cannon.push(new THREE.Object3D);
-  
-            let x = r * Math.cos( 360 / ( i + 2 ) );
-            let z = r * Math.sin( 360 / ( i + 2 ) );
-  
-            let posCannon = new THREE.Vector3( x, 0, z )
-            this.cannon[i].position.copy( posCannon );
-            this.parent.add(this.cannon[i]);
-  
-        }
+        this.cannon.push(new THREE.Object3D);
+        this.cannon[0].position.copy(  new THREE.Vector3(0,0,0.2) );
+        this.parent.add(this.cannon[0]);
   
       }
 
     Update(timeElapsed) {
 
-      this.Subsomption();
+      this.Subsomption(timeElapsed);
 
     }
     
-    Subsomption() {
+    Subsomption(timeElapsed) {
 
         if(!this.Dodge()){
 
@@ -65,9 +57,9 @@ class SpaceshipComportement {
                 setTimeout(() => {
 
                     this.canShoot = true;
-                    this.Shoot();
+                    this.Shoot(timeElapsed);
     
-                }, 2000);
+                }, 400);
                 
 
             }
@@ -148,9 +140,24 @@ class SpaceshipComportement {
 
     }
 
-    Shoot(){
+    Shoot(timeElapsed){
 
         for (let i = 0; i < this.cannon.length; i++) {
+        
+            this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
+            this.temp.y = -0;
+            this.spawnRot =  this.parent.rotation;
+            
+            this.parent.stageSystem.InstantiateGameObject(this.parent.weaponParams,this.temp, this.spawnRot, 0.001)
+            console.log(this.parent.weaponParams)
+            //this.parent.audio_syst.PlayBulletShoot(Math.random() * 0.2, 0.2);
+    
+            this.indexMissile ++;
+    
+        }
+
+
+      /*  for (let i = 0; i < this.cannon.length; i++) {
 
             let bulletClone = this.parent.weaponParams.clone(); 
 
@@ -166,7 +173,7 @@ class SpaceshipComportement {
             
             this.indexMissile ++;
     
-          }
+        }*/
 
     }
     

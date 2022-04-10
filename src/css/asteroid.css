@@ -250,7 +250,7 @@ canvas {
 	display: flex;
 	flex-direction: column;
 	margin-left: 40%;
-	margin-top: 10vh;
+	margin-top: 26vh;
 	align-items: center;
 
 }
@@ -266,8 +266,9 @@ canvas {
 
 #stage_comp_msg{
 
-	font-size: 1.7em;
-	color: gray;
+	font-size: 2.3em;
+    font-weight: bold;
+	color: darkgreen
 
 }
 

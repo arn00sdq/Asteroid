@@ -161,6 +161,8 @@ class GameManager {
     
         } 
 
+        console.log(this.models)
+
     }
 
     ValueInitialisation() {
@@ -172,14 +174,18 @@ class GameManager {
         this.player.audio_syst = this.GetComponent("SoundSystem");
         this.player.add(this.booster);
        
+        /* EnnemyShip init */
+        
+        this.ennemy_ss.stageSystem = this.GetComponent("LevelSystem");
+        this.ennemy_ss.audio_syst = this.GetComponent("SoundSystem");
+        this.ennemy_ss.weaponParams = this.ennemyBullet;
+        this.ennemy_ss.asteroid = this.asteroid;
+        this.ennemy_ss.target = this.player;
+
         const booster = this.player.children.find( e =>e.name =="booster"  )
         booster.position.set(0,-0.01,-0.155)
         
         this.input = this.player.GetComponent("CharacterControllerInput").keys;
-
-        this.ennemy_ss.weaponParams = this.ennemyBullet;
-        this.ennemy_ss.asteroid = this.asteroid;
-        this.ennemy_ss.target = this.player;
 
         this.ennemyBullet.name = "EnnemyBullet";
 
@@ -232,6 +238,8 @@ class GameManager {
         if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
         if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);    
 
+        console.log(this.currentScene.children)
+
     }
 
     OnPlayerEnd() {
@@ -262,9 +270,10 @@ class GameManager {
             this.tempTime = this.timeElapsed;
             if(this.postProActive){
 
-                this.renderBloom();
+              /*  this.renderBloom();
                 this.outlinePass.selectedObjects = this.selectedObjects;
-                this.finalComposer.render();
+                this.finalComposer.render();*/
+                this.renderer.render(this.currentScene,this.currentCamera)
 
             }else{
                

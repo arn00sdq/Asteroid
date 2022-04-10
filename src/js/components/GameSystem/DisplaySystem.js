@@ -106,19 +106,21 @@ class DisplaySystem{
     printStageCompleted(score){
 
         let ui_header = `
-        <div id="stage_comp_section">
+        <div class="tb">
+            <div id="stage_comp_section">
 
-            <div id="header_stage_comp">
-                <div id="stage_comp_msg">Stage completed</div>
-                <div id="score_stage_comp">Score : ${score} </div>
-            </div>
-    
-            <div id="button_section_menu">
-                <button name="next">Next</button>
-                <button name="quit">Quit</button>
-            </div>
+                <div id="header_stage_comp">
+                    <div id="stage_comp_msg">Stage completed</div>
+                    <div id="score_stage_comp">Score : ${score} </div>
+                </div>
+        
+                <div id="button_section_menu">
+                    <button name="next">Next</button>
+                    <button name="quit">Quit</button>
+                </div>
 
-        </div> 
+            </div> 
+        </div>
         `
 
         this.printAPP(ui_header)

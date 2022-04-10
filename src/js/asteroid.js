@@ -178,7 +178,7 @@ class Asteroid {
 
         var material = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg') })
         var materialCoin = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/collectable/coin/textures/Coin_Gold_albedo.png') });
-        var materialEnnemySS = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/Ennemy/textures/E-45 _col.jpg') });
+        var materialEnnemySS = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/Ennemy/textures/E-45 _col.jpg')});
         /* 
         *   Balle Joueur
         */
@@ -192,11 +192,13 @@ class Asteroid {
         /* 
         *   Balle Ennemy
         */
-        const geometryBullet = new THREE.CylinderBufferGeometry(0.01, 0.01, 0.1, 5, 1, false);
+        const cylinderMesh = new THREE.Mesh(
+            new THREE.CylinderGeometry(5, 50, 50),
+            new THREE.MeshBasicMaterial({ color: 0xffff00,emissive : 0xff000d }));
+       /* const geometryBullet = new THREE.CylinderBufferGeometry(0.01, 0.01, 0.1, 5, 1, false);
         const materialBullet = new THREE.MeshLambertMaterial();
         materialBullet.color.set(0xff0000);
-        materialBullet.emissive.set(0xff000d);
-        const cylinderMesh = new THREE.Mesh(geometryBullet, materialBullet);
+        materialBullet.emissive.set(0xff000d);*/
         cylinderMesh.name = "BulletEnnemy";
         cylinderMesh.rotateX((Math.PI / 180) * 90);
 
@@ -421,13 +423,16 @@ class Asteroid {
 
             object.traverse(function (child) {
 
-                if (child.isMesh) child.material = materialEnnemySS;
+                if (child.isMesh){
+                    child.name = "ennemyShipMesh";
+                    child.material = materialEnnemySS;
+                } 
 
             });
 
-            object.children[0].rotateY();
+          //  object.children[0].rotateY();
             object.name = "EnnemySpaceship";
-
+            object.children[0].rotateY((Math.PI / 180)* 180)
             this.modelManager.push(object);
 
         });
@@ -614,7 +619,7 @@ class Asteroid {
         const models = {
 
             player: new Player(playerModel, audio,this.params),
-            ennemy_ss: new EnnemySpaceship(ennemy_ssModel,0),
+            ennemy_ss: new EnnemySpaceship(ennemy_ssModel,audio,0),
             asteroid: new BasicAsteroid(rockModel,audio, 0),
             coin: new Coin(coinModel,audio, 0),
             earth: new Earth(earthModel,audio,0),
@@ -647,7 +652,7 @@ class Asteroid {
             document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").scenePicker("Stage1", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("Stage2", true);
 
         }
 

@@ -31,12 +31,14 @@ class GameObject extends THREE.Object3D{
     * @param {THREE.Vector3}  scale 
     */
     InitMesh(scale){
-    
+        
+        
         this.model.children.forEach( (e) => {
             
+           
             if (e.constructor.name == "Mesh") 
-
             this.add(e)
+            
             
         })
 
