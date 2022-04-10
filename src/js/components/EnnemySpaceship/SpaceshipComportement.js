@@ -147,7 +147,7 @@ class SpaceshipComportement {
             
             this.parent.weaponParams.timerInstantiate = timeInSecond * 1000;
             this.parent.stageSystem.InstantiateGameObject(this.parent.weaponParams,this.temp, this.spawnRot, 0.001,undefined,undefined, this.parent.target.position)
-            this.parent.audio_syst.PlayEnnemyShoot(this.parent);
+            this.parent.audioSystem.PlayEnnemyShoot(this.parent);
 
     
         }

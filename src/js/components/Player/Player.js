@@ -26,7 +26,7 @@ class Player extends GameObject{
         };
         
 
-        this.audio_syst = null;
+        this.audioSystem = null;
         this.stageSystem = null;
 
         this.life = 1;

@@ -166,13 +166,13 @@ class GameManager {
         this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
         this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
         this.player.stageSystem = this.GetComponent("LevelSystem");
-        this.player.audio_syst = this.GetComponent("SoundSystem");
+        this.player.audioSystem = this.GetComponent("SoundSystem");
         this.player.add(this.booster);
        
         /* EnnemyShip init */
         
         this.ennemy_ss.stageSystem = this.GetComponent("LevelSystem");
-        this.ennemy_ss.audio_syst = this.GetComponent("SoundSystem");
+        this.ennemy_ss.audioSystem = this.GetComponent("SoundSystem");
         this.ennemy_ss.weaponParams = this.ennemyBullet;
         this.ennemy_ss.asteroid = this.asteroid;
         this.ennemy_ss.target = this.player;

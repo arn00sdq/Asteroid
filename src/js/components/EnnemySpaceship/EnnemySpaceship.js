@@ -17,7 +17,7 @@ class EnnemySpaceship extends GameObject{
 
         this.audio = audio;
 
-        this.audio_syst = null;
+        this.audioSystem = null;
         this.stageSystem = null;
 
         this.InitComponent();

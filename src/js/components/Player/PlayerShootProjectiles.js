@@ -34,7 +34,7 @@ class PlayerShootProjectiles{
 
         this.parent.stageSystem.InstantiateGameObject(this.weaponParams,this.temp, this.spawnRot, 0.0009)
         
-        this.parent.audio_syst.PlayBulletShoot(Math.random() * 0.2, 0.2);
+        this.parent.audioSystem.PlayBulletShoot(Math.random() * 0.2, 0.2);
 
         this.indexMissile ++;
 

@@ -423,7 +423,7 @@ class GameObjectManager{
     this.parent.ennemy = nbEnnemyFrame;
     this.parent.GetComponent("DisplaySystem").PrintEnnemy(nbEnnemyFrame);
 
-    if(nbEnnemyFrame == 0) this.parent.StageCompleted();
+    if(nbEnnemyFrame == 0 && this.levelSystem.currentLevel !== "StartMenu") this.parent.StageCompleted();
    
   }
 

@@ -46,7 +46,7 @@ class JokerSystem{
         setTimeout(() => {
 
             player.hasJoker.immune = false;
-            shieldClone.removeFromParent()
+            player.remove(shieldClone)
 
         }, seconds);
         
