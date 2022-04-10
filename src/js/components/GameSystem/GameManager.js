@@ -54,7 +54,9 @@ class GameManager {
         /*
         * Audio
         */
+
         this.audio = audio;
+        this.ambientSound = new THREE.Audio( this.audio.listener  );
 
         /*
         * Shader

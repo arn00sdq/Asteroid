@@ -22,6 +22,8 @@ class LevelSystem{
 
         }
 
+
+
     }
 
     InstantiatePlayer(player,position, rotation, scale){
@@ -196,7 +198,7 @@ class LevelSystem{
             case "StartMenu":
                 this.loadScene(level);
                 this.loadUI(level,displaySystem);
-                this.loadProps(level)
+                this.loadProps(level);
                 break;
 
             case "Stage1":   
@@ -230,6 +232,7 @@ class LevelSystem{
 
         }
 
+        this.loadAudio(level)
         this.parent.PostProcessRender(switchScene); 
         this.gameActive(init);
         
@@ -338,6 +341,26 @@ class LevelSystem{
                 break;
         }
 
+    }
+
+    loadAudio(level){
+
+        let ambientSound = this.parent.ambientSound;
+        let soundSystem = this.parent.GetComponent("SoundSystem");
+
+        if(level == "StartMenu"){
+           
+            const ambientBuffer =  this.parent.audio.audioManager.find(e => e.name == "StartMenuTheme");
+			ambientSound.setBuffer(ambientBuffer);
+			ambientSound.setVolume(  soundSystem.musicVolume > soundSystem.masterVolume  ? soundSystem.masterVolume : soundSystem.musicVolume );
+			ambientSound.play();
+
+        }else{
+
+            if (ambientSound.isPlaying) ambientSound.stop();
+            console.log(ambientSound.isPlaying)
+
+        }
     }
 
     loadPlanetStartMenu(model){

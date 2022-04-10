@@ -11,7 +11,7 @@ class SoundSystem{
 
         this.masterVolume = 0.5;
         this.sfxVolume = 0.5;
-        this.musicVolume = 0.5;
+        this.musicVolume = 0.05;
 
     }
 
@@ -122,7 +122,7 @@ class SoundSystem{
         const exploBuffer =  this.audioManager.find(e => e.name == "AsteroidExplosion");
        
         let exploAudio =  asteroid.children.find(e => e.constructor.name == "PositionalAudio");
-
+        if (exploAudio.isPlaying)  exploAudio.stop()
         exploAudio.setBuffer( exploBuffer );
         exploAudio.setLoop( false );
         exploAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );

@@ -529,6 +529,11 @@ class Asteroid {
             me.audioManager.push(buffer);
         });
 
+        audioLoader.load('../medias/sounds/startMenu/outer-wilds-timber-hearth.mp3', function (buffer) {
+            buffer.name = "StartMenuTheme";
+            me.audioManager.push(buffer);
+        });
+
 
     }
 

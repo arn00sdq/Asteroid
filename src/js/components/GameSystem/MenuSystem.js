@@ -91,19 +91,23 @@ class MenuSystem{
 
     OnChange(event) {
 
+        let soundSystem = this.parent.GetComponent("SoundSystem");
+
         switch (event.target.id) {
 
             case "range_master_volume":
-                this.soundSystem.masterVolume = event.target.value / 100;
-                document.getElementById("sp_master_volume").innerHTML = soundSystem.masterVolume;
+                soundSystem.masterVolume = event.target.value / 100;
+                document.getElementById("range_master_volume").innerHTML = soundSystem.masterVolume;
                 break;
             case "range_sfx_volume":
-                this.soundSystem.sfxVolume = event.target.value / 100;
-                document.getElementById("sp_sfx_volume").innerHTML = soundSystem.sfxVolume;
+                soundSystem.sfxVolume = event.target.value / 100;
+                document.getElementById("range_sfx_volume").innerHTML = soundSystem.sfxVolume;
                 break;
             case "range_music_volume":
-                this.soundSystem.musicVolume = event.target.value / 100;
-                document.getElementById("sp_music_volume").innerHTML = soundSystem.musicVolume;
+                console.log()
+                soundSystem.musicVolume = event.target.value / 100;
+                document.getElementById("range_music_volume").innerHTML = soundSystem.musicVolume;
+                this.parent.ambientSound.setVolume(  soundSystem.musicVolume > soundSystem.masterVolume  ? soundSystem.masterVolume : soundSystem.musicVolume );
                 break;
             case "range_brightness":
                 this.video.brightness = event.target.value/100;
