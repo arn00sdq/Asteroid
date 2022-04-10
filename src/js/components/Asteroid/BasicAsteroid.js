@@ -56,7 +56,7 @@ class BasicAsteroid extends GameObject {
 
         if(o.userData.type == "BackGround") o.children[0].material.color.set(new THREE.Color("rgb(84, 83, 83)"));
 
-        this.SetInvulnerability(500);
+        this.SetInvulnerability(2000);
         this.life = this.life / (this.nbBreak + 1);
 
         this.scene.add(o);

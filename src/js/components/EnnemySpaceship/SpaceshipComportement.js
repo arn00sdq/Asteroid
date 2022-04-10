@@ -19,9 +19,6 @@ class SpaceshipComportement {
         this.spawnRot = new THREE.Euler;
         this.temp = new THREE.Vector3;
 
-        this.indexMissile = 1;
-
-
     }
 
     AddProjectile(nbCannon){ //Composant ?
@@ -39,31 +36,31 @@ class SpaceshipComportement {
   
       }
 
-    Update(timeElapsed) {
+    Update(timeElapsed,timeInSecond) {
 
-      this.Subsomption(timeElapsed);
+      this.Subsomption(timeElapsed,timeInSecond);
 
     }
     
-    Subsomption(timeElapsed) {
+    Subsomption(timeElapsed,timeInSecond) {
 
         if(!this.Dodge()){
 
             this.Explore();
-            if(this.canShoot){ 
+            
+        }
 
-                this.canShoot = false;
+        if(this.canShoot){ 
 
-                setTimeout(() => {
+            this.canShoot = false;
 
-                    this.canShoot = true;
-                    this.Shoot(timeElapsed);
-    
-                }, 400);
-                
+            setTimeout(() => {
 
-            }
-           
+                this.canShoot = true;
+                this.Shoot(timeElapsed,timeInSecond);
+
+            }, 2000);
+            
 
         }
 
@@ -140,7 +137,7 @@ class SpaceshipComportement {
 
     }
 
-    Shoot(timeElapsed){
+    Shoot(timeElapsed,timeInSecond){
 
         for (let i = 0; i < this.cannon.length; i++) {
         
@@ -148,32 +145,12 @@ class SpaceshipComportement {
             this.temp.y = -0;
             this.spawnRot =  this.parent.rotation;
             
-            this.parent.stageSystem.InstantiateGameObject(this.parent.weaponParams,this.temp, this.spawnRot, 0.001)
-            console.log(this.parent.weaponParams)
-            //this.parent.audio_syst.PlayBulletShoot(Math.random() * 0.2, 0.2);
-    
-            this.indexMissile ++;
+            this.parent.weaponParams.timerInstantiate = timeInSecond * 1000;
+            this.parent.stageSystem.InstantiateGameObject(this.parent.weaponParams,this.temp, this.spawnRot, 0.001,undefined,undefined, this.parent.target.position)
+            this.parent.audio_syst.PlayEnnemyShoot(this.parent);
+
     
         }
-
-
-      /*  for (let i = 0; i < this.cannon.length; i++) {
-
-            let bulletClone = this.parent.weaponParams.clone(); 
-
-            bulletClone.spaceShip = this.parent;
-            bulletClone.scene = this.parent.weaponParams.scene;
-            bulletClone.index = this.indexMissile;
-    
-            this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
-    
-            bulletClone.SetRigidBody(bulletClone);
-            bulletClone.Instantiate(bulletClone,this.temp, new THREE.Euler(0,0,0), 1);      
-            bulletClone.lookAt(this.parent.target.position)
-            
-            this.indexMissile ++;
-    
-        }*/
 
     }
     

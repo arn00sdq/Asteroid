@@ -41,6 +41,19 @@ class SoundSystem{
 
     }
 
+    PlayEnnemyShoot(ennemy){
+      
+        const bulletBuffer =  this.audioManager.find(e => e.name == "ennemyLaser");
+        const ennemyAudio = ennemy.children.find(e => e.constructor.name == "PositionalAudio")
+
+        if (ennemyAudio.isPlaying)  ennemyAudio.stop()
+        ennemyAudio.setBuffer( bulletBuffer );
+        ennemyAudio.setLoop( false );
+        ennemyAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        ennemyAudio.play(0);
+
+    }
+
     PlayBulletShoot(){
       
         const bulletBuffer =  this.audioManager.find(e => e.name == "Bullet");
@@ -107,14 +120,14 @@ class SoundSystem{
     PlayAsteroidDestruction(asteroid, delay){
 
         const exploBuffer =  this.audioManager.find(e => e.name == "AsteroidExplosion");
-
+       
         let exploAudio =  asteroid.children.find(e => e.constructor.name == "PositionalAudio");
 
         exploAudio.setBuffer( exploBuffer );
         exploAudio.setLoop( false );
         exploAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
 
-        exploAudio.play(delay);
+        exploAudio.play(0);
 
     }
 

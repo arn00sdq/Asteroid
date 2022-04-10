@@ -14,7 +14,9 @@ class EnnemySpaceship extends GameObject{
         this.asteroid = null;
         this.weaponParams = null;
         this.target = null;
-        
+
+        this.audio = audio;
+
         this.audio_syst = null;
         this.stageSystem = null;
 

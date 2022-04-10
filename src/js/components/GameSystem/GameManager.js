@@ -154,14 +154,9 @@ class GameManager {
 
         for(const [key,values] of Object.entries(this.models)){
 
-            values.InitMesh();
-            /*console.log(this.audio.listener.context)
-            const sound = new THREE.Audio( this.audio.listener );*/
-            
+            values.InitMesh();      
     
         } 
-
-        console.log(this.models)
 
     }
 
@@ -270,10 +265,9 @@ class GameManager {
             this.tempTime = this.timeElapsed;
             if(this.postProActive){
 
-              /*  this.renderBloom();
+                this.renderBloom();
                 this.outlinePass.selectedObjects = this.selectedObjects;
-                this.finalComposer.render();*/
-                this.renderer.render(this.currentScene,this.currentCamera)
+                this.finalComposer.render();
 
             }else{
                

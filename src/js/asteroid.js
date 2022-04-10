@@ -194,7 +194,7 @@ class Asteroid {
         */
         const cylinderMesh = new THREE.Mesh(
             new THREE.CylinderGeometry(5, 50, 50),
-            new THREE.MeshBasicMaterial({ color: 0xffff00,emissive : 0xff000d }));
+            new THREE.MeshBasicMaterial({ color: 0xff0000,emissive : 0xff000d }));
        /* const geometryBullet = new THREE.CylinderBufferGeometry(0.01, 0.01, 0.1, 5, 1, false);
         const materialBullet = new THREE.MeshLambertMaterial();
         materialBullet.color.set(0xff0000);
@@ -486,6 +486,11 @@ class Asteroid {
         let me = this;
         audioLoader.load('../medias/sounds/coin/coin.mp3', function (buffer) {
             buffer.name = "Coin";
+            me.audioManager.push(buffer);
+        });
+
+        audioLoader.load('../medias/sounds/ennemyShip/laser-ennemy.mp3', function (buffer) {
+            buffer.name = "ennemyLaser";
             me.audioManager.push(buffer);
         });
 

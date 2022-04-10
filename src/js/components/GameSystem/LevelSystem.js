@@ -40,21 +40,32 @@ class LevelSystem{
         ennemyShip.Instantiate(ennemyShip,position, rotation, scale);
         
        // ennemyShip.SetRigidBody(player);
-      //  ennemyShip.add( new THREE.PositionalAudio(  this.parent.audio.listener ));
+        ennemyShip.add( new THREE.PositionalAudio(  this.parent.audio.listener ));
+
 
     }
 
-    InstantiateGameObject(object,position, rotation, scale, velocity, opt){
+    InstantiateGameObject(object,position, rotation, scale, velocity, opt,target){
 
         object.scene = this.parent.currentScene;
+
+        let positionAudio = object.children.find( k=> k.constructor.name == "PositionalAudio")    
+        if (positionAudio !== undefined) object.remove(positionAudio)
+
+        
         let object_clone = object.clone();
         this.setCloneValue(object_clone, object);
 
         if(opt !== undefined ){
             object_clone.userData.type = opt;
         }
+        
+
         object_clone.Instantiate(object_clone,position, rotation, scale,velocity);
         object_clone.SetRigidBody(object_clone);
+
+        if(object_clone.name == "EnnemyBullet") object_clone.lookAt(target)
+
         this.updateValue(object_clone, object);
 
         
@@ -431,7 +442,7 @@ class LevelSystem{
                                               ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 2 ) ) ) + ( this.edgeLimit / 3.5 )) * ( Math.round( Math.random() ) ? 1 : -1 )
                                             )                       
             let rotation = new THREE.Euler( 0,0,0);
-            let scale = 0.4;
+            let scale = 0.2;
 
             this.InstantiateGameObject(ennemy_ss, position, rotation, scale,undefined, "Ennemy")
 

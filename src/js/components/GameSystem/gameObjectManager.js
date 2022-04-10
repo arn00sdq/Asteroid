@@ -201,7 +201,7 @@ class GameObjectManager{
     if(asteroid.life == 0) {
 
       asteroid.nbBreak += 1;
-
+      this.sound_sys.PlayAsteroidDestruction(asteroid,0) // destroy will remove pos audio
       if (asteroid.nbBreak < 2){
 
         this.Asteroid_Subdivision(asteroid,object);
@@ -212,10 +212,10 @@ class GameObjectManager{
         this.parent.score += 5;
         this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 1,10);
       } 
-      console.log(asteroid.position)
-      this.levelSystem.InstantiateExplosion(this.parent.explosion, asteroid.position, new THREE.Euler(0,0,0),1);
-      this.sound_sys.PlayAsteroidDestruction(asteroid,0)
+      
       asteroid.Destroy(asteroid);
+      this.levelSystem.InstantiateExplosion(this.parent.explosion, asteroid.position, new THREE.Euler(0,0,0),1);
+
 
     }
 
@@ -241,8 +241,8 @@ class GameObjectManager{
                                            e.position.z + Math.random() *0.3 );
       let rotation = new THREE.Euler(0,0 ,0);
       let scale = 0.75*e.scale.x;
+      let velocity = new THREE.Vector3(Math.random()* 1,0,(dir.x/dir.z)*signe).normalize().multiplyScalar(10);
 
-      let velocity = new THREE.Vector3(Math.random()* 1,0,(dir.x/dir.z)*signe).normalize().multiplyScalar(10)
       this.levelSystem.InstantiateGameObject(e , position,rotation, scale, velocity)
 
     }
@@ -270,10 +270,10 @@ class GameObjectManager{
 
   CollisionEnnemyBulletHandler(bullet, object){
 
-    console.log(object.name)
+    
     if(object.name == "Asteroid" || object.name == "Player" ){
 
-      
+
       bullet.Destroy(bullet)
 
     } 
@@ -327,8 +327,12 @@ class GameObjectManager{
 
       if (object.name == "BasicBullet"){
 
+        this.sound_sys.PlayHitBullet(object, 0);
+
         let bullet = object.GetComponent("BulletDamageSystem");
         ennemy_ss_health.Damage(bullet.damageAmount);
+
+        object.Destroy(object);
 
       } 
 
