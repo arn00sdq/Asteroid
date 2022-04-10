@@ -73,6 +73,7 @@ class GameManager {
         */
         this.materials = {};
         this.selectedObjects = [];
+        this.selectedEnnemy = [];
         this.postProActive = true;
 
         this.finalComposer = postProcess.finalComposer;
@@ -229,7 +230,7 @@ class GameManager {
         if (pass.outline == true && !containOutline) this.finalComposer.addPass(this.outlinePass);     
 
         if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
-        if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);  
+        if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);    
 
     }
 
@@ -279,6 +280,7 @@ class GameManager {
             this.prevTime = null;
 
         }
+        
 
     }
 

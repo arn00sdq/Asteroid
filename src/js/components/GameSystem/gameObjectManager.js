@@ -371,11 +371,17 @@ class GameObjectManager{
 
     let nbEnnemyFrame = 0;let playerLife; let countBullet = 0;
     this.parent.selectedObjects = [];
+    this.parent.selectedEnnemy = [];
     this.parent.currentScene.children.forEach(e => {
 
       if(e.type == "Object3D"){ 
 
-        if(e.userData.type == "Ennemy") nbEnnemyFrame++ ;
+        if(e.userData.type == "Ennemy"){
+
+          nbEnnemyFrame++ ;
+          this.parent.selectedObjects.push(e.children.find(e =>  e.constructor.name == "Mesh"));
+        
+        } 
 
         if(e.userData.type == "joker"){
          
@@ -383,7 +389,15 @@ class GameObjectManager{
 
         } ;
 
-        if(e.name == "Player") playerLife = e.life ;
+        if(e.name == "Player"){
+
+          playerLife = e.life ;
+          
+          let test = e.children.filter(k =>k.constructor.name == "Mesh");
+          for (let mesh of test)  this.parent.selectedObjects.push(mesh);
+         
+
+        } 
 
         if(e.name == "BasicBullet") countBullet++;
     
