@@ -30,7 +30,7 @@ class BasicAsteroid extends GameObject {
 
     }
 
-    Instantiate(o, p, r, s, v) {
+    Instantiate(o, p, r, s) {
 
         super.Instantiate(o, p, r, s);
 
@@ -39,16 +39,10 @@ class BasicAsteroid extends GameObject {
         o.scale.copy(new THREE.Vector3(s, s, s))
 
         let aste_mvt = this.GetComponent("AsteroidMovement");
+        console.log(o.userData.velocity)
+        o.userData.velocity !== undefined ? aste_mvt.velocity.copy(o.userData.velocity) : 
+        aste_mvt.velocity = new THREE.Vector3(Math.ceil(Math.random() * (6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1), 0, Math.ceil(Math.random() * (6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1));;
 
-        if (v !== undefined) {
-
-            aste_mvt.velocity = v;
-
-        } else {
-
-            aste_mvt.velocity = new THREE.Vector3(Math.ceil(Math.random() * (6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1), 0, Math.ceil(Math.random() * (6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1));
-
-        }
 
         aste_mvt.gravity = (this.scale.x * 20);
 
@@ -60,8 +54,6 @@ class BasicAsteroid extends GameObject {
         this.life = this.life / (this.nbBreak + 1);
 
         this.scene.add(o);
-
-    
 
     }
 

@@ -24,8 +24,6 @@ class LevelSystem{
 
         }
 
-
-
     }
 
     InstantiatePlayer(player,position, rotation, scale){
@@ -37,22 +35,10 @@ class LevelSystem{
 
     }
 
-    InstantiateEnnemyS(ennemyShip,position, rotation, scale){
-        
-        ennemyShip.scene = this.parent.currentScene;
-        ennemyShip.scale.set(scale,scale,scale)
-        ennemyShip.Instantiate(ennemyShip,position, rotation, scale);
-        
-       // ennemyShip.SetRigidBody(player);
-        ennemyShip.add( new THREE.PositionalAudio(  this.parent.audio.listener ));
-
-
-    }
-
-    InstantiateGameObject(object,position, rotation, scale, velocity, opt,target){
+    InstantiateGameObject(object,position, rotation, scale, opt){
 
         object.scene = this.parent.currentScene;
-        console.log(velocity)
+
         let positionAudio = object.children.find( k=> k.constructor.name == "PositionalAudio")    
         if (positionAudio !== undefined) object.remove(positionAudio)
 
@@ -62,13 +48,12 @@ class LevelSystem{
 
         if(opt !== undefined ){
             object_clone.userData.type = opt;
-        }
+        }      
         
-
-        object_clone.Instantiate(object_clone,position, rotation, scale,velocity);
+        object_clone.Instantiate(object_clone,position, rotation, scale);
         object_clone.SetRigidBody(object_clone);
-
-        if(object_clone.name == "EnnemyBullet") object_clone.lookAt(target)
+        
+        if(object_clone.name == "EnnemyBullet") object_clone.lookAt(object_clone.userData.player.x,object_clone.userData.player.y,object_clone.userData.player.z)
 
         this.updateValue(object_clone, object);
 
@@ -86,24 +71,13 @@ class LevelSystem{
         let mesh = object_clone.children.find(e => e.constructor.name == "Mesh");
         let shaderMat = Object.values(this.parent.shaders).find( val => val.parentName === object.constructor.name);
         mesh.material = shaderMat;
+
+        if (object.constructor.name == "Explosion") mesh.material.uniforms[ 'opacity' ].value  = 1.0;
+
         object_clone.SetRigidBody(object_clone);
         object.Instantiate(object_clone,position, rotation, scale);
 
         
-    }
-
-    InstantiateExplosion(object,position,rotation,scale){
-
-        object.scene = this.parent.currentScene;
-        
-        let object_clone = object.clone();
-        this.setCloneValue(object_clone, object);
-
-        let mesh = object_clone.children.find(e => e.constructor.name == "Mesh")
-        mesh.material = this.parent.explosionShader;
-        mesh.material.uniforms[ 'opacity' ].value  = 1.0;
-        object_clone.Instantiate(object_clone,position, rotation, scale);
-
     }
 
     generatingStars(star,min,max){
@@ -448,7 +422,7 @@ class LevelSystem{
                                             )                       
             let rotation = new THREE.Euler( 0,0,0);
             let scale = (Math.random() * (0.03 -0.015)) + 0.015;
-            this.InstantiateGameObject(asteroid, position, rotation, scale,undefined, "BackGround")
+            this.InstantiateGameObject(asteroid, position, rotation, scale, "BackGround")
 
         }
 
@@ -464,7 +438,7 @@ class LevelSystem{
                                             )                       
             let rotation = new THREE.Euler( 0,0,0);
             let scale = (Math.random() * (0.03 -0.015)) + 0.015;
-            this.InstantiateGameObject(asteroid, position, rotation, scale,undefined, "Ennemy")
+            this.InstantiateGameObject(asteroid, position, rotation, scale, "Ennemy")
 
         }
 
@@ -481,7 +455,7 @@ class LevelSystem{
             let rotation = new THREE.Euler( 0,0,0);
             let scale = 0.2;
 
-            this.InstantiateGameObject(ennemy_ss, position, rotation, scale,undefined, "Ennemy")
+            this.InstantiateGameObject(ennemy_ss, position, rotation, scale, "Ennemy")
 
         }
 

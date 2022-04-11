@@ -407,6 +407,7 @@ class Asteroid {
             }
 
         })
+        this.shaderExplosion.parentName = "Explosion";
         const explosion = new THREE.Mesh(
             new THREE.IcosahedronGeometry(0.5,10),
             new ShaderMaterial(),
@@ -604,7 +605,6 @@ class Asteroid {
 
 
         this.modelManager.forEach((e) => {
-            console.log(e)
             if (e.name == "SpaceShip") playerModel = e;
 
             if (e.name == "SpaceRock") rockModel = e

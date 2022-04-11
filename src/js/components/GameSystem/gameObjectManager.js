@@ -166,7 +166,7 @@ class GameObjectManager{
       
       if(player.life == 0){
 
-        this.levelSystem.InstantiateExplosion(this.parent.explosion, player.position, new THREE.Euler(0,0,0),1);
+        this.levelSystem.InstantiateShader(this.parent.explosion, player.position, new THREE.Euler(0,0,0));
         player.Destroy(player);
 
         setTimeout(() => {
@@ -214,7 +214,7 @@ class GameObjectManager{
       } 
       
       asteroid.Destroy(asteroid);
-      this.levelSystem.InstantiateExplosion(this.parent.explosion, asteroid.position, new THREE.Euler(0,0,0),1);
+      this.levelSystem.InstantiateShader(this.parent.explosion, asteroid.position, new THREE.Euler(0,0,0),1);
 
 
     }
@@ -224,26 +224,20 @@ class GameObjectManager{
   Asteroid_Subdivision(e,object){
 
     let dir = new THREE.Vector3();
-    if (object.name == "Player"){
 
-      dir.set(1,0,0.5);
-
-    }else{
-
-      dir = object.GetComponent("BulletMouvement").forward;
-
-    }
-
+    object.name == "Player" ? dir.set(1,0,0.5) : dir = object.GetComponent("BulletMouvement").forward;
+    
     for (let index = 1; index <= 2; index++) {
       
-      let signe = index == 1 ? 1 : -1;
       let position = new THREE.Vector3(e.position.x + Math.random() *0.3, 0 ,
                                            e.position.z + Math.random() *0.3 );
       let rotation = new THREE.Euler(0,0 ,0);
       let scale = 0.75*e.scale.x;
-      let velocity = new THREE.Vector3(Math.random()* 1,0,(dir.x/dir.z)*signe).normalize().multiplyScalar(10);
+      let velocity = new THREE.Vector3(Math.random()* 1,0,(dir.x/dir.z)* (index == 1 ? 1 : -1) ).normalize().multiplyScalar(10);
 
-      this.levelSystem.InstantiateGameObject(e , position,rotation, scale, velocity)
+      e.userData.velocity = velocity;
+
+      this.levelSystem.InstantiateGameObject(e , position,rotation, scale)
 
     }
 
