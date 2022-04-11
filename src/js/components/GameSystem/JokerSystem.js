@@ -36,17 +36,24 @@ class JokerSystem{
         
         player.hasJoker.immune = true;
         
-        let shieldClone = shield.clone();
-        shieldClone.scene = shield.scene;
+       /* let shieldClone = shield.clone();
+        shieldClone.scene = shield.scene;*/
 
-        shieldClone.RemoveRigidBody(shieldClone);
-        player.add(shieldClone)
+        let shield_clone = shield.clone();
+        shield_clone.scene = shield.scene;
+
+        let mesh = shield_clone.children.find(e => e.constructor.name == "Mesh");
+        let shaderMat = Object.values(this.parent.shaders).find( val => val.parentName === shield.constructor.name);
+        mesh.material = shaderMat
+
+        shield_clone.RemoveRigidBody(shield_clone);
+        player.add(shield_clone)
 
 
         setTimeout(() => {
 
             player.hasJoker.immune = false;
-            player.remove(shieldClone)
+            player.remove(shield_clone)
 
         }, seconds);
         
@@ -110,7 +117,12 @@ class JokerSystem{
                         break;
                 }
                 
-                this.levelSystem.InstantiateGameObject(currentJoker,position,rotation,scale,undefined,"joker");
+                if (currentJoker.constructor.name == "Shield"){
+                    this.levelSystem.InstantiateShader(currentJoker,position,rotation,scale,"joker");
+                }  else{
+                    this.levelSystem.InstantiateGameObject(currentJoker,position,rotation,scale,undefined,"joker");
+                }
+               
                 
             } 
         }

@@ -73,16 +73,19 @@ class LevelSystem{
         
     }
 
-    InstantiatePlanet(object,position, rotation, scale, opt){
+    InstantiateShader(object,position, rotation, scale, opt){ //instantiateShader
 
         object.scene = this.parent.currentScene;
+
         let object_clone = object.clone();
         this.setCloneValue(object_clone, object);
         object_clone.userData.type = opt;
+
         let mesh = object_clone.children.find(e => e.constructor.name == "Mesh");
         let shaderMat = Object.values(this.parent.shaders).find( val => val.parentName === object.constructor.name);
-        mesh.material = shaderMat;
-
+        mesh.material = shaderMat
+        ;
+        object_clone.SetRigidBody(object_clone);
         object.Instantiate(object_clone,position, rotation, scale);
 
         
@@ -371,7 +374,7 @@ class LevelSystem{
         this.parent.currentScene.add(atmosphere);
 
         model.earth.scale.set(1,1,1);
-        this.InstantiatePlanet(model.earth, new THREE.Vector3(0,0,0),  new THREE.Euler(0,0,0), 1, "Planet");
+        this.InstantiateShader(model.earth, new THREE.Vector3(0,0,0),  new THREE.Euler(0,0,0), 1, "Planet");
 
         this.generatingStars(model.stars,200,500);
         this.parent.currentScene.add(model.stars);
@@ -418,8 +421,8 @@ class LevelSystem{
         this.parent.currentScene.add(model.stars);
 
         //Instate go
-        this.InstantiatePlanet(model.earth, positionEarth, rotationEarth, scaleEarth, "Planet");
-        this.InstantiatePlanet(model.sun, positionSun, rotationSun, scaleSun, "Planet");
+        this.InstantiateShader(model.earth, positionEarth, rotationEarth, scaleEarth, "Planet");
+        this.InstantiateShader(model.sun, positionSun, rotationSun, scaleSun, "Planet");
 
     } 
     

@@ -69,6 +69,7 @@ class GameManager {
         this.stars = shaders.stars;
         this.explosionShader = shaders.explosionShader;
         this.earthShader = shaders.earthShader
+        this.shieldShader = shaders.shieldShader
         
         /*
         * PostProcess

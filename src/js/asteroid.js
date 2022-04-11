@@ -28,9 +28,11 @@ import Explosion from './components/Explosion/Explosion.js';
 import { _FS,_VS } from "./components/Shader/Earth/glslEarth.js";
 import {_FSAT, _VSAT } from "./components/Shader/Earth/glslAtmosphere.js";
 import {_FSBooster, _VSBooster} from "./components/Shader/Player/booster.js";
-import {_FSSunShader, _VSSunShader} from "./components/Shader/Sun/glslSunShader.js"
-import { _FSBloom, _VSBloom}  from "./components/Shader/Postprocess/bloom.js"
-import { _FSExplosion, _VSExplosion}  from "./components/Shader/Explosion/explosion.js"
+import {_FSSunShader, _VSSunShader} from "./components/Shader/Sun/glslSunShader.js";
+import { _FSBloom, _VSBloom}  from "./components/Shader/Postprocess/bloom.js";
+import { _FSExplosion, _VSExplosion}  from "./components/Shader/Explosion/explosion.js";
+import { vs_shader, fs_shader} from "./components/Shader/shield/glglShield.js"
+import { getFBO } from "./components/Shader/FBO/FBO.js";
 
 
 class Asteroid {
@@ -223,9 +225,25 @@ class Asteroid {
         /* 
         *   Shield
         */
-        const geometryShield = new THREE.SphereGeometry(0.23, 12, 10);
-        const materialShield = new THREE.MeshStandardMaterial({ color: 0xffdd00, emissive: 0xecc70e, transparent: true, opacity: 0.5, alphaTest: 0.1 });
-        const shieldMesh = new THREE.Mesh(geometryShield, materialShield);
+        const depth = getFBO(1, 1, {
+            format: THREE.RGBAFormat,
+            type: THREE.UnsignedByteType,
+          });
+
+        this.materialShield = new THREE.ShaderMaterial({
+            uniforms: {
+              depthBuffer: { value:  depth.texture },
+              resolution: { value: new THREE.Vector2(1, 1) },
+              time: { value: 0 },
+            },
+            vertexShader: vs_shader,
+            fragmentShader: fs_shader,
+            transparent: true,
+            depthWrite: false,
+            side: THREE.DoubleSide,
+          });
+        this.materialShield.parentName = "Shield";
+        const shieldMesh = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(0.3, 5), this.material);
         shieldMesh.name = "ShieldItem";
 
         /*
@@ -622,6 +640,7 @@ class Asteroid {
             explosionShader : this.shaderExplosion,
             earthShader: this.earthMaterial,
             sunShader: this.sunMaterial,
+            shieldShader : this.materialShield,
             
  
          }
@@ -662,7 +681,7 @@ class Asteroid {
             document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("Stage1", true);
 
         }
 

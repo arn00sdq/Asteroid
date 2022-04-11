@@ -2,6 +2,7 @@ import * as THREE from 'three';
 
 import GameObject from "../GameObject.js";
 import JokerMovement from "./JokerMovement.js";
+import ShieldShader from './ShieldShader.js';
 
 class Shield extends GameObject{
 
@@ -21,6 +22,7 @@ class Shield extends GameObject{
     InitComponent() {
 
         this.AddComponent(new JokerMovement(this))
+        this.AddComponent(new ShieldShader(this))
 
     }
 
