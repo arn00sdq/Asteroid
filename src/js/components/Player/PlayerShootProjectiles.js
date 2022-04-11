@@ -8,7 +8,8 @@ class PlayerShootProjectiles{
       this.audio = audio;
       this.fireRate = 500;
 
-      this.weaponParams = null;
+      this.weaponList = null;
+      this.currentWeapon = null;
 
       this.canShoot = true;
       this.nbCannon = 0;
@@ -29,10 +30,10 @@ class PlayerShootProjectiles{
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
         this.temp.y = -0;
         this.spawnRot =  this.parent.rotation;
-
-        this.weaponParams.timerInstantiate = timeElapsed;// a reglo
-
-        this.parent.stageSystem.InstantiateGameObject(this.weaponParams,this.temp, this.spawnRot, 0.0009)
+        
+        this.currentWeapon.timerInstantiate = timeElapsed;
+        //if(this.currentWeapon.constructor.name == "SpecialBullet") this.parent.stageSystem.InstantiateShader(this.currentWeapon,this.temp, this.spawnRot, 0.09,"cc")
+        this.parent.stageSystem.InstantiateGameObject(this.currentWeapon,this.temp, this.spawnRot, 0.0009)
         
         this.parent.audioSystem.PlayBulletShoot(Math.random() * 0.2, 0.2);
 

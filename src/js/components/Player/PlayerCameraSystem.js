@@ -41,7 +41,6 @@ class PlayerCameraSystem {
 
         let follow_player = this.parent.children.find(e => e.name == "FollowPlayer");
         let limitA = this.parent.position.distanceTo(new THREE.Vector3(0, 0, 0));
-
         this.b.copy(this.goal.position);
 
         if ((limitA) > this.limit) {

@@ -14,7 +14,6 @@ class ShieldShader {
     Update(timeElapsed) {
 
         let mesh = this.parent.children.find(e => e.constructor.name == "Mesh");
-        // shield.material.uniforms.time.value = performance.now();
         mesh.material.uniforms.time.value = window.performance.now() * 0.5;
 
     }

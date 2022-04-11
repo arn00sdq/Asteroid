@@ -33,6 +33,7 @@ import { _FSBloom, _VSBloom}  from "./components/Shader/Postprocess/bloom.js";
 import { _FSExplosion, _VSExplosion}  from "./components/Shader/Explosion/explosion.js";
 import { vs_shader, fs_shader} from "./components/Shader/shield/glglShield.js"
 import { getFBO } from "./components/Shader/FBO/FBO.js";
+import SpecialBullet from './components/Bullet/SpecialBullet.js';
 
 
 class Asteroid {
@@ -191,16 +192,51 @@ class Asteroid {
             new THREE.MeshBasicMaterial({ color: 0xffff00 }));
         bulletPlayer.name = "BulletPlayer";
         bulletPlayer.rotateX((Math.PI / 180) * 90);
+
+        /*
+        * Special Bullet
+        */
+        this.specialBulletMaterial = new THREE.ShaderMaterial({
+            vertexShader: _VSBooster(),
+            fragmentShader: _FSBooster(),
+            uniforms: {
+                time: { 
+                  type: "f",
+                  value: 0.05
+                },
+                uniformZ:{
+                    type:"f",
+                    value:0.03
+                },
+                uniformX:{
+                    type:"f",
+                    value:0.03
+                },
+                boostPower:{
+                    type:"f",
+                    value:0.03,
+                }
+            },
+            blending: THREE.AdditiveBlending,
+            side: THREE.BackSide
+
+        })
+        this.specialBulletMaterial.parentName = "SpecialBullet";
+
+        const specialBulletMesh = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(5, 50, 50),
+            new ShaderMaterial(),
+        )
+        specialBulletMesh.name = "SpecialBulletItem";
+    
+
         /* 
         *   Balle Ennemy
         */
         const cylinderMesh = new THREE.Mesh(
             new THREE.CylinderGeometry(5, 50, 50),
-            new THREE.MeshBasicMaterial({ color: 0xff0000,emissive : 0xff000d }));
-       /* const geometryBullet = new THREE.CylinderBufferGeometry(0.01, 0.01, 0.1, 5, 1, false);
-        const materialBullet = new THREE.MeshLambertMaterial();
-        materialBullet.color.set(0xff0000);
-        materialBullet.emissive.set(0xff000d);*/
+            new THREE.MeshLambertMaterial({ color: 0xff0000,emissive : 0xff000d }));
+       /* const geometryBullet = new THREE.CylinderBufferGeometry(0.01, 0.01, 0.1, 5, 1, false);*/
         cylinderMesh.name = "BulletEnnemy";
         cylinderMesh.rotateX((Math.PI / 180) * 90);
 
@@ -419,8 +455,11 @@ class Asteroid {
         */
         this.modelManager.push(cylinderMesh);this.modelManager.push(firePower);this.modelManager.push(fireRate);
         this.modelManager.push(earthMesh);this.modelManager.push(bulletPlayer);this.modelManager.push(shieldMesh);
-        this.modelManager.push(sunMesh); this.modelManager.push(explosion)
+        this.modelManager.push(sunMesh); this.modelManager.push(explosion); this.modelManager.push(specialBulletMesh)
 
+        /*
+        * ObjectLoader
+        */
         loaderObj.load('../medias/models/low_poly.obj', (object) => {
 
             object.traverse(function (child) {
@@ -560,15 +599,19 @@ class Asteroid {
         let playerModel, rockModel,heartModel, coinModel, ennemy_ssModel;
         let bulletEnnemy = new Object3D(); let bulletPlayer= new Object3D(); let firePowerModel= new Object3D(); 
         let fireRateModel= new Object3D(); let shieldModel= new Object3D(); let earthModel = new Object3D();
-        let sunModel = new Object3D(); let explosionModel = new Object3D();
+        let sunModel = new Object3D(); let explosionModel = new Object3D(); let specialeBullet = new Object3D();
+
+
 
         this.modelManager.forEach((e) => {
-
+            console.log(e)
             if (e.name == "SpaceShip") playerModel = e;
 
             if (e.name == "SpaceRock") rockModel = e
 
             if (e.name == "BulletPlayer") bulletPlayer.add(e);
+
+            if (e.name == "SpecialBulletItem") specialeBullet.add(e);
 
             if (e.name == "BulletEnnemy") bulletEnnemy.add(e);
 
@@ -591,6 +634,10 @@ class Asteroid {
             if (e.name == "EnnemySpaceship") ennemy_ssModel = e
 
         })
+
+
+
+
         const audio = {
 
             audioManager: this.audioManager,
@@ -637,6 +684,7 @@ class Asteroid {
             booster : this.booster,
             stars: this.stars,
 
+            specialBullet: this.specialBulletMaterial,
             explosionShader : this.shaderExplosion,
             earthShader: this.earthMaterial,
             sunShader: this.sunMaterial,
@@ -650,15 +698,20 @@ class Asteroid {
             player: new Player(playerModel, audio,this.params),
             ennemy_ss: new EnnemySpaceship(ennemy_ssModel,audio,0),
             asteroid: new BasicAsteroid(rockModel,audio, 0),
-            coin: new Coin(coinModel,audio, 0),
+            
             earth: new Earth(earthModel,audio,0),
             sun: new Sun(sunModel,audio, 0),
+
+            basicBullet: new BasicBullet(bulletPlayer, audio),
+            ennemyBullet: new BasicBullet(bulletEnnemy, audio),
+            specialBullet: new SpecialBullet(specialeBullet,audio),
+
+            coin: new Coin(coinModel,audio, 0),
             firepower: new FirePower(firePowerModel,audio, 0),
             firerate: new FireRate(fireRateModel,audio, 0),
             shield: new Shield(shieldModel,audio, 0),
             heart: new Heart(heartModel,audio, 0),
-            basicBullet: new BasicBullet(bulletPlayer, audio),
-            ennemyBullet: new BasicBullet(bulletEnnemy, audio),
+            
             explosion: new Explosion(explosionModel, audio),
         }
 
@@ -675,13 +728,14 @@ class Asteroid {
 
     onPlayerBegin(event) { // nom a changer
 
-
+        (this.gm.currentScene)
         if (event.code == 'Space') {
 
             document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
-            this.gm.GetComponent("LevelSystem").scenePicker("Stage1", true);
+            
+            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
 
         }
 

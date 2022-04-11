@@ -36,6 +36,7 @@ class GameManager {
         /*
         * Models
         */
+
         this.models = models;
         this.player = models.player;
         this.asteroid = models.asteroid;
@@ -46,7 +47,10 @@ class GameManager {
         this.firepower = models.firepower;
         this.firerate = models.firerate;
         this.shield = models.shield;
-        this.basicBullet = models.basicBullet;
+        this.weaponList = {
+            normalBullet : models.basicBullet, 
+            specialBullet: models.specialBullet
+        }
         this.ennemyBullet = models.ennemyBullet;
         this.ennemy_ss = models.ennemy_ss;
         this.explosion = models.explosion;
@@ -63,13 +67,16 @@ class GameManager {
         */
 
         this.shaders = shaders;
+
         this.atmosphere = shaders.astmosphere;
         this.booster = shaders.booster;
         this.sunAtmosphere = shaders.sunAtmosphere;
         this.stars = shaders.stars;
+
+        this.specialBullet = shaders.specialBullet;
         this.explosionShader = shaders.explosionShader;
-        this.earthShader = shaders.earthShader
-        this.shieldShader = shaders.shieldShader
+        this.earthShader = shaders.earthShader;
+        this.shieldShader = shaders.shieldShader;
         
         /*
         * PostProcess
@@ -86,6 +93,12 @@ class GameManager {
         this.outlinePass = postProcess.outlinePass,
         this.bloomPass = postProcess.bloomPass,
         this.finalPass = postProcess.finalPass,
+
+        /*
+        * Animation
+        */
+
+        this.mixer = null;
 
         /*
         * GM
@@ -166,7 +179,8 @@ class GameManager {
     ValueInitialisation() {
 
         /* Player init */
-        this.player.GetComponent("PlayerShootProjectiles").weaponParams = this.basicBullet;
+        this.player.GetComponent("PlayerShootProjectiles").weaponList = this.weaponList;
+        this.player.GetComponent("PlayerShootProjectiles").currentWeapon = this.weaponList.normalBullet;
         this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
         this.player.stageSystem = this.GetComponent("LevelSystem");
         this.player.audioSystem = this.GetComponent("SoundSystem");
@@ -213,8 +227,6 @@ class GameManager {
             this.finalComposer.passes.shift();
             this.finalComposer.insertPass(renderScene, 0);
 
-            console.log(this.finalComposer)
-
         }
 
         if (pass.bloom == false && containBloom){
@@ -236,7 +248,7 @@ class GameManager {
         if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
         if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);    
 
-        console.log(this.currentScene.children)
+
 
     }
 
@@ -258,6 +270,7 @@ class GameManager {
     RAF() {
         
         requestAnimationFrame(this.RAF.bind(this));
+
         if (!this.state.pause) {
 
             this.loop.now = window.performance.now();
@@ -277,6 +290,8 @@ class GameManager {
                this.renderer.render(this.currentScene,this.currentCamera)
 
             }
+            
+            if (this.mixer !== null) this.mixer.update(this.loop.dt * 5)
  
             this.loop.last = this.loop.now;
             this.Step(this.loop.dt,this.tempTime);

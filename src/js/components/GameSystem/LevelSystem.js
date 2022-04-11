@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 
 import JokerSystem from "./JokerSystem.js";
+import {cameraStartLevel} from "../Animation/cameraStartLevel.js"
+
 
 class LevelSystem{
 
@@ -50,7 +52,7 @@ class LevelSystem{
     InstantiateGameObject(object,position, rotation, scale, velocity, opt,target){
 
         object.scene = this.parent.currentScene;
-
+        console.log(velocity)
         let positionAudio = object.children.find( k=> k.constructor.name == "PositionalAudio")    
         if (positionAudio !== undefined) object.remove(positionAudio)
 
@@ -83,8 +85,7 @@ class LevelSystem{
 
         let mesh = object_clone.children.find(e => e.constructor.name == "Mesh");
         let shaderMat = Object.values(this.parent.shaders).find( val => val.parentName === object.constructor.name);
-        mesh.material = shaderMat
-        ;
+        mesh.material = shaderMat;
         object_clone.SetRigidBody(object_clone);
         object.Instantiate(object_clone,position, rotation, scale);
 
@@ -210,6 +211,7 @@ class LevelSystem{
                 this.loadProps(level);
                 this.loadWave(level)
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
+                this.loadAnimation()
                 this.soundSystem.PlayPlayerRespawn();
                 //----
                 
@@ -220,8 +222,9 @@ class LevelSystem{
                 this.loadScene(level);
                 this.loadUI(level,displaySystem);
                 this.loadProps(level);
-                this.loadWave(level)
+                this.loadWave(level);
                 this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
+                this.loadAnimation();
                 this.soundSystem.PlayPlayerRespawn();
                 break;
 
@@ -361,9 +364,17 @@ class LevelSystem{
         }else{
 
             if (ambientSound.isPlaying) ambientSound.stop();
-            console.log(ambientSound.isPlaying)
 
         }
+    }
+
+    loadAnimation(){// parametre si + de 1
+
+        this.parent.mixer = new THREE.AnimationMixer( this.parent.currentCamera );
+	    this.clipAction = this.parent.mixer.clipAction( cameraStartLevel() );
+        this.clipAction.loop= THREE.LoopOnce;
+        this.clipAction.play();
+
     }
 
     loadPlanetStartMenu(model){
