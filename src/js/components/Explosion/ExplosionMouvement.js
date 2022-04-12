@@ -29,8 +29,8 @@ class ExplosionMouvement {
 
           mesh.material.uniforms[ 'growTime' ].value =   this.growTime  ;
 
-        } 
-        
+        }
+
     }
 
   };

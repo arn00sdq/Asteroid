@@ -28,6 +28,7 @@ class CharacterControllerInput {
       shift: false,
 
       shoot: false,
+      enter:false,
 
       cam1: false,
       cam2: true,
@@ -63,6 +64,10 @@ class CharacterControllerInput {
 
       case 32: // space
         this.keys.shoot = true;
+        break;
+
+      case 13: // enter
+        this.keys.enter = true;
         break;
 
       case 73: // i

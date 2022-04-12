@@ -180,7 +180,7 @@ class GameManager {
 
         /* Player init */
         this.player.GetComponent("PlayerShootProjectiles").weaponList = this.weaponList;
-        this.player.GetComponent("PlayerShootProjectiles").currentWeapon = this.weaponList.normalBullet;
+        this.player.GetComponent("PlayerShootProjectiles").currentWeapon = this.weaponList.specialBullet;
         this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
         this.player.stageSystem = this.GetComponent("LevelSystem");
         this.player.audioSystem = this.GetComponent("SoundSystem");

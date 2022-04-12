@@ -19,23 +19,41 @@ class PlayerShootProjectiles{
       this.spawnRot = new THREE.Euler;
       this.temp = new THREE.Vector3;
 
+      this.basicBullet = 0;
+      this.powerBullet = 1;
+
+      this.ultimate = 0;
+
       this.indexMissile = 1;
 
     }
 
-    Shoot(timeElapsed){
+    Shoot(timeElapsed,bullet){
       
       for (let i = 0; i < this.cannon.length; i++) {
         
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
         this.temp.y = -0;
         this.spawnRot =  this.parent.rotation;
+
+        if (bullet == 0){
+
+          this.weaponList.normalBullet.timerInstantiate = timeElapsed;
+          console.log(this.weaponList)
+          this.parent.stageSystem.InstantiateGameObject(this.weaponList.normalBullet,this.temp, this.spawnRot, 0.0009) 
+          this.parent.audioSystem.PlayBulletShoot();
+          
+        }else{
+
+          this.weaponList.specialBullet.timerInstantiate = timeElapsed;
+          this.parent.stageSystem.InstantiateShader(this.weaponList.specialBullet,this.temp, this.spawnRot, 0.9);
+          this.parent.audioSystem.PlayPowerShoot();
+
+        }
         
-        this.currentWeapon.timerInstantiate = timeElapsed;
-        //if(this.currentWeapon.constructor.name == "SpecialBullet") this.parent.stageSystem.InstantiateShader(this.currentWeapon,this.temp, this.spawnRot, 0.09,"cc")
-        this.parent.stageSystem.InstantiateGameObject(this.currentWeapon,this.temp, this.spawnRot, 0.0009)
+       // if(this.currentWeapon.constructor.name == "SpecialBullet") 
+ 
         
-        this.parent.audioSystem.PlayBulletShoot(Math.random() * 0.2, 0.2);
 
         this.indexMissile ++;
 
@@ -93,13 +111,24 @@ class PlayerShootProjectiles{
 
     }
 
+    loadUltimate(){
+
+      
+      this.ultimate += 15 /60;
+      if(this.ultimate > 100) this.ultimate =  100;
+
+      document.getElementById("power").style.width = this.ultimate +"%";
+      document.getElementById("powerp").innerHTML = Math.round(this.ultimate);
+
+    }
+
     Update(timeElapsed,timeInSecond){
       
       const input = this.parent.GetComponent('CharacterControllerInput');
 
         if ( input.keys.shoot && this.canShoot ){ 
         
-          this.Shoot(timeInSecond * 1000)
+          this.Shoot(timeInSecond * 1000,this.basicBullet)
           this.canShoot = false
 
           setTimeout(() => {
@@ -110,8 +139,20 @@ class PlayerShootProjectiles{
           
         }
 
+        if ( input.keys.enter && this.ultimate == 100 ){ 
+                   
+          this.Shoot(timeInSecond * 1000,this.powerBullet)
+          this.ultimate = 0;
+          
+        }
+
+        this.loadUltimate();
+
         input.keys.shoot = false;
+        input.keys.enter = false;
+        
   }
+
 }
 
 export default PlayerShootProjectiles

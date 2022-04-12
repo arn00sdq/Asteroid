@@ -28,8 +28,10 @@ class Player extends GameObject{
 
         this.audioSystem = null;
         this.stageSystem = null;
-
+        //creer une liste 
         this.life = 1;
+        this.stamina = 100;
+        this.ultimate = 0;
 
         this.InitComponent();
         this.InitValue();

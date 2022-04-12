@@ -24,6 +24,8 @@ class LevelSystem{
 
         }
 
+        this.player = this.parent.player;
+
     }
 
     InstantiatePlayer(player,position, rotation, scale){
@@ -142,7 +144,7 @@ class LevelSystem{
         this.timeElapsed = 0;
         this.score = 0;
 
-        this.parent.player.ResetPlayer();
+        this.player.ResetPlayer();
 
         this.removeProps();
 
@@ -184,7 +186,7 @@ class LevelSystem{
                 this.loadUI(level,displaySystem);
                 this.loadProps(level);
                 this.loadWave(level)
-                this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
+                this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 this.loadAnimation()
                 this.soundSystem.PlayPlayerRespawn();
                 //----
@@ -197,7 +199,7 @@ class LevelSystem{
                 this.loadUI(level,displaySystem);
                 this.loadProps(level);
                 this.loadWave(level);
-                this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
+                this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 this.loadAnimation();
                 this.soundSystem.PlayPlayerRespawn();
                 break;
@@ -207,7 +209,7 @@ class LevelSystem{
                 this.loadUI(level,displaySystem);
                 this.loadProps(level);
                 this.loadWave(level)
-                this.InstantiatePlayer(this.parent.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
+                this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 break;   
 
         }
@@ -272,13 +274,13 @@ class LevelSystem{
                 displaySystem.printUIStartMenu();
                 break;
             case "Stage1":
-                displaySystem.printUIHeader(this.parent.player.life, this.parent.score);
+                displaySystem.printUIHeader(this.player.life,this.player.stamina,this.player.ultimate, this.parent.score); // liste en parametre
                 break;
             case "Stage2":
-                displaySystem.printUIHeader(this.parent.player.life, this.parent.score);
+                displaySystem.printUIHeader(this.player.life,this.player.stamina,this.player.ultimate, this.parent.score);
                 break;
             case "Stage3":
-                displaySystem.printUIHeader(this.parent.player.life, this.parent.score);
+                displaySystem.printUIHeader(this.player.life,this.player.stamina,this.player.ultimate, this.parent.score);
                 break;
             
         }

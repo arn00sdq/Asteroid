@@ -1,6 +1,9 @@
 import BulletMouvement from "./BulletMouvement.js";
 import BulletDamageSystem from "./BulletDamageSystem.js";
 import GameObject from "../GameObject.js";
+import * as THREE from 'three';
+import SpecialBulletAnim from "./SpecialBulletAnim.js";
+
 
 class SpecialBullet extends GameObject{ 
 
@@ -23,22 +26,8 @@ class SpecialBullet extends GameObject{
 
         this.AddComponent(new BulletMouvement(this));
         this.AddComponent(new BulletDamageSystem(this));
+        this.AddComponent(new SpecialBulletAnim(this));
 
-    }
-
-    Instantiate(o,p,r,s){
-        
-        super.Instantiate(o,p,r,s);
-
-        o.position.copy(p);
-        o.rotation.copy(r);
-
-        let bullet_mvt = this.GetComponent("BulletMouvement");
-        bullet_mvt.velocity.set(0,0,1);
-        this.SetInvulnerability(100);
-        
-        this.scene.add(o);
-        
     }
     
 

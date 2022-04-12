@@ -31,6 +31,7 @@ import {_FSBooster, _VSBooster} from "./components/Shader/Player/booster.js";
 import {_FSSunShader, _VSSunShader} from "./components/Shader/Sun/glslSunShader.js";
 import { _FSBloom, _VSBloom}  from "./components/Shader/Postprocess/bloom.js";
 import { _FSExplosion, _VSExplosion}  from "./components/Shader/Explosion/explosion.js";
+import { _FSBullet, _VSBullet}  from "./components/Shader/Player/bullet.js";
 import { vs_shader, fs_shader} from "./components/Shader/shield/glglShield.js"
 import { getFBO } from "./components/Shader/FBO/FBO.js";
 import SpecialBullet from './components/Bullet/SpecialBullet.js';
@@ -197,34 +198,22 @@ class Asteroid {
         * Special Bullet
         */
         this.specialBulletMaterial = new THREE.ShaderMaterial({
-            vertexShader: _VSBooster(),
-            fragmentShader: _FSBooster(),
+            vertexShader: _VSBullet(),
+            fragmentShader: _FSBullet(),
             uniforms: {
                 time: { 
                   type: "f",
                   value: 0.05
                 },
-                uniformZ:{
-                    type:"f",
-                    value:0.03
-                },
-                uniformX:{
-                    type:"f",
-                    value:0.03
-                },
-                boostPower:{
-                    type:"f",
-                    value:0.03,
-                }
             },
             blending: THREE.AdditiveBlending,
-            side: THREE.BackSide
+            side: THREE.DoubleSide
 
         })
         this.specialBulletMaterial.parentName = "SpecialBullet";
 
         const specialBulletMesh = new THREE.Mesh(
-            new THREE.SphereBufferGeometry(5, 50, 50),
+            new THREE.SphereBufferGeometry(0.5, 50, 50),
             new ShaderMaterial(),
         )
         specialBulletMesh.name = "SpecialBulletItem";
@@ -549,6 +538,11 @@ class Asteroid {
 
         audioLoader.load('../medias/sounds/ennemyShip/laser-ennemy.mp3', function (buffer) {
             buffer.name = "ennemyLaser";
+            me.audioManager.push(buffer);
+        });
+
+        audioLoader.load('../medias/sounds/bullet/plasma-pistol.mp3', function (buffer) {
+            buffer.name = "powerShot";
             me.audioManager.push(buffer);
         });
 

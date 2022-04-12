@@ -1,0 +1,157 @@
+#footer-hud{
+    position: absolute;
+    bottom: 0px;
+
+}
+
+#footer-hud div{
+	color: white;
+}
+
+.player-bar{
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 4vh;
+    margin-left: 2vw;
+
+}
+
+.player-section{
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0.1vh;
+    text-align: center;
+
+}
+
+.hud-icon{
+    height: 2vh;
+    width: 2vw;
+    margin-bottom: 0.5vh;
+    filter: invert(95%) sepia(100%) saturate(14%) hue-rotate(213deg) brightness(104%) contrast(104%);
+}
+
+.player-health-bar{
+
+    width: 13vw;
+    height: 2vh;
+    background: #ddd;
+    clip-path: polygon(3% 0, 100% 0, 91% 100%, 0 100%);
+    margin-left: 1vw;
+  
+}
+
+.player-health-bar .health-bar{
+
+    background: #c54;
+    width: 89%;
+    height: 100%;
+}
+
+.player-abilities-bar{
+
+    width: 17vw;
+    height: 2vh;
+    background: #ddd;
+    clip-path: polygon(2% 0, 100% 0, 91% 100%, 0 100%);
+  
+}
+
+.player-abilities-bar .power-bar{
+
+    background: #8D2AD5;
+    width: 89%;
+    height: 100%;
+}
+
+.player-stamina-bar{
+    height: 2vh;
+    display: flex;
+    width: 17vw;
+    margin-left: 0.5vw;
+    box-shadow: inset -14px 0px 4px #2c2c2c, inset 1px -6px 9px;
+    clip-path: polygon(2% 0, 100% 0, 91% 100%, 0 100%);
+}
+
+.player-stamina-bar .stamina-bar{
+    background: #3755cc;
+    width: 100%;
+    text-shadow: 0 0 5px #000;
+}
+
+#life{
+
+    font-size: 2vh;
+    font-family: "SpaceGrotesk";
+    margin-left: 0.2vw;
+
+}
+
+#stamina{
+
+    font-size: 2vh;
+    font-family: "SpaceGrotesk";
+    margin-left: 0.2vw;
+
+}
+
+#powerp{
+
+    font-size:2vh;
+    font-family: "SpaceGrotesk";
+    margin-left: 0.2vw;
+
+}
+
+
+#score_section{
+	display : flex;
+	flex-direction: column;
+	align-items: flex-start;
+
+}
+
+#sp_points{
+	position: absolute;
+    font-size: 25px;
+    color: green;
+    font-weight: bold;
+	top: 42px;
+    right: 9px;
+	opacity: 0;
+	animation: animatePoints 1.5s linear;
+
+}
+
+@keyframes animatePoints
+{
+    0%
+    {  
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1.5);
+        transform: translateY(0px);
+        
+    }
+
+    50%
+    {
+        opacity: 0.5;
+        transform: scale(1.3);
+        transform: translateY(-30px);
+    }
+
+    100%
+    {
+        opacity: 0;
+        transform: scale(1.0);
+        transform: translateY(-60px);
+        visibility: hidden;
+    }
+}
+
+

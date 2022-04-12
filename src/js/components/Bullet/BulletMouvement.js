@@ -6,7 +6,7 @@ class BulletMouvement{
 
         this.parent = parent;
         
-        this.velocity = new THREE.Vector3();
+        this.velocity = new THREE.Vector3(0,0,1);
         this.forward = new THREE.Vector3();
         this.direction = new THREE.Vector3();
         this.speed = 0.1;

@@ -38,6 +38,7 @@ class GameObjectManager{
 
   collision_handler(e,e2){
 
+
     switch(e.constructor.name){
 
       case "BasicAsteroid":
@@ -50,6 +51,9 @@ class GameObjectManager{
 
       case "BasicBullet":
         this.CollisionBulletHandler(e, e2);
+        break;
+      case "SpecialBullet":
+        this.CollisionSpecialHandler(e, e2);
         break;
       case "EnnemyBullet":
         this.CollisionEnnemyBulletHandler(e, e2);
@@ -189,9 +193,7 @@ class GameObjectManager{
     let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
 
     if (object.name == "Player" && object.hasJoker.immune == false) asteroidHealth.Damage("max");
-
-    if(object.name == "BasicBullet"){
-
+    if(object.name == "BasicBullet" || object.name == "SpecialBullet"){
      
       let bullet = object.GetComponent("BulletDamageSystem");
       asteroidHealth.Damage(bullet.damageAmount);
@@ -253,14 +255,30 @@ class GameObjectManager{
       let bulletDamage = bullet.GetComponent("BulletDamageSystem").damageAmount;
       if (bulletDamage > 0){
 
-      //  let playerHitSound = new THREE.Audio( this.parent.audio.listener );
         this.sound_sys.PlayHitBullet(object, 0);
 
       }   
 
     } 
 
-  }
+}
+
+CollisionSpecialHandler(bullet, object){
+
+  if(bullet.name == "EnnemyBullet") return;
+
+  if(object.name == "Asteroid" || object.name == "EnnemySpaceship" ){
+
+    let bulletDamage = bullet.GetComponent("BulletDamageSystem").damageAmount;
+    if (bulletDamage > 0){
+
+      this.sound_sys.PlayHitBullet(object, 0);
+
+    }   
+
+  } 
+
+}
 
   CollisionEnnemyBulletHandler(bullet, object){
 

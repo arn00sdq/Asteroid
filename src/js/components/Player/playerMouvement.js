@@ -203,6 +203,7 @@ class CharacterMouvement {
     if(this.stamina < 0) this.stamina=  0;
     
     document.getElementById("endurance").style.width = this.stamina +"%";
+    document.getElementById("stamina").innerHTML = Math.round(this.stamina);
 
   }
 
@@ -211,6 +212,7 @@ class CharacterMouvement {
     this.stamina += this.stamina_regain /60;
     if(this.stamina > 100) this.stamina =  100;
     document.getElementById("endurance").style.width = this.stamina +"%";
+    document.getElementById("stamina").innerHTML = Math.round(this.stamina);
 
   }
 

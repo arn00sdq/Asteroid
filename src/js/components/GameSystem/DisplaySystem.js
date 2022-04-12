@@ -38,35 +38,55 @@ class DisplaySystem{
 
     }
 
-    printUIHeader(life,score){
+    printUIHeader(life,stamina,ultimate,score){
 
         let ui_header = `
-        <div id="header_ui">
-            <div id="life_section">  
-                <span id="life_title">Vie</span> 
-                <span id="life">${life}</span>
-            </div>
-            <div id="ennemy_r_section">  
-                <span id="remaining_title">Restant</span> 
-                <span id="remaining_asteroid"></span> 
-            </div>
-            <div id="score_section"> 
-                <span id="score_title">Score</span>
-                <span id="sp_score">00000</span> 
+        
+        <div id="footer-hud">
+        
+            <div class="player-bar">  
+                <div class="player-section">
+                    <img class="hud-icon" src="../../../src/medias/images/hud/heart-solid.svg"/>
+                    <div class="player-health-bar">
+                        <div class="health-bar"></div>
+                    </div>
+                    <div id="life">${life}</div>
+                </div>
                 
-            </div>
+                <div class="player-section">
+                    <img class="hud-icon" src="../../../src/medias/images/hud/bolt-lightning-solid.svg"/>
+                    <div class="player-stamina-bar">
+                        <div class="stamina-bar" id="endurance"></div>
+                    </div>
+                    <div id="stamina">${stamina}</div>
+                </div>
+
+                <div class="player-section">
+                    <img class="hud-icon" src="../../../src/medias/images/hud/wand-magic-solid.svg"/>
+                    <div class="player-abilities-bar">
+                        <div class="power-bar" id="power"></div>
+                    </div>
+                    <div id="powerp">${ultimate}</div>
+                </div> 
+
+            </div> 
         </div>
 
-        <div class="endurance_bar">
-            <div class="endurance_stat" id="endurance">
-            </div>
-        </div>
         `
 
         this.printAPP(ui_header)
 
     }
-
+  /*  <div id="ennemy_r_section">  
+    <span id="remaining_title">Restant</span> 
+    <span id="remaining_asteroid"></span> 
+</div>
+<div id="score_section"> 
+    <span id="score_title">Score</span>
+    <span id="sp_score">00000</span> 
+    
+</div>
+<span id="life">${life}</span>*/
     printScore(score,increment, points){
         
         let length_score = score.toString().length;

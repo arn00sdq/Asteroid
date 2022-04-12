@@ -67,6 +67,19 @@ class SoundSystem{
 
     }
 
+    PlayPowerShoot(){
+      
+        const bulletBuffer =  this.audioManager.find(e => e.name == "powerShot");
+        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
+
+        if (playerAudio.isPlaying)  playerAudio.stop()
+        playerAudio.setBuffer( bulletBuffer );
+        playerAudio.setLoop( false );
+        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        playerAudio.play();
+
+    }
+
     PlayHitBullet(bullet, delay){
 
         const bulletBuffer =  this.audioManager.find(e => e.name == "BulletHit");
