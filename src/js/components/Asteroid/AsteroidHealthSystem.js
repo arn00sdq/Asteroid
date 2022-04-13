@@ -3,6 +3,8 @@ class AsteroidHealthSystem{
     constructor(parent,originalColor) {
 
         this.parent = parent;
+
+        this.life = 15;
         this.color = originalColor;
 
     }
@@ -14,25 +16,25 @@ class AsteroidHealthSystem{
 
         if(lifeAmount == "max"){
 
-            this.parent.life = 0;
+            this.life = 0;
 
         }else{
 
-            this.parent.life -= lifeAmount
+            this.life -= lifeAmount
         }
         
-        if (this.parent.life < 0) this.parent.life = 0;
+        if (this.life < 0) this.life = 0;
 
-        if (this.parent.life > 0) this.DamageMarker();
+        if (this.life > 0) this.DamageMarker();
 
-        if(this.parent.life == 0) {}
+        if(this.life == 0) {}
 
     }
 
     Heal(healAmount){
 
-        this.parent.life += healAmount;
-        if (this.life > 0) this.parent.life = this.parent.life
+        this.life += healAmount;
+        if (this.life > 0) this.life = this.life
 
     }
 

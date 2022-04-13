@@ -16,7 +16,6 @@ class BasicAsteroid extends GameObject {
         this.audio = audio;
         this.name = "Asteroid"
         this.nbBreak = nbBreak;
-        this.life = 15;
 
         this.InitComponent();
 

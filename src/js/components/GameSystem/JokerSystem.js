@@ -15,7 +15,7 @@ class JokerSystem{
         this.jokerUnv = []
 
         this.levelSystem = this.parent.GetComponent("LevelSystem");
-        this.displaySystem = this.parent.GetComponent("DisplaySystem")
+        this.displaySystem = this.parent.GetComponent("DisplaySystem");
 
     }
 

@@ -161,7 +161,7 @@ class GameObjectManager {
 
     }
 
-    if (asteroid.life == 0) {
+    if (asteroidHealth.life == 0) {
 
       asteroid.nbBreak += 1;
       this.sound_sys.PlayAsteroidDestruction(asteroid, 0) // destroy will remove pos audio
