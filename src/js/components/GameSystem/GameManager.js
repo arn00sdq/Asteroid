@@ -4,6 +4,9 @@ import { _FS,_VS } from "../Shader/Earth/glslEarth.js";
 import { _FSBloom, _VSBloom}  from "../Shader/Postprocess/bloom.js"
 
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/RenderPass.js";
+import Stats from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/libs/stats.module.js"
+import {GPUStatsPanel} from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/utils/GPUStatsPanel.js"
+
 
 import DisplaySystem from "./DisplaySystem.js";
 import JokerSystem from "./JokerSystem.js";
@@ -79,12 +82,15 @@ class GameManager {
         this.shieldShader = shaders.shieldShader;
         
         /*
-        * PostProcess
+        * PostProcess / videoSection
         */
         this.materials = {};
         this.selectedObjects = [];
         this.selectedEnnemy = [];
         this.postProActive = true;
+
+        this.stat = false;
+        this.targetStat = new Stats();
 
         this.finalComposer = postProcess.finalComposer;
         this.bloomComposer = postProcess.bloomComposer;
@@ -246,9 +252,9 @@ class GameManager {
         if (pass.outline == true && !containOutline) this.finalComposer.addPass(this.outlinePass);     
 
         if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
-        if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);    
-
-
+        if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);
+        
+       // 
 
     }
 
@@ -284,6 +290,7 @@ class GameManager {
                 this.renderBloom();
                 this.outlinePass.selectedObjects = this.selectedObjects;
                 this.finalComposer.render();
+               
 
             }else{
                
@@ -292,6 +299,8 @@ class GameManager {
             }
             
             if (this.mixer !== null) this.mixer.update(this.loop.dt * 5)
+            
+             this.targetStat.update()
  
             this.loop.last = this.loop.now;
             this.Step(this.loop.dt,this.tempTime);

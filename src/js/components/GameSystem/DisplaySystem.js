@@ -1,9 +1,13 @@
+import Stat from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/libs/stats.module.js"
+
 class DisplaySystem{
 
     constructor(parent){
 
         this.parent = parent;
         this.container = document.body;
+        
+        this.displayStat = false
 
     }
 
@@ -11,6 +15,8 @@ class DisplaySystem{
 
         this.container.innerHTML = element;
         this.container.appendChild(this.parent.renderer.domElement)
+
+        if(this.displayStat) document.getElementById("stat-section").appendChild( this.parent.targetStat.dom)
 
     }
 
@@ -39,7 +45,7 @@ class DisplaySystem{
     }
 
     printUIHeader(life,stamina,ultimate,score){
-
+        console.log(this.parent.targetStat);
         let ui_header = `
         
         <div id="header-hud"> 
@@ -47,16 +53,18 @@ class DisplaySystem{
                 <span class="score-title">Score</span>
                 <span id="sp-score">00000</span>  
             </div>
+            <div id="stat-section">
+            </div>
         </div>
         <div id="footer-hud">
             <div class="game-infos-icon">
                 <div class="game-infos-section">
                     <img class="infos-icon" src="../../../src/medias/images/hud/meteor-solid.svg"/>
-                    <div id="remaining_asteroid">${life}</div>
+                    <div id="remaining-asteroid">${life}</div>
                 </div>
                 <div class="game-infos-section">
                     <img class="infos-icon" src="../../../src/medias/images/hud/skull-solid.svg"/>
-                    <div id="life">0</div>
+                    <div id="asteroid-killed">0</div>
                 </div>
 
             </div>
@@ -112,7 +120,6 @@ class DisplaySystem{
         }
         
         document.getElementById("score-section").innerHTML = appendScore;
-        console.log(document.getElementById("score-section"))
         
 
     }
@@ -123,11 +130,17 @@ class DisplaySystem{
 
     }
 
-    PrintEnnemy(nbEnnemyFrame){
+    PrintEnnemyRemaining(nbEnnemyFrame){
 
         this.ennemy = nbEnnemyFrame;
-        if (document.getElementById("remaining_asteroid") !== null)
-            document.getElementById("remaining_asteroid").innerHTML = this.ennemy;
+        if (document.getElementById("remaining-asteroid") !== null) document.getElementById("remaining-asteroid").innerHTML = this.ennemy;
+
+    }
+
+    PrintEnnemyKilled(nbEnnemyFrame){
+
+        this.ennemy = nbEnnemyFrame;
+        if (document.getElementById("asteroid-killed") !== null) document.getElementById("asteroid-killed").innerHTML = this.ennemy;
 
     }
 
@@ -354,8 +367,10 @@ class DisplaySystem{
                     </div>
                     <div class="arrow_option_field">
                         <span class="option_input_name">Target FPS</span>
-                        <div class="option_com_soon">
-                            Prochainement !
+                        <div class="arrow_picker">
+                            <button  name="stat" class="arrow left"></button>
+                            <div class="value_arrow" >${videoParam.stat == true ? "On" : "Off"}</div>
+                            <button name="stat" class="arrow right"></button>                
                         </div>
                     </div>
                 </div>

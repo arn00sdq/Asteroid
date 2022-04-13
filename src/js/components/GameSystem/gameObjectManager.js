@@ -171,7 +171,6 @@ class GameObjectManager {
         this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 2, 2);
 
       } else {
-        console.log("broke")
         this.parent.score += 5;
         this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 1, 10);
       }
@@ -374,7 +373,9 @@ class GameObjectManager {
     this.CheckBullet(countBullet);
 
     this.parent.ennemy = nbEnnemyFrame;
-    this.parent.GetComponent("DisplaySystem").PrintEnnemy(nbEnnemyFrame);
+
+    this.parent.GetComponent("DisplaySystem").PrintEnnemyKilled(nbEnnemyFrame);
+    this.parent.GetComponent("DisplaySystem").PrintEnnemyRemaining(nbEnnemyFrame);
 
     if (nbEnnemyFrame == 0 && this.levelSystem.currentLevel !== "StartMenu") this.parent.StageCompleted();
 

@@ -11,6 +11,7 @@ class MenuSystem{
             bloom:true,
             outline:true,
             fxaa:false,
+            stat:false,
 
         }
 
@@ -78,6 +79,26 @@ class MenuSystem{
                 this.checkPostProcess();
                 this.uiDisplay.printVideoUIMenu();
                 this.parent.PostProcessRender();
+            break;
+            case "stat":
+
+                if (this.video.stat ==false) {
+
+                    this.video.stat=true;
+                    this.parent.stat = true;
+                    this.uiDisplay.displayStat = true;
+
+                }else{
+
+                    this.video.stat = false; 
+                    this.parent.stat = false;
+                    this.uiDisplay.displayStat = false;
+
+
+                }
+                this.uiDisplay.printVideoUIMenu();
+
+                
             break;
             case "quit":
                 this.levelSystem.currentLevel == "StartMenu" ? document.location.href = "index.html" : this.levelSystem.scenePicker("StartMenu",false,true);
