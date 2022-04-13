@@ -26,6 +26,12 @@ class LevelSystem{
 
         this.player = this.parent.player;
 
+        this.playerHealth = this.parent.player.GetComponent("PlayerHealthSystem");
+        this.playerMouvement = this.parent.player.GetComponent("CharacterMouvement");
+        this.playerShoot = this.parent.player.GetComponent("PlayerShootProjectiles");
+
+        this.soundSystem = this.parent.GetComponent("SoundSystem");
+
     }
 
     InstantiatePlayer(player,position, rotation, scale){
@@ -169,7 +175,6 @@ class LevelSystem{
         this.removeProps();
 
         let displaySystem = this.parent.GetComponent("DisplaySystem");
-        this.soundSystem  = this.parent.GetComponent("SoundSystem");
 
         this.currentLevel = level;
         
@@ -274,13 +279,13 @@ class LevelSystem{
                 displaySystem.printUIStartMenu();
                 break;
             case "Stage1":
-                displaySystem.printUIHeader(this.player.life,this.player.stamina,this.player.ultimate, this.parent.score); // liste en parametre
+                displaySystem.printUIHeader(this.playerHealth.life,this.playerMouvement.stamina, this.playerShoot.ultimate, this.parent.score); // liste en parametre
                 break;
             case "Stage2":
-                displaySystem.printUIHeader(this.player.life,this.player.stamina,this.player.ultimate, this.parent.score);
+                displaySystem.printUIHeader(this.playerHealth.life,this.playerMouvement.stamina, this.playerShoot.ultimate, this.parent.score);
                 break;
             case "Stage3":
-                displaySystem.printUIHeader(this.player.life,this.player.stamina,this.player.ultimate, this.parent.score);
+                displaySystem.printUIHeader(this.playerHealth.life,this.playerMouvement.stamina, this.playerShoot.ultimate, this.parent.score);
                 break;
             
         }
@@ -328,13 +333,12 @@ class LevelSystem{
     loadAudio(level){
 
         let ambientSound = this.parent.ambientSound;
-        let soundSystem = this.parent.GetComponent("SoundSystem");
 
         if(level == "StartMenu"){
            
             const ambientBuffer =  this.parent.audio.audioManager.find(e => e.name == "StartMenuTheme");
 			ambientSound.setBuffer(ambientBuffer);
-			ambientSound.setVolume(  soundSystem.musicVolume > soundSystem.masterVolume  ? soundSystem.masterVolume : soundSystem.musicVolume );
+			ambientSound.setVolume(  this.soundSystem.musicVolume > this.soundSystem.masterVolume  ? this.soundSystem.masterVolume : this.soundSystem.musicVolume );
 			ambientSound.play();
 
         }else{

@@ -11,6 +11,10 @@ class GameObjectManager {
     this.levelSystem = this.parent.GetComponent("LevelSystem");
     this.sound_sys = this.parent.GetComponent("SoundSystem");
     this.joker_sys = this.parent.GetComponent("JokerSystem");
+    this.displaySystem = this.parent.GetComponent("DisplaySystem")
+
+    this.playerHealth = this.parent.player.GetComponent("PlayerHealthSystem");
+
 
   }
 
@@ -117,18 +121,15 @@ class GameObjectManager {
 
     if ((object.name == "Asteroid" || object.name == "EnnemyBullet") && !player.hasJoker.immune) {
 
-      let playerHealth = player.GetComponent("PlayerHealthSystem");
-
       let playerHitSound = new THREE.Audio(this.parent.audio.listener);
       this.sound_sys.PlayShipDamageTaken();
 
-      playerHealth.Damage(1);
+      this.playerHealth.Damage(1);
       player.SetInvulnerability(2000);
 
-      this.parent.playerLife = player.life
-      this.parent.GetComponent("DisplaySystem").PrintLife(player.life);
+      this.displaySystem.PrintLife(this.playerHealth.life);
 
-      if (player.life == 0) {
+      if (this.playerHealth.life == 0) {
 
         this.levelSystem.InstantiateShader(this.parent.explosion, player.position, new THREE.Euler(0, 0, 0));
         player.Destroy(player);
@@ -168,11 +169,11 @@ class GameObjectManager {
 
         this.Asteroid_Subdivision(asteroid, object);
         this.parent.score += 4;
-        this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 2, 2);
+        this.displaySystem.printScore(this.parent.score, 2, 2);
 
       } else {
         this.parent.score += 5;
-        this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 1, 10);
+        this.displaySystem.printScore(this.parent.score, 1, 10);
       }
 
       asteroid.Destroy(asteroid);
@@ -329,7 +330,7 @@ class GameObjectManager {
 
   Update(timeElapsed, timeInSecond) {
 
-    let nbEnnemyFrame = 0; let playerLife; let countBullet = 0;
+    let nbEnnemyFrame = 0; let countBullet = 0;
     this.parent.selectedObjects = [];
     this.parent.selectedEnnemy = [];
     this.parent.currentScene.children.forEach(e => {
@@ -350,8 +351,6 @@ class GameObjectManager {
         };
 
         if (e.name == "Player") {
-
-          playerLife = e.life;
 
           let test = e.children.filter(k => k.constructor.name == "Mesh");
           for (let mesh of test) this.parent.selectedObjects.push(mesh);
@@ -374,8 +373,8 @@ class GameObjectManager {
 
     this.parent.ennemy = nbEnnemyFrame;
 
-    this.parent.GetComponent("DisplaySystem").PrintEnnemyKilled(nbEnnemyFrame);
-    this.parent.GetComponent("DisplaySystem").PrintEnnemyRemaining(nbEnnemyFrame);
+    this.displaySystem.PrintEnnemyKilled(nbEnnemyFrame);
+    this.displaySystem.PrintEnnemyRemaining(nbEnnemyFrame);
 
     if (nbEnnemyFrame == 0 && this.levelSystem.currentLevel !== "StartMenu") this.parent.StageCompleted();
 

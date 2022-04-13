@@ -15,20 +15,23 @@ class JokerSystem{
         this.jokerUnv = []
 
         this.levelSystem = this.parent.GetComponent("LevelSystem");
+        this.displaySystem = this.parent.GetComponent("DisplaySystem")
 
     }
 
     PlayerAddLife(player,number){
 
-        player.GetComponent("PlayerHealthSystem").Heal(number);
-        this.parent.GetComponent("DisplaySystem").PrintLife(player.life);
+        let playerHealth = player.GetComponent("PlayerHealthSystem");
+
+        playerHealth.Heal(number);
+        this.displaySystem.PrintLife(playerHealth.life);
 
     }
 
     PlayerAddCoin(score, number){
 
         this.parent.score += number;
-        this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 1,1);
+        this.displaySystem.printScore(this.parent.score, 1,1);
 
     }
 

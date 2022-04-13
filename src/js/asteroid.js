@@ -729,7 +729,7 @@ class Asteroid {
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
             
-            this.gm.GetComponent("LevelSystem").scenePicker("Stage2", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
 
         }
 

@@ -112,7 +112,6 @@ class GameManager {
         this.limit = 10;
         this.limit_background = 40;
         this.score = 0;
-        this.playerLife = 1;
         this.ennemyRemaining = null;
         this.input = null;
 
@@ -143,8 +142,9 @@ class GameManager {
     InitComponent(models, audio) {
 
 
-        this.AddComponent(new LevelSystem(this));
+        
         this.AddComponent(new SoundSystem(this, audio));
+        this.AddComponent(new LevelSystem(this));
         this.AddComponent(new JokerSystem(this, models));
         this.AddComponent(new DisplaySystem(this));
         this.AddComponent(new HackSystem(this));

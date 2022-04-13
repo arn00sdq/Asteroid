@@ -19,6 +19,9 @@ class MenuSystem{
         this.levelSystem = this.parent.GetComponent("LevelSystem");
         this.soundSystem = this.parent.GetComponent("SoundSystem");
 
+        this.playerHealth = this.parent.player.GetComponent("PlayerHealthSystem");
+        this.gameState = this.parent.state;
+
         document.addEventListener('click', (e) => this.OnClick(e), false);
         document.addEventListener("change", (e) => this.OnChange(e), false);
         document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
@@ -35,8 +38,8 @@ class MenuSystem{
                 this.levelSystem.currentLevel == "StartMenu" ? this.uiDisplay.printUIStartMenu() : this.uiDisplay.printPause();
                 break;
             case "resume":
-                this.parent.state.pause = false;
-                this.uiDisplay.printUIHeader(this.parent.player.life, this.parent.score);
+                this.gameState.pause = false;
+                this.uiDisplay.printUIHeader(this.playerHealth.life, this.parent.score);
                 break;
             case "restart":
                 this.levelSystem.scenePicker(this.levelSystem.currentLevel, false);
@@ -144,32 +147,31 @@ class MenuSystem{
 
     OnKeyDown(event) {
 
-        let parent = this.parent;
         switch (event.keyCode) {
 
             case 27:
 
-                if(parent.GetComponent("LevelSystem").currentLevel == "StartMenu") break;
+                if(this.levelSystem.currentLevel == "StartMenu") break;
 
-                if (!this.parent.state.pause) {
+                if (!this.gameState.pause) {
 
-                    parent.state.pause = true;
+                    this.gameState.pause = true;
                     this.uiDisplay.printPause();
 
                 } else {
 
-                    parent.state.pause = false;
-                    this.uiDisplay.printUIHeader(parent.player.life, parent.score);
+                    this.gameState.pause = false;
+                    this.uiDisplay.printUIHeader(this.playerHealth.life, parent.score);
 
                 }
 
                 break;
             case 72:
                 
-                if (!this.parent.state.keyboard) {
+                if (!this.gameState.keyboard) {
 
-                    parent.state.keyboard = true;
-                    parent.state.pause = true;
+                    this.gameState.keyboard = true;
+                    this.gameState.pause = true;
                     this.uiDisplay.printKeyboardShortcut();
 
                 } else {
@@ -177,7 +179,7 @@ class MenuSystem{
                     parent.state.keyboard = false;
                     parent.state.pause = false;
 
-                    parent.GetComponent("LevelSystem").currentLevel == "StartMenu" ? this.uiDisplay.printUIStartMenu() : this.uiDisplay.printUIHeader(parent.player.life, parent.score);
+                    this.levelSystem.currentLevel == "StartMenu" ? this.uiDisplay.printUIStartMenu() : this.uiDisplay.printUIHeader(this.playerHealth.life, parent.score);
 
                 }
                 break;
