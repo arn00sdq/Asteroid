@@ -39,7 +39,6 @@ class BasicAsteroid extends GameObject {
         o.scale.copy(new THREE.Vector3(s, s, s))
 
         let aste_mvt = this.GetComponent("AsteroidMovement");
-        console.log(o.userData.velocity)
         o.userData.velocity !== undefined ? aste_mvt.velocity.copy(o.userData.velocity) : 
         aste_mvt.velocity = new THREE.Vector3(Math.ceil(Math.random() * (6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1), 0, Math.ceil(Math.random() * (6 - 3) + 3) * (Math.round(Math.random()) ? 1 : -1));;
 

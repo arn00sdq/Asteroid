@@ -39,7 +39,6 @@ class PlayerShootProjectiles{
         if (bullet == 0){
 
           this.weaponList.normalBullet.timerInstantiate = timeElapsed;
-          console.log(this.weaponList)
           this.parent.stageSystem.InstantiateGameObject(this.weaponList.normalBullet,this.temp, this.spawnRot, 0.0009) 
           this.parent.audioSystem.PlayBulletShoot();
           

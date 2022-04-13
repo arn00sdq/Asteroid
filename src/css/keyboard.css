@@ -110,6 +110,13 @@ body{
     transform: rotate(0deg);
 }
 
+.linePower{
+    margin-right: -80vw;
+    width: 5vw;
+    top: 50vh;
+    transform: rotate(0deg);
+}
+
 .lineSpace {
     margin-left: -4.5vw;
     width: 10vw;
@@ -186,6 +193,12 @@ body{
     transform: rotate(0deg);
     margin-left: -3vw;
     margin-top: -0.9vh;
+}
+
+.textPower{
+    transform: rotate(0deg);
+    margin-left: 5.5vw;
+    margin-top: -1vh;
 }
 
 .textEchap{

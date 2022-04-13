@@ -8,6 +8,31 @@
 	color: white;
 }
 
+.game-infos-icon{
+
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.1vh;
+    margin-left: 4.5vw;
+}
+
+.game-infos-section{
+
+    display: flex;
+    flex-direction: row;
+    margin-left: 1vw;
+    align-items: center;
+
+}
+
+.infos-icon{
+
+    height: 1.5vh;
+    width: 1.5vw;
+
+    filter: invert(95%) sepia(100%) saturate(14%) hue-rotate(213deg) brightness(104%) contrast(104%);
+}
+
 .player-bar{
 
     display: flex;
@@ -107,21 +132,48 @@
 
 }
 
+#header-hud{
 
-#score_section{
-	display : flex;
-	flex-direction: column;
-	align-items: flex-start;
+    position: absolute;
+    width: 100%;
 
 }
 
-#sp_points{
+
+#score-section{
+
+	display : flex;
+	flex-direction: column;
+	align-items: flex-end;
+    margin-right: 2vw;
+
+}
+
+.score-title{
+
+    font-size: 8vh;
+    font-family: "SpaceGrotesk";
+    font-weight: bolder;
+    color: white;
+    -webkit-text-stroke-width: 1px;
+}
+
+#sp-score{
+
+    font-size: 4vh;
+    font-family: "SpaceGrotesk";
+    font-weight: bolder;
+    color: white;
+
+}
+
+#sp-points{
 	position: absolute;
-    font-size: 25px;
+    font-size: 3vh;
     color: green;
     font-weight: bold;
-	top: 42px;
-    right: 9px;
+	top: 10vh;
+    right: 2vw;
 	opacity: 0;
 	animation: animatePoints 1.5s linear;
 

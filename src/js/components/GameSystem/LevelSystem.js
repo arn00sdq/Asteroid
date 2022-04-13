@@ -293,7 +293,7 @@ class LevelSystem{
                 this.loadPlanetStartMenu({earth : this.parent.earth, stars : this.parent.stars});
                 break;
             case "Stage1":
-                this.loadAsteroidBackGround(this.parent.asteroid,1);
+                this.loadAsteroidBackGround(this.parent.asteroid,50);
                 this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 break;
             case "Stage2":
@@ -316,7 +316,7 @@ class LevelSystem{
                 break;
             case "Stage2":
                 this.asteroidWave(this.parent.asteroid, 1);
-                this.ennemySpaceshipWave(this.parent.ennemy_ss,1)
+               // this.ennemySpaceshipWave(this.parent.ennemy_ss,1)
                 break;
             case "Stage3":
                 this.asteroidWave(this.parent.asteroid, 1);

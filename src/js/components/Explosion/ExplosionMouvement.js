@@ -22,7 +22,7 @@ class ExplosionMouvement {
 
           this.growTime = .8
 
-          mesh.material.uniforms[ 'opacity' ].value -=   timeElapsed * 2  ;
+          mesh.material.uniforms[ 'opacity' ].value -=   timeElapsed * 3  ;
           if(mesh.material.uniforms[ 'opacity' ].value <= 0) this.parent.Destroy(this.parent)
           
         }else{

@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 
-class GameObjectManager{
+class GameObjectManager {
 
   constructor(parent) {
-    
+
     this.parent = parent;
     this.edge_limit = parent.limit;
     this.edge_limit_background = parent.limit_background
@@ -11,20 +11,20 @@ class GameObjectManager{
     this.levelSystem = this.parent.GetComponent("LevelSystem");
     this.sound_sys = this.parent.GetComponent("SoundSystem");
     this.joker_sys = this.parent.GetComponent("JokerSystem");
-    
+
   }
 
   Detect_collision() {
 
-    this.parent.currentScene.children.forEach( e =>  { 
-      
-      if( (e.userData.box3 !== null) && (e.children[0])){
+    this.parent.currentScene.children.forEach(e => {
+
+      if ((e.userData.box3 !== null) && (e.children[0])) {
 
         this.parent.currentScene.children.forEach(e2 => {
 
-        if((e !== e2) &&  (e2.userData.box3 && e.userData.box3) && e2.children[0] && e.children[0]){
+          if ((e !== e2) && (e2.userData.box3 && e.userData.box3) && e2.children[0] && e.children[0]) {
 
-          if ( e.userData.box3.intersectsBox(e2.userData.box3)) this.collision_handler(e,e2);
+            if (e.userData.box3.intersectsBox(e2.userData.box3)) this.collision_handler(e, e2);
 
           }
 
@@ -36,24 +36,21 @@ class GameObjectManager{
 
   }
 
-  collision_handler(e,e2){
+  collision_handler(e, e2) {
 
 
-    switch(e.constructor.name){
+    switch (e.constructor.name) {
 
       case "BasicAsteroid":
         this.CollisionAsteroidHandler(e, e2);
         break;
-        
+
       case "Player":
         this.CollisionPlayerHandler(e, e2);
         break;
 
       case "BasicBullet":
         this.CollisionBulletHandler(e, e2);
-        break;
-      case "SpecialBullet":
-        this.CollisionSpecialHandler(e, e2);
         break;
       case "EnnemyBullet":
         this.CollisionEnnemyBulletHandler(e, e2);
@@ -72,233 +69,180 @@ class GameObjectManager{
         break;
 
       case "FireRate":
-          this.CollisionJokerHandler(e, e2);
+        this.CollisionJokerHandler(e, e2);
         break;
 
       case "Shield":
         this.CollisionJokerHandler(e, e2);
-          break;
+        break;
       case "EnnemySpaceship":
         this.CollisionEnnemySSHandler(e, e2);
-          break;
+        break;
 
     }
 
-    /*switch(e2.constructor.name){
-
-      case "BasicAsteroid":
-        this.CollisionAsteroidHandler(e2, e);
-        
-        break;
-
-      case "Player":
-        this.CollisionPlayerHandler(e2, e);
-        break;
-
-      case "BasicBullet":
-        this.CollisionBulletHandler(e2, e);
-        break;
-
-      case "Heart":
-          this.CollisionJokerHandler(e2, e);
-          break;
-
-      case "Coin":
-          this.CollisionJokerHandler(e2, e);
-          break;
-
-      case "FirePower":
-          this.CollisionJokerHandler(e2, e);
-          break;
-      case "Shield":
-          this.CollisionJokerHandler(e2, e);
-          break;
-      case "EnnemySpaceship":
-        this.CollisionEnnemySSHandler(e2, e);
-        break;
-      case "EnnemyBullet":
-        this.CollisionEnnemyBulletHandler(e2, e);
-          break;
-    }*/
-
   }
 
-  DetectEdge(object){  
-    
-    if(object.userData.type == "Planet") return;
+  DetectEdge(object) {
 
-    if(object.userData.type == "BackGround"){
+    if (object.userData.type == "Planet") return;
 
-      if( (object.position.distanceTo(new THREE.Vector3(0,0,0) ) > this.edge_limit_background)){
+    if (object.userData.type == "BackGround") {
+
+      if ((object.position.distanceTo(new THREE.Vector3(0, 0, 0)) > this.edge_limit_background)) {
 
         object.position.x = - object.position.x
-        object.position.y =   object.position.y
+        object.position.y = object.position.y
         object.position.z = - object.position.z
 
       }
 
-    }else{
+    } else {
 
-      if( (object.position.distanceTo(new THREE.Vector3(0,0,0) ) > this.edge_limit)){
+      if ((object.position.distanceTo(new THREE.Vector3(0, 0, 0)) > this.edge_limit)) {
 
         object.position.x = - object.position.x
-        object.position.y =   object.position.y
+        object.position.y = object.position.y
         object.position.z = - object.position.z
 
       }
 
     }
 
-    
+
 
   }
 
-  CollisionPlayerHandler(player, object){
-    
-    if ((object.name == "Asteroid" || object.name == "EnnemyBullet") && !player.hasJoker.immune){
+  CollisionPlayerHandler(player, object) {
+
+    if ((object.name == "Asteroid" || object.name == "EnnemyBullet") && !player.hasJoker.immune) {
 
       let playerHealth = player.GetComponent("PlayerHealthSystem");
 
-      let playerHitSound = new THREE.Audio( this.parent.audio.listener );
+      let playerHitSound = new THREE.Audio(this.parent.audio.listener);
       this.sound_sys.PlayShipDamageTaken();
 
       playerHealth.Damage(1);
       player.SetInvulnerability(2000);
 
-      this.parent.playerLife =player.life
+      this.parent.playerLife = player.life
       this.parent.GetComponent("DisplaySystem").PrintLife(player.life);
-      
-      if(player.life == 0){
 
-        this.levelSystem.InstantiateShader(this.parent.explosion, player.position, new THREE.Euler(0,0,0));
+      if (player.life == 0) {
+
+        this.levelSystem.InstantiateShader(this.parent.explosion, player.position, new THREE.Euler(0, 0, 0));
         player.Destroy(player);
 
         setTimeout(() => {
-          
+
           this.parent.OnPlayerEnd();
 
-      }, 1000);
-        
-        
+        }, 1000);
+
+
       }
 
     }
 
   }
 
-  CollisionAsteroidHandler(asteroid, object){
+  CollisionAsteroidHandler(asteroid, object) {
 
-    if(object.name == "Heart" || object.name == "Shield"|| object.name ==  "Coin"|| object.name == "FirePower" ||  object.name ==  "Asteroid" ) return;
+    if (object.name == "Heart" || object.name == "Shield" || object.name == "Coin" || object.name == "FirePower" || object.name == "Asteroid") return;
 
     let asteroidHealth = asteroid.GetComponent("AsteroidHealthSystem");
 
     if (object.name == "Player" && object.hasJoker.immune == false) asteroidHealth.Damage("max");
-    if(object.name == "BasicBullet" || object.name == "SpecialBullet"){
-     
+    if (object.name == "BasicBullet" || object.name == "SpecialBullet") {
+
       let bullet = object.GetComponent("BulletDamageSystem");
       asteroidHealth.Damage(bullet.damageAmount);
 
     }
-    
-    if(asteroid.life == 0) {
+
+    if (asteroid.life == 0) {
 
       asteroid.nbBreak += 1;
-      this.sound_sys.PlayAsteroidDestruction(asteroid,0) // destroy will remove pos audio
-      if (asteroid.nbBreak < 2){
+      this.sound_sys.PlayAsteroidDestruction(asteroid, 0) // destroy will remove pos audio
+      if (asteroid.nbBreak < 2) {
 
-        this.Asteroid_Subdivision(asteroid,object);
+        this.Asteroid_Subdivision(asteroid, object);
         this.parent.score += 4;
-        this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 2,2);
+        this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 2, 2);
 
-      }else{
+      } else {
+        console.log("broke")
         this.parent.score += 5;
-        this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 1,10);
-      } 
-      
+        this.parent.GetComponent("DisplaySystem").printScore(this.parent.score, 1, 10);
+      }
+
       asteroid.Destroy(asteroid);
-      this.levelSystem.InstantiateShader(this.parent.explosion, asteroid.position, new THREE.Euler(0,0,0),1);
+      this.levelSystem.InstantiateShader(this.parent.explosion, asteroid.position, new THREE.Euler(0, 0, 0), 1);
 
 
     }
 
   }
 
-  Asteroid_Subdivision(e,object){
+  Asteroid_Subdivision(e, object) {
 
     let dir = new THREE.Vector3();
 
-    object.name == "Player" ? dir.set(1,0,0.5) : dir = object.GetComponent("BulletMouvement").forward;
-    
+    object.name == "Player" ? dir.set(1, 0, 0.5) : dir = object.GetComponent("BulletMouvement").forward;
+
     for (let index = 1; index <= 2; index++) {
-      
-      let position = new THREE.Vector3(e.position.x + Math.random() *0.3, 0 ,
-                                           e.position.z + Math.random() *0.3 );
-      let rotation = new THREE.Euler(0,0 ,0);
-      let scale = 0.75*e.scale.x;
-      let velocity = new THREE.Vector3(Math.random()* 1,0,(dir.x/dir.z)* (index == 1 ? 1 : -1) ).normalize().multiplyScalar(10);
+
+      let position = new THREE.Vector3(e.position.x + Math.random() * 0.3, 0,
+        e.position.z + Math.random() * 0.3);
+      let rotation = new THREE.Euler(0, 0, 0);
+      let scale = 0.75 * e.scale.x;
+      let velocity = new THREE.Vector3(Math.random() * 1, 0, (dir.x / dir.z) * (index == 1 ? 1 : -1)).normalize().multiplyScalar(10);
 
       e.userData.velocity = velocity;
 
-      this.levelSystem.InstantiateGameObject(e , position,rotation, scale)
+      this.levelSystem.InstantiateGameObject(e, position, rotation, scale)
 
     }
 
   }
-  
-  CollisionBulletHandler(bullet, object){
 
-    if(bullet.name == "EnnemyBullet") return;
+  CollisionBulletHandler(bullet, object) {
 
-    if(object.name == "Asteroid" || object.name == "EnnemySpaceship" ){
+    if (bullet.name == "EnnemyBullet") return;
+
+    if (object.name == "Asteroid" || object.name == "EnnemySpaceship") {
 
       bullet.Destroy(bullet)
       let bulletDamage = bullet.GetComponent("BulletDamageSystem").damageAmount;
-      if (bulletDamage > 0){
+      if (bulletDamage > 0) {
 
         this.sound_sys.PlayHitBullet(object, 0);
 
-      }   
+      }
 
-    } 
+    }
 
-}
+  }
 
-CollisionSpecialHandler(bullet, object){
+  CollisionEnnemyBulletHandler(bullet, object) {
 
-  if(bullet.name == "EnnemyBullet") return;
 
-  if(object.name == "Asteroid" || object.name == "EnnemySpaceship" ){
-
-    let bulletDamage = bullet.GetComponent("BulletDamageSystem").damageAmount;
-    if (bulletDamage > 0){
-
-      this.sound_sys.PlayHitBullet(object, 0);
-
-    }   
-
-  } 
-
-}
-
-  CollisionEnnemyBulletHandler(bullet, object){
-
-    
-    if(object.name == "Asteroid" || object.name == "Player" ){
+    if (object.name == "Asteroid" || object.name == "Player") {
 
 
       bullet.Destroy(bullet)
 
-    } 
+    }
 
   }
 
-  CollisionJokerHandler(joker, object){
+  CollisionJokerHandler(joker, object) {
 
-    if(object.name == "Player" ){
+    if (object.name == "Player") {
 
       joker.Destroy(joker);
 
-      switch(joker.constructor.name){
+      switch (joker.constructor.name) {
 
         case "Coin":
           this.parent.coin.nb -= 1
@@ -315,44 +259,15 @@ CollisionSpecialHandler(bullet, object){
           this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
           break;
         case "FireRate":
-            this.parent.firerate.nb -= 1
-            if(!object.hasJoker.firerate) this.joker_sys.IncreaseFireRate(object,5000);
+          this.parent.firerate.nb -= 1
+          if (!object.hasJoker.firerate) this.joker_sys.IncreaseFireRate(object, 5000);
           break;
         case "Shield":
-            this.parent.shield.nb -= 1
-            this.sound_sys.PlayEnergyShield();
-            
-            if(!object.hasJoker.immune) this.joker_sys.PlayerProtection(object,this.parent.shield, 3000);
+          this.parent.shield.nb -= 1
+          this.sound_sys.PlayEnergyShield();
+
+          if (!object.hasJoker.immune) this.joker_sys.PlayerProtection(object, this.parent.shield, 3000);
           break;
-
-      }  
-
-    }
-
-  }
-
-  CollisionEnnemySSHandler(ennemy_ss, object){
-
-    if (object.name == "BasicBullet" || object.name == "Asteroid"){
-
-      let ennemy_ss_health = ennemy_ss.GetComponent("EnnemySSHealthSystem");
-
-      if (object.name == "BasicBullet"){
-
-        this.sound_sys.PlayHitBullet(object, 0);
-
-        let bullet = object.GetComponent("BulletDamageSystem");
-        ennemy_ss_health.Damage(bullet.damageAmount);
-
-        object.Destroy(object);
-
-      } 
-
-      if (object.name == "Asteroid") ennemy_ss_health.Damage(2);
-
-      if(ennemy_ss_health.life == 0) {
-
-        ennemy_ss.Destroy(ennemy_ss);
 
       }
 
@@ -360,74 +275,100 @@ CollisionSpecialHandler(bullet, object){
 
   }
 
-  CheckBullet(nbBullet){
+  CollisionEnnemySSHandler(ennemy_ss, object) {
+
+    let ennemy_ss_health = ennemy_ss.GetComponent("EnnemySSHealthSystem");
+    let bullet = object.GetComponent("BulletDamageSystem");
+
+    switch (object.name) {
+
+      case "BasicBullet":
+        this.sound_sys.PlayHitBullet(object, 0);
+        ennemy_ss_health.Damage(bullet.damageAmount);
+        object.Destroy(object);
+        break;
+      case "SpecialBullet":
+        this.sound_sys.PlayHitBullet(object, 0);
+        ennemy_ss_health.Damage(bullet.damageAmount);
+        break;
+      case "Asteroid":
+        ennemy_ss_health.Damage(2);
+        break;
+
+    }
+
+    if (ennemy_ss_health.life == 0) ennemy_ss.Destroy(ennemy_ss);
+
+  }
+
+  CheckBullet(nbBullet) {
 
     let objectsToRemove = [];
     let bulletToRemove = 2;
-    
-    if (nbBullet >40){
 
-        this.parent.currentScene.traverse( function(child ) {
-            
-            if(child.name == "BasicBullet" && bulletToRemove > 0){
-                
-                objectsToRemove.push(child)
-                bulletToRemove--;
+    if (nbBullet > 40) {
 
-            }
+      this.parent.currentScene.traverse(function (child) {
 
-        })
+        if (child.name == "BasicBullet" && bulletToRemove > 0) {
+
+          objectsToRemove.push(child)
+          bulletToRemove--;
+
+        }
+
+      })
 
     }
 
     objectsToRemove.forEach(node => {
-      this.parent.currentScene.remove( node );
+      this.parent.currentScene.remove(node);
     });
 
-}
+  }
 
 
-  Update(timeElapsed,timeInSecond) {
+  Update(timeElapsed, timeInSecond) {
 
-    let nbEnnemyFrame = 0;let playerLife; let countBullet = 0;
+    let nbEnnemyFrame = 0; let playerLife; let countBullet = 0;
     this.parent.selectedObjects = [];
     this.parent.selectedEnnemy = [];
     this.parent.currentScene.children.forEach(e => {
 
-      if(e.type == "Object3D"){ 
+      if (e.type == "Object3D") {
 
-        if(e.userData.type == "Ennemy"){
+        if (e.userData.type == "Ennemy") {
 
-          nbEnnemyFrame++ ;
-          this.parent.selectedObjects.push(e.children.find(e =>  e.constructor.name == "Mesh"));
-        
-        } 
+          nbEnnemyFrame++;
+          this.parent.selectedObjects.push(e.children.find(e => e.constructor.name == "Mesh"));
 
-        if(e.userData.type == "joker"){
-         
-          this.parent.selectedObjects.push(e.children.find(e =>  e.constructor.name == "Mesh"));
+        }
 
-        } ;
+        if (e.userData.type == "joker") {
 
-        if(e.name == "Player"){
+          this.parent.selectedObjects.push(e.children.find(e => e.constructor.name == "Mesh"));
 
-          playerLife = e.life ;
-          
-          let test = e.children.filter(k =>k.constructor.name == "Mesh");
-          for (let mesh of test)  this.parent.selectedObjects.push(mesh);
-         
+        };
 
-        } 
+        if (e.name == "Player") {
 
-        if(e.name == "BasicBullet") countBullet++;
-    
-        
+          playerLife = e.life;
+
+          let test = e.children.filter(k => k.constructor.name == "Mesh");
+          for (let mesh of test) this.parent.selectedObjects.push(mesh);
+
+
+        }
+
+        if (e.name == "BasicBullet") countBullet++;
+
+
         this.DetectEdge(e);
-        e.Update(timeElapsed,timeInSecond);
+        e.Update(timeElapsed, timeInSecond);
 
       }
 
-    }); 
+    });
 
     this.Detect_collision()
     this.CheckBullet(countBullet);
@@ -435,8 +376,8 @@ CollisionSpecialHandler(bullet, object){
     this.parent.ennemy = nbEnnemyFrame;
     this.parent.GetComponent("DisplaySystem").PrintEnnemy(nbEnnemyFrame);
 
-    if(nbEnnemyFrame == 0 && this.levelSystem.currentLevel !== "StartMenu") this.parent.StageCompleted();
-   
+    if (nbEnnemyFrame == 0 && this.levelSystem.currentLevel !== "StartMenu") this.parent.StageCompleted();
+
   }
 
 }

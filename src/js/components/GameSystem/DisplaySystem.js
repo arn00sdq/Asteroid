@@ -42,8 +42,24 @@ class DisplaySystem{
 
         let ui_header = `
         
+        <div id="header-hud"> 
+            <div id="score-section">
+                <span class="score-title">Score</span>
+                <span id="sp-score">00000</span>  
+            </div>
+        </div>
         <div id="footer-hud">
-        
+            <div class="game-infos-icon">
+                <div class="game-infos-section">
+                    <img class="infos-icon" src="../../../src/medias/images/hud/meteor-solid.svg"/>
+                    <div id="remaining_asteroid">${life}</div>
+                </div>
+                <div class="game-infos-section">
+                    <img class="infos-icon" src="../../../src/medias/images/hud/skull-solid.svg"/>
+                    <div id="life">0</div>
+                </div>
+
+            </div>
             <div class="player-bar">  
                 <div class="player-section">
                     <img class="hud-icon" src="../../../src/medias/images/hud/heart-solid.svg"/>
@@ -77,34 +93,26 @@ class DisplaySystem{
         this.printAPP(ui_header)
 
     }
-  /*  <div id="ennemy_r_section">  
-    <span id="remaining_title">Restant</span> 
-    <span id="remaining_asteroid"></span> 
-</div>
-<div id="score_section"> 
-    <span id="score_title">Score</span>
-    <span id="sp_score">00000</span> 
-    
-</div>
-<span id="life">${life}</span>*/
     printScore(score,increment, points){
         
-        let length_score = score.toString().length;
-        let score_to_print = ``;
         
-        for(let k =0; k <5 - length_score; k++) score_to_print += `0`
-
-        score_to_print += `${score}`
-        let append_sp_points = `
-            <span id="score_title">Score</span>
-            <span id="sp_score">${score_to_print}</span> 
+        let length_score = score.toString().length;
+        let scoreToPrint = ``;
+        
+        for(let k =0; k <5 - length_score; k++) scoreToPrint += `0`
+        scoreToPrint += `${score}`
+        let appendScore = `
+            <span class="score-title">Score</span>
+            <span id="sp-score">${scoreToPrint}</span> 
         `
         
         for(let i =0 ; i < increment; i++){
-            let posW = Math.random() * 30;
-            append_sp_points += `<span id="sp_points" style="right:${posW}px" class="active">+${points}</span>`
+            let posW = Math.random() * 5;
+            appendScore += `<span id="sp-points" style="right:${posW}vw" class="active">+${points}</span>`
         }
-         if (document.getElementById("score_section") !== null ) document.getElementById("score_section").innerHTML = append_sp_points;
+        
+        document.getElementById("score-section").innerHTML = appendScore;
+        console.log(document.getElementById("score-section"))
         
 
     }
@@ -240,6 +248,7 @@ class DisplaySystem{
             <div class="line lineP"><div class="text textP">Photo</div></div>
             
             <div class="line lineSpace"><div class="text textSpace">Tirer</div></div>
+            <div class="line linePower"><div class="text textPower">Compétance spécial</div></div>
 
             <div class="line lineH"><div class="text textH">Afficher </br>touches</div></div>
             <div class="line lineJ"><div class="text textJ">Joker</div></div>
