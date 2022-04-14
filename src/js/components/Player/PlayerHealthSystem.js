@@ -6,7 +6,7 @@ class PlayerHealthSystem{
 
         this.parent = parent;
 
-        this.life = 1;
+        this.life = 3;
         this.healthLimit = 3;
 
     }

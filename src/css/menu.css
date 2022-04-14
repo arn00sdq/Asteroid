@@ -1,0 +1,91 @@
+
+.end-section{
+
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	margin-left: 40%;
+	margin-top: 26vh;
+	align-items: center;
+
+}
+
+#header_death{
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+	padding: 0px 0px 22px 0px;
+
+}
+
+.score-final{
+
+	font-size: 1.5em;
+	margin-top: 3.5vh;
+	color: white;
+
+}
+
+
+.end-section{
+
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	margin-left: 40%;
+	margin-top: 26vh;
+	align-items: center;
+
+}
+
+#header_death{
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+	padding: 0px 0px 22px 0px;
+
+}
+
+#player-death-msg{
+
+	font-size: 2.3em;
+    font-weight: bold;
+	color: darkred;
+
+}
+
+.end-section  .button-section-menu{
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+.end-section button {
+
+	text-align: center;
+	width: 15vw;
+    height: 6vh;
+	margin: 19px 0px 0px 0px;
+
+}
+
+#header-victory{
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+	padding: 0px 0px 22px 0px;
+
+}
+
+#player-victory-msg{
+
+	font-size: 4.3em;
+    font-weight: bold;
+	color: green;
+
+}
+

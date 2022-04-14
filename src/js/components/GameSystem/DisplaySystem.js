@@ -24,14 +24,14 @@ class DisplaySystem{
 
         let ui_death = `
         <div class="tb">
-            <div id="death_section">
+            <div class="end-section">
 
                 <div id="header_death">
-                    <div id="player_death_msg">Vous etes mort</div>
-                    <div id="score_final">Score final : ${score}</div>
+                    <div id="player-death-msg">Vous etes mort</div>
+                    <div class="score-final">Score final : ${score}</div>
                 </div>
         
-                <div id="button_section_menu">
+                <div class="button-section-menu">
                     <button name="restart">Restart</button>
                     <button name="quit">Quit</button>
                 </div>
@@ -41,6 +41,30 @@ class DisplaySystem{
 		
         `
         this.printAPP(ui_death)
+
+    }
+
+    printVictory(score){
+
+        let ui_victory = `
+
+        <div class="tb">
+            <div class="end-section">
+
+                <div id="header-victory">
+                    <div id="player-victory-msg">Victoire</div>
+                    <div class="score-final">Score final : ${score}</div>
+                </div>
+        
+                <div class="button-section-menu">
+                    <button name="quit">Quit</button>
+                </div>
+
+            </div> 
+        </div>
+		
+        `
+        this.printAPP(ui_victory)
 
     }
 
@@ -72,7 +96,7 @@ class DisplaySystem{
                 <div class="player-section">
                     <img class="hud-icon" src="../../../src/medias/images/hud/heart-solid.svg"/>
                     <div class="player-health-bar">
-                        <div class="health-bar"></div>
+                        <div id="health-bar"></div>
                     </div>
                     <div id="life">${life}</div>
                 </div>
@@ -126,7 +150,10 @@ class DisplaySystem{
 
     PrintLife(life) {
 
-        if(life !== undefined) document.getElementById("life").innerHTML = life;
+        document.getElementById("life").innerHTML = life;
+
+        if(life !== 0) document.getElementById('health-bar').style.width = (100/3)*life+"%";
+        if(life == 0) document.getElementById('health-bar').style.width = "0%";
 
     }
 

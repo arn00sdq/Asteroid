@@ -188,13 +188,13 @@ class LevelSystem{
 
             case "Stage1":   
                 this.loadScene(level);
+                this.loadLight(level);
                 this.loadUI(level,displaySystem);
                 this.loadProps(level);
-                this.loadWave(level)
+                this.loadWave(level);
                 this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 this.loadAnimation()
                 this.soundSystem.PlayPlayerRespawn();
-                //----
                 
                 break;
 
@@ -211,10 +211,12 @@ class LevelSystem{
 
             case "Stage3":
                 this.loadScene(level);
+                this.loadLight(level)
                 this.loadUI(level,displaySystem);
                 this.loadProps(level);
                 this.loadWave(level)
                 this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
+                this.loadLight(level)
                 break;   
 
         }
@@ -242,53 +244,40 @@ class LevelSystem{
 
     loadScene(level) {
 
-        switch(level){
-            case "StartMenu":          
-                let sceneStartMenu = new THREE.Scene();
-                this.parent.currentScene = sceneStartMenu;
+        this.parent.currentScene = level == "StartMenu" ?  new THREE.Scene() : this.parent.stageScene;
+        this.parent.currentCamera = level == "StartMenu" ? this.parent.startMenuCamera : this.parent.inGameCamera;
 
-                this.parent.currentCamera = this.parent.startMenuCamera;
-                this.parent.currentCamera.lookAt(new THREE.Vector3(-11,0,0));
+        if (level == "StartMenu") {
 
-                this.parent.RemoveComponent("JokerSystem");
-                break;
-            case "Stage1":
-                this.parent.currentScene = this.parent.stageScene;
-                this.parent.currentCamera = this.parent.inGameCamera;
+            this.parent.RemoveComponent("JokerSystem");
 
-                if (this.parent.components["JokerSystem"] === undefined)
-                    this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
+        }else if(this.parent.components["JokerSystem"] === undefined){
 
-                break;
-            case "Stage2":
-                this.parent.currentScene = this.parent.stageScene;
-                this.parent.currentCamera = this.parent.inGameCamera;
-                             
-                if (this.parent.components["JokerSystem"] === undefined) 
-                    this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
+            this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
 
-                break;
         }
         
     }
 
+    loadLight(){
+        
+        const spotLight = new THREE.SpotLight(0xF7AB29,2,500,(Math.PI/180)*50);
+        spotLight.position.set(-100,-5,-150);
+        spotLight.target.position.set(0,-20,50);
+        this.parent.currentScene.add(spotLight);
+
+        let brightVal = this.parent.GetComponent("MenuSystem").video.brightness;
+        const ambientLight = new THREE.AmbientLight(0xFFFFFF,brightVal);
+        ambientLight.position.set(0,0,0);
+        this.parent.currentScene.add(ambientLight);
+
+    }
+
     loadUI(level,displaySystem){
 
-        switch(level){
-            case "StartMenu":
-                displaySystem.printUIStartMenu();
-                break;
-            case "Stage1":
-                displaySystem.printUIHeader(this.playerHealth.life,this.playerMouvement.stamina, this.playerShoot.ultimate, this.parent.score); // liste en parametre
-                break;
-            case "Stage2":
-                displaySystem.printUIHeader(this.playerHealth.life,this.playerMouvement.stamina, this.playerShoot.ultimate, this.parent.score);
-                break;
-            case "Stage3":
-                displaySystem.printUIHeader(this.playerHealth.life,this.playerMouvement.stamina, this.playerShoot.ultimate, this.parent.score);
-                break;
-            
-        }
+        level == "StartMenu" ?  displaySystem.printUIStartMenu() 
+                              : displaySystem.printUIHeader(this.playerHealth.life,this.playerMouvement.stamina, this.playerShoot.ultimate, this.parent.score); // liste en parametre
+        
     }
 
     loadProps(level){
@@ -306,6 +295,8 @@ class LevelSystem{
                 this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 break;
             case "Stage3":
+                this.loadAsteroidBackGround(this.parent.asteroid,1);
+                this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 break;
         }
 
@@ -387,18 +378,6 @@ class LevelSystem{
         let positionSun = new THREE.Vector3(-100,50,-450);
         let rotationSun = new THREE.Euler( 0,0,0);
         let scaleSun = 1;
-
-        /*light*/
-
-        const spotLight = new THREE.SpotLight(0xF7AB29,2,500,(Math.PI/180)*50);
-        spotLight.position.set(-100,-5,-150);
-        spotLight.target.position.set(0,-20,50);
-        this.parent.currentScene.add(spotLight);
-
-        let brightVal = this.parent.GetComponent("MenuSystem").video.brightness;
-        const ambientLight = new THREE.AmbientLight(0xFFFFFF,brightVal);
-        ambientLight.position.set(0,0,0);
-        this.parent.currentScene.add(ambientLight);
 
         /*atmosphere sun*/
 

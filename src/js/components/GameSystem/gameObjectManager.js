@@ -376,7 +376,7 @@ class GameObjectManager {
     this.displaySystem.PrintEnnemyKilled(nbEnnemyFrame);
     this.displaySystem.PrintEnnemyRemaining(nbEnnemyFrame);
 
-    if (nbEnnemyFrame == 0 && this.levelSystem.currentLevel !== "StartMenu") this.parent.StageCompleted();
+    if (nbEnnemyFrame == 0 && this.levelSystem.currentLevel !== "StartMenu") this.parent.StageCompleted(this.levelSystem.currentLevel);
 
   }
 

@@ -140,9 +140,7 @@ class GameManager {
     }
 
     InitComponent(models, audio) {
-
-
-        
+  
         this.AddComponent(new SoundSystem(this, audio));
         this.AddComponent(new LevelSystem(this));
         this.AddComponent(new DisplaySystem(this));
@@ -265,10 +263,20 @@ class GameManager {
 
     }
 
-    StageCompleted() {
+    StageCompleted(level) {
 
         this.state.pause = true;
-        this.GetComponent("DisplaySystem").printStageCompleted(this.score);//a regler le score arrive avant
+        console.log(level)
+        if(level == "Stage3"){
+
+            this.GetComponent("DisplaySystem").printVictory(this.score);
+
+        }else{
+
+            this.GetComponent("DisplaySystem").printStageCompleted(this.score);//a regler le score arrive avant
+
+        }
+        
 
     }
 
@@ -300,7 +308,7 @@ class GameManager {
             
             if (this.mixer !== null) this.mixer.update(this.loop.dt * 5)
             
-             this.targetStat.update()
+            this.targetStat.update()
  
             this.loop.last = this.loop.now;
             this.Step(this.loop.dt,this.tempTime);

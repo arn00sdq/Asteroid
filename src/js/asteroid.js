@@ -56,6 +56,7 @@ class Asteroid {
 
         this.cameraStartMenu = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 2 , 500);
         this.cameraStartMenu.position.set(5,0,15);
+        this.cameraStartMenu.lookAt(new THREE.Vector3(-11,0,0));
 
         /*camera tps*/
         this.goal = new THREE.Object3D;
@@ -729,7 +730,7 @@ class Asteroid {
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
             
-            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("Stage3", true);
 
         }
 

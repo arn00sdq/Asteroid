@@ -42,62 +42,6 @@ canvas {
 }
 
 /*
-* Death menu
-*/
-
-#death_section{
-
-	position: absolute;
-	display: flex;
-	flex-direction: column;
-	margin-left: 40%;
-	margin-top: 26vh;
-	align-items: center;
-
-}
-
-#header_death{
-
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-	padding: 0px 0px 22px 0px;
-
-}
-
-#player_death_msg{
-
-	font-size: 2.3em;
-    font-weight: bold;
-	color: darkred;
-
-}
-
-#score_final{
-
-	font-size: 1.2em;
-	margin-top: 3.5vh;
-	color: white;
-
-}
-
-#death_section  #button_section_menu{
-
-    display: flex;
-    flex-direction: column;
-
-}
-
-#death_section button {
-
-	text-align: center;
-	width: 15vw;
-    height: 6vh;
-	margin: 19px 0px 0px 0px;
-
-}
-
-/*
 * Pause menu
 */
 
