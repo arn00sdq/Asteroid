@@ -119,7 +119,8 @@ class JokerSystem{
                         scale = 0.002;
                         break;
                 }
-                
+                        
+
                 if (currentJoker.constructor.name == "Shield"){
                     this.levelSystem.InstantiateShader(currentJoker,position,rotation,scale,"joker");
                 }  else{

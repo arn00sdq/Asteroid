@@ -90,6 +90,10 @@ class DisplaySystem{
                     <img class="infos-icon" src="../../../src/medias/images/hud/skull-solid.svg"/>
                     <div id="asteroid-killed">0</div>
                 </div>
+                <div class="game-infos-section">
+                    <img class="infos-icon" src="../../../src/medias/images/hud/infinity-solid.svg"/>
+                    <div id="joker-cheat"></div>
+                </div>
 
             </div>
             <div class="player-bar">  

@@ -39,6 +39,7 @@ class HackSystem{
 
         let playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
         let jokerSystem = this.parent.GetComponent("JokerSystem");
+        let displayJoker = document.getElementById("joker-cheat");
         let player = this.parent.player;
 
         if (playerInput.nj){
@@ -50,14 +51,17 @@ class HackSystem{
                 case 0:
                     jokerSystem.PlayerAddLife(player,1);
                     this.sound_sys.PlayHeartPickUp();
+                    displayJoker.innerHTML = "extra-life";
                     break;
 
                 case 1:
                     jokerSystem.PlayerAddCoin(this.parent.score, 1);
                     this.sound_sys.PlayCoinPickUp();
+                    displayJoker.innerHTML = "coin";
                     break;
                 case 2:
                     player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
+                    displayJoker.innerHTML = "extra-missile";
                     break;
                 case 3:
  
@@ -66,6 +70,7 @@ class HackSystem{
                         jokerSystem.PlayerProtection(player, this.parent.shield,3000);
                     }
                     break;
+                    displayJoker.innerHTML = "shield";
 
                 case 4:
                     
@@ -74,6 +79,7 @@ class HackSystem{
                         jokerSystem.IncreaseFireRate(player,5000);
     
                     }
+                    displayJoker.innerHTML = "firerate increased";
 
                 break;
 
