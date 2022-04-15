@@ -15,7 +15,6 @@ import GameObjectManager from "./gameObjectManager.js";
 import HackSystem from "./HackSystem.js";
 import SoundSystem from "./SoundSystem.js";
 import MenuSystem from "./MenuSystem.js";
-import SceneSystem from "./SceneManager.js";
 
 class GameManager {
 
@@ -148,7 +147,6 @@ class GameManager {
         this.AddComponent(new HackSystem(this));
         this.AddComponent(new GameObjectManager(this));
         this.AddComponent(new MenuSystem(this));
-        this.AddComponent(new SceneSystem(this));
 
     }
 
@@ -266,7 +264,6 @@ class GameManager {
     StageCompleted(level) {
 
         this.state.pause = true;
-        console.log(level)
         if(level == "Stage3"){
 
             this.GetComponent("DisplaySystem").printVictory(this.score);
@@ -354,6 +351,7 @@ class GameManager {
     Step(timeElapsed,timeInSecond) {
 
         for (let k in this.components) {
+
             this.components[k].Update(timeElapsed,timeInSecond * 0.001);
 
         }

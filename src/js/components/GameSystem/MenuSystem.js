@@ -21,6 +21,7 @@ class MenuSystem{
 
         this.playerHealth = this.parent.player.GetComponent("PlayerHealthSystem");
         this.gameState = this.parent.state;
+        this.ambientSound = this.parent.ambientSound;
 
         document.addEventListener('click', (e) => this.OnClick(e), false);
         document.addEventListener("change", (e) => this.OnChange(e), false);
@@ -34,7 +35,7 @@ class MenuSystem{
             case "play":
                 this.levelSystem.scenePicker("Stage1",false,true);
                 break;
-            case "retour":
+            case "retour":         
                 this.levelSystem.currentLevel == "StartMenu" ? this.uiDisplay.printUIStartMenu() : this.uiDisplay.printPause();
                 break;
             case "resume":
@@ -42,7 +43,8 @@ class MenuSystem{
                 this.uiDisplay.printUIHeader(this.playerHealth.life, this.parent.score);
                 break;
             case "restart":
-                this.levelSystem.scenePicker(this.levelSystem.currentLevel, false);
+                console.log(this.ambientSound.isPlaying)
+                this.levelSystem.scenePicker(this.levelSystem.currentLevel , false, false);
                 break;
             case "next":
 
@@ -131,7 +133,7 @@ class MenuSystem{
                 console.log()
                 soundSystem.musicVolume = event.target.value / 100;
                 document.getElementById("range_music_volume").innerHTML = soundSystem.musicVolume;
-                this.parent.ambientSound.setVolume(  soundSystem.musicVolume > soundSystem.masterVolume  ? soundSystem.masterVolume : soundSystem.musicVolume );
+                this.ambientSound.setVolume(  soundSystem.musicVolume > soundSystem.masterVolume  ? soundSystem.masterVolume : soundSystem.musicVolume );
                 break;
             case "range_brightness":
                 this.video.brightness = event.target.value/100;
@@ -155,13 +157,26 @@ class MenuSystem{
 
                 if (!this.gameState.pause) {
 
+                    if(this.ambientSound.isPlaying) this.ambientSound.pause();
+
+                    if(this.levelSystem.currentLevel == "Stage3") this.levelSystem.timer.paused = true;
+
                     this.gameState.pause = true;
                     this.uiDisplay.printPause();
 
                 } else {
 
+                    if(!this.ambientSound.isPlaying) this.ambientSound.play();
+
                     this.gameState.pause = false;
                     this.uiDisplay.printUIHeader(this.playerHealth.life, parent.score);
+                    
+                    if(this.levelSystem.currentLevel == "Stage3"){
+
+                        this.uiDisplay.printTimer();
+                        this.levelSystem.timer.paused = false;
+
+                    } 
 
                 }
 
@@ -173,12 +188,12 @@ class MenuSystem{
                     this.gameState.keyboard = true;
                     this.gameState.pause = true;
                     this.uiDisplay.printKeyboardShortcut();
+                   
 
                 } else {
 
                     parent.state.keyboard = false;
                     parent.state.pause = false;
-
                     this.levelSystem.currentLevel == "StartMenu" ? this.uiDisplay.printUIStartMenu() : this.uiDisplay.printUIHeader(this.playerHealth.life, parent.score);
 
                 }

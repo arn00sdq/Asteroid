@@ -1,4 +1,5 @@
 import Stat from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/libs/stats.module.js"
+import Timer  from "../Timer/timer.js"
 
 class DisplaySystem{
 
@@ -7,7 +8,9 @@ class DisplaySystem{
         this.parent = parent;
         this.container = document.body;
         
-        this.displayStat = false
+        this.displayStat = false;
+
+        this.timer = new Timer()
 
     }
 
@@ -16,7 +19,7 @@ class DisplaySystem{
         this.container.innerHTML = element;
         this.container.appendChild(this.parent.renderer.domElement)
 
-        if(this.displayStat) document.getElementById("stat-section").appendChild( this.parent.targetStat.dom)
+        if(this.displayStat) document.body.appendChild( this.parent.targetStat.dom) 
 
     }
 
@@ -69,13 +72,15 @@ class DisplaySystem{
     }
 
     printUIHeader(life,stamina,ultimate,score){
-        console.log(this.parent.targetStat);
+
         let ui_header = `
         
         <div id="header-hud"> 
             <div id="score-section">
                 <span class="score-title">Score</span>
                 <span id="sp-score">00000</span>  
+            </div>
+            <div id="timer">
             </div>
             <div id="stat-section">
             </div>
@@ -129,6 +134,7 @@ class DisplaySystem{
         this.printAPP(ui_header)
 
     }
+
     printScore(score,increment, points){
         
         
@@ -149,6 +155,34 @@ class DisplaySystem{
         
         document.getElementById("score-section").innerHTML = appendScore;
         
+
+    }
+
+    printTimer(){
+
+       document.getElementById("timer").innerHTML = `
+        <div class="base-timer">
+        <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g class="base-timer__circle">
+            <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+            <path
+                id="base-timer-path-remaining"
+                stroke-dasharray="283"
+                class="base-timer__path-remaining ${this.timer.remainingPathColor}"
+                d="
+                M 50, 50
+                m -45, 0
+                a 45,45 0 1,0 90,0
+                a 45,45 0 1,0 -90,0
+                "
+            ></path>
+            </g>
+        </svg>
+        <span id="base-timer-label" class="base-timer__label">${this.timer.formatTime(
+            this.timer.timeLeft
+        )}</span>
+        </div>
+        `;
 
     }
 

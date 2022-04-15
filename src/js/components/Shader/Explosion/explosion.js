@@ -44,8 +44,6 @@ export function _FSExplosion() {
     
     return `
 
-   
-
     varying vec2 vUv;
     varying float noise;
     uniform sampler2D tExplosion;

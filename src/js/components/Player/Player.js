@@ -47,15 +47,20 @@ class Player extends GameObject{
 
     ResetPlayer(){
 
-        this.life = 1;
+        this.shootComponent = this.GetComponent("PlayerShootProjectiles");
+        this.shootComponent.nbCannon = 1;
+        this.shootComponent.indexMissile = 1;
+        this.shootComponent.ultimate = 0;
+        this.shootComponent.cannon.splice(1);
 
-        this.comp_projectile = this.GetComponent("PlayerShootProjectiles");
-        this.comp_projectile.nbCannon = 1;
-        this.comp_projectile.indexMissile = 1;
-        this.comp_projectile.cannon.splice(1);
+        this.healthComponent = this.GetComponent("PlayerHealthSystem");
+        this.healthComponent.life = 3;
 
-        this.comp_cam = this.GetComponent("PlayerCameraSystem");
-        this.comp_cam.goal.position.set(0,0,0)
+        this.controllerComponent = this.GetComponent("CharacterMouvement");
+        this.healthComponent.stamina = 100;
+
+        this.cameraComponent = this.GetComponent("PlayerCameraSystem");
+        this.cameraComponent.goal.position.set(0,0,0)
 
 
     }

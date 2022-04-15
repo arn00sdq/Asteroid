@@ -28,7 +28,7 @@ import Explosion from './components/Explosion/Explosion.js';
 import { _FS,_VS } from "./components/Shader/Earth/glslEarth.js";
 import {_FSAT, _VSAT } from "./components/Shader/Earth/glslAtmosphere.js";
 import {_FSBooster, _VSBooster} from "./components/Shader/Player/booster.js";
-import {_FSSunShader, _VSSunShader} from "./components/Shader/Sun/glslSunShader.js";
+import {_FSSun, _VSSun} from "./components/Shader/Sun/glslSunShader.js";
 import { _FSBloom, _VSBloom}  from "./components/Shader/Postprocess/bloom.js";
 import { _FSExplosion, _VSExplosion}  from "./components/Shader/Explosion/explosion.js";
 import { _FSBullet, _VSBullet}  from "./components/Shader/Player/bullet.js";
@@ -275,14 +275,59 @@ class Asteroid {
         /*
         * Sun 
         */
+
+       /* this.shaderExplosion = new THREE.ShaderMaterial({
+            vertexShader: _VSExplosion(),
+            fragmentShader: _FSExplosion(),
+            transparent: true,
+            uniforms:{
+                tExplosion: {
+                    value: textureLoader.load("../medias/images/explosion/explosion.png"),
+                    
+                },
+                time: { // float initialized to 0
+                    type: "f",
+                    value: 0.0
+                  },
+                growTime:{
+                    type: "f",
+                    value: 0.0
+                },
+                opacity:{
+                    type: "f",
+                    value: 1.0
+                },
+                weight: { type: "f", value: 10.0 }
+                
+            }
+
+        })*/
+
         this.sunMaterial = new THREE.ShaderMaterial({
-            vertexShader: _VS(),
-            fragmentShader: _FS(),
+            vertexShader: _VSSun(),
+            fragmentShader: _FSSun(),
             uniforms:{
                 globeTexture: {
                     value: textureLoader.load("../medias/images/sun/sun.jpg"),
                     
                 },
+                time: { // float initialized to 0
+                    type: "f",
+                    value: 0.0
+                  },
+                growTime:{
+                    type: "f",
+                    value: 0.0
+                },
+                n:{
+                    type: "f",
+                    value: 0.0
+                },
+                intensity:{
+                    type: "f",
+                    value: 1.2
+                },
+                
                 
             }
 
@@ -300,7 +345,7 @@ class Asteroid {
         * SunAtmosphere
         */
         
-        this.sunAtmosphere = new THREE.Mesh(
+       /* this.sunAtmosphere = new THREE.Mesh(
             new THREE.SphereGeometry(5, 50, 50),
             new THREE.ShaderMaterial( 
                 {
@@ -315,7 +360,7 @@ class Asteroid {
                     blending: THREE.AdditiveBlending,
                     transparent: true,
             })
-        );
+        );*/
 
         /*
         * Star
@@ -587,6 +632,15 @@ class Asteroid {
             me.audioManager.push(buffer);
         });
 
+        audioLoader.load('../medias/sounds/stage3/end-times.mp3', function (buffer) {
+            buffer.name = "stage3-ambient";
+            me.audioManager.push(buffer);
+        });
+        audioLoader.load('../medias/sounds/stage3/outer-wilds-supernova.mp3', function (buffer) {
+            buffer.name = "stage3-supernova";
+            me.audioManager.push(buffer);
+        });
+
 
     }
 
@@ -675,7 +729,7 @@ class Asteroid {
         const shaders = {     
 
             astmosphere :  this.atmosphere,
-            sunAtmosphere: this.sunAtmosphere,
+          //  sunAtmosphere: this.sunAtmosphere,
             booster : this.booster,
             stars: this.stars,
 
@@ -730,7 +784,7 @@ class Asteroid {
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
             
-            this.gm.GetComponent("LevelSystem").scenePicker("Stage3", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
 
         }
 

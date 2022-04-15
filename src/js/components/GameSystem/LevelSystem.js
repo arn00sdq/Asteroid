@@ -2,6 +2,8 @@ import * as THREE from 'three';
 
 import JokerSystem from "./JokerSystem.js";
 import {cameraStartLevel} from "../Animation/cameraStartLevel.js"
+import Timer from '../Timer/timer.js';
+import SunShrinking from '../Planet/SunShrinking.js';
 
 
 class LevelSystem{
@@ -15,10 +17,10 @@ class LevelSystem{
 
         this.stateScene = {
 
-            startmenu:false,
-            stage1:true,
-            stage2:false,
-            stage3:false,
+            StartMenu:false,
+            Stage1:true,
+            Stage2:false,
+            Stage3:false,
 
             stageClear : false,
 
@@ -31,6 +33,8 @@ class LevelSystem{
         this.playerShoot = this.parent.player.GetComponent("PlayerShootProjectiles");
 
         this.soundSystem = this.parent.GetComponent("SoundSystem");
+
+        this.timer = new Timer();
 
     }
 
@@ -144,15 +148,22 @@ class LevelSystem{
 
     }
 
-    resetLevel() {
+    resetLevel(level) {
 
-        this.parent.state.pause = true;
         this.timeElapsed = 0;
-        this.score = 0;
+        this.parent.score = 0;
 
         this.player.ResetPlayer();
-
+        this.checkSceneState(level);
         this.removeProps();
+
+        this.parent.ambientSound.play();// si on doit restart la musique on doit play pour que le stop puisse se faire
+        this.parent.ambientSound.stop();
+
+
+        if(level == "Stage3") this.resetTimer();
+
+        
 
     }
 
@@ -166,18 +177,23 @@ class LevelSystem{
 
     }
 
+    resetTimer(){
+
+        this.timer.timeLeft = 86
+
+    }
+
     /* ----------- Delimitation ------------ */
 
     scenePicker(level,init,switchScene){
         
         if(switchScene == undefined) switchScene = false;
-
-        this.removeProps();
+        this.currentLevel = level;
 
         let displaySystem = this.parent.GetComponent("DisplaySystem");
-
-        this.currentLevel = level;
         
+        this.resetLevel(level);
+          
         switch (level){
 
             case "StartMenu":
@@ -186,38 +202,17 @@ class LevelSystem{
                 this.loadProps(level);
                 break;
 
-            case "Stage1":   
+            default :   
                 this.loadScene(level);
                 this.loadLight(level);
                 this.loadUI(level,displaySystem);
+                this.loadTimer(level, displaySystem);
                 this.loadProps(level);
                 this.loadWave(level);
                 this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 this.loadAnimation()
                 this.soundSystem.PlayPlayerRespawn();
-                
                 break;
-
-            case "Stage2":
-                console.log("-- Stage2 --")
-                this.loadScene(level);
-                this.loadUI(level,displaySystem);
-                this.loadProps(level);
-                this.loadWave(level);
-                this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
-                this.loadAnimation();
-                this.soundSystem.PlayPlayerRespawn();
-                break;
-
-            case "Stage3":
-                this.loadScene(level);
-                this.loadLight(level)
-                this.loadUI(level,displaySystem);
-                this.loadProps(level);
-                this.loadWave(level)
-                this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
-                this.loadLight(level)
-                break;   
 
         }
 
@@ -242,11 +237,16 @@ class LevelSystem{
 
     }
 
-    loadScene(level) {
+    checkSceneState(level){
 
-        this.parent.currentScene = level == "StartMenu" ?  new THREE.Scene() : this.parent.stageScene;
-        this.parent.currentCamera = level == "StartMenu" ? this.parent.startMenuCamera : this.parent.inGameCamera;
+        for (const [key, value] of Object.entries(this.stateScene)) {
 
+            key == level ? this.stateScene[key] = true : this.stateScene[key] = false;     
+
+        }
+
+        if(this.parent.sun["SunShrinking"] !== undefined) this.parent.sun.RemoveComponent("SunShrinking");
+        
         if (level == "StartMenu") {
 
             this.parent.RemoveComponent("JokerSystem");
@@ -256,6 +256,13 @@ class LevelSystem{
             this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
 
         }
+
+    }
+
+    loadScene(level) {
+
+        this.parent.currentScene = level == "StartMenu" ?  new THREE.Scene() : this.parent.stageScene;
+        this.parent.currentCamera = level == "StartMenu" ? this.parent.startMenuCamera : this.parent.inGameCamera;
         
     }
 
@@ -280,6 +287,18 @@ class LevelSystem{
         
     }
 
+    loadTimer(level, displaySystem){
+
+        if(level == "Stage3"){
+
+            displaySystem.printTimer(); 
+            this.timer.startTimer()
+
+        }
+        
+
+    }
+
     loadProps(level){
 
         switch(level){
@@ -297,6 +316,7 @@ class LevelSystem{
             case "Stage3":
                 this.loadAsteroidBackGround(this.parent.asteroid,1);
                 this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
+                //ajout compo soleil
                 break;
         }
 
@@ -315,7 +335,8 @@ class LevelSystem{
                // this.ennemySpaceshipWave(this.parent.ennemy_ss,1)
                 break;
             case "Stage3":
-                this.asteroidWave(this.parent.asteroid, 1);
+                this.asteroidWave(this.parent.asteroid, 10);
+                this.ennemySpaceshipWave(this.parent.ennemy_ss,2)
                 break;
         }
 
@@ -323,19 +344,22 @@ class LevelSystem{
 
     loadAudio(level){
 
+        let ambientBuffer = this.parent.audio.audioManager;
         let ambientSound = this.parent.ambientSound;
 
-        if(level == "StartMenu"){
-           
-            const ambientBuffer =  this.parent.audio.audioManager.find(e => e.name == "StartMenuTheme");
-			ambientSound.setBuffer(ambientBuffer);
-			ambientSound.setVolume(  this.soundSystem.musicVolume > this.soundSystem.masterVolume  ? this.soundSystem.masterVolume : this.soundSystem.musicVolume );
-			ambientSound.play();
+        if(ambientSound.isPlaying) ambientSound.stop();
 
-        }else{
-
-            if (ambientSound.isPlaying) ambientSound.stop();
-
+        switch(level){
+            case "StartMenu":
+                this.soundSystem.playAmbientMusic(ambientBuffer.find(e => e.name == "StartMenuTheme"));
+                break;
+            case "Stage1":
+                break;
+            case "Stage2":
+                break;
+            case "Stage3":
+                this.soundSystem.playAmbientMusic(ambientBuffer.find(e => e.name == "stage3-ambient"));
+                break;
         }
     }
 
@@ -381,9 +405,9 @@ class LevelSystem{
 
         /*atmosphere sun*/
 
-        let sunAtmosphere = this.parent.sunAtmosphere;
+      /*  let sunAtmosphere = this.parent.sunAtmosphere;
         sunAtmosphere.scale.set(12,12,12);
-        sunAtmosphere.position.set(-100,50,-450);
+        sunAtmosphere.position.set(-100,50,-450);*/
         //this.parent.currentScene.add(sunAtmosphere);
         
         //star
@@ -446,14 +470,26 @@ class LevelSystem{
 
     }
 
+    endStage3(){
+
+        this.parent.currentScene.traverse( function(child ) {
+
+            if(child.constructor.name !== "Sun")  return;
+            
+            child.AddComponent(new SunShrinking(child));
+            
+        })
+
+        let ambientBuffer = this.parent.audio.audioManager;
+        this.soundSystem.playAmbientMusic(ambientBuffer.find(e => e.name == "stage3-supernova"))
+        document.getElementById("timer").innerHTML = "";
+        this.stateScene.Stage3 = false;
+
+    }
+
     Update(timeElapsed){
 
-       /* if(this.parent.ennemy == 0){
-
-            this.level++;
-            this.scenePicker();
-
-        }*/
+        if(this.timer.timeLeft == 0 && this.stateScene.Stage3) this.endStage3();
 
 
     }

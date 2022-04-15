@@ -135,7 +135,10 @@
 #header-hud{
 
     position: absolute;
+    display: flex;
     width: 100%;
+    /* flex-direction: row; */
+    justify-content: center;
 
 }
 

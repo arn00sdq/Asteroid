@@ -10,8 +10,20 @@ class SoundSystem{
         this.sound = audio.sound;
 
         this.masterVolume = 0.5;
-        this.sfxVolume = 0.5;
+        this.sfxVolume = 0.2;
         this.musicVolume = 0.05;
+
+    }
+
+    playAmbientMusic(buffer){
+
+        let ambientSound = this.parent.ambientSound;
+
+        if(ambientSound.isPlaying) ambientSound.stop();
+        console.log(buffer)
+        ambientSound.setBuffer(buffer);
+        ambientSound.setVolume(  this.musicVolume > this.masterVolume  ? this.masterVolume : this.musicVolume );
+        ambientSound.play();
 
     }
 

@@ -146,7 +146,7 @@ class SpaceshipComportement {
             this.spawnRot =  this.parent.rotation;
             
             this.parent.weaponParams.timerInstantiate = timeInSecond * 1000;
-            console.log(this.parent.weaponParams.userData)
+
             this.parent.weaponParams.userData.player = this.parent.target.position;
             this.parent.stageSystem.InstantiateGameObject(this.parent.weaponParams,this.temp, this.spawnRot, 0.001)
             this.parent.audioSystem.PlayEnnemyShoot(this.parent);

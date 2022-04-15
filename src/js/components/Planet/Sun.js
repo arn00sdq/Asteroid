@@ -1,6 +1,7 @@
 //not a planet --'
 import GameObject from "../GameObject.js";
 import PlanetMouvement from "./PlanetMouvement.js";
+import SunShrinking from "./SunShrinking.js";
 
 class Sun extends GameObject{ 
 
@@ -15,7 +16,9 @@ class Sun extends GameObject{
     }
 
     InitComponent() {
-        this.AddComponent(new PlanetMouvement(this))
+        
+        this.AddComponent(new PlanetMouvement(this));
+
     }
     
 }

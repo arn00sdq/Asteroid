@@ -14,7 +14,7 @@ class ExplosionMouvement {
 
     Update(timeElapsed,timeInSecond) {
 
-        let mesh =  this.parent.children.find(e => e.constructor.name == "Mesh")
+        let mesh =  this.parent.children.find(e => e.constructor.name == "Mesh");
         this.growTime =  THREE.MathUtils.lerp(this.growTime,this.growTime +  this.growTimeStep,0.4);
         mesh.material.uniforms[ 'time' ].value = 0.025 *  timeInSecond * 1000 ;
 
