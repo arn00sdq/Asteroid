@@ -95,7 +95,7 @@ class SpaceshipComportement {
         this.parent.scene.children.forEach((e) => {
             if(e.name == "Asteroid" || e.name == "Player"){
 
-                if (this.parent.position.distanceTo(e.position) <= 2 ) dodge = true
+                if (this.parent.position.distanceTo(e.position) <= 1 ) dodge = true
 
             }
 
