@@ -158,7 +158,6 @@ class MenuSystem{
                 if (!this.gameState.pause) {
 
                     if(this.ambientSound.isPlaying) this.ambientSound.pause();
-
                     if(this.levelSystem.currentLevel == "Stage3") this.levelSystem.timer.paused = true;
 
                     this.gameState.pause = true;
@@ -188,14 +187,26 @@ class MenuSystem{
                     this.gameState.keyboard = true;
                     this.gameState.pause = true;
                     this.uiDisplay.printKeyboardShortcut();
+
+                    if(this.ambientSound.isPlaying) this.ambientSound.pause();
+                    if(this.levelSystem.currentLevel == "Stage3") this.levelSystem.timer.paused = true;
                    
 
                 } else {
 
-                    parent.state.keyboard = false;
-                    parent.state.pause = false;
+                    if(!this.ambientSound.isPlaying) this.ambientSound.play();
+                    this.gameState.keyboard = false;
+                    this.gameState.pause = false;
+
                     this.levelSystem.currentLevel == "StartMenu" ? this.uiDisplay.printUIStartMenu() : this.uiDisplay.printUIHeader(this.playerHealth.life, parent.score);
 
+                    if(this.levelSystem.currentLevel == "Stage3"){
+
+                        this.uiDisplay.printTimer();
+                        this.levelSystem.timer.paused = false;
+
+                    } 
+                
                 }
                 break;
         }
