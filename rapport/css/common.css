@@ -1,0 +1,16 @@
+body {
+    background: #000;
+    color: #ebebeb;
+    font-family: Raleway, Helvetica, Arial, sans-serif;
+    font-size: 1.3em;
+    margin: 0;
+    min-width: 320px;
+}
+
+html {
+    line-height: 1.15;
+}
+
+article, aside, footer, header, nav, section {
+    display: block;
+}

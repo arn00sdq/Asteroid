@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+        <link rel="stylesheet" href="./rapport/css/header.css">
+		<link rel="stylesheet" href="./rapport/css/common.css">
+        <link rel="stylesheet" href="./rapport/css/section.css">
+        <link rel="stylesheet" href="./rapport/css/slider.css">
+        <link rel="stylesheet" href="./rapport/css/card.css">
+	</head>
+	<body>
+        <div class="wrapper">
+            <header class="header" role="banner">
+                <div class="logo">
+                    <span class="logo-text">Asteroid</span>
+
+                </div>
+            </header>
+            <section class="section">
+                <div class="section-content text-centered">
+                    <div class="box box-red ">
+                        <h2 class="text-head-centered">
+                            Asteroid : Introducing Beta v0.1
+                        </h2>
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                Votre objectif est de passer de niveau en niveau en affrontant divers types d'ennemis
+                                avec des niveaux uniques et bien plus encore
+                            </p>
+                        </div>
+                        <div class="box box-try-it">
+                            <h2 class="text-shadow text-try-it">Essayer le</h2>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-content text-centered">
+                    <div class="box box-blue ">
+                        <h2 class="text-head-centered">
+                            Post-processing
+                        </h2>
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                Asteroid propose trois effets de post processing amélioriant grandement la qualité du jeu
+                            </p>
+                        </div>
+                        <p class="margin-bottom-default">
+                            <span class="text-highlight">L'UnrealBloomEffect</span> propose un effet de flou lumineux qui rend possible <span class="text-highlight"> l'illusion d'une émission d'une lumière</span>
+                        </p>
+                        <div class="bloc-align-two">
+                            <div class="compare">
+                                <img src="./rapport/images/game/earth/earth-vanilla.PNG" class="img-slid "/>
+                                <img src="./rapport/images/game/earth/earth-bloom.PNG" id="earth" class="img-slid after"/>
+                                <input type="range" min="0" max="100" id="sliderEarth" oninput="slideEarth()">
+                            </div>  
+                            <div class="compare">
+                                <img src="./rapport/images/game/sun/sun-vanilla.PNG" class="img-slid "/>
+                                <img src="./rapport/images/game/sun/sun-bloom.PNG" id="sun" class="img-slid after"/>
+                                <input type="range" min="0" max="100" id="sliderSun" oninput="slideSun()">
+                            </div>
+                        </div>
+                        <p class="margin-bottom-default margin-top-default">
+                            <span class="text-highlight">FXAA</span> améliore la qualité des objets 3D en  <span class="text-highlight"> reduisant les irrégularités</span>
+                        </p>
+                        <div class="bloc-align-two">
+                            <div class="compare">
+                                <img src="./rapport/images/game/fxaa/fxaa-off.PNG" class="img-slid "/>
+                                <img src="./rapport/images/game/fxaa/fxaa-on.PNG" id="coin" class="img-slid after"/>
+                                <input type="range" min="0" max="100" id="sliderCoin" oninput="sliderCoin()">
+                            </div>  
+                            <div class="compare">
+                                <img src="./rapport/images/game/fxaa/coin-fxaa-off.PNG" class="img-slid "/>
+                                <img src="./rapport/images/game/fxaa/coin-fxaa-on.PNG" id="fx" class="img-slid after"/>
+                                <input type="range" min="0" max="100" id="sliderEarthFX" oninput="sliderEarthFX()">
+                            </div>
+                        </div>
+                        <p class="margin-bottom-default margin-top-default">
+                            <span class="text-highlight">L'Outline effect</span> permet d' <span class="text-highlight"> améliorer  la visibilité </span> du joueurs, ennemis, jokers par rapport au object se situant
+                                à l'arrière plan 
+                        </p>
+                        <div class="media">
+                            <img src="./rapport/images/game/outline/outline2.PNG" class="wide-img"/>
+                        </div>
+                        
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-content text-centered">
+                    <div class="box box-darkblue ">
+                        <h2 class="text-head-centered">
+                            Musiques
+                        </h2>
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                Des musiques tirés du jeu à succès outer-wild pour une <br> 
+                                immersion saisissante
+                            </p>
+                        </div>
+                        <div class="media">
+                            <img src="rapport/images/autres/outer-wild.jpg" class="img-outer-wild large-img">
+                        </div>
+                        <div class="media-audio">
+                            <div class="margin-top-small"></div>
+                            <figcaption>Timber-hearth</figcaption>
+                            <audio
+                                controls
+                                src="./src/medias/sounds/startMenu/outer-wilds-timber-hearth.mp3">
+                                    Your browser does not support the
+                                    <code>audio</code> element.
+                            </audio>
+                            <div class="margin-top-small"></div>
+                            <figcaption>End-times</figcaption>
+                            <audio
+                                controls
+                                src="./src/medias/sounds/stage3/end-times.mp3">
+                                    Your browser does not support the
+                                    <code>audio</code> element.
+                            </audio>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-content text-centered">
+                    <div class="box box-red ">
+                        <h2 class="text-head-centered">
+                            Animations
+                        </h2>
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                Toutes les animations ont été faites avec <span class="text-highlight">les Shaders</span> : fragment shader et vertex Shader.<br>
+                                En implémentant des fonctions de bruits tel que perlin noise, on peut créer du mouvement fluide et complexe comme celle de l'explosion                                 
+                            </p>
+                        </div>
+                        <div class="bloc-align-two">
+                            <div class="media-video">
+                                <video controls >
+                                    <source src="./rapport/video/anim/explosion.mp4"
+                                            type="video/webm">                              
+                                    Sorry, your browser doesn't support embedded videos.
+                                </video>
+                            </div>    
+                            <div class="media-video">
+                                <video controls >
+                                    <source src="./rapport/video/anim/shield-anim.mp4"
+                                            type="video/webm">                              
+                                    Sorry, your browser doesn't support embedded videos.
+                                </video> 
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-content text-centered">
+                    <div class="box box-medium-blue ">
+                        <h2 class="text-head-centered">
+                            Joker et Spécial
+                        </h2>
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                Cinq joker ont été implimenter pour dynamiser le jeu<br>
+                                En plus de ces jokers une arme plasma a été implementé                                
+                            </p>
+                        </div>
+                        <div class="cards">
+                            <div class="card card1">
+                                <div class="container-card">
+                                    <img src="./rapport/images/game/joker/coin.PNG">
+                                </div>
+                                <div class="details">
+                                    <h3>Coin</h3>
+                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                </div>
+                            </div>    
+                            <div class="card card1">
+                                <div class="container-card">
+                                    <img src="./rapport/images/game/joker/shield.PNG">
+                                </div>
+                                <div class="details">
+                                    <h3>Coin</h3>
+                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                </div>
+                            </div> 
+                            <div class="card card1">
+                                <div class="container-card">
+                                    <img src="./rapport/images/game/joker/heart.PNG">
+                                </div>
+                                <div class="details">
+                                    <h3>Coin</h3>
+                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                </div>
+                            </div> 
+                            <div class="card card1">
+                                <div class="container-card">
+                                    <img src="./rapport/images/game/joker/firePower.PNG">
+                                </div>
+                                <div class="details">
+                                    <h3>Coin</h3>
+                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                </div>
+                            </div> 
+                            <div class="card card1">
+                                <div class="container-card">
+                                    <img src="./rapport/images/game/joker/fireRate.PNG">
+                                </div>
+                                <div class="details">
+                                    <h3>Coin</h3>
+                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                </div>
+                            </div> 
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <script src="./rapport/js/slider.js"></script>
+
+	</body>
+</html>

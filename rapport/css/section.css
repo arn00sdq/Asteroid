@@ -1,0 +1,214 @@
+@font-face {
+    font-family: "geosanslight-nmsregular";
+    src: url(../css/police/geosanslight_regular/geosanslight_regular.ttf) 
+  }  
+
+@font-face {
+    font-family: "Raleway";
+    src: url(../css/police/raleway/Raleway-Light.ttf) 
+}  
+
+.text-highlight{
+    color: #ffbf36;  
+}
+.section {
+    display: block;
+    margin: 0;
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.section-content {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.text-centered {
+    text-align: center;
+}
+
+.box{
+
+    padding-bottom: 35px;
+    padding-bottom: 3.5rem;
+    padding-top: 35px;
+    padding-top: 3.5rem;
+    box-sizing: border-box;
+    display: block;
+    position: relative;
+    background: #001319;
+    box-shadow: 0px 10px 54px 0px rgb(0 0 0 / 30%);
+
+}
+
+.box-yellow-2, .box-orange-1, .box-orange-2, .box-blue, .box-blue-dark, .box-light-orange, .box-orange, .box-orange-dark, .box-purple, .box-purple-dark, .box-red {
+    background-repeat: round;
+}
+
+.box-red{
+    background-image: url(../images/background/box-red.jpg);
+}
+
+.box-blue{
+    background-image: url(../images/background/box-blue.png);
+}
+
+.box-darkblue{
+    background-image: url(../images/background/box-darblue.jpg);
+}
+
+.box-medium-blue{
+    background-image: url(../images/background/box-medium-blue.png);
+}
+
+.bloc-align-two{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+}
+
+.padding-h-none{
+
+    padding-left: 0;
+    padding-right: 0;
+
+}
+
+.text-head-centered{
+
+    background-image: url(../images/head/heading-border-centered.png);
+    background-position: bottom center;
+    text-align: center;
+
+}
+
+.text-head-centered, .text-head-left, .text-head-right {
+
+    padding-bottom: 30px;
+    padding-bottom: 3rem;
+    background-repeat: no-repeat;
+    background-size: 1290px 14px;
+
+}
+
+h2{
+    font-size: 2rem;
+}
+
+h2, h3, h4, h5 ,h6 {
+
+    margin-bottom: 3.5rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #fff;
+    font-family: "geosanslight-nmsregular", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    letter-spacing: 7.5px;
+    letter-spacing: 0.75rem;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.margin--bottom-default {
+    margin-bottom: 30px;
+    margin-bottom: 3rem;
+}
+
+.margin-top-default {
+    margin-top: 30px;
+    margin-top: 3rem;
+}
+
+.margin-top-small {
+    margin-top: 15px;
+    margin-top: 1.5rem;
+}
+
+.icons-header {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    background-size: 0;
+}
+
+.section__content p:last-child, .section__content ul:last-child, .section__content ol:last-child {
+    margin-bottom: 0;
+}
+
+p {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    line-height: 1.3;
+    display: block;
+    margin-top: 0;
+}
+
+.box-try-it{
+    position: static;
+    margin: 0 auto;
+    text-align: center;
+    transform: none !important;
+    max-width: none;
+
+    bottom: 0;
+    box-sizing: border-box;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 1.5rem;
+    width: 100%;
+    z-index: 99;
+    background-color: transparent;
+
+}
+
+.media{
+
+    position: relative;
+
+}
+
+.media-video video{
+    height: 40vh;
+    width: 30vw;
+}
+
+.wide-img{
+
+    width: 50vw;
+    height: 37vh;
+    box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.15);
+    border: 1px solid #f5f5f5;
+
+}
+
+.large-img{
+
+    width: 50vw;
+    height: 48vh;
+    box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.15);
+    border: 1px solid #f5f5f5;
+
+}
+
+.text-shadow{
+
+    text-shadow: 0px 0px 20px rgb(255 255 255 / 60%);
+}
+
+.text-try-it{
+
+    color: white ;
+    margin-bottom: 1.5rem ;
+    font-size: 2.5rem;
+    font-weight: 700 ;
+
+}
+
