@@ -212,6 +212,15 @@ p {
 
 }
 
+.medium-img{
+
+    width: 34vw;
+    height: 37vh;
+    box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.15);
+    border: 1px solid #f5f5f5;
+
+}
+
 .large-img{
 
     width: 50vw;
@@ -219,6 +228,13 @@ p {
     box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.15);
     border: 1px solid #f5f5f5;
 
+}
+
+.hud{
+    width: 34vw;
+    height: 50vh;
+    box-shadow: 0px 0px 20px 5px rgba(0,0,0,0.15);
+    border: 1px solid #f5f5f5;
 }
 
 .text-shadow{
