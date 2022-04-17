@@ -295,7 +295,7 @@ class GameManager {
 
         if (!this.state.pause) {
 
-          //  this.controls.update()
+            //this.controls.update()
             this.loop.now = window.performance.now();
             this.loop.dt = this.loop.dt + Math.min(1, (this.loop.now - this.loop.last) / 1000);
             while (this.loop.dt > this.loop.slowStep) this.loop.dt = this.loop.dt - this.loop.slowStep;

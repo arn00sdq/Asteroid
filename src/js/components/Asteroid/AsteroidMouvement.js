@@ -19,6 +19,7 @@ class AsteroidMovement {
 
       this.dir = new THREE.Vector3
       this.dis = 0
+      this.pas = 1;
 
     }
         
@@ -27,10 +28,12 @@ class AsteroidMovement {
 
       this.customvitesse = (1 + (1/ (this.parent.scale.x))/100);
       this.palier = 1 + ((Math.floor(timeElapsed / 3) + 1) * 0.01 );
-
+      
       if(this.parent.children[0] !== null){
 
-       // this.parent.children[0].rotateY( (Math.PI / 180) *  Math.random() * 1);
+        this.pas +=0.5
+        let rotation = new THREE.Euler((Math.PI / 180) *  (2+this.pas),0,(Math.PI / 180) *  (2+this.pas))
+        this.parent.children[0].rotation.copy(rotation);
   
       }
 

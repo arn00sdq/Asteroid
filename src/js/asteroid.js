@@ -597,7 +597,7 @@ class Asteroid {
             me.audioManager.push(buffer);
         });
 
-        audioLoader.load('../medias/sounds/bullet/bullet.mp3', function (buffer) {
+        audioLoader.load('../medias/sounds/bullet/bullet.wav', function (buffer) {
             buffer.name = "Bullet";
             me.audioManager.push(buffer);
         });
@@ -632,6 +632,14 @@ class Asteroid {
             me.audioManager.push(buffer);
         });
 
+        audioLoader.load('../medias/sounds/stage2/outer-wilds-dark-bramble.mp3', function (buffer) {
+            buffer.name = "stage2-ambient";
+            me.audioManager.push(buffer);
+        });
+        audioLoader.load('../medias/sounds/stage1/outer-wilds-the-museum.mp3', function (buffer) {
+            buffer.name = "stage1-ambient";
+            me.audioManager.push(buffer);
+        });
         audioLoader.load('../medias/sounds/stage3/end-times.mp3', function (buffer) {
             buffer.name = "stage3-ambient";
             me.audioManager.push(buffer);
@@ -784,7 +792,7 @@ class Asteroid {
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
             
-            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("Stage3", true);
 
         }
 

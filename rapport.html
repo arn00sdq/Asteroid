@@ -26,11 +26,19 @@
                         <div class="icons-header margin-bottom-default">
                             <p class="text-narrow margin-bottom-none">
                                 Votre objectif est de passer de niveau en niveau en affrontant divers types d'ennemis
-                                avec des niveaux uniques et bien plus encore
+                                avec des niveaux uniques et bien plus encore<br>
+                                Asteroid propose aussi <span class="text-highlight">une caméra 3eme personne</span> qui réagit en temps réel au commande de l'utilisateur
                             </p>
                         </div>
-                        <div class="box box-try-it">
-                            <h2 class="text-shadow text-try-it">Essayer le</h2>
+                        <div class="media-video big-video">
+                            <video controls >
+                                <source src="./rapport/video/global/global.mp4"
+                                        type="video/webm">                              
+                                Sorry, your browser doesn't support embedded videos.
+                            </video> 
+                        </div> 
+                        <div class="box-try-it">
+                            <h2 class="text-shadow text-try-it">Essayer le <br> Maintenant</h2>
                         </div>
                     </div>
                 </div>
@@ -47,7 +55,8 @@
                             </p>
                         </div>
                         <p class="margin-bottom-default">
-                            <span class="text-highlight">L'UnrealBloomEffect</span> propose un effet de flou lumineux qui rend possible <span class="text-highlight"> l'illusion d'une émission d'une lumière</span>
+                            <span class="text-highlight">L'UnrealBloomEffect</span> propose un effet de flou lumineux qui permet l'eclat lumineux d'un objet et donc <span class="text-highlight"> l'illusion d'une émission de lumière</span> (soleil) ou de 
+                            l'absorption d'une partie de la lumière (Terre). 
                         </p>
                         <div class="bloc-align-two">
                             <div class="compare">
@@ -62,7 +71,8 @@
                             </div>
                         </div>
                         <p class="margin-bottom-default margin-top-default">
-                            <span class="text-highlight">FXAA</span> améliore la qualité des objets 3D en  <span class="text-highlight"> reduisant les irrégularités</span>
+                            <span class="text-highlight">FXAA</span> améliore la qualité des objets 3D en  <span class="text-highlight"> reduisant les irrégularités</span><br>
+                            Il permet de traiter un pixel shader en une seule passe, il permet donc d'avoir des <span class="text-highlight">gains de vitesse</span> de post traitement au niveau des pipelines.
                         </p>
                         <div class="bloc-align-two">
                             <div class="compare">
@@ -132,18 +142,18 @@
                         <div class="icons-header margin-bottom-default">
                             <p class="text-narrow margin-bottom-none">
                                 Toutes les animations ont été faites avec <span class="text-highlight">les Shaders</span> : fragment shader et vertex Shader.<br>
-                                En implémentant des fonctions de bruits tel que perlin noise, on peut créer du mouvement fluide et complexe comme celle de l'explosion                                 
+                                En implémentant des fonctions de bruits tel que <span class="text-highlight">perlin noise</span> , on peut créer du <span class="text-highlight">mouvement fluide</span> et <span class="text-highlight">complexe</span> comme celle de l'explosion                                 
                             </p>
                         </div>
                         <div class="bloc-align-two">
-                            <div class="media-video">
+                            <div class="media-video small-video ">
                                 <video controls >
                                     <source src="./rapport/video/anim/explosion.mp4"
                                             type="video/webm">                              
                                     Sorry, your browser doesn't support embedded videos.
                                 </video>
                             </div>    
-                            <div class="media-video">
+                            <div class="media-video small-video ">
                                 <video controls >
                                     <source src="./rapport/video/anim/shield-anim.mp4"
                                             type="video/webm">                              
@@ -162,7 +172,7 @@
                         </h2>
                         <div class="icons-header margin-bottom-default">
                             <p class="text-narrow margin-bottom-none">
-                                Cinq joker ont été implimenter pour dynamiser le jeu<br>
+                                <span class="text-highlight">Cinq joker </span>ont été implimenter pour dynamiser le jeu et <span class="text-highlight">apparaissant périodiquement</span> sur le plateau de jeu<br>
                                 En plus de ces jokers une arme plasma a été implementé                                
                             </p>
                         </div>
@@ -173,7 +183,7 @@
                                 </div>
                                 <div class="details">
                                     <h3>Coin</h3>
-                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                    <p>Bonus augmentant le score de 1 point</p>
                                 </div>
                             </div>    
                             <div class="card card1">
@@ -181,8 +191,8 @@
                                     <img src="./rapport/images/game/joker/shield.PNG">
                                 </div>
                                 <div class="details">
-                                    <h3>Coin</h3>
-                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                    <h3>Shield</h3>
+                                    <p>Bonus octroyant une courte période d'invincibilité</p>
                                 </div>
                             </div> 
                             <div class="card card1">
@@ -190,8 +200,8 @@
                                     <img src="./rapport/images/game/joker/heart.PNG">
                                 </div>
                                 <div class="details">
-                                    <h3>Coin</h3>
-                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                    <h3>Heart</h3>
+                                    <p>Bonus permettant de recupérer 1 point de vie</p>
                                 </div>
                             </div> 
                             <div class="card card1">
@@ -199,8 +209,8 @@
                                     <img src="./rapport/images/game/joker/firePower.PNG">
                                 </div>
                                 <div class="details">
-                                    <h3>Coin</h3>
-                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                    <h3>+1 missile</h3>
+                                    <p>Bonus octroyant 1 missile supplémentaire pour le niveau en cours</p>
                                 </div>
                             </div> 
                             <div class="card card1">
@@ -208,11 +218,79 @@
                                     <img src="./rapport/images/game/joker/fireRate.PNG">
                                 </div>
                                 <div class="details">
-                                    <h3>Coin</h3>
-                                    <p>Bonus apparaissant et augmentant le score de 1 point</p>
+                                    <h3>Cadence de tir</h3>
+                                    <p>Bonus octrayant une cadence de tire soutenue durant une courte periode</p>
                                 </div>
                             </div> 
                         </div>
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                Egalement, au bout d'une certaine durée le joueur obtient un <span class="text-highlight"> tir plasma </span> qui ne se detruit pas 
+                                lors d'une collision et <span class="text-highlight"> infligant de lourd dégat </span>    .                           
+                            </p>
+                        </div>
+                        <div class="media-video">
+                            <video controls >
+                                <source src="./rapport/video/anim/plasma-bullet.mp4"
+                                        type="video/webm">                              
+                                Sorry, your browser doesn't support embedded videos.
+                            </video> 
+                        </div>  
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <div class="section-content text-centered">
+                    <div class="box box-blue ">
+                        <h2 class="text-head-centered">
+                            Dynamique
+                        </h2>
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                Un ensemble d'effet dynamique au jeu ont été implementé comme presenter ci-dessous                           
+                            </p>
+                        </div>
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                Les asteroids<span class="text-highlight"> ne suivent pas de trajectoire linéaire </span>, mais <span class="text-highlight">sont déviés</span> quand ils arrivent dans la "gravité" d'un autre asteroid.<br>
+                                <span class="text-highlight">Cette gravite</span> depend de la <span class="text-highlight">masse de l'asteroid</span>. Ainsi ils les petits asteroids ont une déviation beaucoup plus prononcée que les gros asteroid.<br>
+                                Dependant de leur <span class="text-highlight">direction d'approche</span>, les asteroid <span class="text-highlight">gagneront plus ou moins de vitesse</span> à l'approche d'un ou plusieurs asteroid                           
+                            </p>
+                        </div>
+                        <div class="media-video wide-video">
+                            <video controls >
+                                <source src="./rapport/video/asteroid/2022-04-17-11-15-47.mp4"
+                                        type="video/webm">                              
+                                Sorry, your browser doesn't support embedded videos.
+                            </video> 
+                        </div>  
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                <span class="text-highlight">Un vaisseau ennemis</span> a été implémenté et <span class="text-highlight">se déplace</span> de facon <span class="text-highlight">aléatoire</span> dans le plateau de jeu tout en esquivant les astéroids</span>
+                                comme présenté dans la video ci-dessous. Son rayon "d'évitement" peut etre plus ou moins important.<br>
+                                <span class="text-highlight">Son comportement</span> peut etre <span class="text-highlight">réglé</span> aussi de sorte qu'il puisse <span class="text-highlight"> tirer seulement si il n'est pas en phase d'évitement</span>                         
+                            </p>
+                        </div>
+                        <div class="media-video wide-video">
+                            <video controls >
+                                <source src="./rapport/video/enemyShip/2022-04-17-11-28-13.mp4"
+                                        type="video/webm">                              
+                                Sorry, your browser doesn't support embedded videos.
+                            </video> 
+                        </div>  
+                        <div class="icons-header margin-bottom-default">
+                            <p class="text-narrow margin-bottom-none">
+                                Lors de la destruction d'un asteroid il <span class="text-highlight">eclate en 2 morceaux</span>et ayant une <span class="text-highlight">direction opposée.</span><br>
+                                Ils n'eclateront jamais vers la direction du joueur.                         
+                            </p>
+                        </div>
+                        <div class="media-video wide-video">
+                            <video controls >
+                                <source src="./rapport/video/asteroid/destroy.mp4"
+                                        type="video/webm">                              
+                                Sorry, your browser doesn't support embedded videos.
+                            </video> 
+                        </div> 
                     </div>
                 </div>
             </section>

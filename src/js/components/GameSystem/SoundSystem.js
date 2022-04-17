@@ -18,7 +18,7 @@ class SoundSystem{
     playAmbientMusic(buffer){
 
         let ambientSound = this.parent.ambientSound;
-
+        console.log(buffer)
         if(ambientSound.isPlaying) ambientSound.stop();
         console.log(buffer)
         ambientSound.setBuffer(buffer);
@@ -147,7 +147,7 @@ class SoundSystem{
         const exploBuffer =  this.audioManager.find(e => e.name == "AsteroidExplosion");
        
         let exploAudio =  asteroid.children.find(e => e.constructor.name == "PositionalAudio");
-        if (exploAudio.isPlaying)  exploAudio.stop()
+     //   if (exploAudio.isPlaying)  exploAudio.stop()
         exploAudio.setBuffer( exploBuffer );
         exploAudio.setLoop( false );
         exploAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );

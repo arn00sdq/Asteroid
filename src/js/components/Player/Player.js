@@ -59,8 +59,8 @@ class Player extends GameObject{
         this.controllerComponent = this.GetComponent("CharacterMouvement");
         this.healthComponent.stamina = 100;
 
-        this.cameraComponent = this.GetComponent("PlayerCameraSystem");
-        this.cameraComponent.goal.position.set(0,0,0)
+        /*this.cameraComponent = this.GetComponent("PlayerCameraSystem");
+        this.cameraComponent.goal.position.set(0,0,0)*/
 
 
     }

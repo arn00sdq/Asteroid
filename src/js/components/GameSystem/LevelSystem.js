@@ -354,8 +354,10 @@ class LevelSystem{
                 this.soundSystem.playAmbientMusic(ambientBuffer.find(e => e.name == "StartMenuTheme"));
                 break;
             case "Stage1":
+                this.soundSystem.playAmbientMusic(ambientBuffer.find(e => e.name == "stage1-ambient"));
                 break;
             case "Stage2":
+                this.soundSystem.playAmbientMusic(ambientBuffer.find(e => e.name == "stage2-ambient"));
                 break;
             case "Stage3":
                 this.soundSystem.playAmbientMusic(ambientBuffer.find(e => e.name == "stage3-ambient"));
