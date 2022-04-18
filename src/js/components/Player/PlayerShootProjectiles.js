@@ -2,10 +2,10 @@ import * as THREE from 'three';
 
 class PlayerShootProjectiles{
 
-    constructor(parent,audio){
+    constructor(parent){
 
       this.parent = parent;
-      this.audio = audio;
+      this.audio = this.parent.audioSystem;
       this.fireRate = 500;
 
       this.weaponList = null;
@@ -40,20 +40,16 @@ class PlayerShootProjectiles{
 
           this.weaponList.normalBullet.timerInstantiate = timeElapsed;
           this.parent.stageSystem.InstantiateGameObject(this.weaponList.normalBullet,this.temp, this.spawnRot, 0.0009) 
-          this.parent.audioSystem.PlayBulletShoot();
+          this.parent.audioSystem.playSfx(this.parent.audioSystem.audioManager.find(e => e.name == "Bullet"));
           
         }else{
 
           this.weaponList.specialBullet.timerInstantiate = timeElapsed;
           this.parent.stageSystem.InstantiateShader(this.weaponList.specialBullet,this.temp, this.spawnRot, 0.9);
-          this.parent.audioSystem.PlayPowerShoot();
+          this.parent.audioSystem.playSfx(this.parent.audioSystem.audioManager.find(e => e.name == "powerShot"));
 
         }
         
-       // if(this.currentWeapon.constructor.name == "SpecialBullet") 
- 
-        
-
         this.indexMissile ++;
 
       }

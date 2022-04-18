@@ -33,10 +33,13 @@ canvas {
 
 #infos_start{
 
-	color: white;
-	font-size: 20px;
-	animation: text_shrink 6s linear infinite;
-	opacity: 0.3;
+	top: 48vh;
+    left: 26vw;
+    position: absolute;
+    color: white;
+    font-size: 3em;
+    animation: text_shrink 6s linear infinite;
+    opacity: 0.3;
 	
 
 }

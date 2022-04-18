@@ -2,11 +2,14 @@ import * as THREE from 'three';
 
 class GameObjectManager {
 
-  constructor(parent) {
+  constructor(parent,audio) {
 
     this.parent = parent;
+
     this.edge_limit = parent.limit;
-    this.edge_limit_background = parent.limit_background
+    this.edge_limit_background = parent.limit_background;
+
+    this.audioManager = audio.audioManager
 
     this.levelSystem = this.parent.GetComponent("LevelSystem");
     this.sound_sys = this.parent.GetComponent("SoundSystem");
@@ -122,7 +125,7 @@ class GameObjectManager {
     if ((object.name == "Asteroid" || object.name == "EnnemyBullet") && !player.hasJoker.immune) {
 
       let playerHitSound = new THREE.Audio(this.parent.audio.listener);
-      this.sound_sys.PlayShipDamageTaken();
+      this.sound_sys.playSfx(this.audioManager.find(e => e.name == "Heart"));
 
       this.playerHealth.Damage(1);
       player.SetInvulnerability(2000);
@@ -253,32 +256,34 @@ class GameObjectManager {
     if (object.name == "Player") {
 
       joker.Destroy(joker);
-
       switch (joker.constructor.name) {
 
         case "Coin":
           this.parent.coin.nb -= 1
           this.joker_sys.PlayerAddCoin(this.parent.score, 1);
-          this.sound_sys.PlayCoinPickUp();
+          this.sound_sys.playSfx(this.audioManager.find(e => e.name == "Coin"));
           break;
         case "Heart":
           this.parent.heart.nb -= 1
           this.joker_sys.PlayerAddLife(object, 1);
-          this.sound_sys.PlayHeartPickUp();
+          this.sound_sys.playSfx(this.audioManager.find(e => e.name == "Heart"));
           break;
         case "FirePower":
           this.parent.firepower.nb -= 1
           this.parent.player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
+          this.sound_sys.playSfx(this.audioManager.find(e => e.name == "ItemPick"));
           break;
         case "FireRate":
           this.parent.firerate.nb -= 1
           if (!object.hasJoker.firerate) this.joker_sys.IncreaseFireRate(object, 5000);
+          this.sound_sys.playSfx(this.audioManager.find(e => e.name == "ItemPick"));
           break;
         case "Shield":
           this.parent.shield.nb -= 1
-          this.sound_sys.PlayEnergyShield();
-
-          if (!object.hasJoker.immune) this.joker_sys.PlayerProtection(object, this.parent.shield, 3000);
+          if (!object.hasJoker.immune){
+            this.sound_sys.playSfx(this.audioManager.find(e => e.name == "Shield"));
+            this.joker_sys.PlayerProtection(object, this.parent.shield, 3000);
+          } 
           break;
 
       }

@@ -612,8 +612,12 @@ class Asteroid {
             me.audioManager.push(buffer);
         });
         /*-*/
-        audioLoader.load('../medias/sounds/player/spawn-sound.mp3', function (buffer) {
+        audioLoader.load('../medias/sounds/player/player-spawn.ogg', function (buffer) {
             buffer.name = "ShipRespawn";
+            me.audioManager.push(buffer);
+        });
+        audioLoader.load('../medias/sounds/item/item-pickup.wav', function (buffer) {
+            buffer.name = "ItemPick";
             me.audioManager.push(buffer);
         });
 
@@ -785,8 +789,7 @@ class Asteroid {
 
     onPlayerBegin(event) { // nom a changer
 
-        (this.gm.currentScene)
-        if (event.code == 'Space') {
+        if (event.code) {
 
             document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
@@ -819,6 +822,7 @@ class Asteroid {
 
     onTransitionEnd(event) {
 
+        console.log("pret")
         event.target.remove();
         this.loadProps();
 

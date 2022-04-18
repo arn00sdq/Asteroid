@@ -9,8 +9,8 @@ class SoundSystem{
         this.audioManager = audio.audioManager
         this.sound = audio.sound;
 
-        this.masterVolume = 0.5;
-        this.sfxVolume = 0.2;
+        this.masterVolume = 0.7;
+        this.sfxVolume = 0.5;
         this.musicVolume = 0.05;
 
     }
@@ -25,31 +25,20 @@ class SoundSystem{
 
     }
 
-    PlayCoinPickUp(){
 
-        const CoinBuffer =  this.audioManager.find(e => e.name == "Coin");
+    playSfx(buffer){
+
         const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
 
         if (playerAudio.isPlaying)  playerAudio.stop()
-        playerAudio.setBuffer( CoinBuffer );
+        console.log(buffer)
+        playerAudio.setBuffer( buffer );
         playerAudio.setLoop( false );
         playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
         playerAudio.play();
 
     }
 
-    PlayHeartPickUp(){
-
-        const CoinBuffer =  this.audioManager.find(e => e.name == "Coin");
-        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
-
-        if (playerAudio.isPlaying)  playerAudio.stop()
-        playerAudio.setBuffer( CoinBuffer );
-        playerAudio.setLoop( false );
-        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        playerAudio.play();
-
-    }
 
     PlayEnnemyShoot(ennemy){
       
@@ -64,32 +53,6 @@ class SoundSystem{
 
     }
 
-    PlayBulletShoot(){
-      
-        const bulletBuffer =  this.audioManager.find(e => e.name == "Bullet");
-        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
-
-        if (playerAudio.isPlaying)  playerAudio.stop()
-        playerAudio.setBuffer( bulletBuffer );
-        playerAudio.setLoop( false );
-        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        playerAudio.play();
-
-    }
-
-    PlayPowerShoot(){
-      
-        const bulletBuffer =  this.audioManager.find(e => e.name == "powerShot");
-        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
-
-        if (playerAudio.isPlaying)  playerAudio.stop()
-        playerAudio.setBuffer( bulletBuffer );
-        playerAudio.setLoop( false );
-        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        playerAudio.play();
-
-    }
-
     PlayHitBullet(bullet, delay){
 
         const bulletBuffer =  this.audioManager.find(e => e.name == "BulletHit");
@@ -101,45 +64,6 @@ class SoundSystem{
         bulletAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
 
         bulletAudio.play(delay);
-
-    }
-
-    PlayShipDamageTaken(){
-
-        const bulletBuffer =  this.audioManager.find(e => e.name == "ShipDamageTaken");
-        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
-
-        
-        playerAudio.setBuffer( bulletBuffer );
-        playerAudio.setLoop( false );
-        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        playerAudio.play(0);
-
-    }
-
-    PlayEnergyShield(){
-
-        const shieldBuffer =  this.audioManager.find(e => e.name == "EnergyShield");
-        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
-
-        if (playerAudio.isPlaying)  playerAudio.stop()
-        playerAudio.setBuffer( shieldBuffer );
-        playerAudio.setLoop( true );
-        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        playerAudio.play();
-
-    }
-
-    PlayPlayerRespawn(){
-
-        const spawnBuffer =  this.audioManager.find(e => e.name == "ShipRespawn");
-        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
-        
-        if (playerAudio.isPlaying)  playerAudio.stop()
-        playerAudio.setBuffer( spawnBuffer );
-        playerAudio.setLoop( false );
-        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        playerAudio.play();
 
     }
 

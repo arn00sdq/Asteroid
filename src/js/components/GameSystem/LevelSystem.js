@@ -43,7 +43,10 @@ class LevelSystem{
         player.scene = this.parent.currentScene;
         player.Instantiate(player,position, rotation, scale);
         player.SetRigidBody(player);
-        player.add( new THREE.PositionalAudio(  this.parent.audio.listener ));
+        let audioPlayer = 
+        
+        player.add( new THREE.PositionalAudio(  this.parent.audio.listener ) );
+        console.log(player.children)
 
     }
 
@@ -211,7 +214,7 @@ class LevelSystem{
                 this.loadWave(level);
                 this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 this.loadAnimation()
-                this.soundSystem.PlayPlayerRespawn();
+                this.soundSystem.playSfx(this.soundSystem.audioManager.find(e => e.name == "ShipRespawn"));
                 break;
 
         }
