@@ -192,8 +192,8 @@ class Asteroid {
 
 
         const bulletPlayer = new THREE.Mesh(
-            new THREE.CylinderGeometry(5, 50, 50),
-            new THREE.MeshBasicMaterial({ color: 0xffff00 }));
+            new THREE.CylinderGeometry(14,14, 100),
+            new THREE.MeshLambertMaterial({ color: 0xffff00,emissive:0xff0000 }));
         bulletPlayer.name = "BulletPlayer";
         bulletPlayer.rotateX((Math.PI / 180) * 90);
 

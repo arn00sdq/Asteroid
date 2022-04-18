@@ -154,7 +154,7 @@ class GameManager {
         this.AddComponent(new LevelSystem(this));
         this.AddComponent(new DisplaySystem(this));
         this.AddComponent(new JokerSystem(this, models));
-        this.AddComponent(new HackSystem(this));
+        this.AddComponent(new HackSystem(this,audio));
         this.AddComponent(new GameObjectManager(this,audio));
         this.AddComponent(new MenuSystem(this));
 

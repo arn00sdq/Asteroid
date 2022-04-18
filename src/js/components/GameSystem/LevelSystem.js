@@ -273,7 +273,7 @@ class LevelSystem{
 
     loadLight(){
         
-        const spotLight = new THREE.SpotLight(0xF7AB29,2,500,(Math.PI/180)*50);
+        const spotLight = new THREE.SpotLight(0xF7AB29,3,500,(Math.PI/180)*50);
         spotLight.position.set(-100,-5,-150);
         spotLight.target.position.set(0,-20,50);
         this.parent.currentScene.add(spotLight);
@@ -333,7 +333,7 @@ class LevelSystem{
             case "StartMenu":
                 break;
             case "Stage1":
-                this.asteroidWave(this.parent.asteroid, 5);
+                this.asteroidWave(this.parent.asteroid, 8);
                 break;
             case "Stage2":
                 this.asteroidWave(this.parent.asteroid, 5);

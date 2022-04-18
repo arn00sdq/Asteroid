@@ -43,7 +43,6 @@ class MenuSystem{
                 this.uiDisplay.printUIHeader(this.playerHealth.life, this.parent.score);
                 break;
             case "restart":
-                console.log(this.ambientSound.isPlaying)
                 this.levelSystem.scenePicker(this.levelSystem.currentLevel , false, false);
                 break;
             case "next":
@@ -66,6 +65,9 @@ class MenuSystem{
                 break;
             case "video":
                 this.uiDisplay.printVideoUIMenu();
+                break;
+            case "commande":
+                this.uiDisplay.printKeyboardShortcut();
                 break;
             case "fxaa_post_process":
                 this.video.fxaa == false ? this.video.fxaa = true: this.video.fxaa=false;
@@ -148,13 +150,13 @@ class MenuSystem{
     }
 
     OnKeyDown(event) {
-
-        switch (event.keyCode) {
+        
+        console.log(event.keyCode,event.keyCode && this.levelSystem.currentLevel !== "StartMenu")
+        if(this.levelSystem.currentLevel == "StartMenu") return;
+        switch (event.keyCode ) {
 
             case 27:
-
-                if(this.levelSystem.currentLevel == "StartMenu") break;
-
+                
                 if (!this.gameState.pause) {
 
                     if(this.ambientSound.isPlaying) this.ambientSound.pause();
@@ -181,7 +183,7 @@ class MenuSystem{
 
                 break;
             case 72:
-                
+                if(this.levelSystem.currentLevel == "StartMenu") break;
                 if (!this.gameState.keyboard) {
 
                     this.gameState.keyboard = true;

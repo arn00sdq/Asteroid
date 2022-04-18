@@ -257,3 +257,50 @@ body{
     margin-top: -0.5vh;
 }
 
+
+ /* CSS */
+ .button-53 {
+
+    top: 88vh;
+    left: 5vw;
+    position: absolute;
+    height: 8vh;
+    width: 13vw;
+    background-color: #3DD1E7;
+    color: #000000;
+    display: flex;
+    font-weight: 700;
+    justify-content: center;
+    line-height: 1.75rem;
+    text-align: center;
+    text-decoration: none #000000 solid;
+    cursor: pointer;
+    transform: rotate(-2deg);
+    touch-action: manipulation;
+    }
+
+    .button-53:focus {
+    outline: 0;
+    }
+
+    .button-53:after {
+    content: '';
+    position: absolute;
+    border: 1px solid #000000;
+    bottom: 4px;
+    left: 4px;
+    width: calc(100% - 1px);
+    height: calc(100% - 1px);
+    }
+
+    .button-53:hover:after {
+    bottom: 2px;
+    left: 2px;
+    }
+
+    @media (min-width: 768px) {
+    .button-53 {
+        padding: .75rem 3rem;
+        font-size: 1.25rem;
+    }
+    }

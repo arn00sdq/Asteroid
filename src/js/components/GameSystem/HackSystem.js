@@ -1,11 +1,12 @@
 class HackSystem{
 
-    constructor(parent){
+    constructor(parent,audio){
 
         this.parent = parent;
         
         this.jokerSytem = this.parent.GetComponent("JokerSystem");
-        this.sound_sys = this.parent.GetComponent("SoundSystem");
+        this.soundSyst = this.parent.GetComponent("SoundSystem");
+        this.audioManager = audio.audioManager
 
         this.indexJoker = 0;
 
@@ -50,33 +51,38 @@ class HackSystem{
 
                 case 0:
                     jokerSystem.PlayerAddLife(player,1);
-                    this.sound_sys.PlayHeartPickUp();
+                    console.log(this.soundSyst)
+                    this.soundSyst.playSfx(this.audioManager.find(e => e.name == "Heart"));
                     displayJoker.innerHTML = "extra-life";
                     break;
 
                 case 1:
                     jokerSystem.PlayerAddCoin(this.parent.score, 1);
-                    this.sound_sys.PlayCoinPickUp();
+                    this.soundSyst.playSfx(this.audioManager.find(e => e.name == "Coin"));
                     displayJoker.innerHTML = "coin";
                     break;
                 case 2:
                     player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
                     displayJoker.innerHTML = "extra-missile";
+                    this.soundSyst.playSfx(this.audioManager.find(e => e.name == "ItemPick"));
                     break;
                 case 3:
  
                     if(player.hasJoker.immune == false){
 
                         jokerSystem.PlayerProtection(player, this.parent.shield,3000);
+                        this.soundSyst.playSfx(this.audioManager.find(e => e.name == "Shield"));
                     }
-                    break;
                     displayJoker.innerHTML = "shield";
+                    break;
+                    
 
                 case 4:
                     
                     if(player.hasJoker.fireRate == false){
 
                         jokerSystem.IncreaseFireRate(player,5000);
+                        this.soundSyst.playSfx(this.audioManager.find(e => e.name == "ItemPick"));
     
                     }
                     displayJoker.innerHTML = "firerate increased";
