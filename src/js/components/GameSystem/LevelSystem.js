@@ -41,12 +41,14 @@ class LevelSystem{
     InstantiatePlayer(player,position, rotation, scale){
         
         player.scene = this.parent.currentScene;
-        player.Instantiate(player,position, rotation, scale);
+        player.Instantiate(player,position, rotation, 0.03);
         player.SetRigidBody(player);
-        let audioPlayer = 
-        
         player.add( new THREE.PositionalAudio(  this.parent.audio.listener ) );
-        console.log(player.children)
+        player.add(this.parent.booster);
+        const booster = player.children.find(e => e.name == "booster")
+        booster.position.set(0, -0.01, -0.155)
+        console.log(player)
+        booster.scale.set(0.001,0.001,0.001)
 
     }
 

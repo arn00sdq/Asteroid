@@ -197,9 +197,7 @@ class GameManager {
         this.player.stageSystem = this.GetComponent("LevelSystem");
         this.player.audioSystem = this.GetComponent("SoundSystem");
         this.input = this.player.GetComponent("CharacterControllerInput").keys;
-        this.player.add(this.booster);
-        const booster = this.player.children.find(e => e.name == "booster")
-        booster.position.set(0, -0.01, -0.155)
+
 
         /* EnnemyShip init */
 

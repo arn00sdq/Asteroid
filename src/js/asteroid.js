@@ -6,6 +6,7 @@ import BasicAsteroid from "./components/Asteroid/BasicAsteroid.js";
 import GameManager from "./components/GameSystem/GameManager.js";
 
 import { OBJLoader } from "./Loader/OBJLoader.js"
+import {FBXLoader} from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/loaders/FBXLoader.js"
 import { Object3D, ShaderMaterial, TextureLoader } from "./three/three.module.js";
 
 import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/EffectComposer.js";
@@ -52,7 +53,7 @@ class Asteroid {
 
         this.inGameCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.001, 10000);
         this.inGameCamera.fov = 142.5
-        this.inGameCamera.position.set(0, 0.3, 0); 
+        this.inGameCamera.position.set(0, 0.4, 0.0); 
 
         this.cameraStartMenu = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 2 , 500);
         this.cameraStartMenu.position.set(5,0,15);
@@ -167,6 +168,7 @@ class Asteroid {
         this.idleAction = null;
 
         const loaderObj = new OBJLoader(this.loadingManager);
+        const fbxLoader = new FBXLoader(this.loadingManager);
 
         /* 
         * texture
@@ -455,7 +457,7 @@ class Asteroid {
         */
 
         this.booster = new THREE.Mesh(
-            new THREE.SphereGeometry(0.1, 50, 50),
+            new THREE.SphereGeometry(0.05, 50, 50),
             new THREE.ShaderMaterial({
                 vertexShader: _VSBooster(),
                 fragmentShader: _FSBooster(),
@@ -494,8 +496,43 @@ class Asteroid {
         this.modelManager.push(sunMesh); this.modelManager.push(explosion); this.modelManager.push(specialBulletMesh)
 
         /*
+        *
+        */
+        fbxLoader.load(
+            '../medias/models/test/SF_Fighter/SciFi_Fighter.FBX',
+            (object) => {
+                 object.name = "SpaceShip";
+                 object.rotateY((Math.PI / 180)* 70);
+                 console.log(object)
+                 this.modelManager.push(object);
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+        /*
         * ObjectLoader
         */
+
+       /* loaderObj.load('../medias/models/Player/SpaceShip.obj', (object) => {
+
+            object.traverse(function (child) {
+
+                if (child.isMesh){
+                    child.name = "playerMesh";
+                    child.material = materialPlayer;
+                } 
+
+            });
+
+            object.name = "SpaceShip";
+            this.modelManager.push(object);
+
+        });*/
+
         loaderObj.load('../medias/models/low_poly.obj', (object) => {
 
             object.traverse(function (child) {
@@ -550,23 +587,6 @@ class Asteroid {
             this.modelManager.push(object)
 
         });
-
-        loaderObj.load('../medias/models/Player/SpaceShip.obj', (object) => {
-
-            object.traverse(function (child) {
-
-                if (child.isMesh){
-                    child.name = "playerMesh";
-                    child.material = materialPlayer;
-                } 
-
-            });
-
-            object.name = "SpaceShip";
-            this.modelManager.push(object);
-
-        });
-
     }
 
     loadAudio() {
