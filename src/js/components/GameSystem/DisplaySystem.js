@@ -466,22 +466,22 @@ class DisplaySystem{
             <div id="startMenuBody">
                 <div id="startMenuSelection">
                     <div class="startMenuBtn" id="startMenuB1">
-                        <button class="startMenuSPAN" name="play">PLAY GAME</button>
+                        <button class="startMenuSPAN" name="play">Play game</button>
                     </div>
                     <div class="startMenuBtn" id="startMenuB2">
-                        <button class="startMenuSPAN" name="video">VIDEO</button>
+                        <button class="startMenuSPAN" name="video">Video</button>
                     </div>
                     <div class="startMenuBtn" id="startMenuB2">
-                        <button class="startMenuSPAN" name="audio">AUDIO</button>
+                        <button class="startMenuSPAN" name="audio">Audio</button>
                     </div>
                     <div class="startMenuBtn" id="startMenuB3">
                         <button class="startMenuSPAN" name="commande">Commande</button>
                     </div>
                     <div class="startMenuBtn" id="startMenuB4">
-                        <button class="startMenuSPAN" name="credit">CREDITS</button>
+                        <button class="startMenuSPAN" name="credit">Credits</button>
                     </div>
                     <div class="startMenuBtn" id="startMenuB5">
-                        <button class="startMenuSPAN" name="quit">EXIT</button>
+                        <button class="startMenuSPAN" name="quit">Exit</button>
                     </div>
                 </div>
             </div>
