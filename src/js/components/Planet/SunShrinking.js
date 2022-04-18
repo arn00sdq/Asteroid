@@ -28,7 +28,6 @@ class SunShrinking {
         let mesh =  this.parent.children.find(e => e.constructor.name == "Mesh");
      
         if(this.timer.timeLeft >3){
-          console.log("1er part")
           this.intensity =  THREE.MathUtils.lerp(this.intensity,this.intensity +  this.intensityStep,0.4);
 
           mesh.material.uniforms[ 'time' ].value =  this.timeShrink * timeInSecond ;
@@ -40,14 +39,12 @@ class SunShrinking {
         }
 
         if(this.timer.timeLeft <= 3 && this.timer.timeLeft >2 ){
-          console.log("2eme part")
           mesh.material.uniforms[ 'time' ].value =  this.timeShrink * timeInSecond ;
           mesh.material.uniforms[ 'n' ].value =  this.nShrink *  timeInSecond  ;
 
         }
 
         if(this.timer.timeLeft <= 2){
-          console.log("last")
           mesh.scale.addScalar(0.02);
 
           this.intensity =  THREE.MathUtils.lerp(this.intensity,this.intensity - this.intensityStep,0.9);

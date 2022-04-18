@@ -7,6 +7,7 @@ class CharacterControllerInput {
     
 
     this.cam_sys = this.parent.GetComponent("PlayerCameraSystem");
+    this.camera = this.parent.GetComponent("PlayerCameraSystem").camera;
 
     this.Init();
 
@@ -162,7 +163,8 @@ class CharacterControllerInput {
     goal_setting.position.set(0, 5, 0);
     camera_setting.position.set(0, 5, 0);
 
-    camera_setting.lookAt(0, 0, 0)
+    camera_setting.lookAt(0, 0, 0);
+    this.camera.fov = 90
 
   }
 
@@ -173,8 +175,7 @@ class CharacterControllerInput {
 
     goal_setting.position.set(this.parent.position.x, 0, this.parent.position.z -0.3);
     camera_setting.position.set(0, 0.3, 0);
-    
-    camera_setting.fov = 112.5
+    this.camera.fov = 142.5
 
   }
 

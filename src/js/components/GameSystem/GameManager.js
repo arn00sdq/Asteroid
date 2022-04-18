@@ -25,7 +25,6 @@ class GameManager {
         this.currentCamera = new THREE.Camera();
 
 
-
         /*
         * Utils
         */
@@ -197,7 +196,10 @@ class GameManager {
         this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
         this.player.stageSystem = this.GetComponent("LevelSystem");
         this.player.audioSystem = this.GetComponent("SoundSystem");
+        this.input = this.player.GetComponent("CharacterControllerInput").keys;
         this.player.add(this.booster);
+        const booster = this.player.children.find(e => e.name == "booster")
+        booster.position.set(0, -0.01, -0.155)
 
         /* EnnemyShip init */
 
@@ -206,12 +208,6 @@ class GameManager {
         this.ennemy_ss.weaponParams = this.ennemyBullet;
         this.ennemy_ss.asteroid = this.asteroid;
         this.ennemy_ss.target = this.player;
-
-        const booster = this.player.children.find(e => e.name == "booster")
-        booster.position.set(0, -0.01, -0.155)
-
-        this.input = this.player.GetComponent("CharacterControllerInput").keys;
-
         this.ennemyBullet.name = "EnnemyBullet";
 
     }
@@ -294,7 +290,6 @@ class GameManager {
         requestAnimationFrame(this.RAF.bind(this));
 
         if (!this.state.pause) {
-
             //this.controls.update()
             this.loop.now = window.performance.now();
             this.loop.dt = this.loop.dt + Math.min(1, (this.loop.now - this.loop.last) / 1000);

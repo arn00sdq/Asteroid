@@ -51,7 +51,7 @@ class Asteroid {
         /*camera*/
 
         this.inGameCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.001, 10000);
-        this.inGameCamera.fov = 112.5
+        this.inGameCamera.fov = 142.5
         this.inGameCamera.position.set(0, 0.3, 0); 
 
         this.cameraStartMenu = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 2 , 500);
@@ -792,7 +792,7 @@ class Asteroid {
             document.removeEventListener('keydown', this.remove);
             this.gm.state.start = true;
             
-            this.gm.GetComponent("LevelSystem").scenePicker("Stage3", true);
+            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
 
         }
 

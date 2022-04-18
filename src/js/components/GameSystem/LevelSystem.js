@@ -331,11 +331,11 @@ class LevelSystem{
                 this.asteroidWave(this.parent.asteroid, 5);
                 break;
             case "Stage2":
-                this.asteroidWave(this.parent.asteroid, 1);
-               // this.ennemySpaceshipWave(this.parent.ennemy_ss,1)
+                this.asteroidWave(this.parent.asteroid, 5);
+                this.ennemySpaceshipWave(this.parent.ennemy_ss,1)
                 break;
             case "Stage3":
-                this.asteroidWave(this.parent.asteroid, 10);
+                this.asteroidWave(this.parent.asteroid, 8);
                 this.ennemySpaceshipWave(this.parent.ennemy_ss,2)
                 break;
         }
@@ -491,7 +491,12 @@ class LevelSystem{
 
     Update(timeElapsed){
 
-        if(this.timer.timeLeft == 0 && this.stateScene.Stage3) this.endStage3();
+        if(this.timer.timeLeft == 0 && this.stateScene.Stage3){
+
+            this.endStage3();
+          //  this.timeElapsed.onTimesUp();
+
+        } 
 
 
     }

@@ -315,6 +315,8 @@ class DisplaySystem{
                 </div>
             </div>
 
+            <img src="../medias/images/key/mouse.jpg" class="mouse-pict "/>
+
             <div class="line lineEchap"><div class="text textEchap">Menu</div></div>
 
             <div class="line lineZ"><div class="text textZ">Avancer</div></div>
@@ -331,6 +333,8 @@ class DisplaySystem{
             <div class="line lineH"><div class="text textH">Afficher </br>touches</div></div>
             <div class="line lineJ"><div class="text textJ">Joker</div></div>
             <div class="line lineK"><div class="text textK">Tuer les </br> tous</div></div>
+
+            <div class="line lineMouse"><div class="text textMouse">FOV</div></div>
 
         </div>
        

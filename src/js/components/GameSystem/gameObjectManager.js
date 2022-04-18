@@ -42,7 +42,6 @@ class GameObjectManager {
 
   collision_handler(e, e2) {
 
-
     switch (e.constructor.name) {
 
       case "BasicAsteroid":
@@ -119,6 +118,7 @@ class GameObjectManager {
 
   CollisionPlayerHandler(player, object) {
 
+
     if ((object.name == "Asteroid" || object.name == "EnnemyBullet") && !player.hasJoker.immune) {
 
       let playerHitSound = new THREE.Audio(this.parent.audio.listener);
@@ -128,21 +128,33 @@ class GameObjectManager {
       player.SetInvulnerability(2000);
 
       this.displaySystem.PrintLife(this.playerHealth.life);
-
       if (this.playerHealth.life == 0) {
 
-        this.levelSystem.InstantiateShader(this.parent.explosion, player.position, new THREE.Euler(0, 0, 0));
+        this.levelSystem.InstantiateShader(this.parent.explosion, player.position, new THREE.Euler(0, 0, 0), 1);
         player.Destroy(player);
 
         setTimeout(() => {
 
           this.parent.OnPlayerEnd();
 
-        }, 1000);
+        }, 1200);
 
 
       }
 
+    }
+
+    if(object.name == "Sun"){
+      console.log(object.name)
+      this.levelSystem.InstantiateShader(this.parent.explosion, player.position, new THREE.Euler(0, 0, 0), 1);
+      player.Destroy(player);
+
+      setTimeout(() => {
+
+        this.parent.OnPlayerEnd();
+
+      }, 1200);
+      
     }
 
   }
@@ -343,7 +355,7 @@ class GameObjectManager {
           this.parent.selectedObjects.push(e.children.find(e => e.constructor.name == "Mesh"));
 
         }
-
+        
         if (e.userData.type == "joker") {
 
           this.parent.selectedObjects.push(e.children.find(e => e.constructor.name == "Mesh"));

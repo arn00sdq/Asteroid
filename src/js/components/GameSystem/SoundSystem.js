@@ -18,9 +18,7 @@ class SoundSystem{
     playAmbientMusic(buffer){
 
         let ambientSound = this.parent.ambientSound;
-        console.log(buffer)
         if(ambientSound.isPlaying) ambientSound.stop();
-        console.log(buffer)
         ambientSound.setBuffer(buffer);
         ambientSound.setVolume(  this.musicVolume > this.masterVolume  ? this.masterVolume : this.musicVolume );
         ambientSound.play();
@@ -111,6 +109,7 @@ class SoundSystem{
         const bulletBuffer =  this.audioManager.find(e => e.name == "ShipDamageTaken");
         const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
 
+        
         playerAudio.setBuffer( bulletBuffer );
         playerAudio.setLoop( false );
         playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
@@ -123,6 +122,7 @@ class SoundSystem{
         const shieldBuffer =  this.audioManager.find(e => e.name == "EnergyShield");
         const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
 
+        if (playerAudio.isPlaying)  playerAudio.stop()
         playerAudio.setBuffer( shieldBuffer );
         playerAudio.setLoop( true );
         playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
@@ -134,7 +134,8 @@ class SoundSystem{
 
         const spawnBuffer =  this.audioManager.find(e => e.name == "ShipRespawn");
         const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
-
+        
+        if (playerAudio.isPlaying)  playerAudio.stop()
         playerAudio.setBuffer( spawnBuffer );
         playerAudio.setLoop( false );
         playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
@@ -147,7 +148,7 @@ class SoundSystem{
         const exploBuffer =  this.audioManager.find(e => e.name == "AsteroidExplosion");
        
         let exploAudio =  asteroid.children.find(e => e.constructor.name == "PositionalAudio");
-     //   if (exploAudio.isPlaying)  exploAudio.stop()
+        if (exploAudio.isPlaying)  exploAudio.stop()
         exploAudio.setBuffer( exploBuffer );
         exploAudio.setLoop( false );
         exploAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );

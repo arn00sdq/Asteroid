@@ -237,3 +237,23 @@ body{
     margin-top: -1vh;
 }
 
+.mouse-pict{
+    position: absolute;
+    width: 5vw;
+    top: 80vh;
+    right: 29vw;
+}
+
+.lineMouse{
+    margin-left: 44vw;
+    width: 6vw;
+    top: 82vh;
+    transform: rotate(0deg);
+}
+
+.textMouse{
+    transform: rotate(0deg);
+    margin-left: 6.5vw;
+    margin-top: -0.5vh;
+}
+

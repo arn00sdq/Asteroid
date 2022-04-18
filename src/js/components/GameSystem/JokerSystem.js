@@ -98,12 +98,13 @@ class JokerSystem{
 
             this.nextJoker =  Math.round(timeInSecond);
 
-            if(this.nextJoker % 1 == 0 && this.jokerAv.length > 0){
+            if(this.nextJoker % 5 == 0 && this.jokerAv.length > 0){
 
-                let position = new THREE.Vector3( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) )  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+                let position = new THREE.Vector3( ( Math.random() *  (this.edgeLimit - 3  ))  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
-                                                  ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 2 ) ) )  * ( Math.round( Math.random() ) ? 1 : -1 ) 
+                                                  ( Math.random() * (this.edgeLimit - 3  ))  * ( Math.round( Math.random() ) ? 1 : -1 ) 
                                             )
+                console.log(this.edgeLimit)
                 let rotation = new THREE.Euler(0,0,0);      
                 let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
                 let scale = 1;
@@ -124,7 +125,7 @@ class JokerSystem{
                 if (currentJoker.constructor.name == "Shield"){
                     this.levelSystem.InstantiateShader(currentJoker,position,rotation,scale,"joker");
                 }  else{
-                    this.levelSystem.InstantiateGameObject(currentJoker,position,rotation,scale,undefined,"joker");
+                    this.levelSystem.InstantiateGameObject(currentJoker,position,rotation,scale,"joker");
                 }
                
                 
