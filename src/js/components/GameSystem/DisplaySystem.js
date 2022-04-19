@@ -238,8 +238,23 @@ class DisplaySystem{
         <div class="container">
             <div class="keyboard_wrapp">
                 <div class="keyboard_keys">
+                <div class="row">
+                        <div class="keys crtl_key ctrl_left">Echap</div>
+                        <div class="keys">F1</div>
+                        <div class="keys">F2</div>
+                        <div class="keys">F4</div>
+                        <div class="keys">F5</div>
+                        <div class="keys">F6</div>
+                        <div class="keys">F7</div>
+                        <div class="keys">F8</div>
+                        <div class="keys">F9</div>
+                        <div class="keys">F10</div>
+                        <div class="keys">F11</div>
+                        <div class="keys">F12</div>
+                        <div class="keys">Impr syst</div>
+                    </div>
                     <div class="row">
-                        <div class="keys">Echap</div>
+                        <div class="keys">²</div>
                         <div class="keys">1</div>
                         <div class="keys">2</div>
                         <div class="keys">3</div>
@@ -312,6 +327,7 @@ class DisplaySystem{
                         <div class="keys win_key">Win</div>
                         <div class="keys ctrl_key ctrl_right">Ctrl</div>
                     </div>
+                    
                 </div>
             </div>
             <button class="button-53" role="button" name="retour">Retour</button>
@@ -328,6 +344,7 @@ class DisplaySystem{
             <div class="line lineS"><div class="text textS">Reculer</div></div>
             
             <div class="line lineP"><div class="text textP">Photo</div></div>
+            <div class="line lineF11"><div class="text textF11">Plein écran</div></div>
             
             <div class="line lineSpace"><div class="text textSpace">Tirer</div></div>
             <div class="line linePower"><div class="text textPower">Compétance spécial</div></div>

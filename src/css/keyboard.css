@@ -77,22 +77,22 @@ body{
 
 .lineZ {
     margin-left: -52vw;
-    width: 10vw;
-    top: 30vh; 
+    width: 12vw;
+    top: 28vh; 
     transform: rotate(90deg);
 }
 
 .lineS {
-    margin-left: -49vw;
-    width: 17vw;
-    margin-top: 33vh;
+    margin-left: -48.5vw;
+    width: 14vw;
+    margin-top: 45vh;
     transform: rotate(90deg);
 }
 
 .lineD {
     margin-left:  -38vw;
-    width: 20vw;
-    margin-top: -37vh;  
+    width: 16vw;
+    margin-top: -29vh;  
     transform: rotate(90deg);
 }
 
@@ -106,35 +106,35 @@ body{
 .lineShift{
     margin-left: -83vw;
     width: 6vw;
-    top: 60vh;
+    top: 65vh;
     transform: rotate(0deg);
 }
 
 .linePower{
     margin-right: -80vw;
     width: 5vw;
-    top: 50vh;
+    top: 55vh;
     transform: rotate(0deg);
 }
 
 .lineSpace {
     margin-left: -4.5vw;
-    width: 10vw;
-    top: 78vh; 
+    width: 5vw;
+    top: 83vh; 
     transform: rotate(90deg);
 }
 
 .lineEchap {
     margin-left: -75vw;
-    width: 6vw;
-    top: 22vh;
+    width: 3vw;
+    top: 18vh;
     transform: rotate(90deg);
 }
 
 .lineQ {
     margin-left: -73vw;
     width: 13vw;
-    top: 49vh;
+    top: 55vh;
     transform: rotate(0deg);
 }
 
@@ -178,7 +178,7 @@ body{
 
 .textS{
     transform: rotate(-90deg);
-    margin-left: 16vw;
+    margin-left: 14vw;
     margin-top: -1vh;
 }
 
@@ -186,7 +186,7 @@ body{
 .textQ{
     transform: rotate(0deg);
     margin-left: -4.5vw;
-    margin-top: -2vh;
+    margin-top: -1vh;
 }
 
 .textShift{
@@ -233,7 +233,7 @@ body{
 
 .textSpace{
     transform: rotate(-90deg);
-    margin-left: 10vw;
+    margin-left: 5vw;
     margin-top: -1vh;
 }
 
@@ -256,6 +256,21 @@ body{
     margin-left: 6.5vw;
     margin-top: -0.5vh;
 }
+
+.lineF11{
+    transform: rotate(-90deg);
+    margin-left: 49vw;
+    margin-top: -60vh;
+    width: 4vw;
+
+}
+
+.textF11{
+    transform: rotate(90deg);
+    margin-left: 5vw;
+    margin-top: -3vh;
+}
+
 
 
  /* CSS */
