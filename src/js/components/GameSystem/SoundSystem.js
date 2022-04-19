@@ -31,7 +31,6 @@ class SoundSystem{
         const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
 
         if (playerAudio.isPlaying)  playerAudio.stop()
-        console.log(buffer)
         playerAudio.setBuffer( buffer );
         playerAudio.setLoop( false );
         playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );

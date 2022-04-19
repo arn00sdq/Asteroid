@@ -132,7 +132,6 @@ class MenuSystem{
                 document.getElementById("range_sfx_volume").innerHTML = soundSystem.sfxVolume;
                 break;
             case "range_music_volume":
-                console.log()
                 soundSystem.musicVolume = event.target.value / 100;
                 document.getElementById("range_music_volume").innerHTML = soundSystem.musicVolume;
                 this.ambientSound.setVolume(  soundSystem.musicVolume > soundSystem.masterVolume  ? soundSystem.masterVolume : soundSystem.musicVolume );
@@ -151,7 +150,6 @@ class MenuSystem{
 
     OnKeyDown(event) {
         
-        console.log(event.keyCode,event.keyCode && this.levelSystem.currentLevel !== "StartMenu")
         if(this.levelSystem.currentLevel == "StartMenu") return;
         switch (event.keyCode ) {
 

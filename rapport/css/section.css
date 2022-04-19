@@ -179,20 +179,27 @@ p {
     padding-bottom: 1vh;
 }
 
-.big-video video{
-    height: 60vh;
-    width: 50vw;
-}
-
 .small-video video{
     height: 40vh;
     width: 30vw;
+}
+
+.medium-video video{
+    height: 35vh;
+    width: 30vw;
+}
+
+
+.big-video video{
+    height: 60vh;
+    width: 50vw;
 }
 
 .wide-video video{
     height: 50vh;
     width: 50vw;
 }
+
 
 .small-video, .wide-video  video{
     object-fit: cover;

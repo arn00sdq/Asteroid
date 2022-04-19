@@ -47,7 +47,6 @@ class LevelSystem{
         player.add(this.parent.booster);
         const booster = player.children.find(e => e.name == "booster")
         booster.position.set(0, -0.01, -0.155)
-        console.log(player)
         booster.scale.set(0.001,0.001,0.001)
 
     }

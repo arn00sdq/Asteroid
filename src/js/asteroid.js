@@ -176,13 +176,6 @@ class Asteroid {
 
         const textureLoader = new TextureLoader(this.loadingManager);
 
-        var materialPlayer = new THREE.MeshPhongMaterial({
-            map: textureLoader.load('../medias/models/Player/textures/Andorian (4).png'),
-            normalMap: textureLoader.load('../medias/models/Player/textures/Andorian (3).png'),
-            bumpMap: textureLoader.load('../medias/models/Player/textures/Husnock (3).png'),
-            emissiveMap: textureLoader.load('../medias/models/Player/textures/env.png'),
-        });
-
         var material = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg') })
         var materialCoin = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/collectable/coin/textures/Coin_Gold_albedo.png') });
         var materialEnnemySS = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/Ennemy/textures/E-45 _col.jpg')});
@@ -192,8 +185,8 @@ class Asteroid {
 
 
         const bulletPlayer = new THREE.Mesh(
-            new THREE.CylinderGeometry(14,14, 100),
-            new THREE.MeshLambertMaterial({ color: 0xffff00,emissive:0xff0000 }));
+            new THREE.CylinderGeometry(20,20, 130),
+            new THREE.MeshLambertMaterial({ color: 0xffff00,emissive:0xffff00 }));
         bulletPlayer.name = "BulletPlayer";
         bulletPlayer.rotateX((Math.PI / 180) * 90);
 
@@ -503,7 +496,6 @@ class Asteroid {
             (object) => {
                  object.name = "SpaceShip";
                  object.rotateY((Math.PI / 180)* 70);
-                 console.log(object)
                  this.modelManager.push(object);
             },
             (xhr) => {
@@ -513,25 +505,6 @@ class Asteroid {
                 console.log(error)
             }
         )
-        /*
-        * ObjectLoader
-        */
-
-       /* loaderObj.load('../medias/models/Player/SpaceShip.obj', (object) => {
-
-            object.traverse(function (child) {
-
-                if (child.isMesh){
-                    child.name = "playerMesh";
-                    child.material = materialPlayer;
-                } 
-
-            });
-
-            object.name = "SpaceShip";
-            this.modelManager.push(object);
-
-        });*/
 
         loaderObj.load('../medias/models/low_poly.obj', (object) => {
 
@@ -842,7 +815,6 @@ class Asteroid {
 
     onTransitionEnd(event) {
 
-        console.log("pret")
         event.target.remove();
         this.loadProps();
 

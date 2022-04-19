@@ -104,7 +104,6 @@ class JokerSystem{
                                                   0 ,
                                                   ( Math.random() * (this.edgeLimit - 3  ))  * ( Math.round( Math.random() ) ? 1 : -1 ) 
                                             )
-                console.log(this.edgeLimit)
                 let rotation = new THREE.Euler(0,0,0);      
                 let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
                 let scale = 1;
