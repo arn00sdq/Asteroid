@@ -183,7 +183,11 @@ class LevelSystem{
 
     resetTimer(){
 
-        this.timer.timeLeft = 86
+        this.timer.onTimesUp()
+        this.timer.timeLeft = 86;
+        this.timer.timePassed = 0;
+        this.timer.timerInterval =null;
+        this.timer.paused = false;
 
     }
 
@@ -496,7 +500,6 @@ class LevelSystem{
     Update(timeElapsed){
 
         if(this.timer.timeLeft == 0 && this.stateScene.Stage3){
-
             this.endStage3();
           //  this.timeElapsed.onTimesUp();
 
