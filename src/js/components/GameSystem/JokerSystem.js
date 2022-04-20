@@ -11,8 +11,10 @@ class JokerSystem{
         
         this.nextJoker = null;
         this.joker = [models.heart, models.firepower, models.coin,models.shield,models.firerate];
-        this.jokerAv = []
-        this.jokerUnv = []
+        this.jokerAv = [];
+        this.jokerUnv = [];
+
+        this.shield_clone;
 
         this.levelSystem = this.parent.GetComponent("LevelSystem");
         this.displaySystem = this.parent.GetComponent("DisplaySystem");
@@ -36,32 +38,40 @@ class JokerSystem{
     }
 
     PlayerProtection(player,shield, seconds){
-        
-        player.hasJoker.immune = true;
-        
-       /* let shieldClone = shield.clone();
-        shieldClone.scene = shield.scene;*/
-
-        let shield_clone = shield.clone();
-        shield_clone.scene = shield.scene;
-
-        let mesh = shield_clone.children.find(e => e.constructor.name == "Mesh");
-        let shaderMat = Object.values(this.parent.shaders).find( val => val.parentName === shield.constructor.name);
-        mesh.material = shaderMat
-
-        shield_clone.RemoveRigidBody(shield_clone);
-        player.add(shield_clone)
-
+          
+        this.addShield(player,shield);
 
         setTimeout(() => {
 
-            player.hasJoker.immune = false;
-            player.remove(shield_clone)
+            this.removeShield(player);
 
         }, seconds);
         
 
     }
+
+    addShield(player,shield){
+
+        player.hasJoker.immune = true;
+        this.shield_clone = shield.clone();
+        this.shield_clone.scene = shield.scene;
+
+        let mesh = this.shield_clone.children.find(e => e.constructor.name == "Mesh");
+        let shaderMat = Object.values(this.parent.shaders).find( val => val.parentName === shield.constructor.name);
+        mesh.material = shaderMat
+
+        this.shield_clone.RemoveRigidBody(this.shield_clone);
+        player.add(this.shield_clone)
+
+    }
+
+    removeShield(player){
+
+        player.hasJoker.immune = false;
+        player.remove(this.shield_clone)
+
+    }
+    
 
     IncreaseFireRate(player,seconds){
 
