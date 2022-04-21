@@ -43,7 +43,6 @@ class LevelSystem{
         player.scene = this.parent.currentScene;
         player.Instantiate(player,position, rotation, 0.03);
         player.SetRigidBody(player);
-        player.add( new THREE.PositionalAudio(  this.parent.audio.listener ) );
         player.add(this.parent.booster);
         const booster = player.children.find(e => e.name == "booster")
         booster.position.set(0, -0.01, -0.155)
@@ -138,7 +137,7 @@ class LevelSystem{
             
         });
 
-        destination.add( new THREE.PositionalAudio( this.parent.audio.listener ));
+        destination.add( new THREE.PositionalAudio( this.parent.audio.asteroidListener ));
 
     }
 
@@ -231,7 +230,7 @@ class LevelSystem{
                 this.loadWave(level);
                 this.InstantiatePlayer(this.player, new THREE.Vector3(0,0.0,0), new THREE.Euler(0,0,0),0.0004);
                 this.loadAnimation()
-                this.soundSystem.playSfx(this.soundSystem.audioManager.find(e => e.name == "ShipRespawn"));
+                this.soundSystem.playSfxInstantPlayer(this.soundSystem.audioManager.find(e => e.name == "ShipRespawn"))
                 break;
 
         }

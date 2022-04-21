@@ -40,13 +40,13 @@ class PlayerShootProjectiles{
 
           this.weaponList.normalBullet.timerInstantiate = timeElapsed;
           this.parent.stageSystem.InstantiateGameObject(this.weaponList.normalBullet,this.temp, this.spawnRot, 0.0009) 
-          this.parent.audioSystem.playSfx(this.parent.audioSystem.audioManager.find(e => e.name == "Bullet"));
+          this.parent.audioSystem.playSfxBullet(this.parent.audioSystem.audioManager.find(e => e.name == "Bullet"));
           
         }else{
 
           this.weaponList.specialBullet.timerInstantiate = timeElapsed;
           this.parent.stageSystem.InstantiateShader(this.weaponList.specialBullet,this.temp, this.spawnRot, 0.9);
-          this.parent.audioSystem.playSfx(this.parent.audioSystem.audioManager.find(e => e.name == "powerShot"));
+          this.parent.audioSystem.playSfxPlasma(this.parent.audioSystem.audioManager.find(e => e.name == "powerShot"));
 
         }
         

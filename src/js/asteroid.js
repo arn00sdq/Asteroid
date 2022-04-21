@@ -150,8 +150,24 @@ class Asteroid {
 
         this.inGameCamera.lookAt(this.stageScene.position);
 
-        this.listener = new THREE.AudioListener();
-        this.inGameCamera.add(this.listener);
+        this.ambientListener = new THREE.AudioListener();
+        this.asteroidListener = new THREE.AudioListener();
+        this.bulletListener = new THREE.AudioListener();
+        this.shieldListener = new THREE.AudioListener();
+        this.jokerListener = new THREE.AudioListener();
+        this.plasmaListener = new THREE.AudioListener();
+        this.playerDamageListener = new THREE.AudioListener();
+        this.playerInstListener = new THREE.AudioListener();
+    
+        this.inGameCamera.add(this.ambientListener);
+        this.inGameCamera.add(this.asteroidListener);
+        this.inGameCamera.add(this.bulletListener);
+        this.inGameCamera.add(this.shieldListener);
+        this.inGameCamera.add(this.jokerListener);
+        this.inGameCamera.add(this.plasmaListener);
+        this.inGameCamera.add(this.playerDamageListener);
+        this.inGameCamera.add(this.playerInstListener);
+
 
         window.addEventListener('resize', () => {
 
@@ -566,8 +582,6 @@ class Asteroid {
 
         this.audioManager = [];
 
-        this.sound = new THREE.PositionalAudio(this.listener);
-
         const audioLoader = new THREE.AudioLoader(this.loadingManager);
         let me = this;
         audioLoader.load('../medias/sounds/coin/coin.mp3', function (buffer) {
@@ -695,8 +709,15 @@ class Asteroid {
         const audio = {
 
             audioManager: this.audioManager,
-            //sound: this.sound,
-            listener: this.listener
+
+            ambientListener: this.ambientListener,
+            asteroidListener: this.asteroidListener,
+            bulletListener: this.bulletListener,
+            shieldListener: this.shieldListener,
+            jokerListener: this.jokerListener,
+            plasmaListener: this.plasmaListener,
+            playerDamageListener: this.playerDamageListener,
+            playerInstListener:this.playerInstListener
 
         }
 

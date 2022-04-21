@@ -25,18 +25,71 @@ class SoundSystem{
 
     }
 
+    playSfxPlayerDamge(buffer){
 
-    playSfx(buffer){
-
-        const playerAudio = this.parent.player.children.find(e => e.constructor.name == "PositionalAudio")
-
-        if (playerAudio.isPlaying)  playerAudio.stop()
-        playerAudio.setBuffer( buffer );
-        playerAudio.setLoop( false );
-        playerAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        playerAudio.play();
+        let playerDamageSound = this.parent.playerDamageSound;
+        if (playerDamageSound.isPlaying)  playerDamageSound.stop()
+        playerDamageSound.setBuffer( buffer );
+        playerDamageSound.setLoop( false );
+        playerDamageSound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        playerDamageSound.play();
 
     }
+
+    playSfxInstantPlayer(buffer){
+
+        let playerInstSound = this.parent.playerInstSound;
+        if (playerInstSound.isPlaying)  playerInstSound.stop()
+        playerInstSound.setBuffer( buffer );
+        playerInstSound.setLoop( false );
+        playerInstSound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        playerInstSound.play();
+
+    }
+
+    playSfxBullet(buffer){
+
+         let playerBulletSound = this.parent.bulletSound;
+         if (playerBulletSound.isPlaying)  playerBulletSound.stop()
+         playerBulletSound.setBuffer( buffer );
+         playerBulletSound.setLoop( false );
+         playerBulletSound.setVolume( 0.05 ); //too loud
+         playerBulletSound.play();
+ 
+     }
+
+     playSfxPlasma(buffer){
+
+        let plasmaSound = this.parent.plasmaSound;
+        if (plasmaSound.isPlaying)  plasmaSound.stop()
+        plasmaSound.setBuffer( buffer );
+        plasmaSound.setLoop( false );
+        plasmaSound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        plasmaSound.play();
+
+    }
+
+     playSfxJoker(buffer){
+
+         let jokerSound = this.parent.jokerSound;
+         if (jokerSound.isPlaying)  jokerSound.stop()
+         jokerSound.setBuffer( buffer );
+         jokerSound.setLoop( false );
+         jokerSound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+         jokerSound.play();
+ 
+     }
+
+     playSfxShield(buffer){
+
+         let shieldSound = this.parent.shieldSound;
+         if (shieldSound.isPlaying)  shieldSound.stop()
+         shieldSound.setBuffer( buffer );
+         shieldSound.setLoop( false );
+         shieldSound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+         shieldSound.play();
+ 
+     }
 
 
     PlayEnnemyShoot(ennemy){

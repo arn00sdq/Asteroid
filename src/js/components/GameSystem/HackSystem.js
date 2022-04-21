@@ -54,26 +54,26 @@ class HackSystem{
                 case 0:
                     jokerSystem.PlayerAddLife(player,1);
                     console.log(this.soundSyst)
-                    this.soundSyst.playSfx(this.audioManager.find(e => e.name == "Heart"));
+                    this.soundSyst.playSfxJoker(this.audioManager.find(e => e.name == "Heart"));
                     displayJoker.innerHTML = "extra-life";
                     break;
 
                 case 1:
                     jokerSystem.PlayerAddCoin(this.parent.score, 1);
-                    this.soundSyst.playSfx(this.audioManager.find(e => e.name == "Coin"));
+                    this.soundSyst.playSfxJoker(this.audioManager.find(e => e.name == "Coin"));
                     displayJoker.innerHTML = "coin";
                     break;
                 case 2:
                     player.GetComponent("PlayerShootProjectiles").AddProjectile(1);
                     displayJoker.innerHTML = "extra-missile";
-                    this.soundSyst.playSfx(this.audioManager.find(e => e.name == "ItemPick"));
+                    this.soundSyst.playSfxJoker(this.audioManager.find(e => e.name == "ItemPick"));
                     break;
                 case 3:
  
                     if(player.hasJoker.immune == false){
 
                         jokerSystem.PlayerProtection(player, this.parent.shield,3000);
-                        this.soundSyst.playSfx(this.audioManager.find(e => e.name == "Shield"));
+                        this.soundSyst.playSfxShield(this.audioManager.find(e => e.name == "EnergyShield"));
                     }
                     displayJoker.innerHTML = "shield";
                     break;
@@ -84,7 +84,7 @@ class HackSystem{
                     if(player.hasJoker.fireRate == false){
 
                         jokerSystem.IncreaseFireRate(player,5000);
-                        this.soundSyst.playSfx(this.audioManager.find(e => e.name == "ItemPick"));
+                        this.soundSyst.playSfxJoker(this.audioManager.find(e => e.name == "ItemPick"));
     
                     }
                     displayJoker.innerHTML = "firerate increased";

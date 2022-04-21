@@ -107,10 +107,6 @@ class CharacterMouvement {
     }
 
     controlObject.position.add( this.direction.multiplyScalar(this.temp.z) );
-
-    let audioPos = this.parent.children.find(e => e.constructor.name == "PositionalAudio")
-    audioPos.position.copy(controlObject.position);
-    audioPos.rotation.copy(controlObject.rotation);
     
     this.direction = this.direction_copy.clone();
 

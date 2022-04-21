@@ -72,7 +72,15 @@ class GameManager {
         */
 
         this.audio = audio;
-        this.ambientSound = new THREE.Audio(this.audio.listener);
+
+        this.ambientSound = new THREE.Audio(this.audio.ambientListener);
+        this.asteroidSound = new THREE.Audio(this.audio.asteroidListener);
+        this.bulletSound = new THREE.Audio(this.audio.bulletListener);
+        this.shieldSound= new THREE.Audio(this.audio.shieldListener);
+        this.jokerSound = new THREE.Audio(this.audio.jokerListener);
+        this.plasmaSound= new THREE.Audio(this.audio.plasmaListener);
+        this.playerDamageSound= new THREE.Audio(this.audio.playerDamageListener);
+        this.playerInstSound= new THREE.Audio(this.audio.playerInstListener);
 
         /*
         * Shader
