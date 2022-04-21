@@ -14,6 +14,7 @@ class FireRate extends GameObject{
 
         this.limit = 1;
         this.nb = nb;    
+        this.userData.type = "joker"   
         
         this.InitComponent();
 

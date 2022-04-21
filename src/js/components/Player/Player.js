@@ -59,8 +59,15 @@ class Player extends GameObject{
         this.controllerComponent = this.GetComponent("CharacterMouvement");
         this.healthComponent.stamina = 100;
 
-        /*this.cameraComponent = this.GetComponent("PlayerCameraSystem");
-        this.cameraComponent.goal.position.set(0,0,0)*/
+        if(this.children.find(e => e.constructor.name == "Shield") !== undefined){
+
+            this.hasJoker.immune = false;
+            let shieldToRemove = this.children.find(e => e.constructor.name == "Shield")
+            this.remove( shieldToRemove );
+            shieldToRemove.matrixWorld.decompose( shieldToRemove.position, shieldToRemove.quaternion, shieldToRemove.scale );
+       
+        }
+        
 
 
     }

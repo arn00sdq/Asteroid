@@ -22,7 +22,7 @@ class Timer {
         };
 
 
-        this.TIME_LIMIT = 86;
+        this.TIME_LIMIT = 10;
         this.timePassed = 0;
         this.timeLeft = this.TIME_LIMIT;
         this.timerInterval = null;
@@ -40,7 +40,6 @@ class Timer {
 
     startTimer() {
         this.timerInterval = setInterval(() => {
-            console.log(this.TIME_LIMIT,this.timePassed,this.timeLeft,this.timerInterval )
             if(this.paused) return;
             this.timePassed = this.timePassed += 1;
             this.timeLeft = this.TIME_LIMIT - this.timePassed;

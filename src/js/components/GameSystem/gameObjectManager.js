@@ -125,7 +125,7 @@ class GameObjectManager {
     if ((object.name == "Asteroid" || object.name == "EnnemyBullet") && !player.hasJoker.immune) {
 
       let playerHitSound = new THREE.Audio(this.parent.audio.listener);
-      this.sound_sys.playSfx(this.audioManager.find(e => e.name == "Heart"));
+      this.sound_sys.playSfx(this.audioManager.find(e => e.name == "ShipDamageTaken"));
 
       this.playerHealth.Damage(1);
       player.SetInvulnerability(2000);
@@ -281,7 +281,7 @@ class GameObjectManager {
         case "Shield":
           this.parent.shield.nb -= 1
           if (!object.hasJoker.immune){
-            this.sound_sys.playSfx(this.audioManager.find(e => e.name == "Shield"));
+            this.sound_sys.playSfx(this.audioManager.find(e => e.name == "EnergyShield"));
             this.joker_sys.PlayerProtection(object, this.parent.shield, 3000);
           } 
           break;

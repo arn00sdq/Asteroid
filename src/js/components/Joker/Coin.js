@@ -14,6 +14,7 @@ class Coin extends GameObject{
 
         this.limit = 10;
         this.nb = nb;
+        this.userData.type = "joker"   
 
         this.InitComponent();
 

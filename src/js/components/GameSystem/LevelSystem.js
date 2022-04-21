@@ -158,8 +158,10 @@ class LevelSystem{
         this.parent.score = 0;
 
         this.player.ResetPlayer();
+
         this.checkSceneState(level);
         this.removeProps();
+        this.resetJoker();
 
         this.parent.ambientSound.play();// si on doit restart la musique on doit play pour que le stop puisse se faire
         this.parent.ambientSound.stop();
@@ -179,6 +181,9 @@ class LevelSystem{
             this.parent.currentScene.remove(obj); 
         }
 
+        let shieldToRemove = this.parent.player.children.find(e => e.constructor.name == "Shield")
+        if( shieldToRemove!== undefined) this.parent.scene.remove(this.parent.player.children["Shield"])
+
     }
 
     resetTimer(){
@@ -189,6 +194,13 @@ class LevelSystem{
         this.timer.timerInterval =null;
         this.timer.paused = false;
 
+    }
+
+    resetJoker(){
+    
+        for (const value in this.parent.models)
+            if (this.parent.models[value].userData.type == "joker")
+                this.parent.models[value].nb = 0;
     }
 
     /* ----------- Delimitation ------------ */
@@ -256,11 +268,11 @@ class LevelSystem{
         if(this.parent.sun["SunShrinking"] !== undefined) this.parent.sun.RemoveComponent("SunShrinking");
         
         if (level == "StartMenu") {
-
+            console.log("remove")
             this.parent.RemoveComponent("JokerSystem");
 
         }else if(this.parent.components["JokerSystem"] === undefined){
-
+            console.log("yo")
             this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
 
         }
@@ -289,7 +301,6 @@ class LevelSystem{
     }
 
     loadUI(level,displaySystem){
-
         level == "StartMenu" ?  displaySystem.printUIStartMenu() 
                               : displaySystem.printUIHeader(this.playerHealth.life,this.playerMouvement.stamina, this.playerShoot.ultimate, this.parent.score); // liste en parametre
         
@@ -318,11 +329,11 @@ class LevelSystem{
                 this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 break;
             case "Stage2":
-                this.loadAsteroidBackGround(this.parent.asteroid,1);
+                this.loadAsteroidBackGround(this.parent.asteroid,50);
                 this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 break;
             case "Stage3":
-                this.loadAsteroidBackGround(this.parent.asteroid,1);
+                this.loadAsteroidBackGround(this.parent.asteroid,50);
                 this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
                 //ajout compo soleil
                 break;
@@ -344,7 +355,7 @@ class LevelSystem{
                 break;
             case "Stage3":
                 this.asteroidWave(this.parent.asteroid, 8);
-                this.ennemySpaceshipWave(this.parent.ennemy_ss,2)
+                //this.ennemySpaceshipWave(this.parent.ennemy_ss,2)
                 break;
         }
 
@@ -451,9 +462,9 @@ class LevelSystem{
 
         for (let index = 0; index < nbAsteroid; index++) {
 
-            let position = new THREE.Vector3( ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) ) + ( this.edgeLimit / 3 )) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+            let position = new THREE.Vector3( ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1 ) ) ) + ( this.edgeLimit / 2 )) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
-                                              ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 2 ) ) ) + ( this.edgeLimit / 3.5 )) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                              ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) ) + ( this.edgeLimit / 2.5 )) * ( Math.round( Math.random() ) ? 1 : -1 )
                                             )                       
             let rotation = new THREE.Euler( 0,0,0);
             let scale = (Math.random() * (0.03 -0.015)) + 0.015;
@@ -467,9 +478,9 @@ class LevelSystem{
 
         for (let index = 0; index < nb_ennemy_ss; index++) {
 
-            let position = new THREE.Vector3( ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) ) + ( this.edgeLimit / 3 )) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
+            let position = new THREE.Vector3( ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1 ) ) ) + ( this.edgeLimit / 2 )) * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
-                                              ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 2 ) ) ) + ( this.edgeLimit / 3.5 )) * ( Math.round( Math.random() ) ? 1 : -1 )
+                                              ( ( Math.random() * ( this.edgeLimit - (this.edgeLimit / 1.5 ) ) ) + ( this.edgeLimit / 2.5 )) * ( Math.round( Math.random() ) ? 1 : -1 )
                                             )                       
             let rotation = new THREE.Euler( 0,0,0);
             let scale = 0.2;

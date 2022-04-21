@@ -93,7 +93,6 @@ class JokerSystem{
         if(this.nextJoker !== Math.round(timeInSecond)){
     
             this.joker.forEach( (e,index) => {        
-                
                 if (e.nb >= e.limit) {
                     if (this.jokerAv.includes(e) == true) this.jokerAv.splice(this.jokerAv.indexOf(e),1)
                     if (this.jokerUnv.includes(e) == false) this.jokerUnv.push(e)
@@ -108,7 +107,7 @@ class JokerSystem{
 
             this.nextJoker =  Math.round(timeInSecond);
 
-            if(this.nextJoker % 5 == 0 && this.jokerAv.length > 0){
+            if(this.nextJoker % 1 == 0 && this.jokerAv.length > 0){
 
                 let position = new THREE.Vector3( ( Math.random() *  (this.edgeLimit - 3  ))  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,
@@ -118,7 +117,6 @@ class JokerSystem{
                 let random = Math.round( Math.random() *  (this.jokerAv.length - 1) )
                 let scale = 1;
                 let currentJoker = this.jokerAv[random];
-
                 switch(currentJoker.constructor.name){ 
                     
                     case "Coin":

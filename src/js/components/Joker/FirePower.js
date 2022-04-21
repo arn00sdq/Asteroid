@@ -13,7 +13,8 @@ class FirePower extends GameObject{
         this.name = "FirePower";
 
         this.limit = 1;
-        this.nb = nb;    
+        this.nb = nb; 
+        this.userData.type = "joker"   
         
         this.InitComponent();
 
