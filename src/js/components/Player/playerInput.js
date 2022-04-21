@@ -1,13 +1,14 @@
 import * as THREE from 'three';
 
 class CharacterControllerInput {
-  constructor(parent) {
+  constructor(parent,params) {
 
     this.parent = parent;
     
 
     this.cam_sys = this.parent.GetComponent("PlayerCameraSystem");
-    this.camera = this.parent.GetComponent("PlayerCameraSystem").camera;
+    this.camera = params.camera;
+
 
     this.Init();
 
@@ -40,6 +41,8 @@ class CharacterControllerInput {
       screenshot : false,
 
     };
+
+    this.ThirdCameraInit();
 
     document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
     document.addEventListener('keyup', (e) => this.OnKeyUp(e), false);
@@ -175,7 +178,7 @@ class CharacterControllerInput {
 
     goal_setting.position.set(this.parent.position.x, 0, this.parent.position.z -0.3);
     camera_setting.position.set(0, 0.3, 0);
-    this.camera.fov = 142.5
+    this.camera.fov = 152.5
 
   }
 

@@ -18,6 +18,8 @@ class Player extends GameObject{
         this.name = "Player";
         this.params = params;
         
+       
+
         this.hasJoker = {
 
             immune: false,
@@ -25,7 +27,6 @@ class Player extends GameObject{
 
         };
         
-
         this.audioSystem = null;
         this.stageSystem = null;
 
@@ -41,7 +42,7 @@ class Player extends GameObject{
         this.AddComponent(new PlayerHealthSystem(this));
         this.AddComponent(new PlayerShootProjectiles(this,this.audio));
         this.AddComponent(new PlayerCameraSystem(this, this.params));
-        this.AddComponent(new CharacterControllerInput(this));
+        this.AddComponent(new CharacterControllerInput(this, this.params));
         
     }
 

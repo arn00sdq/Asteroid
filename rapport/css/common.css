@@ -12,7 +12,7 @@ html {
 }
 
 article, aside, footer, header, nav, section {
-    display: block;
+  /*  display: block;*/
 }
 
 video{

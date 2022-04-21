@@ -294,7 +294,7 @@ class GameManager {
     RAF() {
 
         requestAnimationFrame(this.RAF.bind(this));
-
+        console.log(this.currentCamera.fov)
         if (!this.state.pause) {
             //this.controls.update()
             this.loop.now = window.performance.now();

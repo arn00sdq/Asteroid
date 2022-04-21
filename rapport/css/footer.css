@@ -1,15 +1,14 @@
 footer{
-    padding: 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
+    padding: 0; 
     display: flex;
-    text-align: left;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
-    justify-content: center;
     height: 55px;
+    align-items: center;
+    justify-content: center;
+}
+
+footer p{
+
+    font-size: 0.7em;
+    color: gray;
 }
 
