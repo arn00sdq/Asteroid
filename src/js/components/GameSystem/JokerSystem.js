@@ -107,7 +107,7 @@ class JokerSystem{
 
             this.nextJoker =  Math.round(timeInSecond);
 
-            if(this.nextJoker % 1 == 0 && this.jokerAv.length > 0){
+            if(this.nextJoker % 5 == 0 && this.jokerAv.length > 0){
 
                 let position = new THREE.Vector3( ( Math.random() *  (this.edgeLimit - 3  ))  * ( Math.round( Math.random() ) ? 1 : -1 ) , 
                                                   0 ,

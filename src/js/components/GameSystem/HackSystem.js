@@ -24,13 +24,11 @@ class HackSystem{
 
                 this.parent.player.RemoveRigidBody(this.parent.player);
                 this.jokerSytem.addShield(this.parent.player,this.parent.shield);
-                console.log(" Activation invincible mode")
 
             }else{
 
                 this.parent.player.SetRigidBody(this.parent.player);
                 this.jokerSytem.removeShield(this.parent.player);
-                console.log(" Désactivation invincible mode")
 
             }
 

@@ -175,9 +175,15 @@ class LevelSystem{
     removeProps() {
 
         let obj;
-        for( var i = this.parent.currentScene.children.length - 1; i >= 0; i--) { 
-            obj = this.parent.currentScene.children[i];
+        let children = this.parent.currentScene.children;
+        for( var i = children.length - 1; i >= 0; i--) { 
+            obj = children[i];
+
+            if ( children[i].constructor.name == "Sun" && children[i].GetComponent("SunShrinking") !== undefined ){
+                children[i].GetComponent("SunShrinking").timer.onTimesUp();               
+            }
             this.parent.currentScene.remove(obj); 
+
         }
 
         let shieldToRemove = this.parent.player.children.find(e => e.constructor.name == "Shield")
@@ -187,16 +193,18 @@ class LevelSystem{
 
     resetTimer(){
 
-        this.timer.onTimesUp()
+
+
         this.timer.timeLeft = 86;
         this.timer.timePassed = 0;
-        this.timer.timerInterval =null;
         this.timer.paused = false;
+
+
 
     }
 
     resetJoker(){
-    
+        
         for (const value in this.parent.models)
             if (this.parent.models[value].userData.type == "joker")
                 this.parent.models[value].nb = 0;
@@ -207,6 +215,8 @@ class LevelSystem{
     scenePicker(level,init,switchScene){
         
         if(switchScene == undefined) switchScene = false;
+        
+
         this.currentLevel = level;
 
         let displaySystem = this.parent.GetComponent("DisplaySystem");
@@ -267,11 +277,9 @@ class LevelSystem{
         if(this.parent.sun["SunShrinking"] !== undefined) this.parent.sun.RemoveComponent("SunShrinking");
         
         if (level == "StartMenu") {
-            console.log("remove")
             this.parent.RemoveComponent("JokerSystem");
 
         }else if(this.parent.components["JokerSystem"] === undefined){
-            console.log("yo")
             this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
 
         }
@@ -306,11 +314,13 @@ class LevelSystem{
     }
 
     loadTimer(level, displaySystem){
-
         if(level == "Stage3"){
 
             displaySystem.printTimer(); 
+            console.log("je demarre")
             this.timer.startTimer()
+            this.timer.restart = true;
+
 
         }
         
@@ -354,7 +364,7 @@ class LevelSystem{
                 break;
             case "Stage3":
                 this.asteroidWave(this.parent.asteroid, 8);
-                //this.ennemySpaceshipWave(this.parent.ennemy_ss,2)
+                this.ennemySpaceshipWave(this.parent.ennemy_ss,2)
                 break;
         }
 
@@ -514,7 +524,6 @@ class LevelSystem{
           //  this.timeElapsed.onTimesUp();
 
         } 
-
 
     }
 

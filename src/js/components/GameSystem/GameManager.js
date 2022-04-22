@@ -294,7 +294,6 @@ class GameManager {
     RAF() {
 
         requestAnimationFrame(this.RAF.bind(this));
-        console.log(this.currentCamera.fov)
         if (!this.state.pause) {
             //this.controls.update()
             this.loop.now = window.performance.now();
@@ -373,7 +372,7 @@ class GameManager {
         if (this.player.GetComponent("CharacterControllerInput").keys.screenshot) {
             this.player.GetComponent("CharacterControllerInput").keys.screenshot = false;
 
-            html2canvas(document.querySelector("canvas")).then(function (canvas) {
+            html2canvas(document.querySelector("body")).then(function (canvas) {
 
                 var win = window.open();
                 win.document.write('<iframe src="' + canvas.toDataURL("png") + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen> </iframe>');

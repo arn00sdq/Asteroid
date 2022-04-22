@@ -18,6 +18,7 @@ class MenuSystem{
         this.uiDisplay = this.parent.GetComponent("DisplaySystem");
         this.levelSystem = this.parent.GetComponent("LevelSystem");
         this.soundSystem = this.parent.GetComponent("SoundSystem");
+        this.timer = this.parent.GetComponent("LevelSystem").timer;
 
         this.playerHealth = this.parent.player.GetComponent("PlayerHealthSystem");
         this.gameState = this.parent.state;
@@ -172,7 +173,7 @@ class MenuSystem{
                     
                     if(this.levelSystem.currentLevel == "Stage3"){
 
-                        this.uiDisplay.printTimer();
+                        if (this.levelSystem.timer.timeLeft > 0) this.uiDisplay.printTimer();
                         this.levelSystem.timer.paused = false;
 
                     } 

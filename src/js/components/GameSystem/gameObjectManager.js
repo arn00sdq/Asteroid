@@ -87,6 +87,48 @@ class GameObjectManager {
 
     }
 
+    switch (e2.constructor.name) {
+
+      case "BasicAsteroid":
+        this.CollisionAsteroidHandler(e2, e);
+        break;
+
+      case "Player":
+        this.CollisionPlayerHandler(e2, e);
+        break;
+
+      case "BasicBullet":
+        this.CollisionBulletHandler(e2, e);
+        break;
+      case "EnnemyBullet":
+        this.CollisionEnnemyBulletHandler(e2, e);
+        break;
+
+      case "Heart":
+        this.CollisionJokerHandler(e2, e);
+        break;
+
+      case "Coin":
+        this.CollisionJokerHandler(e2, e);
+        break;
+
+      case "FirePower":
+        this.CollisionJokerHandler(e2, e);
+        break;
+
+      case "FireRate":
+        this.CollisionJokerHandler(e2, e);
+        break;
+
+      case "Shield":
+        this.CollisionJokerHandler(e2, e);
+        break;
+      case "EnnemySpaceship":
+        this.CollisionEnnemySSHandler(e2, e);
+        break;
+
+    }
+
   }
 
   DetectEdge(object) {
@@ -281,7 +323,7 @@ class GameObjectManager {
           this.parent.shield.nb -= 1
           if (!object.hasJoker.immune){
             this.sound_sys.playSfxShield(this.audioManager.find(e => e.name == "EnergyShield"));
-            this.joker_sys.PlayerProtection(object, this.parent.shield, 3000);
+            this.joker_sys.PlayerProtection(object, this.parent.shield, 5000);
           } 
           break;
 

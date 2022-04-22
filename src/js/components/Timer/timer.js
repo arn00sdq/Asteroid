@@ -21,8 +21,8 @@ class Timer {
             }
         };
 
-
-        this.TIME_LIMIT = 10;
+        this.restart = false;
+        this.TIME_LIMIT = 86;
         this.timePassed = 0;
         this.timeLeft = this.TIME_LIMIT;
         this.timerInterval = null;
@@ -39,19 +39,21 @@ class Timer {
     }
 
     startTimer() {
+      
         this.timerInterval = setInterval(() => {
             if(this.paused) return;
             this.timePassed = this.timePassed += 1;
             this.timeLeft = this.TIME_LIMIT - this.timePassed;
-            document.getElementById("base-timer-label").innerHTML = this.formatTime(
-                this.timeLeft
-            );
+
             this.setCircleDasharray();
             this.setRemainingPathColor(this.timeLeft);
 
-            if (this.timeLeft === 0) {
+            if (this.timeLeft <= 0) {
                 this.onTimesUp();
             }
+            document.getElementById("base-timer-label").innerHTML  = this.formatTime(
+                this.timeLeft <= 0 ? 0 : this.timeLeft
+            );
         }, 1000);
     }
 

@@ -10,7 +10,7 @@ class DisplaySystem{
         
         this.displayStat = false;
 
-        this.timer = new Timer()
+        this.timer = this.parent.GetComponent("LevelSystem").timer;
 
     }
 
