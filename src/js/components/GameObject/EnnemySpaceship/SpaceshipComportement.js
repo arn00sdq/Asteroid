@@ -26,7 +26,6 @@ class SpaceshipComportement {
         this.nbCannon += nbCannon;
         if(this.nbCannon > 4) this.nbCannon = 4;
         this.cannon = [];
-  
         let zPos = new THREE.Vector3(0,0,0.5); // changez z ou x pour futur
         let r = zPos.distanceTo(new THREE.Vector3(0,0,0));
 
@@ -139,17 +138,18 @@ class SpaceshipComportement {
 
     Shoot(timeElapsed,timeInSecond){
 
+        this.ennemyBullet = this.parent.sceneManager.gameModels.ennemyBullet;
         for (let i = 0; i < this.cannon.length; i++) {
         
             this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
             this.temp.y = -0;
             this.spawnRot =  this.parent.rotation;
             
-            this.parent.weaponParams.timerInstantiate = timeInSecond * 1000;
+            this.ennemyBullet.timerInstantiate = timeInSecond * 1000;
 
-            this.parent.weaponParams.userData.player = this.parent.target.position;
-            this.parent.stageSystem.InstantiateGameObject(this.parent.weaponParams,this.temp, this.spawnRot, 0.001)
-            this.parent.audioSystem.PlayEnnemyShoot(this.parent);
+            this.ennemyBullet.userData.player = this.parent.target.position;
+            this.parent.stageSystem.InstantiateGameObject(this.ennemyBullet,this.temp, this.spawnRot, 0.0009)
+            this.parent.audioSystem.PlayEnnemyShoot(this.parent.audioSystem.audioManager.find(e => e.name == "ennemyLaser"));
 
     
         }

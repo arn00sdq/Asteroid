@@ -28,7 +28,7 @@ class BulletDamageSystem{
             this.debugTime =  Math.round(timeInSecond*1000);
             
             let bulletCurrentTime = timeInSecond*1000 - this.parent.timerInstantiate;
-            this.damageAmount = this.damage - Math.round(bulletCurrentTime) * 2
+            this.damageAmount = this.damage - Math.round(bulletCurrentTime) 
 
             //console.log("Temps en seconde : ", this.debugTime, "Dégat balleJoueur : ", this.damageAmount)
 

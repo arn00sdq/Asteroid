@@ -17,7 +17,7 @@ class DisplaySystem{
     printAPP(element){
 
         this.container.innerHTML = element;
-        this.container.appendChild(this.parent.renderer.domElement)
+        this.container.appendChild(this.parent.utils.renderer.domElement)
 
         if(this.displayStat) document.body.appendChild( this.parent.targetStat.dom) 
 

@@ -20,9 +20,9 @@ class MenuSystem{
         this.soundSystem = this.parent.GetComponent("SoundSystem");
         this.timer = this.parent.GetComponent("LevelSystem").timer;
 
-        this.playerHealth = this.parent.player.GetComponent("PlayerHealthSystem");
+        this.playerHealth = this.parent.gameModels.player.GetComponent("PlayerHealthSystem");
         this.gameState = this.parent.state;
-        this.ambientSound = this.parent.ambientSound;
+        this.ambientSound = this.parent.gameAudio.sound.ambientSound;
 
         document.addEventListener('click', (e) => this.OnClick(e), false);
         document.addEventListener("change", (e) => this.OnChange(e), false);

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import Timer from "../Timer/timer.js";
+import Timer from "../../Timer/timer.js";
 
 class SunShrinking { 
 

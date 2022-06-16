@@ -5,12 +5,14 @@ import SunShrinking from "./SunShrinking.js";
 
 class Sun extends GameObject{ 
 
-    constructor(model, audio) {
+    constructor(gameObject) {
 
-        super(model,audio);
+        super(gameObject);
 
+        this.sceneManager = null;
         this.components = {};
         this.name = "Sun";
+
         this.InitComponent();
         
     }
@@ -20,6 +22,8 @@ class Sun extends GameObject{
         this.AddComponent(new PlanetMouvement(this));
 
     }
+
+    InitValue(){}
     
 }
 

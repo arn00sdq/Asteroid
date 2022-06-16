@@ -1,41 +1,41 @@
 import * as THREE from 'three';
 
-import Player from "./components/Player/Player.js";
-import BasicBullet from "./components/Bullet/BasicBullet.js";
-import BasicAsteroid from "./components/Asteroid/BasicAsteroid.js";
+import Player from "./components/GameObject/Player/Player.js";
+import BasicBullet from "./components/GameObject/Bullet/BasicBullet.js";
+import BasicAsteroid from "./components/GameObject/Asteroid/BasicAsteroid.js";
 import GameManager from "./components/GameSystem/GameManager.js";
 
 import { OBJLoader } from "./Loader/OBJLoader.js"
-import {FBXLoader} from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/loaders/FBXLoader.js"
+import { FBXLoader } from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/loaders/FBXLoader.js"
 import { Object3D, ShaderMaterial, TextureLoader } from "./three/three.module.js";
 
 import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/EffectComposer.js";
 import { ShaderPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/ShaderPass.js";
-import { UnrealBloomPass  } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/UnrealBloomPass.js";
+import { UnrealBloomPass } from "https://cdn.jsdelivr.net/npm/three@0.139/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { OutlinePass } from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/postprocessing/OutlinePass.js";
 import { FXAAShader } from "https://cdn.jsdelivr.net/npm/three@0.139.2/examples/jsm/shaders/FXAAShader.js"
 
 
-import Heart from "./components/Joker/Heart.js";
-import Coin from "./components/Joker/Coin.js";
-import FirePower from "./components/Joker/FirePower.js";
-import FireRate from "./components/Joker/FireRate.js";
-import Shield from "./components/Joker/Shield.js";
-import EnnemySpaceship from "./components/EnnemySpaceship/EnnemySpaceship.js";
-import Earth from "./components/Planet/Earth.js";
-import Sun from "./components/Planet/Sun.js";
-import Explosion from './components/Explosion/Explosion.js';
+import Heart from "./components/GameObject/Joker/Heart.js";
+import Coin from "./components/GameObject/Joker/Coin.js";
+import FirePower from "./components/GameObject/Joker/FirePower.js";
+import FireRate from "./components/GameObject/Joker/FireRate.js";
+import Shield from "./components/GameObject/Joker/Shield.js";
+import EnnemySpaceship from "./components/GameObject/EnnemySpaceship/EnnemySpaceship.js";
+import Earth from "./components/GameObject/Planet/Earth.js";
+import Sun from "./components/GameObject/Planet/Sun.js";
+import Explosion from './components/GameObject/Explosion/Explosion.js';
 
-import { _FS,_VS } from "./components/Shader/Earth/glslEarth.js";
-import {_FSAT, _VSAT } from "./components/Shader/Earth/glslAtmosphere.js";
-import {_FSBooster, _VSBooster} from "./components/Shader/Player/booster.js";
-import {_FSSun, _VSSun} from "./components/Shader/Sun/glslSunShader.js";
-import { _FSBloom, _VSBloom}  from "./components/Shader/Postprocess/bloom.js";
-import { _FSExplosion, _VSExplosion}  from "./components/Shader/Explosion/explosion.js";
-import { _FSBullet, _VSBullet}  from "./components/Shader/Player/bullet.js";
-import { vs_shader, fs_shader} from "./components/Shader/shield/glglShield.js"
+import { _FS, _VS } from "./components/Shader/Earth/glslEarth.js";
+import { _FSAT, _VSAT } from "./components/Shader/Earth/glslAtmosphere.js";
+import { _FSBooster, _VSBooster } from "./components/Shader/Player/booster.js";
+import { _FSSun, _VSSun } from "./components/Shader/Sun/glslSunShader.js";
+import { _FSBloom, _VSBloom } from "./components/Shader/Postprocess/bloom.js";
+import { _FSExplosion, _VSExplosion } from "./components/Shader/Explosion/explosion.js";
+import { _FSBullet, _VSBullet } from "./components/Shader/Player/bullet.js";
+import { vs_shader, fs_shader } from "./components/Shader/shield/glglShield.js"
 import { getFBO } from "./components/Shader/FBO/FBO.js";
-import SpecialBullet from './components/Bullet/SpecialBullet.js';
+import SpecialBullet from './components/GameObject/Bullet/SpecialBullet.js';
 
 
 class Asteroid {
@@ -53,11 +53,11 @@ class Asteroid {
 
         this.inGameCamera = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.001, 10000);
         this.inGameCamera.fov = 142.5
-        this.inGameCamera.position.set(0, 0.4, 0.0); 
+        this.inGameCamera.position.set(0, 0.4, 0.0);
 
-        this.cameraStartMenu = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 2 , 500);
-        this.cameraStartMenu.position.set(5,0,15);
-        this.cameraStartMenu.lookAt(new THREE.Vector3(-11,0,0));
+        this.cameraStartMenu = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 2, 500);
+        this.cameraStartMenu.position.set(5, 0, 15);
+        this.cameraStartMenu.lookAt(new THREE.Vector3(-11, 0, 0));
 
         /*camera tps*/
         this.goal = new THREE.Object3D;
@@ -75,7 +75,7 @@ class Asteroid {
         let w = container.clientWidth;
         let h = container.clientHeight;
 
-        this.renderer = new THREE.WebGLRenderer({ antialias:true, preserveDrawingBuffer: true });
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.setSize(w, h);
@@ -84,18 +84,18 @@ class Asteroid {
 
         /* post process */
 
-            /*----- UnrealBloom Pass -----*/
+        /*----- UnrealBloom Pass -----*/
 
-        this.bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );
-        this.bloomPass.threshold =0;
-        this.bloomPass.exposure =0.5;
-		this.bloomPass.strength = 2;
-		this.bloomPass.radius =0.5;
-        this.bloomComposer  = new EffectComposer(this.renderer);
+        this.bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+        this.bloomPass.threshold = 0;
+        this.bloomPass.exposure = 0.5;
+        this.bloomPass.strength = 2;
+        this.bloomPass.radius = 0.5;
+        this.bloomComposer = new EffectComposer(this.renderer);
         this.bloomComposer.renderToScreen = false;
 
         this.finalPass = new ShaderPass(
-            new THREE.ShaderMaterial( {
+            new THREE.ShaderMaterial({
                 uniforms: {
                     baseTexture: { value: null },
                     bloomTexture: { value: this.bloomComposer.renderTarget2.texture }
@@ -103,32 +103,32 @@ class Asteroid {
                 vertexShader: _VSBloom(),
                 fragmentShader: _FSBloom(),
                 defines: {}
-            } ), 'baseTexture'
+            }), 'baseTexture'
         );
         this.finalPass.needsSwap = true;
-        this.finalComposer = new EffectComposer( this.renderer );
+        this.finalComposer = new EffectComposer(this.renderer);
 
-            /*----- Outline Pass -----*/
+        /*----- Outline Pass -----*/
 
-        this.outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), this.stageScene, this.inGameCamera );
+        this.outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.stageScene, this.inGameCamera);
         this.outlinePass.edgeStrength = 3;
         this.outlinePass.pulsePeriod = 4;
         this.outlinePass.edgeGlow = 0.076;
         this.outlinePass.edgeThickness = 1.35;
         this.outlinePass.visibleEdgeColor.set('#ffffff');
         this.outlinePass.hiddenEdgeColor.set('#190a05');
-            /*----- FXAA Pass -----*/
-        
-        this.effectFXAA = new ShaderPass( FXAAShader );
+        /*----- FXAA Pass -----*/
+
+        this.effectFXAA = new ShaderPass(FXAAShader);
         this.effectFXAA.name = "FXAAPass";
-        this.effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
+        this.effectFXAA.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
 
         /*timer*/
         this.loop = {}
         const fps = 60;
         const slow = 1;
         this.loop.dt = 0,
-        this.loop.now = window.performance.now();
+            this.loop.now = window.performance.now();
         this.loop.last = this.loop.now;
         this.loop.fps = fps;
         this.loop.step = 1 / this.loop.fps;
@@ -150,7 +150,11 @@ class Asteroid {
 
         this.inGameCamera.lookAt(this.stageScene.position);
 
+        /*audio */
+        // peut etre simplifié
+
         this.ambientListener = new THREE.AudioListener();
+        this.ennemyLaserListener = new THREE.AudioListener();
         this.asteroidListener = new THREE.AudioListener();
         this.bulletListener = new THREE.AudioListener();
         this.shieldListener = new THREE.AudioListener();
@@ -158,8 +162,9 @@ class Asteroid {
         this.plasmaListener = new THREE.AudioListener();
         this.playerDamageListener = new THREE.AudioListener();
         this.playerInstListener = new THREE.AudioListener();
-    
+
         this.inGameCamera.add(this.ambientListener);
+        this.inGameCamera.add(this.ennemyLaserListener)
         this.inGameCamera.add(this.asteroidListener);
         this.inGameCamera.add(this.bulletListener);
         this.inGameCamera.add(this.shieldListener);
@@ -183,8 +188,10 @@ class Asteroid {
         this.animationsManager = [];
         this.idleAction = null;
 
-        const loaderObj = new OBJLoader(this.loadingManager);
-        const fbxLoader = new FBXLoader(this.loadingManager);
+        this.loaderType = {
+            objLoader : new OBJLoader(this.loadingManager),
+            fbxLoader : new FBXLoader(this.loadingManager),
+        }
 
         /* 
         * texture
@@ -194,15 +201,15 @@ class Asteroid {
 
         var material = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/textures/asteroid_diffuse.jpg') })
         var materialCoin = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/collectable/coin/textures/Coin_Gold_albedo.png') });
-        var materialEnnemySS = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/Ennemy/textures/E-45 _col.jpg')});
+        var materialEnnemySS = new THREE.MeshPhongMaterial({ map: textureLoader.load('../medias/models/Ennemy/textures/E-45 _col.jpg') });
         /* 
         *   Balle Joueur
         */
 
 
         const bulletPlayer = new THREE.Mesh(
-            new THREE.CylinderGeometry(20,20, 130),
-            new THREE.MeshLambertMaterial({ color: 0xffff00,emissive:0xffff00 }));
+            new THREE.CylinderGeometry(20, 20, 130),
+            new THREE.MeshLambertMaterial({ color: 0xffff00, emissive: 0xffff00 }));
         bulletPlayer.name = "BulletPlayer";
         bulletPlayer.rotateX((Math.PI / 180) * 90);
 
@@ -213,9 +220,9 @@ class Asteroid {
             vertexShader: _VSBullet(),
             fragmentShader: _FSBullet(),
             uniforms: {
-                time: { 
-                  type: "f",
-                  value: 0.05
+                time: {
+                    type: "f",
+                    value: 0.05
                 },
             },
             blending: THREE.AdditiveBlending,
@@ -226,18 +233,18 @@ class Asteroid {
 
         const specialBulletMesh = new THREE.Mesh(
             new THREE.SphereBufferGeometry(0.5, 50, 50),
-            new ShaderMaterial(),
+            this.specialBulletMaterial,
         )
         specialBulletMesh.name = "SpecialBulletItem";
-    
+
 
         /* 
         *   Balle Ennemy
         */
         const cylinderMesh = new THREE.Mesh(
-            new THREE.CylinderGeometry(5, 50, 50),
-            new THREE.MeshLambertMaterial({ color: 0xff0000,emissive : 0xff000d }));
-       /* const geometryBullet = new THREE.CylinderBufferGeometry(0.01, 0.01, 0.1, 5, 1, false);*/
+            new THREE.CylinderGeometry(20, 20, 130),
+            new THREE.MeshLambertMaterial({ color: 0xff0000, emissive: 0xff000d }));
+        /* const geometryBullet = new THREE.CylinderBufferGeometry(0.01, 0.01, 0.1, 5, 1, false);*/
         cylinderMesh.name = "BulletEnnemy";
         cylinderMesh.rotateX((Math.PI / 180) * 90);
 
@@ -245,9 +252,10 @@ class Asteroid {
         *   Item +1 Bullet
         */
         const firePowerGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-        const firePowerMaterial = new THREE.MeshBasicMaterial({ 
-            map: textureLoader.load("../medias/images/power-up/firepower.PNG") ,
-            color: 0xff0000 });
+        const firePowerMaterial = new THREE.MeshBasicMaterial({
+            map: textureLoader.load("../medias/images/power-up/firepower.PNG"),
+            color: 0xff0000
+        });
         const firePower = new THREE.Mesh(firePowerGeometry, firePowerMaterial);
         firePower.name = "firePowerItem";
 
@@ -255,7 +263,7 @@ class Asteroid {
         *   Cooldown fireRate
         */
         const fireRateGeometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-        const fireRateMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load("../medias/images/power-up/cooldown.png") ,color: 0xEFDEDE });
+        const fireRateMaterial = new THREE.MeshBasicMaterial({ map: textureLoader.load("../medias/images/power-up/cooldown.png"), color: 0xEFDEDE });
         const fireRate = new THREE.Mesh(fireRateGeometry, fireRateMaterial);
         fireRate.name = "fireRateItem";
 
@@ -265,81 +273,50 @@ class Asteroid {
         const depth = getFBO(1, 1, {
             format: THREE.RGBAFormat,
             type: THREE.UnsignedByteType,
-          });
+        });
 
         this.materialShield = new THREE.ShaderMaterial({
             uniforms: {
-              depthBuffer: { value:  depth.texture },
-              resolution: { value: new THREE.Vector2(1, 1) },
-              time: { value: 0 },
+                depthBuffer: { value: depth.texture },
+                resolution: { value: new THREE.Vector2(1, 1) },
+                time: { value: 0 },
             },
             vertexShader: vs_shader,
             fragmentShader: fs_shader,
             transparent: true,
             depthWrite: false,
             side: THREE.DoubleSide,
-          });
+        });
         this.materialShield.parentName = "Shield";
         const shieldMesh = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(0.3, 5), this.material);
         shieldMesh.name = "ShieldItem";
 
-        /*
-        * Sun 
-        */
-
-       /* this.shaderExplosion = new THREE.ShaderMaterial({
-            vertexShader: _VSExplosion(),
-            fragmentShader: _FSExplosion(),
-            transparent: true,
-            uniforms:{
-                tExplosion: {
-                    value: textureLoader.load("../medias/images/explosion/explosion.png"),
-                    
-                },
-                time: { // float initialized to 0
-                    type: "f",
-                    value: 0.0
-                  },
-                growTime:{
-                    type: "f",
-                    value: 0.0
-                },
-                opacity:{
-                    type: "f",
-                    value: 1.0
-                },
-                weight: { type: "f", value: 10.0 }
-                
-            }
-
-        })*/
-
         this.sunMaterial = new THREE.ShaderMaterial({
             vertexShader: _VSSun(),
             fragmentShader: _FSSun(),
-            uniforms:{
+            uniforms: {
                 globeTexture: {
                     value: textureLoader.load("../medias/images/sun/sun.jpg"),
-                    
+
                 },
                 time: { // float initialized to 0
                     type: "f",
                     value: 0.0
-                  },
-                growTime:{
+                },
+                growTime: {
                     type: "f",
                     value: 0.0
                 },
-                n:{
+                n: {
                     type: "f",
                     value: 0.0
                 },
-                intensity:{
+                intensity: {
                     type: "f",
                     value: 1.2
                 },
-                
-                
+
+
             }
 
         });
@@ -347,65 +324,44 @@ class Asteroid {
 
         const sunMesh = new THREE.Mesh(
             new THREE.SphereBufferGeometry(5, 50, 50),
-            new ShaderMaterial(),
+            this.sunMaterial,
         )
-        sunMesh.rotateY((Math.PI / 180)* 280)
+        sunMesh.rotateY((Math.PI / 180) * 280)
         sunMesh.name = "SunItem";
-
-        /*
-        * SunAtmosphere
-        */
-        
-       /* this.sunAtmosphere = new THREE.Mesh(
-            new THREE.SphereGeometry(5, 50, 50),
-            new THREE.ShaderMaterial( 
-                {
-                    uniforms: { 
-                        sunTexture: {
-                            value: textureLoader.load("../medias/images/sun/glow2.png")
-                        } 
-                    },
-                    vertexShader: _VSSunShader(),
-                    fragmentShader: _FSSunShader(),
-                    side: THREE.DoubleSide,
-                    blending: THREE.AdditiveBlending,
-                    transparent: true,
-            })
-        );*/
 
         /*
         * Star
         */
 
-            const starGeometry = new THREE.BufferGeometry();
-            const starMaterial = new THREE.PointsMaterial({
-                color : 0xffffff,
-                }
-            )
+        const starGeometry = new THREE.BufferGeometry();
+        const starMaterial = new THREE.PointsMaterial({
+            color: 0xffffff,
+        }
+        )
 
-            this.stars = new THREE.Points(starGeometry,starMaterial);
-            
+        this.stars = new THREE.Points(starGeometry, starMaterial);
+
         /*
         * planet 
         */
         this.earthMaterial = new THREE.ShaderMaterial({
             vertexShader: _VS(),
             fragmentShader: _FS(),
-            uniforms:{
+            uniforms: {
                 globeTexture: {
                     value: textureLoader.load("../medias/images/earth/earth2.jpg"),
-                    
+
                 },
-                
+
             }
         });
         this.earthMaterial.parentName = "Earth";
 
         const earthMesh = new THREE.Mesh(
-            new THREE.SphereBufferGeometry(5 , 50, 50),
-            new ShaderMaterial(),
+            new THREE.SphereBufferGeometry(5, 50, 50),
+            this.earthMaterial,
         )
-        earthMesh.rotateY((Math.PI / 180)* 280)
+        earthMesh.rotateY((Math.PI / 180) * 280)
         earthMesh.name = "EarthItem";
 
         /*
@@ -419,46 +375,46 @@ class Asteroid {
                 fragmentShader: _FSAT(),
                 blending: THREE.AdditiveBlending,
                 side: THREE.BackSide
-    
+
             })
         )
 
         /*
         * Explosion
         */
-        
+
         this.shaderExplosion = new THREE.ShaderMaterial({
             vertexShader: _VSExplosion(),
             fragmentShader: _FSExplosion(),
             transparent: true,
-            uniforms:{
+            uniforms: {
                 tExplosion: {
                     value: textureLoader.load("../medias/images/explosion/explosion.png"),
-                    
+
                 },
                 time: { // float initialized to 0
                     type: "f",
                     value: 0.0
-                  },
-                growTime:{
+                },
+                growTime: {
                     type: "f",
                     value: 0.0
                 },
-                opacity:{
+                opacity: {
                     type: "f",
                     value: 1.0
                 },
                 weight: { type: "f", value: 10.0 }
-                
+
             }
 
         })
         this.shaderExplosion.parentName = "Explosion";
         const explosion = new THREE.Mesh(
-            new THREE.IcosahedronGeometry(0.5,10),
-            new ShaderMaterial(),
+            new THREE.IcosahedronGeometry(0.5, 10),
+            this.shaderExplosion,
         )
-        
+
         explosion.name = "explosion";
 
         /*
@@ -466,116 +422,94 @@ class Asteroid {
         */
 
         this.booster = new THREE.Mesh(
-            new THREE.SphereGeometry(0.05, 50, 50),
+            new THREE.SphereGeometry(0.005, 50, 50),
             new THREE.ShaderMaterial({
                 vertexShader: _VSBooster(),
                 fragmentShader: _FSBooster(),
                 uniforms: {
                     time: { // float initialized to 0
-                      type: "f",
-                      value: 0.05
+                        type: "f",
+                        value: 0.05
                     },
-                    uniformZ:{
-                        type:"f",
-                        value:0.03
+                    uniformZ: {
+                        type: "f",
+                        value: 0.5
                     },
-                    uniformX:{
-                        type:"f",
-                        value:0.03
+                    uniformX: {
+                        type: "f",
+                        value: 0.7
                     },
-                    boostPower:{
-                        type:"f",
-                        value:0.03,
+                    boostPower: {
+                        type: "f",
+                        value: 0.03,
                     }
                 },
                 blending: THREE.AdditiveBlending,
                 side: THREE.BackSide
-    
+
             })
 
         )
         this.booster.name = "booster";
-        this.booster.rotateY( (Math.PI / 180) * 90)
+        this.booster.position.set(0, -0.01, -0.155),
+        this.booster.rotateY((Math.PI / 180) * 90);
+       
+        this.loaderModel(this.loaderType.fbxLoader, '../medias/models/test/SF_Fighter/SciFi_Fighter.FBX', "SpaceShip", null, (Math.PI / 180) * 70,false);
+        this.loaderModel(this.loaderType.objLoader, '../medias/models/asteroid/Asteroid.obj', "SpaceRock",null,null,true);
+        this.loaderModel(this.loaderType.objLoader, '../medias/models/Ennemy/ennemy_ss.obj',"EnnemySpaceship",materialEnnemySS, (Math.PI / 180) *180 ,true);
+        this.loaderModel(this.loaderType.objLoader, "../medias/models/collectable/Love.obj","HeartItem",null,null,true);
+        this.loaderModel(this.loaderType.objLoader, "../medias/models/collectable/coin/Coin.obj","CoinItem",materialCoin,null,true);
 
-        /* 
-        * ModelManager
-        */
-        this.modelManager.push(cylinderMesh);this.modelManager.push(firePower);this.modelManager.push(fireRate);
-        this.modelManager.push(earthMesh);this.modelManager.push(bulletPlayer);this.modelManager.push(shieldMesh);
-        this.modelManager.push(sunMesh); this.modelManager.push(explosion); this.modelManager.push(specialBulletMesh)
+        this.modelManager.push(cylinderMesh); this.modelManager.push(firePower); this.modelManager.push(fireRate);
+        this.modelManager.push(earthMesh); this.modelManager.push(bulletPlayer); this.modelManager.push(shieldMesh);
+        this.modelManager.push(sunMesh); this.modelManager.push(explosion); this.modelManager.push(specialBulletMesh);
 
-        /*
-        *
-        */
-        fbxLoader.load(
-            '../medias/models/test/SF_Fighter/SciFi_Fighter.FBX',
-            (object) => {
-                 object.name = "SpaceShip";
-                 object.rotateY((Math.PI / 180)* 70);
-                 this.modelManager.push(object);
-            },
-            (xhr) => {
-                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-            },
-            (error) => {
-                console.log(error)
-            }
-        )
+    }
 
-        loaderObj.load('../medias/models/low_poly.obj', (object) => {
+    loaderModel(loaderType,path,name,material,rotation, traverse){
+        switch (loaderType) { 
+            case this.loaderType.fbxLoader:
+                this.loaderType.fbxLoader.load(path,
+                    (object) => {
+                        object.name = name;
+                        object.add(this.booster)
+                        object.rotateY(rotation);
+                        this.modelManager.push(object);
+                    },
+                    (xhr) => {
+                        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
+                    },
+                    (error) => {
+                        console.log(error);
+                    }
+                )
+                break;
+            case this.loaderType.objLoader:
+                loaderType.load(path, (object) => {
 
-            object.traverse(function (child) {
+                    if(!traverse){
 
-                if (child.isMesh){ 
-                    child.name = "spaceRock";
-                    child.material = material
-                };
+                        object.name = name;
+                        return; 
 
-            });
+                    } 
+                    
+                    object.traverse(function (child) {
+        
+                        if (child.isMesh && material !== null) {
+                            if (material) child.material = material;
+                        };
+        
+                    });
+                    console.log(rotation)
+                    if(rotation !== null) object.children[0].rotateY( rotation );
+                    object.name = name;
+                    this.modelManager.push(object);
 
-            object.name = "SpaceRock";
-            this.modelManager.push(object);
-
-        });
-
-        loaderObj.load('../medias/models/Ennemy/ennemy_ss.obj', (object) => {
-
-            object.traverse(function (child) {
-
-                if (child.isMesh){
-                    child.name = "ennemyShipMesh";
-                    child.material = materialEnnemySS;
-                } 
-
-            });
-
-          //  object.children[0].rotateY();
-            object.name = "EnnemySpaceship";
-            object.children[0].rotateY((Math.PI / 180)* 180)
-            this.modelManager.push(object);
-
-        });
-
-
-        loaderObj.load("../medias/models/collectable/Love.obj", (object) => {
-
-            object.name = "HeartItem";
-            this.modelManager.push(object)
-
-        });
-
-        loaderObj.load("../medias/models/collectable/coin/Coin.obj", (object) => {
-
-            object.traverse(function (child) {
-
-                if (child.isMesh) child.material = materialCoin;
-
-            });
-
-            object.name = "CoinItem";
-            this.modelManager.push(object)
-
-        });
+                });
+                break;
+        }
+        
     }
 
     loadAudio() {
@@ -583,93 +517,41 @@ class Asteroid {
         this.audioManager = [];
 
         const audioLoader = new THREE.AudioLoader(this.loadingManager);
+        
+        this.addAudio('../medias/sounds/coin/coin.mp3',"Coin",audioLoader);
+        this.addAudio('../medias/sounds/ennemyShip/laser-ennemy.mp3',"ennemyLaser",audioLoader);
+        this.addAudio('../medias/sounds/bullet/plasma-pistol.mp3',"powerShot",audioLoader);
+        this.addAudio("../medias/sounds/heart/heart.mp3","Heart",audioLoader);
+        this.addAudio("../medias/sounds/bullet/bullet.wav","Bullet",audioLoader);
+        this.addAudio("../medias/sounds/hit/hit.mp3","BulletHit",audioLoader);
+        this.addAudio("../medias/sounds/ship/ship.mp3","ShipDamageTaken",audioLoader);
+        this.addAudio("../medias/sounds/player/player-spawn.ogg","ShipRespawn",audioLoader);
+        this.addAudio("../medias/sounds/item/item-pickup.wav","ItemPick",audioLoader);
+        this.addAudio("../medias/sounds/shield/energy_shield.mp3","EnergyShield",audioLoader);
+        this.addAudio("../medias/sounds/asteroid/asteroid_explosion.mp3","AsteroidExplosion",audioLoader);
+        this.addAudio("../medias/sounds/startMenu/outer-wilds-timber-hearth.mp3","StartMenuTheme",audioLoader);
+        this.addAudio("../medias/sounds/stage2/outer-wilds-dark-bramble.mp3","stage2-ambient",audioLoader);
+        this.addAudio("../medias/sounds/stage1/outer-wilds-the-museum.mp3","stage1-ambient",audioLoader);
+        this.addAudio("../medias/sounds/stage3/end-times.mp3","stage3-ambient",audioLoader);
+        this.addAudio("../medias/sounds/stage3/outer-wilds-supernova.mp3","stage3-supernova",audioLoader);
+
+    }
+
+    addAudio(path,name,audioLoader){
         let me = this;
-        audioLoader.load('../medias/sounds/coin/coin.mp3', function (buffer) {
-            buffer.name = "Coin";
-            me.audioManager.push(buffer);
-        });
 
-        audioLoader.load('../medias/sounds/ennemyShip/laser-ennemy.mp3', function (buffer) {
-            buffer.name = "ennemyLaser";
+        audioLoader.load(path, function (buffer) {
+            buffer.name = name;
             me.audioManager.push(buffer);
-        });
-
-        audioLoader.load('../medias/sounds/bullet/plasma-pistol.mp3', function (buffer) {
-            buffer.name = "powerShot";
-            me.audioManager.push(buffer);
-        });
-
-        audioLoader.load('../medias/sounds/heart/heart.mp3', function (buffer) {
-            buffer.name = "Heart";
-            me.audioManager.push(buffer);
-        });
-
-        audioLoader.load('../medias/sounds/bullet/bullet.wav', function (buffer) {
-            buffer.name = "Bullet";
-            me.audioManager.push(buffer);
-        });
-
-        audioLoader.load('../medias/sounds/hit/hit.mp3', function (buffer) {
-            buffer.name = "BulletHit";
-            me.audioManager.push(buffer);
-        });
-
-        audioLoader.load('../medias/sounds/ship/ship.mp3', function (buffer) {
-            buffer.name = "ShipDamageTaken";
-            me.audioManager.push(buffer);
-        });
-        /*-*/
-        audioLoader.load('../medias/sounds/player/player-spawn.ogg', function (buffer) {
-            buffer.name = "ShipRespawn";
-            me.audioManager.push(buffer);
-        });
-        audioLoader.load('../medias/sounds/item/item-pickup.wav', function (buffer) {
-            buffer.name = "ItemPick";
-            me.audioManager.push(buffer);
-        });
-
-        audioLoader.load('../medias/sounds/shield/energy_shield.mp3', function (buffer) {
-            buffer.name = "EnergyShield";
-            me.audioManager.push(buffer);
-        });
-
-        audioLoader.load('../medias/sounds/asteroid/asteroid_explosion.mp3', function (buffer) {
-            buffer.name = "AsteroidExplosion";
-            me.audioManager.push(buffer);
-        });
-
-        audioLoader.load('../medias/sounds/startMenu/outer-wilds-timber-hearth.mp3', function (buffer) {
-            buffer.name = "StartMenuTheme";
-            me.audioManager.push(buffer);
-        });
-
-        audioLoader.load('../medias/sounds/stage2/outer-wilds-dark-bramble.mp3', function (buffer) {
-            buffer.name = "stage2-ambient";
-            me.audioManager.push(buffer);
-        });
-        audioLoader.load('../medias/sounds/stage1/outer-wilds-the-museum.mp3', function (buffer) {
-            buffer.name = "stage1-ambient";
-            me.audioManager.push(buffer);
-        });
-        audioLoader.load('../medias/sounds/stage3/end-times.mp3', function (buffer) {
-            buffer.name = "stage3-ambient";
-            me.audioManager.push(buffer);
-        });
-        audioLoader.load('../medias/sounds/stage3/outer-wilds-supernova.mp3', function (buffer) {
-            buffer.name = "stage3-supernova";
-            me.audioManager.push(buffer);
-        });
-
-
+        });  
     }
 
     loadProps() {
 
-        let playerModel, rockModel,heartModel, coinModel, ennemy_ssModel;
-        let bulletEnnemy = new Object3D(); let bulletPlayer= new Object3D(); let firePowerModel= new Object3D(); 
-        let fireRateModel= new Object3D(); let shieldModel= new Object3D(); let earthModel = new Object3D();
+        let playerModel, rockModel, heartModel, coinModel, ennemy_ssModel;
+        let bulletEnnemy = new Object3D(); let bulletPlayer = new Object3D(); let firePowerModel = new Object3D();
+        let fireRateModel = new Object3D(); let shieldModel = new Object3D(); let earthModel = new Object3D();
         let sunModel = new Object3D(); let explosionModel = new Object3D(); let specialeBullet = new Object3D();
-
 
 
         this.modelManager.forEach((e) => {
@@ -703,25 +585,7 @@ class Asteroid {
 
         })
 
-
-
-
-        const audio = {
-
-            audioManager: this.audioManager,
-
-            ambientListener: this.ambientListener,
-            asteroidListener: this.asteroidListener,
-            bulletListener: this.bulletListener,
-            shieldListener: this.shieldListener,
-            jokerListener: this.jokerListener,
-            plasmaListener: this.plasmaListener,
-            playerDamageListener: this.playerDamageListener,
-            playerInstListener:this.playerInstListener
-
-        }
-
-        this.params = {
+        const params = {
 
             goal: this.goal,
             camera: this.inGameCamera,
@@ -729,70 +593,106 @@ class Asteroid {
 
         }
 
-        const utils = {
+        const gameAudio = {
 
-            renderer: this.renderer,
-            stageScene: this.stageScene,
-            sceneStartMenu: this.sceneStartMenu,
-            inGameCamera: this.inGameCamera,
-            startMenuCamera: this.cameraStartMenu,
-            loop: this.loop,
+            audioManager: this.audioManager,
+
+            listener : {
+
+                ambientListener: this.ambientListener,
+                ennemyLaserListener: this.ennemyLaserListener,
+                asteroidListener: this.asteroidListener,
+                bulletListener: this.bulletListener,
+                shieldListener: this.shieldListener,
+                jokerListener: this.jokerListener,
+                plasmaListener: this.plasmaListener,
+                playerDamageListener: this.playerDamageListener,
+                playerInstListener: this.playerInstListener
+    
+            },
+    
+            sound : {
+    
+                ambientSound : new THREE.Audio(this.ambientListener),
+                ennemyLaserSound : new THREE.Audio(this.ennemyLaserListener),
+                asteroidSound : new THREE.Audio(this.asteroidListener),
+                bulletSound : new THREE.Audio(this.bulletListener),
+                shieldSound :new THREE.Audio(this.shieldListener),
+                jokerSound : new THREE.Audio(this.jokerListener),
+                plasmaSound : new THREE.Audio(this.plasmaListener),
+                playerDamageSound : new THREE.Audio(this.playerDamageListener),
+                playerInstSound :new THREE.Audio(this.playerInstListener),
+    
+            }
+
+        }  
+
+        const gameTools = {
+
+             utils : {
+
+                renderer: this.renderer,
+                stageScene: this.stageScene,
+                sceneStartMenu: this.sceneStartMenu,
+                inGameCamera: this.inGameCamera,
+                startMenuCamera: this.cameraStartMenu,
+                loop: this.loop,
+                audio: this.audioManager
+    
+            },
+    
+             postProcess : {
+    
+                finalComposer: this.finalComposer,
+                bloomComposer: this.bloomComposer,
+    
+                bloomPass: this.bloomPass,
+                effectFXAA: this.effectFXAA,
+                outlinePass: this.outlinePass,
+                finalPass: this.finalPass,
+    
+            },
+    
+             shaders : {
+    
+                atmosphere: this.atmosphere,
+                //  sunAtmosphere: this.sunAtmosphere,
+                booster: this.booster,
+                stars: this.stars,
+    
+                specialBullet: this.specialBulletMaterial,
+                explosionShader: this.shaderExplosion,
+                earthShader: this.earthMaterial,
+                sunShader: this.sunMaterial,
+                shieldShader: this.materialShield,
+    
+    
+            }
 
         }
 
-        const postProcess = {
+        const gameObjects = {
 
-            finalComposer: this.finalComposer,
-            bloomComposer : this.bloomComposer,
-
-            bloomPass: this.bloomPass,
-            effectFXAA: this.effectFXAA,
-            outlinePass: this.outlinePass,
-            finalPass : this.finalPass,         
+            player : new Player({ model : playerModel, audio: gameAudio, utils: params, name : "player"}),   
+            ennemyShip : new EnnemySpaceship({ model : ennemy_ssModel, audio: gameAudio, utils: params, break : 0, name : "ennemySS"}),
+            basicAsteroid : new BasicAsteroid({ model : rockModel, audio: gameAudio, utils: params, nbBreak : 0, name : "basicAsteroid"}),
+            earth : new Earth({model : earthModel, audio: gameAudio, utils: params, break : 0, name : "earth"}),
+            sun  : new Sun({model : sunModel, audio: gameAudio, utils: params, break : 0, name : "sun"}),
+            basicBullet :  new BasicBullet({model : bulletPlayer, audio: gameAudio, utils: params, break : 0, name : "basicBullet"}),
+            ennemyBullet :  new BasicBullet({model : bulletEnnemy, audio: gameAudio, utils: params, break : 0, name : "ennemyBullet"}),
+            specialBullet : new SpecialBullet({model : specialeBullet, audio: gameAudio, utils: params, break : 0, name : "specialBullet"}),
+            coin: new Coin({model : coinModel, audio: gameAudio, utils: params, break : 0, name : "coin"}),
+            firepower : new FirePower({model : firePowerModel, audio: gameAudio, utils: params, break : 0, name : "firePower"}),
+            firerate : new FireRate({model : fireRateModel, audio: gameAudio, utils: params, break : 0, name : "fireRate"}),
+            shield : new Shield({model : shieldModel, audio: gameAudio, utils: params, break : 0, name : "shield"}),
+            heart : new Heart({model : heartModel, audio: gameAudio, utils: params, break : 0, name : "heart"}),        
+            explosion : new Explosion({model : explosionModel, audio: gameAudio, utils: params, break : 0, name : "explosion"}),
 
         }
-
-        const shaders = {     
-
-            astmosphere :  this.atmosphere,
-          //  sunAtmosphere: this.sunAtmosphere,
-            booster : this.booster,
-            stars: this.stars,
-
-            specialBullet: this.specialBulletMaterial,
-            explosionShader : this.shaderExplosion,
-            earthShader: this.earthMaterial,
-            sunShader: this.sunMaterial,
-            shieldShader : this.materialShield,
-            
- 
-         }
-
-        const models = {
-
-            player: new Player(playerModel, audio,this.params),
-            ennemy_ss: new EnnemySpaceship(ennemy_ssModel,audio,0),
-            asteroid: new BasicAsteroid(rockModel,audio, 0),
-            
-            earth: new Earth(earthModel,audio,0),
-            sun: new Sun(sunModel,audio, 0),
-
-            basicBullet: new BasicBullet(bulletPlayer, audio),
-            ennemyBullet: new BasicBullet(bulletEnnemy, audio),
-            specialBullet: new SpecialBullet(specialeBullet,audio),
-
-            coin: new Coin(coinModel,audio, 0),
-            firepower: new FirePower(firePowerModel,audio, 0),
-            firerate: new FireRate(fireRateModel,audio, 0),
-            shield: new Shield(shieldModel,audio, 0),
-            heart: new Heart(heartModel,audio, 0),
-            
-            explosion: new Explosion(explosionModel, audio),
-        }
-
-        this.gm = new GameManager(models, utils, audio, shaders, postProcess)
-        this.gm.ModelInitialisation();
-        this.gm.ValueInitialisation();
+        
+        this.gameManager = new GameManager(gameObjects, gameTools, gameAudio);
+        this.gameManager.ModelInitialisation();
+        this.gameManager.ValueInitialisation();
 
         this.remove = null;
 
@@ -807,9 +707,9 @@ class Asteroid {
 
             document.getElementById("start_game").style.display = "none";
             document.removeEventListener('keydown', this.remove);
-            this.gm.state.start = true;
-            
-            this.gm.GetComponent("LevelSystem").scenePicker("StartMenu", true);
+            this.gameManager.state.start = true;
+
+            this.gameManager.GetComponent("LevelSystem").scenePicker("StartMenu", true);
 
         }
 
@@ -829,8 +729,8 @@ class Asteroid {
         this.inGameCamera.aspect = window.innerWidth / window.innerHeight;
         this.inGameCamera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.bloomComposer.setSize( window.innerWidth, window.innerHeight );
-		this.finalComposer.setSize( window.innerWidth, window.innerHeight );
+        this.bloomComposer.setSize(window.innerWidth, window.innerHeight);
+        this.finalComposer.setSize(window.innerWidth, window.innerHeight);
 
     }
 

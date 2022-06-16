@@ -80,7 +80,7 @@ class AsteroidMovement {
                 this.dis = this.parent.position.distanceTo(e.position); 
                 
                // this.dis = (1/this.dis)*0.5 //proche =  + rapide
-                this.directionToTurn.addScaledVector(this.dir,this.dis).multiplyScalar(this.ForceGravitationnelle(e.scale.x,this.parent.scale.x,this.dis) * e.scale.x * 10);// ou 0.005
+                this.directionToTurn.addScaledVector(this.dir,this.dis).multiplyScalar(this.ForceGravitationnelle(e.children[0].scale.x,this.parent.children[0].scale.x,this.dis) * e.children[0].scale.x * 10);// ou 0.005
                 
                 
             } 

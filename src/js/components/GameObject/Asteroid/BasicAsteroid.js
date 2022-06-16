@@ -4,19 +4,21 @@ import AsteroidMovement from "./AsteroidMouvement.js";
 import AsteroidHealthSystem from "./AsteroidHealthSystem.js";
 import StaticAsteroid from "./StaticAsteroid.js";
 import GameObject from "../GameObject.js";
-import { BoxHelper } from "../../three/three.module.js";
 
-class BasicAsteroid extends GameObject {
+class BasicAsteroid extends GameObject { // extends sceneManager
 
-    constructor(model,audio, nbBreak) {
+    constructor(gameObject) {
 
-        super(model,audio);
+        super(gameObject);
 
+        this.sceneManager = null;
         this.components = {};
-        this.audio = audio;
-        this.name = "Asteroid"
-        this.nbBreak = nbBreak;
 
+        if (!gameObject) gameObject = {audio : null, nbBreak : 0};
+
+        this.audio = gameObject.audio;
+        this.name = "Asteroid"
+        this.nbBreak = gameObject.nbBreak;
         this.InitComponent();
 
     }
@@ -29,13 +31,19 @@ class BasicAsteroid extends GameObject {
 
     }
 
+    InitValue(){}
+
     Instantiate(o, p, r, s) {
 
         super.Instantiate(o, p, r, s);
 
         o.position.copy(p);
         o.rotation.copy(r);
-        o.scale.copy(new THREE.Vector3(s, s, s))
+        o.children.forEach( e => {
+            if (e.constructor.name == "Mesh") {
+                e.scale.copy(new THREE.Vector3(s,s,s))
+            }
+        })
 
         let aste_mvt = this.GetComponent("AsteroidMovement");
         o.userData.velocity !== undefined ? aste_mvt.velocity.copy(o.userData.velocity) : 
@@ -52,6 +60,7 @@ class BasicAsteroid extends GameObject {
         this.life = this.life / (this.nbBreak + 1);
 
         this.scene.add(o);
+
 
     }
 

@@ -4,10 +4,11 @@ import GameObject from "../GameObject.js";
 
 class BasicBullet extends GameObject{ 
 
-    constructor(model, audio) {
+    constructor(gameObject) {
 
-        super(model, audio);
+        super(gameObject);
 
+        this.sceneManager = null;
         this.components = {};
         this.name = "BasicBullet";
 
@@ -15,6 +16,7 @@ class BasicBullet extends GameObject{
         this.timerInstantiate = null;
 
         this.index = 0;
+
         this.InitComponent();
         
     }
@@ -25,6 +27,8 @@ class BasicBullet extends GameObject{
         this.AddComponent(new BulletDamageSystem(this))
 
     }
+
+    InitValue(){}
     
 
 }

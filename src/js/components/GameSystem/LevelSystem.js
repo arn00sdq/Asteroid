@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import JokerSystem from "./JokerSystem.js";
 import {cameraStartLevel} from "../Animation/cameraStartLevel.js"
 import Timer from '../Timer/timer.js';
-import SunShrinking from '../Planet/SunShrinking.js';
+import SunShrinking from '../GameObject/Planet/SunShrinking.js';
 
 
 class LevelSystem{
@@ -26,11 +26,11 @@ class LevelSystem{
 
         }
 
-        this.player = this.parent.player;
+        this.player = this.parent.gameModels.player;
 
-        this.playerHealth = this.parent.player.GetComponent("PlayerHealthSystem");
-        this.playerMouvement = this.parent.player.GetComponent("CharacterMouvement");
-        this.playerShoot = this.parent.player.GetComponent("PlayerShootProjectiles");
+        this.playerHealth = this.parent.gameModels.player.GetComponent("PlayerHealthSystem");
+        this.playerMouvement = this.parent.gameModels.player.GetComponent("CharacterMouvement");
+        this.playerShoot = this.parent.gameModels.player.GetComponent("PlayerShootProjectiles");
 
         this.soundSystem = this.parent.GetComponent("SoundSystem");
 
@@ -43,21 +43,13 @@ class LevelSystem{
         player.scene = this.parent.currentScene;
         player.Instantiate(player,position, rotation, 0.03);
         player.SetRigidBody(player);
-        player.add(this.parent.booster);
-        const booster = player.children.find(e => e.name == "booster")
-        booster.position.set(0, -0.01, -0.155)
-        booster.scale.set(0.001,0.001,0.001)
 
     }
 
     InstantiateGameObject(object,position, rotation, scale, opt){
 
         object.scene = this.parent.currentScene;
-
-        let positionAudio = object.children.find( k=> k.constructor.name == "PositionalAudio")    
-        if (positionAudio !== undefined) object.remove(positionAudio)
-
-        
+      
         let object_clone = object.clone();
         this.setCloneValue(object_clone, object);
 
@@ -72,28 +64,55 @@ class LevelSystem{
 
         this.updateValue(object_clone, object);
 
-        
-    }
-
-    InstantiateShader(object,position, rotation, scale, opt){ //instantiateShader
-
-        object.scene = this.parent.currentScene;
-
-        let object_clone = object.clone();
-        this.setCloneValue(object_clone, object);
-        object_clone.userData.type = opt;
-
-        let mesh = object_clone.children.find(e => e.constructor.name == "Mesh");
-        let shaderMat = Object.values(this.parent.shaders).find( val => val.parentName === object.constructor.name);
-        mesh.material = shaderMat;
-
-        if (object.constructor.name == "Explosion") mesh.material.uniforms[ 'opacity' ].value  = 1.0;
-
-        object_clone.SetRigidBody(object_clone);
-        object.Instantiate(object_clone,position, rotation, scale);
+        if (object.constructor.name == "Explosion") console.log( object.children[0].material.uniforms[ 'opacity' ].value)
 
         
     }
+
+    setCloneValue(destination, source){
+
+        for (const property in source) {
+            
+            if(destination[property] == null && property !== "model"){
+             
+                destination[property] = source[property];      
+
+            }  
+
+        }
+
+        destination.children.forEach((e) => { 
+
+            if (!e.isMesh) return;
+
+            if(Object.values(this.parent.shaders).find( val => val.parentName === destination.constructor.name)){
+
+                 e.material = Object.values(this.parent.shaders).find( val => val.parentName === destination.constructor.name);
+
+            }else{
+                
+                let mesh = source.children.find(e => e.constructor.name == 'Mesh');
+                e.material = mesh.material.clone();
+                                       
+            }   
+            
+        });
+
+        if (source.constructor.name == "Explosion") destination.children[0].material.uniforms[ 'opacity' ].value  = 1.0; 
+        console.log()
+        
+    }
+
+    updateValue(destination, source){
+
+        for (const [key, value] of Object.entries(source)) {
+
+            if(typeof value === 'number')source[key] = destination[key]
+
+        }
+
+    }
+
 
     generatingStars(star,min,max){
 
@@ -121,36 +140,6 @@ class LevelSystem{
 
     }
 
-    setCloneValue(destination, source){
-       
-        for (const property in destination) {
-            
-            if(destination[property] == null && property !== "model")  destination[property] = source[property]
-
-        }
-        
-        let mesh = source.children.find(e => e.constructor.name == 'Mesh');
-        destination.children.forEach((e) => { 
-
-            if (e.constructor.name == 'Mesh') 
-            e.material = mesh.material.clone(); 
-            
-        });
-
-        destination.add( new THREE.PositionalAudio( this.parent.audio.asteroidListener ));
-
-    }
-
-    updateValue(destination, source){
-
-        for (const [key, value] of Object.entries(source)) {
-
-            if(typeof value === 'number')source[key] = destination[key]
-
-        }
-
-    }
-
     resetLevel(level) {
 
         this.timeElapsed = 0;
@@ -162,13 +151,11 @@ class LevelSystem{
         this.removeProps();
         this.resetJoker();
 
-        this.parent.ambientSound.play();// si on doit restart la musique on doit play pour que le stop puisse se faire
-        this.parent.ambientSound.stop();
+        this.parent.gameAudio.sound.ambientSound.play();// si on doit restart la musique on doit play pour que le stop puisse se faire
+        this.parent.gameAudio.sound.ambientSound.stop();
 
 
-        if(level == "Stage3") this.resetTimer();
-
-        
+        if(level == "Stage3") this.resetTimer();     
 
     }
 
@@ -186,8 +173,8 @@ class LevelSystem{
 
         }
 
-        let shieldToRemove = this.parent.player.children.find(e => e.constructor.name == "Shield")
-        if( shieldToRemove!== undefined) this.parent.scene.remove(this.parent.player.children["Shield"])
+        let shieldToRemove = this.parent.gameModels.player.children.find(e => e.constructor.name == "Shield")
+        if( shieldToRemove!== undefined) this.parent.scene.remove(this.parent.gameModels.player.children["Shield"])
 
     }
 
@@ -205,9 +192,9 @@ class LevelSystem{
 
     resetJoker(){
         
-        for (const value in this.parent.models)
-            if (this.parent.models[value].userData.type == "joker")
-                this.parent.models[value].nb = 0;
+        for (const value in this.parent.gameModels)
+            if (this.parent.gameModels[value].userData.type == "joker")
+                this.parent.gameModels[value].nb = 0;
     }
 
     /* ----------- Delimitation ------------ */
@@ -274,13 +261,13 @@ class LevelSystem{
 
         }
 
-        if(this.parent.sun["SunShrinking"] !== undefined) this.parent.sun.RemoveComponent("SunShrinking");
+        if(this.parent.gameModels.sun["SunShrinking"] !== undefined) this.parent.gameModels.sun.RemoveComponent("SunShrinking");
         
         if (level == "StartMenu") {
             this.parent.RemoveComponent("JokerSystem");
 
         }else if(this.parent.components["JokerSystem"] === undefined){
-            this.parent.AddComponent(new JokerSystem(this.parent, this.parent.models));
+            this.parent.AddComponent(new JokerSystem(this.parent, this.parent.gameModels));
 
         }
 
@@ -288,8 +275,8 @@ class LevelSystem{
 
     loadScene(level) {
 
-        this.parent.currentScene = level == "StartMenu" ?  new THREE.Scene() : this.parent.stageScene;
-        this.parent.currentCamera = level == "StartMenu" ? this.parent.startMenuCamera : this.parent.inGameCamera;
+        this.parent.currentScene = level == "StartMenu" ?  new THREE.Scene() : this.parent.utils.stageScene;
+        this.parent.currentCamera = level == "StartMenu" ? this.parent.utils.startMenuCamera : this.parent.utils.inGameCamera;
         
     }
 
@@ -328,22 +315,21 @@ class LevelSystem{
     }
 
     loadProps(level){
-
         switch(level){
             case "StartMenu":
-                this.loadPlanetStartMenu({earth : this.parent.earth, stars : this.parent.stars});
+                this.loadPlanetStartMenu({earth : this.parent.gameModels.earth, stars : this.parent.shaders.stars});
                 break;
             case "Stage1":
-                this.loadAsteroidBackGround(this.parent.asteroid,50);
-                this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
+                this.loadAsteroidBackGround(this.parent.gameModels.basicAsteroid,50);
+                this.loadPlanetStageOne({earth : this.parent.gameModels.earth, sun : this.parent.gameModels.sun, stars : this.parent.shaders.stars});
                 break;
             case "Stage2":
-                this.loadAsteroidBackGround(this.parent.asteroid,50);
-                this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
+                this.loadAsteroidBackGround(this.parent.gameModels.basicAsteroid,50);
+                this.loadPlanetStageOne({earth : this.parent.gameModels.earth, sun : this.parent.gameModels.sun, stars : this.parent.shaders.stars});
                 break;
             case "Stage3":
-                this.loadAsteroidBackGround(this.parent.asteroid,50);
-                this.loadPlanetStageOne({earth : this.parent.earth, sun : this.parent.sun, stars : this.parent.stars});
+                this.loadAsteroidBackGround(this.parent.gameModels.basicAsteroid,50);
+                this.loadPlanetStageOne({earth : this.parent.gameModels.earth, sun : this.parent.gameModels.sun, stars : this.parent.shaders.stars});
                 //ajout compo soleil
                 break;
         }
@@ -356,15 +342,15 @@ class LevelSystem{
             case "StartMenu":
                 break;
             case "Stage1":
-                this.asteroidWave(this.parent.asteroid, 8);
+                this.asteroidWave(this.parent.gameModels.basicAsteroid, 8);
                 break;
             case "Stage2":
-                this.asteroidWave(this.parent.asteroid, 5);
-                this.ennemySpaceshipWave(this.parent.ennemy_ss,1)
+                this.asteroidWave(this.parent.gameModels.basicAsteroid, 5);
+                this.ennemySpaceshipWave(this.parent.gameModels.ennemyShip,1)
                 break;
             case "Stage3":
-                this.asteroidWave(this.parent.asteroid, 8);
-                this.ennemySpaceshipWave(this.parent.ennemy_ss,2)
+                this.asteroidWave(this.parent.gameModels.basicAsteroid, 8);
+                this.ennemySpaceshipWave(this.parent.gameModels.ennemyShip,2)
                 break;
         }
 
@@ -372,8 +358,8 @@ class LevelSystem{
 
     loadAudio(level){
 
-        let ambientBuffer = this.parent.audio.audioManager;
-        let ambientSound = this.parent.ambientSound;
+        let ambientBuffer = this.parent.gameAudio.audioManager;
+        let ambientSound = this.parent.gameAudio.sound.ambientSound;
 
         if(ambientSound.isPlaying) ambientSound.stop();
 
@@ -404,13 +390,13 @@ class LevelSystem{
 
     loadPlanetStartMenu(model){
 
-        let atmosphere = this.parent.atmosphere; //manuel
+        let atmosphere = this.parent.shaders.atmosphere; //manuel
         atmosphere.scale.set(1.1,1.1,1.1);
         atmosphere.position.set(0,0,0);
         this.parent.currentScene.add(atmosphere);
 
         model.earth.scale.set(1,1,1);
-        this.InstantiateShader(model.earth, new THREE.Vector3(0,0,0),  new THREE.Euler(0,0,0), 1, "Planet");
+        this.InstantiateGameObject(model.earth, new THREE.Vector3(0,0,0),  new THREE.Euler(0,0,0), 1, "Planet");
 
         this.generatingStars(model.stars,200,500);
         this.parent.currentScene.add(model.stars);
@@ -428,7 +414,7 @@ class LevelSystem{
 
         /*sun*/
 
-        model.sun.scale.set(10.6,10.6,10.6)
+        model.sun.scale.set(10,10,10)
         let positionSun = new THREE.Vector3(-100,50,-450);
         let rotationSun = new THREE.Euler( 0,0,0);
         let scaleSun = 1;
@@ -445,8 +431,8 @@ class LevelSystem{
         this.parent.currentScene.add(model.stars);
 
         //Instate go
-        this.InstantiateShader(model.earth, positionEarth, rotationEarth, scaleEarth, "Planet");
-        this.InstantiateShader(model.sun, positionSun, rotationSun, scaleSun, "Planet");
+        this.InstantiateGameObject(model.earth, positionEarth, rotationEarth, scaleEarth, "Planet");
+        this.InstantiateGameObject(model.sun, positionSun, rotationSun, scaleSun, "Planet");
 
     } 
     
@@ -477,7 +463,7 @@ class LevelSystem{
                                             )                       
             let rotation = new THREE.Euler( 0,0,0);
             let scale = (Math.random() * (0.03 -0.015)) + 0.015;
-            this.InstantiateGameObject(asteroid, position, rotation, scale, "Ennemy")
+            this.InstantiateGameObject(asteroid, position, rotation,scale, "Ennemy")
 
         }
 

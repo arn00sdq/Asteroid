@@ -2,25 +2,20 @@ import * as THREE from 'three';
 
 class GameObject extends THREE.Object3D{
 
-    /**
-    *
-    * @param {THREE.Object3D}  model 
-    * @param {THREE.Mesh}  audio
-    * @param {THREE.Audio} [params] 
-    */
-    constructor(model, audio){
+
+    constructor(gameObject){
         
         super();
-        
-        if (!model) model = "";
-        if (!audio) audio = "";
 
         this.components = {};
-        this.model = model;
+        
+        if (!gameObject) gameObject = {model : null, audio : null};
+
+        this.model = gameObject.model;
 
         this.scene = null;
         this.name = null;
-        this.audio = audio;
+        this.audio = gameObject.audio;
         this.nb = 0;
         this.limit = 0;
 
@@ -32,17 +27,15 @@ class GameObject extends THREE.Object3D{
     */
     InitMesh(scale){
         
-        
+        let modelToAdd = []; 
         this.model.children.forEach( (e) => {
             
-           
-            if (e.constructor.name == "Mesh") 
-            this.add(e)
-            
+            if (e.type == "Mesh")  modelToAdd.push(e)        
             
         })
-
+        modelToAdd.forEach(e => {this.add(e)/*; this.add(new THREE.AxesHelper())*/})
         
+
     }  
 
     /**
@@ -51,7 +44,7 @@ class GameObject extends THREE.Object3D{
     */
     SetRigidBody(object){
 
-        object.userData.box3 = new THREE.Box3()
+        object.userData.box3 = new THREE.Box3();
         
     }
 
@@ -145,7 +138,7 @@ class GameObject extends THREE.Object3D{
     AddComponent(c) {
 
         this.components[c.constructor.name] = c;  
-
+       
     }
 
     /**

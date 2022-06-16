@@ -5,15 +5,12 @@ class PlayerShootProjectiles{
     constructor(parent){
 
       this.parent = parent;
+
       this.audio = this.parent.audioSystem;
       this.fireRate = 500;
 
-      this.weaponList = null;
-      this.currentWeapon = null;
-
       this.canShoot = true;
       this.nbCannon = 0;
-      this.cannon = [];
 
       this.spawnDistance = -0.3;
       this.spawnRot = new THREE.Euler;
@@ -30,6 +27,9 @@ class PlayerShootProjectiles{
 
     Shoot(timeElapsed,bullet){
       
+      this.normalBullet = this.parent.sceneManager.gameModels.basicBullet;
+      this.specialBullet =  this.parent.sceneManager.gameModels.specialBullet;
+
       for (let i = 0; i < this.cannon.length; i++) {
         
         this.temp.setFromMatrixPosition(this.cannon[i].matrixWorld);
@@ -38,14 +38,14 @@ class PlayerShootProjectiles{
 
         if (bullet == 0){
 
-          this.weaponList.normalBullet.timerInstantiate = timeElapsed;
-          this.parent.stageSystem.InstantiateGameObject(this.weaponList.normalBullet,this.temp, this.spawnRot, 0.0009) 
+          this.normalBullet.timerInstantiate = timeElapsed;
+          this.parent.stageSystem.InstantiateGameObject(this.normalBullet,this.temp, this.spawnRot, 0.0009) 
           this.parent.audioSystem.playSfxBullet(this.parent.audioSystem.audioManager.find(e => e.name == "Bullet"));
           
         }else{
 
-          this.weaponList.specialBullet.timerInstantiate = timeElapsed;
-          this.parent.stageSystem.InstantiateShader(this.weaponList.specialBullet,this.temp, this.spawnRot, 0.9);
+          this.specialBullet.timerInstantiate = timeElapsed;
+          this.parent.stageSystem.InstantiateGameObject(this.specialBullet,this.temp, this.spawnRot, 0.9);
           this.parent.audioSystem.playSfxPlasma(this.parent.audioSystem.audioManager.find(e => e.name == "powerShot"));
 
         }

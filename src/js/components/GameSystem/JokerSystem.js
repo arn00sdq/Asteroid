@@ -24,7 +24,7 @@ class JokerSystem{
     PlayerAddLife(player,number){
 
         let playerHealth = player.GetComponent("PlayerHealthSystem");
-
+        console.log(player,number)
         playerHealth.Heal(number);
         this.displaySystem.PrintLife(playerHealth.life);
 
@@ -130,7 +130,7 @@ class JokerSystem{
                         
 
                 if (currentJoker.constructor.name == "Shield"){
-                    this.levelSystem.InstantiateShader(currentJoker,position,rotation,scale,"joker");
+                    this.levelSystem.InstantiateGameObject(currentJoker,position,rotation,scale,"joker");
                 }  else{
                     this.levelSystem.InstantiateGameObject(currentJoker,position,rotation,scale,"joker");
                 }

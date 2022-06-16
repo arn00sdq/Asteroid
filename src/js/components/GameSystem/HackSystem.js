@@ -14,21 +14,21 @@ class HackSystem{
 
     InvincibleMode() {
 
-        this.playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
+        this.playerInput = this.parent.gameModels.player.GetComponent("CharacterControllerInput").keys;
 
         if (this.playerInput.invincible){
 
             this.playerInput.invincible = false;
 
-            if( this.parent.player.userData.box3  !== null){
+            if( this.parent.gameModels.player.userData.box3  !== null){
 
-                this.parent.player.RemoveRigidBody(this.parent.player);
-                this.jokerSytem.addShield(this.parent.player,this.parent.shield);
+                this.parent.gameModels.player.RemoveRigidBody(this.parent.gameModels.player);
+                this.jokerSytem.addShield(this.parent.gameModels.player,this.parent.gameModels.shield);
 
             }else{
 
-                this.parent.player.SetRigidBody(this.parent.player);
-                this.jokerSytem.removeShield(this.parent.player);
+                this.parent.gameModels.player.SetRigidBody(this.parent.gameModels.player);
+                this.jokerSytem.removeShield(this.parent.gameModels.player);
 
             }
 
@@ -38,10 +38,10 @@ class HackSystem{
 
     NextJoker() {
 
-        let playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
+        let playerInput = this.parent.gameModels.player.GetComponent("CharacterControllerInput").keys;
         let jokerSystem = this.parent.GetComponent("JokerSystem");
         let displayJoker = document.getElementById("joker-cheat");
-        let player = this.parent.player;
+        let player = this.parent.gameModels.player;
 
         if (playerInput.nj){
 
@@ -69,8 +69,7 @@ class HackSystem{
                 case 3:
  
                     if(player.hasJoker.immune == false){
-
-                        jokerSystem.PlayerProtection(player, this.parent.shield,3000);
+                        jokerSystem.PlayerProtection(player, this.parent.gameModels.shield,3000);
                         this.soundSyst.playSfxShield(this.audioManager.find(e => e.name == "EnergyShield"));
                     }
                     displayJoker.innerHTML = "shield";
@@ -100,7 +99,7 @@ class HackSystem{
 
     KillThemAll(){ 
 
-        let playerInput = this.parent.player.GetComponent("CharacterControllerInput").keys;
+        let playerInput = this.parent.gameModels.player.GetComponent("CharacterControllerInput").keys;
         let scene = this.parent.currentScene;
 
         if (playerInput.kta){

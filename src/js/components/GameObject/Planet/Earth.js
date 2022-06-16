@@ -3,19 +3,24 @@ import PlanetMouvement from "./PlanetMouvement.js";
 
 class Earth extends GameObject{ 
 
-    constructor(model, audio) {
+    constructor(gameObject) {
         
-        super(model, audio);
+        super(gameObject);
         
+        this.sceneManager = null;
         this.components = {};
         this.name = "Earth";
+
         this.InitComponent();
         
     }
 
     InitComponent() {
+
         this.AddComponent(new PlanetMouvement(this))
     }
+
+    InitValue(){}
     
 }
 

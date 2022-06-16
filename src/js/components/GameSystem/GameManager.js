@@ -18,89 +18,20 @@ import MenuSystem from "./MenuSystem.js";
 
 class GameManager {
 
-    constructor(models, utils, audio, shaders, postProcess) {
+    constructor(gameObject, gameTools, gameAudio) {
 
         this.components = {};
+
+        this.gameModels  = gameObject;
+        this.gameAudio = gameAudio;
+        
+        this.shaders = gameTools.shaders;
+        this.postProcess = gameTools.postProcess;
+        this.utils = gameTools.utils,
+
         this.currentScene = new THREE.Scene();
         this.currentCamera = new THREE.Camera();
 
-
-        /*
-        * Utils
-        */
-        this.composer = utils.composer;
-        this.renderer = utils.renderer;
-        this.stageScene = utils.stageScene;
-
-        this.inGameCamera = utils.inGameCamera;
-        this.startMenuCamera = utils.startMenuCamera;
-        this.loop = utils.loop;
-
-        /* controls */
-
-       /* this.controls = new OrbitControls(this.inGameCamera, this.renderer.domElement);
-
-        this.controls.target.set(0,0,0 );
-        this.controls.update();
-        this.controls.enablePan = false;
-        this.controls.enableDamping = true;*/
-
-        /*
-        * Models
-        */
-
-        this.models = models;
-        this.player = models.player;
-        this.asteroid = models.asteroid;
-        this.heart = models.heart;
-        this.coin = models.coin;
-        this.earth = models.earth;
-        this.sun = models.sun;
-        this.firepower = models.firepower;
-        this.firerate = models.firerate;
-        this.shield = models.shield;
-        this.weaponList = {
-            normalBullet: models.basicBullet,
-            specialBullet: models.specialBullet
-        }
-        this.ennemyBullet = models.ennemyBullet;
-        this.ennemy_ss = models.ennemy_ss;
-        this.explosion = models.explosion;
-
-        /*
-        * Audio
-        */
-
-        this.audio = audio;
-
-        this.ambientSound = new THREE.Audio(this.audio.ambientListener);
-        this.asteroidSound = new THREE.Audio(this.audio.asteroidListener);
-        this.bulletSound = new THREE.Audio(this.audio.bulletListener);
-        this.shieldSound= new THREE.Audio(this.audio.shieldListener);
-        this.jokerSound = new THREE.Audio(this.audio.jokerListener);
-        this.plasmaSound= new THREE.Audio(this.audio.plasmaListener);
-        this.playerDamageSound= new THREE.Audio(this.audio.playerDamageListener);
-        this.playerInstSound= new THREE.Audio(this.audio.playerInstListener);
-
-        /*
-        * Shader
-        */
-
-        this.shaders = shaders;
-
-        this.atmosphere = shaders.astmosphere;
-        this.booster = shaders.booster;
-        this.sunAtmosphere = shaders.sunAtmosphere;
-        this.stars = shaders.stars;
-
-        this.specialBullet = shaders.specialBullet;
-        this.explosionShader = shaders.explosionShader;
-        this.earthShader = shaders.earthShader;
-        this.shieldShader = shaders.shieldShader;
-
-        /*
-        * PostProcess / videoSection
-        */
         this.materials = {};
         this.selectedObjects = [];
         this.selectedEnnemy = [];
@@ -109,19 +40,7 @@ class GameManager {
         this.stat = false;
         this.targetStat = new Stats();
 
-        this.finalComposer = postProcess.finalComposer;
-        this.bloomComposer = postProcess.bloomComposer;
-
-        this.effectFXAA = postProcess.effectFXAA,
-            this.outlinePass = postProcess.outlinePass,
-            this.bloomPass = postProcess.bloomPass,
-            this.finalPass = postProcess.finalPass,
-
-            /*
-            * Animation
-            */
-
-            this.mixer = null;
+        this.mixer = null;
 
         /*
         * GM
@@ -143,7 +62,6 @@ class GameManager {
         /*
         * Global 
         */
-
         this.state = {
 
             start: false,
@@ -152,31 +70,25 @@ class GameManager {
 
         };
 
-        this.InitComponent(models, audio);
+        this.InitComponent();
 
     }
 
-    InitComponent(models, audio) {
+    AddAudioComponent(name, audio) {
 
-        this.AddComponent(new SoundSystem(this, audio));
-        this.AddComponent(new LevelSystem(this));
-        this.AddComponent(new DisplaySystem(this));
-        this.AddComponent(new JokerSystem(this, models));
-        this.AddComponent(new HackSystem(this,audio));
-        this.AddComponent(new GameObjectManager(this,audio));
-        this.AddComponent(new MenuSystem(this));
+        this.audio[name] = audio;
 
     }
 
     AddComponent(c) {
 
-        this.components[c.constructor.name] = c;
+        this.components[c.constructor.name] = c;  
 
     }
 
     RemoveComponent(c) {
 
-        delete this.components[c];
+        delete this.components[c];  
 
     }
 
@@ -186,35 +98,33 @@ class GameManager {
 
     }
 
+    InitComponent() {
+
+        this.AddComponent(new SoundSystem(this));
+        this.AddComponent(new LevelSystem(this));
+        this.AddComponent(new DisplaySystem(this));
+        this.AddComponent(new JokerSystem(this, this.gameModels));
+        this.AddComponent(new HackSystem(this, this.gameAudio));
+        this.AddComponent(new GameObjectManager(this, this.gameAudio));
+        this.AddComponent(new MenuSystem(this));
+
+    }
+
     ModelInitialisation() {
 
-        for (const [key, values] of Object.entries(this.models)) {
+        for (const [key, values] of Object.entries(this.gameModels)) {
 
+            values.sceneManager = this;
             values.InitMesh();
-
+            values.InitValue();
         }
 
     }
 
     ValueInitialisation() {
 
-        /* Player init */
-        this.player.GetComponent("PlayerShootProjectiles").weaponList = this.weaponList;
-        this.player.GetComponent("PlayerShootProjectiles").currentWeapon = this.weaponList.specialBullet;
-        this.player.GetComponent("PlayerCameraSystem").limit = this.limit;
-        this.player.stageSystem = this.GetComponent("LevelSystem");
-        this.player.audioSystem = this.GetComponent("SoundSystem");
-        this.input = this.player.GetComponent("CharacterControllerInput").keys;
-
-
-        /* EnnemyShip init */
-
-        this.ennemy_ss.stageSystem = this.GetComponent("LevelSystem");
-        this.ennemy_ss.audioSystem = this.GetComponent("SoundSystem");
-        this.ennemy_ss.weaponParams = this.ennemyBullet;
-        this.ennemy_ss.asteroid = this.asteroid;
-        this.ennemy_ss.target = this.player;
-        this.ennemyBullet.name = "EnnemyBullet";
+        this.input = this.gameModels.player.GetComponent("CharacterControllerInput").keys;
+        this.gameModels.ennemyBullet.name = "EnnemyBullet";
 
     }
 
@@ -224,44 +134,44 @@ class GameManager {
         let pass = this.GetComponent("MenuSystem").video;
         const renderScene = new RenderPass(this.currentScene, this.currentCamera);
 
-        this.bloomComposer.passes.forEach(e => { if (e.constructor.name == "RenderPass") containRenderPass1 = true })
-        this.finalComposer.passes.forEach(e => { if (e.constructor.name == "RenderPass") containRenderPass2 = true })
+        this.postProcess.bloomComposer.passes.forEach(e => { if (e.constructor.name == "RenderPass") containRenderPass1 = true })
+        this.postProcess.finalComposer.passes.forEach(e => { if (e.constructor.name == "RenderPass") containRenderPass2 = true })
 
-        this.bloomComposer.passes.forEach(e => { if (e.constructor.name == "UnrealBloomPass") containBloom = true })
-        this.finalComposer.passes.forEach(e => { if (e.constructor.name == "OutlinePass") containOutline = true })
-        this.finalComposer.passes.forEach(e => { if (e.name == "FXAAPass") containFXAA = true })
+        this.postProcess.bloomComposer.passes.forEach(e => { if (e.constructor.name == "UnrealBloomPass") containBloom = true })
+        this.postProcess.finalComposer.passes.forEach(e => { if (e.constructor.name == "OutlinePass") containOutline = true })
+        this.postProcess.finalComposer.passes.forEach(e => { if (e.name == "FXAAPass") containFXAA = true })
 
-        if (!containRenderPass1) this.bloomComposer.addPass(renderScene);
-        if (!containRenderPass2) this.finalComposer.addPass(renderScene);
+        if (!containRenderPass1) this.postProcess.bloomComposer.addPass(renderScene);
+        if (!containRenderPass2) this.postProcess.finalComposer.addPass(renderScene);
 
         if (switchScene) {
 
-            this.bloomComposer.passes.shift();
-            this.bloomComposer.insertPass(renderScene, 0);
+            this.postProcess.bloomComposer.passes.shift();
+            this.postProcess.bloomComposer.insertPass(renderScene, 0);
 
-            this.finalComposer.passes.shift();
-            this.finalComposer.insertPass(renderScene, 0);
+            this.postProcess.finalComposer.passes.shift();
+            this.postProcess.finalComposer.insertPass(renderScene, 0);
 
         }
 
         if (pass.bloom == false && containBloom) {
 
-            this.bloomComposer.removePass(this.bloomPass);
-            this.finalComposer.removePass(this.finalPass);
+            this.postProcess.bloomComposer.removePass(this.postProcess.bloomPass);
+            this.postProcess.finalComposer.removePass(this.postProcess.finalPass);
 
         }
         if (pass.bloom == true && !containBloom) {
 
-            this.bloomComposer.addPass(this.bloomPass);
-            this.finalComposer.addPass(this.finalPass);
+            this.postProcess.bloomComposer.addPass(this.postProcess.bloomPass);
+            this.postProcess.finalComposer.addPass(this.postProcess.finalPass);
 
         }
 
-        if (pass.outline == false && containOutline) this.finalComposer.removePass(this.outlinePass);
-        if (pass.outline == true && !containOutline) this.finalComposer.addPass(this.outlinePass);
+        if (pass.outline == false && containOutline) this.postProcess.finalComposer.removePass(this.postProcess.outlinePass);
+        if (pass.outline == true && !containOutline) this.postProcess.finalComposer.addPass(this.postProcess.outlinePass);
 
-        if (pass.fxaa == false && containFXAA) this.finalComposer.removePass(this.effectFXAA);
-        if (pass.fxaa == true && !containFXAA) this.finalComposer.addPass(this.effectFXAA);
+        if (pass.fxaa == false && containFXAA) this.postProcess.finalComposer.removePass(this.postProcess.effectFXAA);
+        if (pass.fxaa == true && !containFXAA) this.postProcess.finalComposer.addPass(this.postProcess.effectFXAA);
 
         // 
 
@@ -296,32 +206,32 @@ class GameManager {
         requestAnimationFrame(this.RAF.bind(this));
         if (!this.state.pause) {
             //this.controls.update()
-            this.loop.now = window.performance.now();
-            this.loop.dt = this.loop.dt + Math.min(1, (this.loop.now - this.loop.last) / 1000);
-            while (this.loop.dt > this.loop.slowStep) this.loop.dt = this.loop.dt - this.loop.slowStep;
-            this.prevTime = Date.now() - this.loop.slowStep;
+            this.utils.loop.now = window.performance.now();
+            this.utils.loop.dt = this.utils.loop.dt + Math.min(1, (this.utils.loop.now - this.utils.loop.last) / 1000);
+            while (this.utils.loop.dt > this.utils.loop.slowStep) this.utils.loop.dt = this.utils.loop.dt - this.utils.loop.slowStep;
+            this.prevTime = Date.now() - this.utils.loop.slowStep;
             this.timeElapsed += Date.now() - this.prevTime;
             this.tempTime = this.timeElapsed;
 
             if (this.postProActive) {
 
                 this.renderBloom();
-                this.outlinePass.selectedObjects = this.selectedObjects;
-                this.finalComposer.render();
+                this.postProcess.outlinePass.selectedObjects = this.selectedObjects;
+                this.postProcess.finalComposer.render();
 
 
             } else {
 
-                this.renderer.render(this.currentScene, this.currentCamera)
+                this.utils.renderer.render(this.currentScene, this.currentCamera)
 
             }
 
-            if (this.mixer !== null) this.mixer.update(this.loop.dt * 5)
+            if (this.mixer !== null) this.mixer.update(this.utils.loop.dt * 5)
 
             this.targetStat.update()
 
-            this.loop.last = this.loop.now;
-            this.Step(this.loop.dt, this.tempTime);
+            this.utils.loop.last = this.utils.loop.now;
+            this.Step(this.utils.loop.dt, this.tempTime);
 
         } else {
 
@@ -335,7 +245,7 @@ class GameManager {
     renderBloom() {
 
         let that = this;
-
+        
         this.currentScene.traverse(function (child) {
 
             if ((!child.isMesh && child.constructor.name !== "Points") || child.name == "SunItem" || child.name == "EarthItem") return;
@@ -347,7 +257,7 @@ class GameManager {
 
         }, true)
 
-        this.bloomComposer.render();
+        this.postProcess.bloomComposer.render();
 
         this.currentScene.traverse(function (child) {
 
@@ -369,8 +279,8 @@ class GameManager {
 
         }
 
-        if (this.player.GetComponent("CharacterControllerInput").keys.screenshot) {
-            this.player.GetComponent("CharacterControllerInput").keys.screenshot = false;
+        if (this.gameModels.player.GetComponent("CharacterControllerInput").keys.screenshot) {
+            this.gameModels.player.GetComponent("CharacterControllerInput").keys.screenshot = false;
 
             html2canvas(document.querySelector("body")).then(function (canvas) {
 

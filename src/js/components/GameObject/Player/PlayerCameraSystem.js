@@ -5,7 +5,7 @@ class PlayerCameraSystem {
     constructor(parent, params) {
 
         this.parent = parent;
-
+        console.log(this.parent)
         this.follow = params.follow;
         this.camera = params.camera;
         this.goal = params.goal;

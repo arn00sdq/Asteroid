@@ -5,13 +5,14 @@ import ExplosionMouvement from './ExplosionMouvement.js';
 
 class Explosion extends GameObject{
 
-    constructor(model, audio){
+    constructor(gameObject){
 
-        super(model, audio);
+        super(gameObject);
 
+        this.sceneManager = null;
         this.components = {}
         this.name = "Explosion";
-        
+
         this.InitComponent();
 
     }
@@ -21,6 +22,8 @@ class Explosion extends GameObject{
         this.AddComponent(new ExplosionMouvement(this));
 
     }
+
+    InitValue(){}
 
 }
 

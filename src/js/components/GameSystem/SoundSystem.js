@@ -2,12 +2,11 @@ import * as THREE from 'three';
 
 class SoundSystem{
 
-    constructor(parent,audio){
+    constructor(parent){
 
         this.parent = parent;
 
-        this.audioManager = audio.audioManager
-        this.sound = audio.sound;
+        this.audioManager = this.parent.gameAudio.audioManager;
 
         this.masterVolume = 0.7;
         this.sfxVolume = 0.5;
@@ -17,7 +16,7 @@ class SoundSystem{
 
     playAmbientMusic(buffer){
 
-        let ambientSound = this.parent.ambientSound;
+        let ambientSound = this.parent.gameAudio.sound.ambientSound;
         if(ambientSound.isPlaying) ambientSound.stop();
         ambientSound.setBuffer(buffer);
         ambientSound.setVolume(  this.musicVolume > this.masterVolume  ? this.masterVolume : this.musicVolume );
@@ -27,7 +26,7 @@ class SoundSystem{
 
     playSfxPlayerDamge(buffer){
 
-        let playerDamageSound = this.parent.playerDamageSound;
+        let playerDamageSound = this.parent.gameAudio.sound.playerDamageSound;
         if (playerDamageSound.isPlaying)  playerDamageSound.stop()
         playerDamageSound.setBuffer( buffer );
         playerDamageSound.setLoop( false );
@@ -38,7 +37,7 @@ class SoundSystem{
 
     playSfxInstantPlayer(buffer){
 
-        let playerInstSound = this.parent.playerInstSound;
+        let playerInstSound = this.parent.gameAudio.sound.playerInstSound;
         if (playerInstSound.isPlaying)  playerInstSound.stop()
         playerInstSound.setBuffer( buffer );
         playerInstSound.setLoop( false );
@@ -49,7 +48,7 @@ class SoundSystem{
 
     playSfxBullet(buffer){
 
-         let playerBulletSound = this.parent.bulletSound;
+         let playerBulletSound = this.parent.gameAudio.sound.bulletSound;
          if (playerBulletSound.isPlaying)  playerBulletSound.stop()
          playerBulletSound.setBuffer( buffer );
          playerBulletSound.setLoop( false );
@@ -60,7 +59,7 @@ class SoundSystem{
 
      playSfxPlasma(buffer){
 
-        let plasmaSound = this.parent.plasmaSound;
+        let plasmaSound = this.parent.gameAudio.sound.plasmaSound;
         if (plasmaSound.isPlaying)  plasmaSound.stop()
         plasmaSound.setBuffer( buffer );
         plasmaSound.setLoop( false );
@@ -71,7 +70,7 @@ class SoundSystem{
 
      playSfxJoker(buffer){
 
-         let jokerSound = this.parent.jokerSound;
+         let jokerSound = this.parent.gameAudio.sound.jokerSound;
          if (jokerSound.isPlaying)  jokerSound.stop()
          jokerSound.setBuffer( buffer );
          jokerSound.setLoop( false );
@@ -82,7 +81,7 @@ class SoundSystem{
 
      playSfxShield(buffer){
 
-         let shieldSound = this.parent.shieldSound;
+         let shieldSound = this.parent.gameAudio.sound.shieldSound;
          if (shieldSound.isPlaying)  shieldSound.stop()
          shieldSound.setBuffer( buffer );
          shieldSound.setLoop( false );
@@ -92,43 +91,34 @@ class SoundSystem{
      }
 
 
-    PlayEnnemyShoot(ennemy){
+    PlayEnnemyShoot(buffer){
       
-        const bulletBuffer =  this.audioManager.find(e => e.name == "ennemyLaser");
-        const ennemyAudio = ennemy.children.find(e => e.constructor.name == "PositionalAudio")
-
-        if (ennemyAudio.isPlaying)  ennemyAudio.stop()
-        ennemyAudio.setBuffer( bulletBuffer );
-        ennemyAudio.setLoop( false );
-        ennemyAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-        ennemyAudio.play(0);
+        let ennemyBulletSound = this.parent.gameAudio.sound.ennemyLaserSound;
+        if (ennemyBulletSound.isPlaying)  ennemyBulletSound.stop()
+        ennemyBulletSound.setBuffer( buffer );
+        ennemyBulletSound.setLoop( false );
+        ennemyBulletSound.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
+        ennemyBulletSound.play(0);
 
     }
 
-    PlayHitBullet(bullet, delay){
+    PlayHitBullet(buffer){
 
-        const bulletBuffer =  this.audioManager.find(e => e.name == "BulletHit");
-        let bulletAudio =  bullet.children.find(e => e.constructor.name == "PositionalAudio");
-
-        bulletAudio.setBuffer( bulletBuffer );
-        bulletAudio.setRefDistance( 1);
+        let bulletAudio =   this.parent.gameAudio.sound.asteroidSound;
+        bulletAudio.setBuffer( buffer );
         bulletAudio.setLoop( false );
         bulletAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-
-        bulletAudio.play(delay);
+        bulletAudio.play(0);
 
     }
 
-    PlayAsteroidDestruction(asteroid, delay){
-
-        const exploBuffer =  this.audioManager.find(e => e.name == "AsteroidExplosion");
+    PlayAsteroidDestruction(buffer){
        
-        let exploAudio =  asteroid.children.find(e => e.constructor.name == "PositionalAudio");
+        let exploAudio =  this.parent.gameAudio.sound.asteroidSound;
         if (exploAudio.isPlaying)  exploAudio.stop()
-        exploAudio.setBuffer( exploBuffer );
+        exploAudio.setBuffer( buffer );
         exploAudio.setLoop( false );
         exploAudio.setVolume( this.sfxVolume > this.masterVolume ? this.masterVolume : this.sfxVolume );
-
         exploAudio.play(0);
 
     }

@@ -3,19 +3,23 @@ import * as THREE from 'three';
 import GameObject from "../GameObject.js";
 import JokerMovement from "./JokerMovement.js";
 
-class FireRate extends GameObject{
+class FirePower extends GameObject{
 
-    constructor(model,audio, nb){
+    constructor(gameObject){
 
-        super(model,audio);
+        super(gameObject);
 
+        this.sceneManager = null;
         this.components = {}
-        this.name = "FireRate";
+
+        if (!gameObject) gameObject = {nb : 0};
+        
+        this.name = "FirePower";
 
         this.limit = 1;
-        this.nb = nb;    
-        this.userData.type = "joker"   
-        
+        this.nb = gameObject.nb; 
+        this.userData.type = "joker";
+
         this.InitComponent();
 
     }
@@ -25,6 +29,8 @@ class FireRate extends GameObject{
         this.AddComponent(new JokerMovement(this))
 
     }
+
+    InitValue(){}
 
     Instantiate(o,p,r,s){
         
@@ -42,4 +48,4 @@ class FireRate extends GameObject{
 
 }
 
-export default FireRate
+export default FirePower

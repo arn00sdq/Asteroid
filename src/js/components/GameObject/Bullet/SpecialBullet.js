@@ -7,10 +7,11 @@ import SpecialBulletAnim from "./SpecialBulletAnim.js";
 
 class SpecialBullet extends GameObject{ 
 
-    constructor(model, audio) {
+    constructor(gameObject) {
 
-        super(model, audio);
+        super(gameObject);
 
+        this.sceneManager = null;
         this.components = {};
         this.name = "SpecialBullet";
 
@@ -18,6 +19,7 @@ class SpecialBullet extends GameObject{
         this.timerInstantiate = null;
 
         this.index = 0;
+
         this.InitComponent();
         
     }
@@ -29,6 +31,8 @@ class SpecialBullet extends GameObject{
         this.AddComponent(new SpecialBulletAnim(this));
 
     }
+
+    InitValue(){}
     
 
 }

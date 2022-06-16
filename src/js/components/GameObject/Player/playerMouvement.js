@@ -21,14 +21,14 @@ class CharacterMouvement {
 
     /* anim */
     
-    this.uniformZ = 50;
-    this.uniformX = 70;
+    this.uniformZ = 0.5;
+    this.uniformX = 0.7;
 
-    this.uniformStepZ = 40;
-    this.uniformStepX = 60;
+    this.uniformStepZ = 0.40;
+    this.uniformStepX = 0.60;
 
-    this.uniformDownStep = 0.3 ;
-    this.uniformDownStepBackWard = 3 ;
+    this.uniformDownStep = 0.005 ;
+    this.uniformDownStepBackWard = 0.01 ;
 
   }
 
@@ -122,29 +122,30 @@ class CharacterMouvement {
         this.uniformZ =  THREE.MathUtils.lerp(this.uniformZ,this.uniformZ + this.uniformStepZ,0.01);
         this.uniformX =  THREE.MathUtils.lerp(this.uniformX,this.uniformX + this.uniformStepX,0.01);
   
-        if(this.uniformZ >  80) this.uniformZ =  100
-        if(this.uniformX > 140) this.uniformX = 140
+        if(this.uniformZ >  1.4) this.uniformZ =  1.4;
+        if(this.uniformX > 2) this.uniformX = 2;
 
         booster.material.uniforms[ 'time' ].value = 0.05;
         break;
 
       case "acceleration":
 
-        this.uniformZ =  THREE.MathUtils.lerp(this.uniformZ,this.uniformZ + this.uniformStepZ,0.05);
-        this.uniformX =  THREE.MathUtils.lerp(this.uniformX,this.uniformX + this.uniformStepX,0.05);
+        this.uniformZ =  THREE.MathUtils.lerp(this.uniformZ,this.uniformZ + this.uniformStepZ,0.08);
+        this.uniformX =  THREE.MathUtils.lerp(this.uniformX,this.uniformX + this.uniformStepX,0.08);
   
-        if(this.uniformZ >  120) this.uniformZ =  120
-        if(this.uniformX > 200) this.uniformX = 200
+        if(this.uniformZ >  1.8) this.uniformZ =  1.8;
+        if(this.uniformX > 3) this.uniformX = 3;
 
         booster.material.uniforms[ 'time' ].value = 0.05;
+
         break;
       case "brake":
 
         this.uniformZ -= this.uniformDownStepBackWard;
         this.uniformX -= this.uniformDownStepBackWard;
     
-        if(this.uniformX < 70) this.uniformX = 70;
-        if(this.uniformZ < 50) this.uniformZ = 50;
+        if(this.uniformX < 0.5) this.uniformX = 0.5;
+        if(this.uniformZ < 0.5) this.uniformZ = 0.5;
 
         break;
       case "freeWheel":
@@ -152,8 +153,8 @@ class CharacterMouvement {
         this.uniformZ -= this.uniformDownStep;
         this.uniformX -= this.uniformDownStep;
     
-        if(this.uniformX < 70) this.uniformX = 70;
-        if(this.uniformZ < 50) this.uniformZ = 50;
+        if(this.uniformX < 0.5) this.uniformX = 0.5;
+        if(this.uniformZ < 0.5) this.uniformZ = 0.5;
 
         break;
 
