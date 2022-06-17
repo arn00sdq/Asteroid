@@ -5,7 +5,7 @@ class PlayerCameraSystem {
     constructor(parent, params) {
 
         this.parent = parent;
-        console.log(this.parent)
+
         this.follow = params.follow;
         this.camera = params.camera;
         this.goal = params.goal;
@@ -38,7 +38,7 @@ class PlayerCameraSystem {
     }
 
     ThirdPersonCamera() {
-
+        console.log(this.parent.sceneManager.currentCamera.fov)
         let follow_player = this.parent.children.find(e => e.name == "FollowPlayer");
         let limitA = this.parent.position.distanceTo(new THREE.Vector3(0, 0, 0));
         this.b.copy(this.goal.position);
@@ -86,7 +86,6 @@ class PlayerCameraSystem {
 
         if (input.keys.cam2 == true) {
 
-            //camera_setting.position.set(goal_setting.position.x, 0.3, goal_setting.position.z);
             this.ThirdPersonCamera();
 
         }

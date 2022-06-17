@@ -108,7 +108,8 @@ class HackSystem{
 
             for( var i = scene.children.length - 1; i >= 0; i--) { 
                 let obj = scene.children[i];
-                if(obj.name == "Asteroid" || obj.name == "EnnemySpaceship") scene.remove(obj); 
+                console.log(obj.name)
+                if(obj.name == "Asteroid" || obj.name == "ennemySS") scene.remove(obj); 
                 
             }
 

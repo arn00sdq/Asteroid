@@ -330,7 +330,6 @@ class LevelSystem{
             case "Stage3":
                 this.loadAsteroidBackGround(this.parent.gameModels.basicAsteroid,50);
                 this.loadPlanetStageOne({earth : this.parent.gameModels.earth, sun : this.parent.gameModels.sun, stars : this.parent.shaders.stars});
-                //ajout compo soleil
                 break;
         }
 

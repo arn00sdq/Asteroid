@@ -1,14 +1,10 @@
-import * as THREE from 'three';
-
 class CharacterControllerInput {
-  constructor(parent,params) {
+  constructor(parent,utils) {
 
-    this.parent = parent;
+    this.parent = parent; 
     
-
     this.cam_sys = this.parent.GetComponent("PlayerCameraSystem");
-    this.camera = params.camera;
-
+    this.camera = utils.camera;
 
     this.Init();
 
@@ -41,8 +37,6 @@ class CharacterControllerInput {
       screenshot : false,
 
     };
-
-    this.ThirdCameraInit();
 
     document.addEventListener('keydown', (e) => this.OnKeyDown(e), false);
     document.addEventListener('keyup', (e) => this.OnKeyUp(e), false);
@@ -178,7 +172,10 @@ class CharacterControllerInput {
 
     goal_setting.position.set(this.parent.position.x, 0, this.parent.position.z -0.3);
     camera_setting.position.set(0, 0.3, 0);
-    this.camera.fov = 152.5
+    this.parent.sceneManager.currentCamera.fov = 124;
+    console.log(this.parent.sceneManager)// awake après le sceneManger
+    this.parent.sceneManager.currentCamera.updateProjectionMatrix();
+  //  this.camera.fov = 158.5;
 
   }
 

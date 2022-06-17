@@ -204,6 +204,7 @@ class GameManager {
     RAF() {
 
         requestAnimationFrame(this.RAF.bind(this));
+        console.log(this.currentCamera)
         if (!this.state.pause) {
             //this.controls.update()
             this.utils.loop.now = window.performance.now();

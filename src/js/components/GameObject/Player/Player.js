@@ -82,9 +82,11 @@ class Player extends GameObject{
             this.GetComponent("PlayerShootProjectiles").currentWeapon = this.sceneManager.gameModels.basicBullet;
 
             this.GetComponent("PlayerCameraSystem").limit = this.sceneManager.limit;
+            this.GetComponent("CharacterControllerInput").ThirdCameraInit();
 
             this.stageSystem = this.sceneManager.GetComponent("LevelSystem");
             this.audioSystem = this.sceneManager.GetComponent("SoundSystem");
+            
 
         } 
 
