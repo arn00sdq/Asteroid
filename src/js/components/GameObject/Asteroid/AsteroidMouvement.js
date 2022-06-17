@@ -17,27 +17,45 @@ class AsteroidMovement {
       this.directionToTurn = new THREE.Vector3();
       this.directionLerp= new THREE.Vector3();
 
-      this.dir = new THREE.Vector3
+      this.dir = new THREE.Vector3()
       this.dis = 0
       this.pas = 1;
 
+      this.rot = new THREE.Quaternion();
+      this.axisQ = this.setRandomAxis();
+      this.speedRot = this.randomFloatFromInterval(0.5,1.3);
+
     }
-        
+
+    Awake(){}
+    
+    setRandomAxis(){
+
+      return new THREE.Vector3(Math.round(Math.random()) * 2 - 1,Math.round(Math.random()) * 2 - 1,Math.round(Math.random()) * 2 - 1);
+
+    }
+
+    randomFloatFromInterval(min, max) { 
+
+      return Math.random() * (max - min) + min;
+
+    }
+
 
     Update(timeElapsed) {
 
       this.customvitesse = (1 + (1/ (this.parent.scale.x))/100);
       this.palier = 1 + ((Math.floor(timeElapsed / 3) + 1) * 0.01 );
-      
       if(this.parent.children[0] !== null){
 
-        this.pas +=0.5
-        let rotation = new THREE.Euler((Math.PI / 180) *  (2+this.pas),0,(Math.PI / 180) *  (2+this.pas))
-        this.parent.children[0].rotation.copy(rotation);
-  
+        this.rot.setFromAxisAngle(this.axisQ,this.speedRot*timeElapsed);
+        this.q = this.parent.children[0].quaternion;
+        this.q.multiplyQuaternions(this.rot,this.q); 
+        this.q.normalize(); 
+
       }
 
-      this.Subsomption(timeElapsed);
+      this.Subsomption(timeElapsed,this.q.x);
 
 
     }
