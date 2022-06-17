@@ -143,7 +143,6 @@ class PlayerShootProjectiles{
 
         this.loadUltimate();
 
-        input.keys.shoot = false;
         input.keys.enter = false;
         
   }
