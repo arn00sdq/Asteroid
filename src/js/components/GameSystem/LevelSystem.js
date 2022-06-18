@@ -41,6 +41,7 @@ class LevelSystem{
     InstantiatePlayer(player,position, rotation, scale){
         
         player.scene = this.parent.currentScene;
+        player.GetComponent("CharacterControllerInput").ThirdCameraInit();
         player.Instantiate(player,position, rotation, 0.03);
         player.SetRigidBody(player);
 
@@ -49,7 +50,6 @@ class LevelSystem{
     InstantiateGameObject(object,position, rotation, scale, opt){
 
         object.scene = this.parent.currentScene;
-      
         let object_clone = object.clone();
         this.setCloneValue(object_clone, object);
 
@@ -63,9 +63,6 @@ class LevelSystem{
         if(object_clone.name == "EnnemyBullet") object_clone.lookAt(object_clone.userData.player.x,object_clone.userData.player.y,object_clone.userData.player.z)
 
         this.updateValue(object_clone, object);
-
-        if (object.constructor.name == "Explosion") console.log( object.children[0].material.uniforms[ 'opacity' ].value)
-
         
     }
 
@@ -73,11 +70,7 @@ class LevelSystem{
 
         for (const property in source) {
             
-            if(destination[property] == null && property !== "model"){
-             
-                destination[property] = source[property];      
-
-            }  
+            if(destination[property] == null && property !== "model") destination[property] = source[property];      
 
         }
 
@@ -99,7 +92,6 @@ class LevelSystem{
         });
 
         if (source.constructor.name == "Explosion") destination.children[0].material.uniforms[ 'opacity' ].value  = 1.0; 
-        console.log()
         
     }
 
@@ -107,10 +99,9 @@ class LevelSystem{
 
         for (const [key, value] of Object.entries(source)) {
 
-            if(typeof value === 'number')source[key] = destination[key]
+            if(typeof value === 'number' ) {destination[key] = source[key]}
 
         }
-
     }
 
 
@@ -320,7 +311,7 @@ class LevelSystem{
                 this.loadPlanetStartMenu({earth : this.parent.gameModels.earth, stars : this.parent.shaders.stars});
                 break;
             case "Stage1":
-                this.loadAsteroidBackGround(this.parent.gameModels.basicAsteroid,50);
+                this.loadAsteroidBackGround(this.parent.gameModels.basicAsteroid,0);
                 this.loadPlanetStageOne({earth : this.parent.gameModels.earth, sun : this.parent.gameModels.sun, stars : this.parent.shaders.stars});
                 break;
             case "Stage2":
@@ -341,7 +332,7 @@ class LevelSystem{
             case "StartMenu":
                 break;
             case "Stage1":
-                this.asteroidWave(this.parent.gameModels.basicAsteroid, 8);
+                this.asteroidWave(this.parent.gameModels.basicAsteroid, 2);
                 break;
             case "Stage2":
                 this.asteroidWave(this.parent.gameModels.basicAsteroid, 5);

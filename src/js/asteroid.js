@@ -722,7 +722,7 @@ class Asteroid {
         this.inGameCamera.fov -= event.wheelDeltaY * 0.05;
         this.inGameCamera.fov = Math.max(Math.min(this.inGameCamera.fov, fovMAX), fovMIN);
         this.inGameCamera.updateProjectionMatrix();
-        console.log(this.inGameCamera.fov)
+        console.log(this.inGameCamera)
     }
 
     onWindowResize() {

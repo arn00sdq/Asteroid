@@ -3,7 +3,7 @@ class CharacterControllerInput {
 
     this.parent = parent; 
     
-    this.cam_sys = this.parent.GetComponent("PlayerCameraSystem");
+    this.camSystem = this.parent.GetComponent("PlayerCameraSystem");
     this.camera = utils.camera;
 
     this.Init();
@@ -65,26 +65,21 @@ class CharacterControllerInput {
       case 13: // enter
         this.keys.enter = true;
         break;
-
       case 73: // i
         this.keys.invincible = true;
         break;
-
       case 74: // j
         this.keys.nj = true;
         break;
-
       case 75: // k
         this.keys.kta = true;
         break;
-
       case 49: // 1 -- fixe
         this.keys.cam1 = true;
         this.keys.cam2 = false;
         this.keys.cam3 = false;
         this.StatiCameraInit();
         break;
-
       case 50: // 2 -- default camera
         if (this.keys.cam2 !== true) {
           this.keys.cam2 = true;
@@ -93,22 +88,18 @@ class CharacterControllerInput {
           this.ThirdCameraInit();
         }
         break;
-
       case 51: // 3 mode poursuite
         this.keys.cam3 = true;
         this.keys.cam2 = false;
         this.keys.cam1 = false;
         this.CameraTrackingInit();
         break;
-
       case 16: // SHIFT
         this.keys.shift = true;
         break;
-
       case 80:
         this.keys.screenshot = true;
         break;
-
       case 27:
 
         if(!this.keys.pause){
@@ -154,36 +145,32 @@ class CharacterControllerInput {
 
   StatiCameraInit() {
 
-    let goal_setting = this.cam_sys.goal;
-    let camera_setting =  this.cam_sys.camera;
+    let goalSetting = this.camSystem.goal;
+    let cameraSetting =  this.camSystem.camera;
 
-    goal_setting.position.set(0, 5, 0);
-    camera_setting.position.set(0, 5, 0);
+    goalSetting.position.set(0, 5, 0);
+    cameraSetting.position.set(0, 5, 0);
 
-    camera_setting.lookAt(0, 0, 0);
-    this.camera.fov = 90
+    cameraSetting.lookAt(0, 0, 0);
+    this.camera.fov = 90;
 
   }
 
   ThirdCameraInit() {
+    let goalSetting =  this.camSystem.goal;
+    let cameraSetting = this.camSystem.camera;
 
-    let goal_setting =  this.cam_sys.goal;
-    let camera_setting = this.cam_sys.camera;
-
-    goal_setting.position.set(this.parent.position.x, 0, this.parent.position.z -0.3);
-    camera_setting.position.set(0, 0.3, 0);
-    this.parent.sceneManager.currentCamera.fov = 124;
-    console.log(this.parent.sceneManager)// awake après le sceneManger
+    goalSetting.position.set(this.parent.position.x, 0, this.parent.position.z -0.3);
+    cameraSetting.position.set(0, 0.3, 0);
+    this.parent.sceneManager.currentCamera.fov = 140;
     this.parent.sceneManager.currentCamera.updateProjectionMatrix();
-  //  this.camera.fov = 158.5;
 
   }
 
   CameraTrackingInit() {
 
-    let camera_setting =  this.cam_sys.camera;
-
-    camera_setting.position.set(0, 5, 0);
+    let cameraSetting =  this.camSystem.camera;
+    cameraSetting.position.set(0, 5, 0);
 
   }
 

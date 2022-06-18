@@ -58,7 +58,6 @@ class BasicAsteroid extends GameObject { // extends sceneManager
 
         this.SetInvulnerability(2000);
         this.life = this.life / (this.nbBreak + 1);
-
         this.scene.add(o);
 
 

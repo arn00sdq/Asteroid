@@ -30,7 +30,7 @@ class GameManager {
         this.utils = gameTools.utils,
 
         this.currentScene = new THREE.Scene();
-        this.currentCamera = new THREE.Camera();
+        this.currentCamera = gameTools.startMenuCamera;
 
         this.materials = {};
         this.selectedObjects = [];
@@ -204,9 +204,7 @@ class GameManager {
     RAF() {
 
         requestAnimationFrame(this.RAF.bind(this));
-        console.log(this.currentCamera)
         if (!this.state.pause) {
-            //this.controls.update()
             this.utils.loop.now = window.performance.now();
             this.utils.loop.dt = this.utils.loop.dt + Math.min(1, (this.utils.loop.now - this.utils.loop.last) / 1000);
             while (this.utils.loop.dt > this.utils.loop.slowStep) this.utils.loop.dt = this.utils.loop.dt - this.utils.loop.slowStep;

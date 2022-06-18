@@ -249,7 +249,6 @@ class GameObjectManager {
         e.position.z + Math.random() * 0.3);
       let rotation = new THREE.Euler(0, 0, 0);
       let scale = 0.4 * e.children[0].scale.x;
-      console.log(scale)
       let velocity = new THREE.Vector3(Math.random() * 1, 0, (dir.x / dir.z) * (index == 1 ? 1 : -1)).normalize().multiplyScalar(10);
 
       e.userData.velocity = velocity;
