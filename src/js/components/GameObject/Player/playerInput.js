@@ -169,8 +169,13 @@ class CharacterControllerInput {
 
   CameraTrackingInit() {
 
-    let cameraSetting =  this.camSystem.camera;
+    let goalSetting =  this.camSystem.goal;
+    let cameraSetting = this.camSystem.camera;
+
+    goalSetting.position.set(this.parent.position.x, 0, this.parent.position.z -0.3);
     cameraSetting.position.set(0, 5, 0);
+    this.parent.sceneManager.currentCamera.fov = 140;
+    this.parent.sceneManager.currentCamera.updateProjectionMatrix();
 
   }
 

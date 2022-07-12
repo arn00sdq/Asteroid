@@ -32,12 +32,16 @@ class PlayerCameraSystem {
 
     CameraTracking() {
 
-        this.camera.lookAt(this.parent.position);
-        this.goal.position.copy(this.parent.position)
+        this.CameraFollowPlayer(0.1);
 
     }
 
-    ThirdPersonCamera() {
+    ThirdPersonCamera(){
+
+        this.CameraFollowPlayer(0.06);
+    }
+
+    CameraFollowPlayer(lerpValue) {
         let follow_player = this.parent.children.find(e => e.name == "FollowPlayer");
         let limitA = this.parent.position.distanceTo(new THREE.Vector3(0, 0, 0));
         this.b.copy(this.goal.position);
@@ -67,7 +71,7 @@ class PlayerCameraSystem {
 
         }
 
-        this.goal.position.lerp(this.temp, 0.06);
+        this.goal.position.lerp(this.temp, lerpValue);
         this.temp.setFromMatrixPosition(follow_player.matrixWorld);
         this.camera.lookAt(this.parent.position);
 
